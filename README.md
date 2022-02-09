@@ -10,7 +10,6 @@ Deploys the components of a software factory with the following services, all ru
 - Mattermost Operator*
 - Mattermost*
 - Nexus*
-- Keycloak*
 - Jira
 - Confluence
 - Jenkins
@@ -29,9 +28,14 @@ All version of this package will not be compatible with all versions of Zarf. He
 
 ## Known Issues
 
-- Due to issues with Elasticsearch this package doesn't work yet in some distros. It does work in the Vagrant VM detailed below. Upcoming work to update to the latest version of Big Bang and swap the EFK stack out for the PLG stack (Promtail, Loki, Grafana) should resolve this issue. Keep in mind the big note above about the package being huge. Unless you have the Mother of All Laptops you'll need to turn a bunch of stuff off before you try to deploy it locally using Vagrant.
+<!-- Not relevant until we update to Zarf v0.15.0 -->
+<!-- - Due to issues with Elasticsearch this package doesn't work yet in some distros. It does work in the Vagrant VM detailed below. Upcoming work to update to the latest version of Big Bang and swap the EFK stack out for the PLG stack (Promtail, Loki, Grafana) should resolve this issue. Keep in mind the big note above about the package being huge. Unless you have the Mother of All Laptops you'll need to turn a bunch of stuff off before you try to deploy it locally using Vagrant. -->
 
-- Inside the Vagrant VM the services are available on the standard port 443. Outside the VM if you want to pull something up in your browser that traffic is being routed to port **8443** to avoid needing to be root when running the Vagrant box.
+<!-- Should be removed after we update to Zarf v0.15.0 -->
+- Since Traefik and Istio are both running in the cluster, Istio has been set to expose its services on port 9443. The Vagrant VM forwards that port, so you can pull up services in your browser. For example, https://grafana.bigbang.dev:9443
+
+<!-- Not relevant until we update to Zarf v0.15.0 -->
+<!-- - Inside the Vagrant VM the services are available on the standard port 443. Outside the VM if you want to pull something up in your browser that traffic is being routed to port **8443** to avoid needing to be root when running the Vagrant box. -->
 
 - Currently this package does the equivalent of `kustomize build | kubectl apply -f -`, which means Flux will be used to deploy everything, but it won't be watching a Git repository for changes. Upcoming work is planned to update the example so that you will be able to open up a Git repo in the private Gitea server inside the cluster, commit and push a change, and see that change get reflected in the deployment.
 
@@ -59,7 +63,8 @@ make build
 
 ## Customize
 
-There's lots of different customization you can do, but the most important one will be to update `template/bigbang/values.yaml` to change the `domain: bigbang.dev` to your actual domain, and update the TLS Cert and Key in the `istio:` section to your actual cert and key.
+There's lots of different customization you can do, but the most important one will be to update `template/bigbang/values.yaml` to change the `domain: bigbang.dev` to your actual domain, and update the TLS Cert and Key in the `istio:` section to your actual cert and key. _**YOUR TLS CERT KEY MUST BE TREATED AS A SECRET**_. It is present here because `bigbang.dev` has its A record configured to point at `127.0.0.1` to make development and testing easier. Further development is planned to move the istio cert configuration to a Kubernetes Secret instead of a ConfigMap.
+
 
 ## Next Steps
 
