@@ -18,7 +18,7 @@ Deploys the components of a software factory with the following services, all ru
 
 **Deployed using Big Bang Umbrella*
 
-![warning](http://placehold.jp/30/ffffff/ff0000/1000x110.png?text=This%20package%20is%20huge.%20We%20recommend%20not%20trying%20to%20run%20it%20on%20a%20developer%20laptop%20without%20disabling%20lots%20of%20stuff%20first.)
+![warning](img/warning.png)
 
 ## Zarf Compatibility
 All version of this package will not be compatible with all versions of Zarf. Here's a compatibility matrix to use to determine which versions match up
