@@ -22,9 +22,9 @@ Deploys the components of a software factory with the following services, all ru
 ## Zarf Compatibility
 All version of this package will not be compatible with all versions of Zarf. Here's a compatibility matrix to use to determine which versions match up
 
-| Package Version                                                                    | Zarf Version                                                            |
-| ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| [main](https://github.com/defenseunicorns/zarf-package-software-factory/tree/main) | [v0.14.0](https://github.com/defenseunicorns/zarf/releases/tag/v0.14.0) |
+| Package Version                                                                                                                                                                   | Zarf Version                                                            |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| [0.0.1](https://github.com/defenseunicorns/zarf-package-software-factory/releases/tag/0.0.1) - [main](https://github.com/defenseunicorns/zarf-package-software-factory/tree/main) | [v0.14.0](https://github.com/defenseunicorns/zarf/releases/tag/v0.14.0) |
 
 ## Known Issues
 
