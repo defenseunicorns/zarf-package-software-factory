@@ -42,6 +42,7 @@ All version of this package will not be compatible with all versions of Zarf. He
 - [Logged into registry1.dso.mil](https://github.com/defenseunicorns/zarf/blob/master/docs/ironbank.md#2-configure-zarf-the-use-em)
 - Clone this repo
 - `make` present in PATH
+- `kustomize` present in PATH
 - `sha256sum` present in PATH
 - TONS of CPU and RAM. Our testing shows the EC2 instance type m6i.8xlarge works pretty well at about $1.50/hour, which can be reduced further if you do a spot instance.
 - [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/), only if you are going to use a Vagrant VM, which is incompatible when using an EC2 instance.

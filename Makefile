@@ -22,7 +22,7 @@ clean: ## Clean up build files
 .PHONY: build
 build: ## Create the software factory deploy package
 	@mkdir -p ./build
-	@zarf package create --confirm && mv zarf-package-* ./build/
+	@kustomize build template/flux > manifests/flux/flux-generated.yaml && kustomize build template/bigbang > manifests/bigbang/bigbang-generated.yaml && zarf package create --confirm && mv zarf-package-* ./build/
 
 .PHONY: ssh
 ssh: ## SSH into the Vagrant VM
