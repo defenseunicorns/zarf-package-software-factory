@@ -205,18 +205,8 @@ components:
 
   - name: postgres-operator
     required: true
-    # Big Bang charts expect this
     secretName: "private-registry"
-
-    manifests:
-      - name: postgres-example-config
-        files:
-          - manifests/postgres-operator/patch-svc-accounts.yaml
-          - manifests/postgres-operator/minio-instance-zarf-connect.yaml
-          - manifests/postgres-operator/pgadmin-zarf-connect.yaml
-          - manifests/postgres-operator/postgres-cluster.yaml
-          - manifests/postgres-operator/postgres-operator.yaml
-          - manifests/postgres-operator/postgres-operator-ui-zarf-connect.yaml
+    manifests: manifests/postgres-operator
     charts:
       - name: postgres-operator
         url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
@@ -261,4 +251,3 @@ components:
       - docker.io/rancher/pause:3.1
       - registry1.dso.mil/ironbank/opensource/minio/operator:v4.2.3
       - registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2021-08-31T05-46-54Z
-      
