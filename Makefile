@@ -22,7 +22,7 @@ clean: ## Clean up build files
 .PHONY: build
 build: ## Create the software factory deploy package
 	@mkdir -p ./build
-	@zarf package create --confirm && mv zarf-package-* ./build/
+	@zarf package create -l debug --confirm && mv zarf-package-* ./build/
 
 .PHONY: ssh
 ssh: ## SSH into the Vagrant VM
