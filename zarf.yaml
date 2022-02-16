@@ -168,12 +168,14 @@ components:
     charts:
       - name: jira
         url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
+        gitPath: /chart
         version: 0.1.0-bb.7
         namespace: jira
         valuesFiles:
           - values/jira.yaml
       - name: confluence
         url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
+        gitPath: /chart
         version: 0.1.0-bb.9
         namespace: confluence
         valuesFiles:
