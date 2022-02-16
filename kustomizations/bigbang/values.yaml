@@ -1,15 +1,9 @@
 domain: bigbang.dev
 
 registryCredentials:
-  - registry: "registry1.dso.mil"
-    username: "zarf-git-user"
-    password: "###ZARF_SECRET###"
-  - registry: "docker.io"
-    username: "zarf-git-user"
-    password: "###ZARF_SECRET###"
-  - registry: "registry.dso.mil"
-    username: "zarf-git-user"
-    password: "###ZARF_SECRET###"
+  registry: "###ZARF_REGISTRY###"
+  username: "zarf-pull"
+  password: "###ZARF_REGISTRY_AUTH_PULL###"
 
 git:
   existingSecret: "zarf-git-secret"
@@ -21,7 +15,7 @@ flux:
 
 networkPolicies:
   enabled: false
-  # When in prod use a real CIDR. Don't do this, it isn't secure. This is done here since it is a demo and the CIDR changes based on which Linux distro you are running on.
+  # When in prod use a real CIDR. Don't do this, it isn't secure.
   controlPlaneCidr: "0.0.0.0/0"
   nodeCidr: "0.0.0.0/0"
 
@@ -40,53 +34,6 @@ istio:
           limits:
             cpu: "500m"
             memory: "512Mi"
-        service:
-          ports:
-            - name: status-port
-              port: 15021
-              protocol: TCP
-              targetPort: 15021
-            - name: http2
-              port: 9080
-              protocol: TCP
-              targetPort: 8080
-            - name: https
-              port: 9443
-              protocol: TCP
-              targetPort: 8443
-            - name: tls
-              port: 15443
-              protocol: TCP
-              targetPort: 15443
-    passthrough-ingressgateway:
-      type: "LoadBalancer" # or "LoadBalancer"
-      kubernetesResourceSpec:
-        resources:
-          requests:
-            cpu: "100m"
-            memory: "512Mi"
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
-        service:
-          ports:
-            - name: status-port
-              port: 15022
-              protocol: TCP
-              targetPort: 15021
-            - name: http2
-              port: 19080
-              protocol: TCP
-              targetPort: 8080
-            - name: https
-              port: 19443
-              protocol: TCP
-              targetPort: 8443
-            - name: tls
-              port: 15444
-              protocol: TCP
-              targetPort: 15443
-
   gateways:
     public:
       tls:
@@ -211,14 +158,11 @@ istio:
           he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
           Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
           -----END CERTIFICATE-----
-    passthrough:
-      ingressGateway: "passthrough-ingressgateway"
-      hosts:
-      - "*.{{ .Values.domain }}"
-      tls:
-        mode: "PASSTHROUGH"
-
   values:
+    hub: "###ZARF_REGISTRY###/ironbank/opensource/istio"
+    cni:
+      image:
+        hub: "###ZARF_REGISTRY###/ironbank/opensource/istio"
     istiod:
       hpaSpec:
         maxReplicas: 1
@@ -240,6 +184,7 @@ istiooperator:
   git:
     repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__istio-operator.git
   values:
+    hub: "###ZARF_REGISTRY###/ironbank/opensource/istio"
     operator:
       resources:
         requests:
@@ -254,6 +199,10 @@ jaeger:
   git:
     repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__jaeger.git
   values:
+    image:
+      repository: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/jaeger-operator"
+    retention:
+      image: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/jaeger-es-index-cleaner:1.24.0"
     resources:
       requests:
         cpu: "100m"
@@ -264,6 +213,7 @@ jaeger:
     jaeger:
       spec:
         allInOne:
+          image: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/all-in-one:1.24.0"
           resources:
             requests:
               cpu: "100m"
@@ -271,23 +221,29 @@ jaeger:
             limits:
               cpu: "500m"
               memory: "128Mi"
-        collector:
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "500m"
-              memory: "128Mi"
+        agent:
+          image: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/jaeger-agent:1.24.0"
         ingester:
-          # TODO: Remove this once the upstream bug is fixed (https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger/-/issues/15)
-          image: registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-ingester:1.24.0
+          image: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/jaeger-ingester:1.24.0"
+        query:
+          image: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/jaeger-query:1.24.0"
+        collector:
+          image: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/jaeger-collector:1.24.0"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "128Mi"
 
 kiali:
   enabled: true
   git:
     repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__kiali.git
   values:
+    image:
+      repo: "###ZARF_REGISTRY###/ironbank/opensource/kiali/kiali-operator"
     resources:
       requests:
         cpu: "100m"
@@ -298,6 +254,7 @@ kiali:
     cr:
       spec:
         deployment:
+          image_name: "###ZARF_REGISTRY###/ironbank/opensource/kiali/kiali"
           resources:
             requests:
               cpu: "100m"
@@ -311,6 +268,8 @@ clusterAuditor:
   git:
     repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__cluster-auditor.git
   values:
+    image:
+      repo: "###ZARF_REGISTRY###/ironbank/cluster-auditor/opa-collector"
     resources:
       requests:
         cpu: "100m"
@@ -324,6 +283,16 @@ gatekeeper:
   git:
     repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__policy.git
   values:
+    postInstall:
+      labelNamespace:
+        image:
+          repository: "###ZARF_REGISTRY###/ironbank/opensource/kubernetes-1.21/kubectl"
+    postUpgrade:
+      cleanupCRD:
+        image:
+          repository: "###ZARF_REGISTRY###/ironbank/opensource/kubernetes-1.21/kubectl"
+    image:
+      repository: "###ZARF_REGISTRY###/ironbank/opensource/openpolicyagent/gatekeeper"
     replicas: 1
     controllerManager:
       resources:
@@ -344,6 +313,8 @@ gatekeeper:
     violations:
       allowedDockerRegistries:
         parameters:
+          repos:
+            - "###ZARF_REGISTRY###"
           excludedResources:
             # K3s kube-system stuff, better than excluding the whole namespace
             - "kube-system/coredns-.*"
@@ -380,6 +351,8 @@ logging:
     repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__elasticsearch-kibana.git
   values:
     elasticsearch:
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/elastic/elasticsearch/elasticsearch"
       master:
         count: 1
         persistence:
@@ -403,6 +376,8 @@ logging:
             cpu: "500m"
             memory: "3Gi"
     kibana:
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/elastic/kibana/kibana"
       count: 1
       resources:
         requests:
@@ -411,17 +386,25 @@ logging:
         limits:
           memory: "1Gi"
           cpu: "500m"
+    upgradeJob:
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/big-bang/base"
 
 eckoperator:
   enabled: true
   git:
     repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__eck-operator.git
+  values:
+    image:
+      repository: "###ZARF_REGISTRY###/ironbank/elastic/eck-operator/eck-operator"
 
 fluentbit:
   enabled: true
   git:
     repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__fluentbit.git
   values:
+    image:
+      repository: "###ZARF_REGISTRY###/ironbank/opensource/fluent/fluent-bit"
     securityContext:
       privileged: true
     resources:
@@ -439,6 +422,8 @@ monitoring:
   values:
     alertmanager:
       alertmanagerSpec:
+        image:
+          repository: "###ZARF_REGISTRY###/ironbank/opensource/prometheus/alertmanager"
         resources:
           requests:
             cpu: "100m"
@@ -447,6 +432,8 @@ monitoring:
             cpu: "500m"
             memory: "256Mi"
     prometheusOperator:
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/opensource/prometheus-operator/prometheus-operator"
       resources:
         requests:
           cpu: "100m"
@@ -454,8 +441,20 @@ monitoring:
         limits:
           cpu: "500m"
           memory: "512Mi"
+      admissionWebhooks:
+        patch:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/opensource/jet/kube-webhook-certgen"
+      configmapReloadImage:
+        repository: "###ZARF_REGISTRY###/ironbank/opensource/jimmidyson/configmap-reload"
+      prometheusConfigReloaderImage:
+        repository: "###ZARF_REGISTRY###/ironbank/opensource/prometheus-operator/prometheus-config-reloader"
+      kubectlImage:
+        repository: "###ZARF_REGISTRY###/ironbank/opensource/kubernetes-1.20/kubectl-1.20"
     prometheus:
       prometheusSpec:
+        image:
+          repository: "###ZARF_REGISTRY###/ironbank/opensource/prometheus/prometheus"
         resources:
           requests:
             cpu: "100m"
@@ -464,7 +463,11 @@ monitoring:
             cpu: "500m"
             memory: "2Gi"
     grafana:
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/opensource/grafana/grafana"
       sidecar:
+        image:
+          repository: "###ZARF_REGISTRY###/ironbank/kiwigrid/k8s-sidecar"
         resources:
           requests:
             cpu: "50m"
@@ -479,7 +482,11 @@ monitoring:
         limits:
           cpu: "500m"
           memory: "128Mi"
+      testFramework:
+        image: "###ZARF_REGISTRY###/ironbank/opensource/bats/bats"
     kube-state-metrics:
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/opensource/coreos/kube-state-metrics"
       resources:
         requests:
           cpu: "10m"
@@ -488,6 +495,8 @@ monitoring:
           cpu: "500m"
           memory: "128Mi"
     prometheus-node-exporter:
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/opensource/prometheus/node-exporter"
       resources:
         requests:
           cpu: "100m"
@@ -502,6 +511,8 @@ twistlock:
     repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__security-tools__twistlock.git
   values:
     console:
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/twistlock/console/console"
       persistence:
         size: 5Gi
     resources:
@@ -512,7 +523,6 @@ twistlock:
         cpu: "500m"
         memory: "2Gi"
 
-
 addons:
   # Addons for bb-umbrella
   sonarqube:
@@ -520,6 +530,8 @@ addons:
     git:
       repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__sonarqube.git
     values:
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/big-bang/sonarqube"
       istio:
         enabled: true
         sonarqube:
@@ -535,6 +547,15 @@ addons:
       repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
     values:
       global:
+        certificates:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/alpine-certificates"
+        kubectl:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/kubectl"
+        busybox:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8"
         istio:
           enabled: true
         imagePullSecrets:
@@ -545,15 +566,80 @@ addons:
         gitlab:
           gateways:
             - istio-system/public
+      upgradeCheck:
+        image:
+          repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8"
+      redis:
+        metrics:
+          image:
+            registry: "###ZARF_REGISTRY###/ironbank/bitnami"
+        image:
+          registry: "###ZARF_REGISTRY###/ironbank/opensource"
+      registry:
+        image:
+          repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-container-registry"
+      shared-secrets:
+        selfsign:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/cfssl-self-sign"
+      gitlab:
+        task-runner:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-task-runner"
+        gitlab-exporter:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-exporter"
+        migrations:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-task-runner"
+        webservice:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-webservice"
+          workhorse:
+            image: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-workhorse"
+        sidekiq:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-sidekiq"
+        gitaly:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitaly"
+        gitlab-shell:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-shell"
+        praefect:
+          image:
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitaly"
+      minio:
+        image: "###ZARF_REGISTRY###/ironbank/opensource/minio/minio"
+        minioMc:
+          image: "###ZARF_REGISTRY###/ironbank/opensource/minio/mc"
   gitlabRunner:
     enabled: true
     git:
       repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab-runner.git
+    values:
+      image: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab-runner/gitlab-runner:v13.12.0"
+      runners:
+        config: |
+          [[runners]]
+            clone_url = "http://gitlab-webservice-default.gitlab.svc.cluster.local:8181"
+            cache_dir = "/tmp/gitlab-runner/cache"
+            [runners.kubernetes]
+              image = "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8:8.4"
+              helper_image = "###ZARF_REGISTRY###/ironbank/gitlab/gitlab-runner/gitlab-runner-helper:v13.12.0"
+              image_pull_secrets = ["private-registry"]
+            [runners.kubernetes.pod_labels]
+              "job_id" = "${CI_JOB_ID}"
+              "job_name" = "${CI_JOB_NAME}"
+              "pipeline_id" = "${CI_PIPELINE_ID}"
   minioOperator:
     enabled: true
     git:
       repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio-operator.git
     values:
+      operator:
+        image:
+          repository: "###ZARF_REGISTRY###/ironbank/opensource/minio/operator"
       istio:
         enabled: true
   mattermostoperator:
@@ -562,6 +648,8 @@ addons:
       repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__collaboration-tools__mattermost-operator.git
       tag: "1.16.0-bb.0"
     values:
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/opensource/mattermost/mattermost-operator"
       istio:
         enabled: true
   mattermost:
@@ -570,6 +658,8 @@ addons:
       repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__collaboration-tools__mattermost.git
       tag: 0.2.4-bb.0
     values:
+      image:
+        name: "###ZARF_REGISTRY###/ironbank/opensource/mattermost/mattermost"
       istio:
         enabled: true
         chat:
@@ -577,13 +667,23 @@ addons:
             - istio-system/public
       minio:
         install: true
-        bucketCreationImage: "registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2021-08-31T05-46-54Z"
+        bucketCreationImage: "###ZARF_REGISTRY###/ironbank/opensource/minio/mc:RELEASE.2021-09-02T09-21-27Z"
+      postgresql:
+        image:
+          registry: "###ZARF_REGISTRY###/ironbank"
+      database:
+        readinessCheck:
+          image: "###ZARF_REGISTRY###/ironbank/opensource/postgres/postgresql12:12.8"
   nexus:
     enabled: true
     git:
       repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__nexus.git
       tag: 36.0.0-bb.0
     values:
+      job_image:
+        repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8-minimal"
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/sonatype/nexus/nexus"
       istio:
         enabled: true
         nexus:
@@ -591,198 +691,196 @@ addons:
             - istio-system/public
   keycloak:
     enabled: false
-    git:
-      repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__security-tools__keycloak.git
-      tag: "11.0.1-bb.6"
-    ingress:
-      key: |
-        -----BEGIN PRIVATE KEY-----
-        MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDbaLWaC86eG74Z
-        D5JxLJ0X4DpOTZgGeP3oY+oS5S1pE+nZq30LrC6YMQeBLSvJDWpBtvV5x9F88gMz
-        yhU94HgrWH26LBUQIBti+ip6IbS0sAKc6bicw6NBtR2F4BnLGw+mrUniVT8WNrRL
-        C1NkN5shexmTE6XAY9Ak6UpApHVmTiB8xz6hypr4JwqnqQfxDO0+AfaGSHheKo5h
-        xTSgUYULhyA9UaImHU+S/SekwGLRLX1KfcTpnz1+TZiQqShG9vqUB4dAge+imwAs
-        ZTCnI9H3tmz6jWekXQYRUraJUwjEaqqLoSQT5VQmEl518ueeRKKNB/8mi1pylWqN
-        UjedV4A5AgMBAAECggEBAM56xORaljBO9WAKOotNK+1rNBO6jAYTWQeY95CeolSP
-        y/PvobcZa6QICAL16o3DlSqQroTTmf7WllLnq4PWueA43+ETWSMaxAsqWE0laTTd
-        qyfV/8lvhzTv5/+z/TIZnmoCDFT2Wm9iPdudpfXbKp+ghFnYFJVwmVITRbB91InX
-        38LaEvLWFnJ3/DPYursaXerwwrm50d0PCdpa/ceqBCVHlpT3Zc0lT0rYpDVtc9BG
-        3gjbvKwhVUQBDfD3FGEobxhbc5eEH6JEf0PUWKnsU5F0qRKjQnfM19XKbczP+9gY
-        71BDL1sALSZxxJXW865+7GeXKCtxObkcCwYbf8UrS30CgYEA+HSH4ZpuHZ8IKIbs
-        vFaAjsEMkRfZPao8b/g4/JCg4TuOpAdFZUTSPWmdUq3i/J8o9b+e8/bznn9HLHIT
-        qyreSyiRUQRtcniSL1ZUHSzzW9QefYKzPghGYHXQLIBAWt50PDaMfPQ6Sj1NaEPH
-        h3hq4YNYNMQP/QVmfFdiT4xVA6cCgYEA4hJgSc17hh/u84uYAKhg2zSlFG5LlYKc
-        Yb2aFQJhFz2QqGxMeOXyIVDFD6btGcOLtPt4RdsBuCLZZzFBDUlWL7rY9qlL+/+P
-        ERStyHE9gFBDa0KWfvQxHSXIuxN2mkokktiVfaTisi8SWEKRJYp+B8HCa5lSDBti
-        eXcGBK3hWR8CgYBJ+aBPmsR4i1ZJgsrP1M2YM4CDXt9uzdYK3JRTFtjf1vTEf+m4
-        mkIiyORvrphr8ROn//La3sdwhKLzZ8/VYgEnzZ9eyPuxXpbgA0suGKkoyUJ+ykCG
-        Er6pj8p4xYLjy2I+X1t7BNiqLBB1H+Ezw7XHCW1k4I+GHWqDUR1TZAwX9wKBgFhy
-        KAm3wqPuymWuL4HSXlJkflFH9XpA5z22GBowHBwjkfzSofiKvfgayX4eKJTz1Cyy
-        VZO+4yVPPQ8KThEMqBN0Xn3iLkAg87ATDwpkg1M4E6hbHNX+Y1ir96R5MOWcLELn
-        SVUmtSpREDRHltHBJR2TyKSgD2F9NUGgN1KNVKSxAoGARyx7VceWlpdmnr+i26UH
-        B4h6/rL/nY7M2oWgUaj7FeygcfemtO6cV+R1Bl876Q9Dx797hZ4ddGAgxmDFsv8J
-        f6SSzTJBB6IGxt+1ZcxD4uFXUrOVFv00br/Re14bsXQcMwi9kEJF2idbR5E7O2qc
-        qbLlPssjuZS5pDnRa05bEIQ=
-        -----END PRIVATE KEY-----
-      cert: |
-        -----BEGIN CERTIFICATE-----
-        MIIFHzCCBAegAwIBAgISA9KlIFfDVyxZ1/qZXl4HMuIOMA0GCSqGSIb3DQEBCwUA
-        MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD
-        EwJSMzAeFw0yMTA5MjcxNDU1MDdaFw0yMTEyMjYxNDU1MDZaMBgxFjAUBgNVBAMM
-        DSouYmlnYmFuZy5kZXYwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDb
-        aLWaC86eG74ZD5JxLJ0X4DpOTZgGeP3oY+oS5S1pE+nZq30LrC6YMQeBLSvJDWpB
-        tvV5x9F88gMzyhU94HgrWH26LBUQIBti+ip6IbS0sAKc6bicw6NBtR2F4BnLGw+m
-        rUniVT8WNrRLC1NkN5shexmTE6XAY9Ak6UpApHVmTiB8xz6hypr4JwqnqQfxDO0+
-        AfaGSHheKo5hxTSgUYULhyA9UaImHU+S/SekwGLRLX1KfcTpnz1+TZiQqShG9vqU
-        B4dAge+imwAsZTCnI9H3tmz6jWekXQYRUraJUwjEaqqLoSQT5VQmEl518ueeRKKN
-        B/8mi1pylWqNUjedV4A5AgMBAAGjggJHMIICQzAOBgNVHQ8BAf8EBAMCBaAwHQYD
-        VR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMAwGA1UdEwEB/wQCMAAwHQYDVR0O
-        BBYEFLUbMi65bMLlINPzTplLjtCHZfa0MB8GA1UdIwQYMBaAFBQusxe3WFbLrlAJ
-        QOYfr52LFMLGMFUGCCsGAQUFBwEBBEkwRzAhBggrBgEFBQcwAYYVaHR0cDovL3Iz
-        Lm8ubGVuY3Iub3JnMCIGCCsGAQUFBzAChhZodHRwOi8vcjMuaS5sZW5jci5vcmcv
-        MBgGA1UdEQQRMA+CDSouYmlnYmFuZy5kZXYwTAYDVR0gBEUwQzAIBgZngQwBAgEw
-        NwYLKwYBBAGC3xMBAQEwKDAmBggrBgEFBQcCARYaaHR0cDovL2Nwcy5sZXRzZW5j
-        cnlwdC5vcmcwggEDBgorBgEEAdZ5AgQCBIH0BIHxAO8AdQBElGUusO7Or8RAB9io
-        /ijA2uaCvtjLMbU/0zOWtbaBqAAAAXwn948JAAAEAwBGMEQCIBkkdKr6WRtmZYO8
-        kuchAYDxGPaCnU9FYU3BZBpsbJvLAiButEYn4AvTFiZMILymyuuqct/eFjIR9MEE
-        pNotyaD+bQB2AH0+8viP/4hVaCTCwMqeUol5K8UOeAl/LmqXaJl+IvDXAAABfCf3
-        kGUAAAQDAEcwRQIhAOOOX0qpI8xjqARUfU4ErGe8icHORlNHHzP/a6b3XE4ZAiBp
-        fMNh3oihXS1e6EM9Xs8m+9nuCi7rqLNSkCNuwisK7zANBgkqhkiG9w0BAQsFAAOC
-        AQEABMjkLKKxYyL4ZT6BPuOyqC4hnczDYUmZdCCysLu7psCjrZIAlSRxLIWXdWir
-        ogi/Vf+wdPKk38NDar0T9+rfAehuvQjQKCzIKVzr+MGauW0Wytwt63EgLIl2znvX
-        jWEIUwDQkqeFzPMbov8BK8hdLibBSz9nLrT0Zyw9mgRIzslemsi62+AjSNERTCTv
-        qyhinnBHLd3dGLOAXexwXu7ic2ZwCgnSgcli+MWC30QOh6ePJJqgw6OpwvOC9DAV
-        fkvGYFXlgYXnhQeLr0/4tzw3koclRWe/qgjAdAjB03yp1e53b+j9NoOfyobo1MFe
-        nMqEgcgAiA2VuE62Q4HE0Rs5wA==
-        -----END CERTIFICATE-----
-        -----BEGIN CERTIFICATE-----
-        MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
-        TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
-        cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjAwOTA0MDAwMDAw
-        WhcNMjUwOTE1MTYwMDAwWjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
-        RW5jcnlwdDELMAkGA1UEAxMCUjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
-        AoIBAQC7AhUozPaglNMPEuyNVZLD+ILxmaZ6QoinXSaqtSu5xUyxr45r+XXIo9cP
-        R5QUVTVXjJ6oojkZ9YI8QqlObvU7wy7bjcCwXPNZOOftz2nwWgsbvsCUJCWH+jdx
-        sxPnHKzhm+/b5DtFUkWWqcFTzjTIUu61ru2P3mBw4qVUq7ZtDpelQDRrK9O8Zutm
-        NHz6a4uPVymZ+DAXXbpyb/uBxa3Shlg9F8fnCbvxK/eG3MHacV3URuPMrSXBiLxg
-        Z3Vms/EY96Jc5lP/Ooi2R6X/ExjqmAl3P51T+c8B5fWmcBcUr2Ok/5mzk53cU6cG
-        /kiFHaFpriV1uxPMUgP17VGhi9sVAgMBAAGjggEIMIIBBDAOBgNVHQ8BAf8EBAMC
-        AYYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMBIGA1UdEwEB/wQIMAYB
-        Af8CAQAwHQYDVR0OBBYEFBQusxe3WFbLrlAJQOYfr52LFMLGMB8GA1UdIwQYMBaA
-        FHm0WeZ7tuXkAXOACIjIGlj26ZtuMDIGCCsGAQUFBwEBBCYwJDAiBggrBgEFBQcw
-        AoYWaHR0cDovL3gxLmkubGVuY3Iub3JnLzAnBgNVHR8EIDAeMBygGqAYhhZodHRw
-        Oi8veDEuYy5sZW5jci5vcmcvMCIGA1UdIAQbMBkwCAYGZ4EMAQIBMA0GCysGAQQB
-        gt8TAQEBMA0GCSqGSIb3DQEBCwUAA4ICAQCFyk5HPqP3hUSFvNVneLKYY611TR6W
-        PTNlclQtgaDqw+34IL9fzLdwALduO/ZelN7kIJ+m74uyA+eitRY8kc607TkC53wl
-        ikfmZW4/RvTZ8M6UK+5UzhK8jCdLuMGYL6KvzXGRSgi3yLgjewQtCPkIVz6D2QQz
-        CkcheAmCJ8MqyJu5zlzyZMjAvnnAT45tRAxekrsu94sQ4egdRCnbWSDtY7kh+BIm
-        lJNXoB1lBMEKIq4QDUOXoRgffuDghje1WrG9ML+Hbisq/yFOGwXD9RiX8F6sw6W4
-        avAuvDszue5L3sz85K+EC4Y/wFVDNvZo4TYXao6Z0f+lQKc0t8DQYzk1OXVu8rp2
-        yJMC6alLbBfODALZvYH7n7do1AZls4I9d1P4jnkDrQoxB3UqQ9hVl3LEKQ73xF1O
-        yK5GhDDX8oVfGKF5u+decIsH4YaTw7mP3GFxJSqv3+0lUFJoi5Lc5da149p90Ids
-        hCExroL1+7mryIkXPeFM5TgO9r0rvZaBFOvV2z0gp35Z0+L4WPlbuEjN/lxPFin+
-        HlUjr8gRsI3qfJOQFy/9rKIJR0Y/8Omwt/8oTWgy1mdeHmmjk7j1nYsvC9JSQ6Zv
-        MldlTTKB3zhThV1+XWYp6rjd5JW1zbVWEkLNxE7GJThEUG3szgBVGP7pSWTUTsqX
-        nLRbwHOoq7hHwg==
-        -----END CERTIFICATE-----
-        -----BEGIN CERTIFICATE-----
-        MIIFYDCCBEigAwIBAgIQQAF3ITfU6UK47naqPGQKtzANBgkqhkiG9w0BAQsFADA/
-        MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
-        DkRTVCBSb290IENBIFgzMB4XDTIxMDEyMDE5MTQwM1oXDTI0MDkzMDE4MTQwM1ow
-        TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
-        cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwggIiMA0GCSqGSIb3DQEB
-        AQUAA4ICDwAwggIKAoICAQCt6CRz9BQ385ueK1coHIe+3LffOJCMbjzmV6B493XC
-        ov71am72AE8o295ohmxEk7axY/0UEmu/H9LqMZshftEzPLpI9d1537O4/xLxIZpL
-        wYqGcWlKZmZsj348cL+tKSIG8+TA5oCu4kuPt5l+lAOf00eXfJlII1PoOK5PCm+D
-        LtFJV4yAdLbaL9A4jXsDcCEbdfIwPPqPrt3aY6vrFk/CjhFLfs8L6P+1dy70sntK
-        4EwSJQxwjQMpoOFTJOwT2e4ZvxCzSow/iaNhUd6shweU9GNx7C7ib1uYgeGJXDR5
-        bHbvO5BieebbpJovJsXQEOEO3tkQjhb7t/eo98flAgeYjzYIlefiN5YNNnWe+w5y
-        sR2bvAP5SQXYgd0FtCrWQemsAXaVCg/Y39W9Eh81LygXbNKYwagJZHduRze6zqxZ
-        Xmidf3LWicUGQSk+WT7dJvUkyRGnWqNMQB9GoZm1pzpRboY7nn1ypxIFeFntPlF4
-        FQsDj43QLwWyPntKHEtzBRL8xurgUBN8Q5N0s8p0544fAQjQMNRbcTa0B7rBMDBc
-        SLeCO5imfWCKoqMpgsy6vYMEG6KDA0Gh1gXxG8K28Kh8hjtGqEgqiNx2mna/H2ql
-        PRmP6zjzZN7IKw0KKP/32+IVQtQi0Cdd4Xn+GOdwiK1O5tmLOsbdJ1Fu/7xk9TND
-        TwIDAQABo4IBRjCCAUIwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYw
-        SwYIKwYBBQUHAQEEPzA9MDsGCCsGAQUFBzAChi9odHRwOi8vYXBwcy5pZGVudHJ1
-        c3QuY29tL3Jvb3RzL2RzdHJvb3RjYXgzLnA3YzAfBgNVHSMEGDAWgBTEp7Gkeyxx
-        +tvhS5B1/8QVYIWJEDBUBgNVHSAETTBLMAgGBmeBDAECATA/BgsrBgEEAYLfEwEB
-        ATAwMC4GCCsGAQUFBwIBFiJodHRwOi8vY3BzLnJvb3QteDEubGV0c2VuY3J5cHQu
-        b3JnMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jcmwuaWRlbnRydXN0LmNvbS9E
-        U1RST09UQ0FYM0NSTC5jcmwwHQYDVR0OBBYEFHm0WeZ7tuXkAXOACIjIGlj26Ztu
-        MA0GCSqGSIb3DQEBCwUAA4IBAQAKcwBslm7/DlLQrt2M51oGrS+o44+/yQoDFVDC
-        5WxCu2+b9LRPwkSICHXM6webFGJueN7sJ7o5XPWioW5WlHAQU7G75K/QosMrAdSW
-        9MUgNTP52GE24HGNtLi1qoJFlcDyqSMo59ahy2cI2qBDLKobkx/J3vWraV0T9VuG
-        WCLKTVXkcGdtwlfFRjlBz4pYg1htmf5X6DYO8A4jqv2Il9DjXA6USbW1FzXSLr9O
-        he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
-        Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
-        -----END CERTIFICATE-----
-    values:
-      replicas: 1
-      imagePullSecrets:
-        - name: "private-registry"
-      postgresql:
-        image:
-          pullSecrets:
-            - "private-registry"
-      istio:
-        enabled: true
-        keycloak:
-          enabled: true
-      resources:
-        requests:
-          cpu: "750m"
-          memory: "1024Mi"
-        limits:
-          cpu: "750m"
-          memory: "1024Mi"
-      startupProbe: |
-        httpGet:
-          path: /auth/realms/master
-          port: http
-        initialDelaySeconds: 600
-        timeoutSeconds: 10
-        failureThreshold: 60
-        periodSeconds: 10
-      secrets:
-        env:
-          stringData:
-            CUSTOM_REGISTRATION_CONFIG: /opt/jboss/keycloak/customreg.yaml
-            KEYCLOAK_IMPORT: /opt/jboss/keycloak/realm.json
-            X509_CA_BUNDLE: /etc/x509/https/cas.pem
-        certauthority:
-          stringData:
-            cas.pem: '{{ .Files.Get "resources/dev/dod_cas.pem" }}'
-        customreg:
-          stringData:
-            customreg.yaml: '{{ .Files.Get "resources/dev/baby-yoda.yaml" }}'
-        realm:
-          stringData:
-            realm.json: '{{ .Files.Get "resources/dev/baby-yoda.json" }}'
-      extraVolumes: |-
-        - name: certauthority
-          secret:
-            secretName: {{ include "keycloak.fullname" . }}-certauthority
-        - name: customreg
-          secret:
-            secretName: {{ include "keycloak.fullname" . }}-customreg
-        - name: realm
-          secret:
-            secretName: {{ include "keycloak.fullname" . }}-realm
-      extraVolumeMounts: |-
-        - name: certauthority
-          mountPath: /etc/x509/https/cas.pem
-          subPath: cas.pem
-          readOnly: true
-        - name: customreg
-          mountPath: /opt/jboss/keycloak/customreg.yaml
-          subPath: customreg.yaml
-          readOnly: true
-        - name: realm
-          mountPath: /opt/jboss/keycloak/realm.json
-          subPath: realm.json
-          readOnly: true
-
-
+    # git:
+    #   repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__security-tools__keycloak.git
+    #   tag: "11.0.1-bb.6"
+    # ingress:
+    #   key: |
+    #     -----BEGIN PRIVATE KEY-----
+    #     MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDbaLWaC86eG74Z
+    #     D5JxLJ0X4DpOTZgGeP3oY+oS5S1pE+nZq30LrC6YMQeBLSvJDWpBtvV5x9F88gMz
+    #     yhU94HgrWH26LBUQIBti+ip6IbS0sAKc6bicw6NBtR2F4BnLGw+mrUniVT8WNrRL
+    #     C1NkN5shexmTE6XAY9Ak6UpApHVmTiB8xz6hypr4JwqnqQfxDO0+AfaGSHheKo5h
+    #     xTSgUYULhyA9UaImHU+S/SekwGLRLX1KfcTpnz1+TZiQqShG9vqUB4dAge+imwAs
+    #     ZTCnI9H3tmz6jWekXQYRUraJUwjEaqqLoSQT5VQmEl518ueeRKKNB/8mi1pylWqN
+    #     UjedV4A5AgMBAAECggEBAM56xORaljBO9WAKOotNK+1rNBO6jAYTWQeY95CeolSP
+    #     y/PvobcZa6QICAL16o3DlSqQroTTmf7WllLnq4PWueA43+ETWSMaxAsqWE0laTTd
+    #     qyfV/8lvhzTv5/+z/TIZnmoCDFT2Wm9iPdudpfXbKp+ghFnYFJVwmVITRbB91InX
+    #     38LaEvLWFnJ3/DPYursaXerwwrm50d0PCdpa/ceqBCVHlpT3Zc0lT0rYpDVtc9BG
+    #     3gjbvKwhVUQBDfD3FGEobxhbc5eEH6JEf0PUWKnsU5F0qRKjQnfM19XKbczP+9gY
+    #     71BDL1sALSZxxJXW865+7GeXKCtxObkcCwYbf8UrS30CgYEA+HSH4ZpuHZ8IKIbs
+    #     vFaAjsEMkRfZPao8b/g4/JCg4TuOpAdFZUTSPWmdUq3i/J8o9b+e8/bznn9HLHIT
+    #     qyreSyiRUQRtcniSL1ZUHSzzW9QefYKzPghGYHXQLIBAWt50PDaMfPQ6Sj1NaEPH
+    #     h3hq4YNYNMQP/QVmfFdiT4xVA6cCgYEA4hJgSc17hh/u84uYAKhg2zSlFG5LlYKc
+    #     Yb2aFQJhFz2QqGxMeOXyIVDFD6btGcOLtPt4RdsBuCLZZzFBDUlWL7rY9qlL+/+P
+    #     ERStyHE9gFBDa0KWfvQxHSXIuxN2mkokktiVfaTisi8SWEKRJYp+B8HCa5lSDBti
+    #     eXcGBK3hWR8CgYBJ+aBPmsR4i1ZJgsrP1M2YM4CDXt9uzdYK3JRTFtjf1vTEf+m4
+    #     mkIiyORvrphr8ROn//La3sdwhKLzZ8/VYgEnzZ9eyPuxXpbgA0suGKkoyUJ+ykCG
+    #     Er6pj8p4xYLjy2I+X1t7BNiqLBB1H+Ezw7XHCW1k4I+GHWqDUR1TZAwX9wKBgFhy
+    #     KAm3wqPuymWuL4HSXlJkflFH9XpA5z22GBowHBwjkfzSofiKvfgayX4eKJTz1Cyy
+    #     VZO+4yVPPQ8KThEMqBN0Xn3iLkAg87ATDwpkg1M4E6hbHNX+Y1ir96R5MOWcLELn
+    #     SVUmtSpREDRHltHBJR2TyKSgD2F9NUGgN1KNVKSxAoGARyx7VceWlpdmnr+i26UH
+    #     B4h6/rL/nY7M2oWgUaj7FeygcfemtO6cV+R1Bl876Q9Dx797hZ4ddGAgxmDFsv8J
+    #     f6SSzTJBB6IGxt+1ZcxD4uFXUrOVFv00br/Re14bsXQcMwi9kEJF2idbR5E7O2qc
+    #     qbLlPssjuZS5pDnRa05bEIQ=
+    #     -----END PRIVATE KEY-----
+    #   cert: |
+    #     -----BEGIN CERTIFICATE-----
+    #     MIIFHzCCBAegAwIBAgISA9KlIFfDVyxZ1/qZXl4HMuIOMA0GCSqGSIb3DQEBCwUA
+    #     MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD
+    #     EwJSMzAeFw0yMTA5MjcxNDU1MDdaFw0yMTEyMjYxNDU1MDZaMBgxFjAUBgNVBAMM
+    #     DSouYmlnYmFuZy5kZXYwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDb
+    #     aLWaC86eG74ZD5JxLJ0X4DpOTZgGeP3oY+oS5S1pE+nZq30LrC6YMQeBLSvJDWpB
+    #     tvV5x9F88gMzyhU94HgrWH26LBUQIBti+ip6IbS0sAKc6bicw6NBtR2F4BnLGw+m
+    #     rUniVT8WNrRLC1NkN5shexmTE6XAY9Ak6UpApHVmTiB8xz6hypr4JwqnqQfxDO0+
+    #     AfaGSHheKo5hxTSgUYULhyA9UaImHU+S/SekwGLRLX1KfcTpnz1+TZiQqShG9vqU
+    #     B4dAge+imwAsZTCnI9H3tmz6jWekXQYRUraJUwjEaqqLoSQT5VQmEl518ueeRKKN
+    #     B/8mi1pylWqNUjedV4A5AgMBAAGjggJHMIICQzAOBgNVHQ8BAf8EBAMCBaAwHQYD
+    #     VR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMAwGA1UdEwEB/wQCMAAwHQYDVR0O
+    #     BBYEFLUbMi65bMLlINPzTplLjtCHZfa0MB8GA1UdIwQYMBaAFBQusxe3WFbLrlAJ
+    #     QOYfr52LFMLGMFUGCCsGAQUFBwEBBEkwRzAhBggrBgEFBQcwAYYVaHR0cDovL3Iz
+    #     Lm8ubGVuY3Iub3JnMCIGCCsGAQUFBzAChhZodHRwOi8vcjMuaS5sZW5jci5vcmcv
+    #     MBgGA1UdEQQRMA+CDSouYmlnYmFuZy5kZXYwTAYDVR0gBEUwQzAIBgZngQwBAgEw
+    #     NwYLKwYBBAGC3xMBAQEwKDAmBggrBgEFBQcCARYaaHR0cDovL2Nwcy5sZXRzZW5j
+    #     cnlwdC5vcmcwggEDBgorBgEEAdZ5AgQCBIH0BIHxAO8AdQBElGUusO7Or8RAB9io
+    #     /ijA2uaCvtjLMbU/0zOWtbaBqAAAAXwn948JAAAEAwBGMEQCIBkkdKr6WRtmZYO8
+    #     kuchAYDxGPaCnU9FYU3BZBpsbJvLAiButEYn4AvTFiZMILymyuuqct/eFjIR9MEE
+    #     pNotyaD+bQB2AH0+8viP/4hVaCTCwMqeUol5K8UOeAl/LmqXaJl+IvDXAAABfCf3
+    #     kGUAAAQDAEcwRQIhAOOOX0qpI8xjqARUfU4ErGe8icHORlNHHzP/a6b3XE4ZAiBp
+    #     fMNh3oihXS1e6EM9Xs8m+9nuCi7rqLNSkCNuwisK7zANBgkqhkiG9w0BAQsFAAOC
+    #     AQEABMjkLKKxYyL4ZT6BPuOyqC4hnczDYUmZdCCysLu7psCjrZIAlSRxLIWXdWir
+    #     ogi/Vf+wdPKk38NDar0T9+rfAehuvQjQKCzIKVzr+MGauW0Wytwt63EgLIl2znvX
+    #     jWEIUwDQkqeFzPMbov8BK8hdLibBSz9nLrT0Zyw9mgRIzslemsi62+AjSNERTCTv
+    #     qyhinnBHLd3dGLOAXexwXu7ic2ZwCgnSgcli+MWC30QOh6ePJJqgw6OpwvOC9DAV
+    #     fkvGYFXlgYXnhQeLr0/4tzw3koclRWe/qgjAdAjB03yp1e53b+j9NoOfyobo1MFe
+    #     nMqEgcgAiA2VuE62Q4HE0Rs5wA==
+    #     -----END CERTIFICATE-----
+    #     -----BEGIN CERTIFICATE-----
+    #     MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
+    #     TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+    #     cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjAwOTA0MDAwMDAw
+    #     WhcNMjUwOTE1MTYwMDAwWjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
+    #     RW5jcnlwdDELMAkGA1UEAxMCUjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+    #     AoIBAQC7AhUozPaglNMPEuyNVZLD+ILxmaZ6QoinXSaqtSu5xUyxr45r+XXIo9cP
+    #     R5QUVTVXjJ6oojkZ9YI8QqlObvU7wy7bjcCwXPNZOOftz2nwWgsbvsCUJCWH+jdx
+    #     sxPnHKzhm+/b5DtFUkWWqcFTzjTIUu61ru2P3mBw4qVUq7ZtDpelQDRrK9O8Zutm
+    #     NHz6a4uPVymZ+DAXXbpyb/uBxa3Shlg9F8fnCbvxK/eG3MHacV3URuPMrSXBiLxg
+    #     Z3Vms/EY96Jc5lP/Ooi2R6X/ExjqmAl3P51T+c8B5fWmcBcUr2Ok/5mzk53cU6cG
+    #     /kiFHaFpriV1uxPMUgP17VGhi9sVAgMBAAGjggEIMIIBBDAOBgNVHQ8BAf8EBAMC
+    #     AYYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMBIGA1UdEwEB/wQIMAYB
+    #     Af8CAQAwHQYDVR0OBBYEFBQusxe3WFbLrlAJQOYfr52LFMLGMB8GA1UdIwQYMBaA
+    #     FHm0WeZ7tuXkAXOACIjIGlj26ZtuMDIGCCsGAQUFBwEBBCYwJDAiBggrBgEFBQcw
+    #     AoYWaHR0cDovL3gxLmkubGVuY3Iub3JnLzAnBgNVHR8EIDAeMBygGqAYhhZodHRw
+    #     Oi8veDEuYy5sZW5jci5vcmcvMCIGA1UdIAQbMBkwCAYGZ4EMAQIBMA0GCysGAQQB
+    #     gt8TAQEBMA0GCSqGSIb3DQEBCwUAA4ICAQCFyk5HPqP3hUSFvNVneLKYY611TR6W
+    #     PTNlclQtgaDqw+34IL9fzLdwALduO/ZelN7kIJ+m74uyA+eitRY8kc607TkC53wl
+    #     ikfmZW4/RvTZ8M6UK+5UzhK8jCdLuMGYL6KvzXGRSgi3yLgjewQtCPkIVz6D2QQz
+    #     CkcheAmCJ8MqyJu5zlzyZMjAvnnAT45tRAxekrsu94sQ4egdRCnbWSDtY7kh+BIm
+    #     lJNXoB1lBMEKIq4QDUOXoRgffuDghje1WrG9ML+Hbisq/yFOGwXD9RiX8F6sw6W4
+    #     avAuvDszue5L3sz85K+EC4Y/wFVDNvZo4TYXao6Z0f+lQKc0t8DQYzk1OXVu8rp2
+    #     yJMC6alLbBfODALZvYH7n7do1AZls4I9d1P4jnkDrQoxB3UqQ9hVl3LEKQ73xF1O
+    #     yK5GhDDX8oVfGKF5u+decIsH4YaTw7mP3GFxJSqv3+0lUFJoi5Lc5da149p90Ids
+    #     hCExroL1+7mryIkXPeFM5TgO9r0rvZaBFOvV2z0gp35Z0+L4WPlbuEjN/lxPFin+
+    #     HlUjr8gRsI3qfJOQFy/9rKIJR0Y/8Omwt/8oTWgy1mdeHmmjk7j1nYsvC9JSQ6Zv
+    #     MldlTTKB3zhThV1+XWYp6rjd5JW1zbVWEkLNxE7GJThEUG3szgBVGP7pSWTUTsqX
+    #     nLRbwHOoq7hHwg==
+    #     -----END CERTIFICATE-----
+    #     -----BEGIN CERTIFICATE-----
+    #     MIIFYDCCBEigAwIBAgIQQAF3ITfU6UK47naqPGQKtzANBgkqhkiG9w0BAQsFADA/
+    #     MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
+    #     DkRTVCBSb290IENBIFgzMB4XDTIxMDEyMDE5MTQwM1oXDTI0MDkzMDE4MTQwM1ow
+    #     TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+    #     cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwggIiMA0GCSqGSIb3DQEB
+    #     AQUAA4ICDwAwggIKAoICAQCt6CRz9BQ385ueK1coHIe+3LffOJCMbjzmV6B493XC
+    #     ov71am72AE8o295ohmxEk7axY/0UEmu/H9LqMZshftEzPLpI9d1537O4/xLxIZpL
+    #     wYqGcWlKZmZsj348cL+tKSIG8+TA5oCu4kuPt5l+lAOf00eXfJlII1PoOK5PCm+D
+    #     LtFJV4yAdLbaL9A4jXsDcCEbdfIwPPqPrt3aY6vrFk/CjhFLfs8L6P+1dy70sntK
+    #     4EwSJQxwjQMpoOFTJOwT2e4ZvxCzSow/iaNhUd6shweU9GNx7C7ib1uYgeGJXDR5
+    #     bHbvO5BieebbpJovJsXQEOEO3tkQjhb7t/eo98flAgeYjzYIlefiN5YNNnWe+w5y
+    #     sR2bvAP5SQXYgd0FtCrWQemsAXaVCg/Y39W9Eh81LygXbNKYwagJZHduRze6zqxZ
+    #     Xmidf3LWicUGQSk+WT7dJvUkyRGnWqNMQB9GoZm1pzpRboY7nn1ypxIFeFntPlF4
+    #     FQsDj43QLwWyPntKHEtzBRL8xurgUBN8Q5N0s8p0544fAQjQMNRbcTa0B7rBMDBc
+    #     SLeCO5imfWCKoqMpgsy6vYMEG6KDA0Gh1gXxG8K28Kh8hjtGqEgqiNx2mna/H2ql
+    #     PRmP6zjzZN7IKw0KKP/32+IVQtQi0Cdd4Xn+GOdwiK1O5tmLOsbdJ1Fu/7xk9TND
+    #     TwIDAQABo4IBRjCCAUIwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYw
+    #     SwYIKwYBBQUHAQEEPzA9MDsGCCsGAQUFBzAChi9odHRwOi8vYXBwcy5pZGVudHJ1
+    #     c3QuY29tL3Jvb3RzL2RzdHJvb3RjYXgzLnA3YzAfBgNVHSMEGDAWgBTEp7Gkeyxx
+    #     +tvhS5B1/8QVYIWJEDBUBgNVHSAETTBLMAgGBmeBDAECATA/BgsrBgEEAYLfEwEB
+    #     ATAwMC4GCCsGAQUFBwIBFiJodHRwOi8vY3BzLnJvb3QteDEubGV0c2VuY3J5cHQu
+    #     b3JnMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jcmwuaWRlbnRydXN0LmNvbS9E
+    #     U1RST09UQ0FYM0NSTC5jcmwwHQYDVR0OBBYEFHm0WeZ7tuXkAXOACIjIGlj26Ztu
+    #     MA0GCSqGSIb3DQEBCwUAA4IBAQAKcwBslm7/DlLQrt2M51oGrS+o44+/yQoDFVDC
+    #     5WxCu2+b9LRPwkSICHXM6webFGJueN7sJ7o5XPWioW5WlHAQU7G75K/QosMrAdSW
+    #     9MUgNTP52GE24HGNtLi1qoJFlcDyqSMo59ahy2cI2qBDLKobkx/J3vWraV0T9VuG
+    #     WCLKTVXkcGdtwlfFRjlBz4pYg1htmf5X6DYO8A4jqv2Il9DjXA6USbW1FzXSLr9O
+    #     he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
+    #     Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
+    #     -----END CERTIFICATE-----
+    # values:
+    #   replicas: 1
+    #   imagePullSecrets:
+    #     - name: "private-registry"
+    #   postgresql:
+    #     image:
+    #       pullSecrets:
+    #         - "private-registry"
+    #   istio:
+    #     enabled: true
+    #     keycloak:
+    #       enabled: true
+    #   resources:
+    #     requests:
+    #       cpu: "750m"
+    #       memory: "1024Mi"
+    #     limits:
+    #       cpu: "750m"
+    #       memory: "1024Mi"
+    #   startupProbe: |
+    #     httpGet:
+    #       path: /auth/realms/master
+    #       port: http
+    #     initialDelaySeconds: 600
+    #     timeoutSeconds: 10
+    #     failureThreshold: 60
+    #     periodSeconds: 10
+    #   secrets:
+    #     env:
+    #       stringData:
+    #         CUSTOM_REGISTRATION_CONFIG: /opt/jboss/keycloak/customreg.yaml
+    #         KEYCLOAK_IMPORT: /opt/jboss/keycloak/realm.json
+    #         X509_CA_BUNDLE: /etc/x509/https/cas.pem
+    #     certauthority:
+    #       stringData:
+    #         cas.pem: '{{ .Files.Get "resources/dev/dod_cas.pem" }}'
+    #     customreg:
+    #       stringData:
+    #         customreg.yaml: '{{ .Files.Get "resources/dev/baby-yoda.yaml" }}'
+    #     realm:
+    #       stringData:
+    #         realm.json: '{{ .Files.Get "resources/dev/baby-yoda.json" }}'
+    #   extraVolumes: |-
+    #     - name: certauthority
+    #       secret:
+    #         secretName: {{ include "keycloak.fullname" . }}-certauthority
+    #     - name: customreg
+    #       secret:
+    #         secretName: {{ include "keycloak.fullname" . }}-customreg
+    #     - name: realm
+    #       secret:
+    #         secretName: {{ include "keycloak.fullname" . }}-realm
+    #   extraVolumeMounts: |-
+    #     - name: certauthority
+    #       mountPath: /etc/x509/https/cas.pem
+    #       subPath: cas.pem
+    #       readOnly: true
+    #     - name: customreg
+    #       mountPath: /opt/jboss/keycloak/customreg.yaml
+    #       subPath: customreg.yaml
+    #       readOnly: true
+    #     - name: realm
+    #       mountPath: /opt/jboss/keycloak/realm.json
+    #       subPath: realm.json
+    #       readOnly: true
 
   # All the other add-ons that we aren't using
   argocd:
