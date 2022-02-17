@@ -191,7 +191,7 @@ components:
       before:
         # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
         - |
-          test $(/usr/local/bin/kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '.items | length') -gt 0
+          test $(/usr/sbin/kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '.items | length') -gt 0
 
   - name: jenkins
     required: true
@@ -213,4 +213,4 @@ components:
       before:
         # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
         - |
-          test $(/usr/local/bin/kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '.items | length') -gt 0
+          test $(/usr/sbin/kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '.items | length') -gt 0
