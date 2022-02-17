@@ -22,7 +22,7 @@ networkPolicies:
 istio:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__istio-controlplane.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__istio-controlplane.git
   ingressGateways:
     public-ingressgateway:
       type: "LoadBalancer"
@@ -182,7 +182,7 @@ istio:
 istiooperator:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__istio-operator.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__istio-operator.git
   values:
     hub: "###ZARF_REGISTRY###/ironbank/opensource/istio"
     operator:
@@ -197,7 +197,7 @@ istiooperator:
 jaeger:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__jaeger.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__jaeger.git
   values:
     image:
       repository: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/jaeger-operator"
@@ -240,7 +240,7 @@ jaeger:
 kiali:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__kiali.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__kiali.git
   values:
     image:
       repo: "###ZARF_REGISTRY###/ironbank/opensource/kiali/kiali-operator"
@@ -266,7 +266,7 @@ kiali:
 clusterAuditor:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__cluster-auditor.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__cluster-auditor.git
   values:
     image:
       repo: "###ZARF_REGISTRY###/ironbank/cluster-auditor/opa-collector"
@@ -281,7 +281,7 @@ clusterAuditor:
 gatekeeper:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__policy.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__policy.git
   values:
     postInstall:
       labelNamespace:
@@ -348,7 +348,7 @@ gatekeeper:
 logging:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__elasticsearch-kibana.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__elasticsearch-kibana.git
   values:
     elasticsearch:
       image:
@@ -393,7 +393,7 @@ logging:
 eckoperator:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__eck-operator.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__eck-operator.git
   values:
     image:
       repository: "###ZARF_REGISTRY###/ironbank/elastic/eck-operator/eck-operator"
@@ -401,7 +401,7 @@ eckoperator:
 fluentbit:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__fluentbit.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__fluentbit.git
   values:
     image:
       repository: "###ZARF_REGISTRY###/ironbank/opensource/fluent/fluent-bit"
@@ -418,7 +418,7 @@ fluentbit:
 monitoring:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__monitoring.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__monitoring.git
   values:
     alertmanager:
       alertmanagerSpec:
@@ -508,7 +508,7 @@ monitoring:
 twistlock:
   enabled: true
   git:
-    repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__security-tools__twistlock.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__security-tools__twistlock.git
   values:
     console:
       image:
@@ -528,7 +528,7 @@ addons:
   sonarqube:
     enabled: true
     git:
-      repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__sonarqube.git
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__sonarqube.git
     values:
       image:
         repository: "###ZARF_REGISTRY###/ironbank/big-bang/sonarqube"
@@ -544,7 +544,7 @@ addons:
   gitlab:
     enabled: true
     git:
-      repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
     values:
       global:
         certificates:
@@ -616,7 +616,7 @@ addons:
   gitlabRunner:
     enabled: true
     git:
-      repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab-runner.git
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab-runner.git
     values:
       image: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab-runner/gitlab-runner:v13.12.0"
       runners:
@@ -635,7 +635,7 @@ addons:
   minioOperator:
     enabled: true
     git:
-      repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio-operator.git
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio-operator.git
     values:
       operator:
         image:
@@ -645,7 +645,7 @@ addons:
   mattermostoperator:
     enabled: true
     git:
-      repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__collaboration-tools__mattermost-operator.git
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__collaboration-tools__mattermost-operator.git
       tag: "1.16.0-bb.0"
     values:
       image:
@@ -655,7 +655,7 @@ addons:
   mattermost:
     enabled: true
     git:
-      repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__collaboration-tools__mattermost.git
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__collaboration-tools__mattermost.git
       tag: 0.2.4-bb.0
     values:
       image:
@@ -677,7 +677,7 @@ addons:
   nexus:
     enabled: true
     git:
-      repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__nexus.git
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__nexus.git
       tag: 36.0.0-bb.0
     values:
       job_image:
@@ -702,7 +702,7 @@ addons:
   minio:
     enabled: false
     git:
-      repo: http://stuart-gitea-http.git.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio.git
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio.git
       tag: "4.2.3-bb.1"
     values:
       istio:
