@@ -526,7 +526,8 @@ twistlock:
 addons:
   # Addons for bb-umbrella
   sonarqube:
-    enabled: true
+    # SonarQube won't work right now due to this bug: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube/-/issues/35
+    enabled: false
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__sonarqube.git
     values:
@@ -643,7 +644,8 @@ addons:
       istio:
         enabled: true
   mattermostoperator:
-    enabled: true
+    # Disabling Mattermost for now, since it isn't working properly and there are other higher priorities to get working.
+    enabled: false
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__collaboration-tools__mattermost-operator.git
       tag: "1.16.0-bb.0"
@@ -653,7 +655,8 @@ addons:
       istio:
         enabled: true
   mattermost:
-    enabled: true
+    # Disabling Mattermost for now, since it isn't working properly and there are other higher priorities to get working
+    enabled: false
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__collaboration-tools__mattermost.git
       tag: 0.2.4-bb.0
