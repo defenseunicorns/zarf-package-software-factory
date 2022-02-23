@@ -14,7 +14,7 @@ components:
       before:
         # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
         - |
-          timeout 600 bash -c $'while [[ "$(./kubectl get pods -n zarf -l app=gitea --field-selector=status.phase=Running -o json | ./jq -r \'.items | length\')" -lt 1 ]]; do sleep 2; done' || false
+          timeout 600 bash -c 'while [[ "$(./kubectl get pods -n zarf -l app=gitea --field-selector=status.phase=Running -o json | ./jq -r '"'"'.items | length'"'"')" -lt 1 ]]; do sleep 2; done' || false
 
   # - name: flux
   #   required: true
