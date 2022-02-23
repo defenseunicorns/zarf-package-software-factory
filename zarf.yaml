@@ -207,6 +207,10 @@ components:
         namespace: jenkins
         valuesFiles:
           - values/jenkins.yaml
+    manifests:
+      - name: jenkins-manifests
+        files:
+          - manifests/jenkins-virtualservice.yaml
     images:
       - jenkins/jenkins:2.319.1-jdk11
       - kiwigrid/k8s-sidecar:1.14.2

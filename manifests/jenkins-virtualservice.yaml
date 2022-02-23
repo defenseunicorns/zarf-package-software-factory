@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  gateways:
+    - istio-system/public
+  hosts:
+    - jenkins.bigbang.dev
+  http:
+    - route:
+        - destination:
+            host: zarf-jenkins.jenkins.svc.cluster.local
+            port:
+              number: 8080
