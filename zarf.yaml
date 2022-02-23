@@ -153,14 +153,17 @@ components:
       - registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.4
       - registry1.dso.mil/ironbank/sonatype/nexus/nexus:3.36.0-01
 
-  - name: jq
+  - name: bin-deps
     required: true
     files:
-      # We need jq because the script uses it to check whether Istio is running yet
+      # We need jq and kubectl because the script uses it to check whether Istio is running yet
       - source: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
         shasum: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
         target: ./jq
         executable: true
+      - source: https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl
+        shasum: 2d0f5ba6faa787878b642c151ccb2c3390ce4c1e6c8e2b59568b3869ba407c4f
+        target: ./kubectl
 
   - name: atlassian
     required: true
@@ -187,11 +190,11 @@ components:
       - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.13.0
       - registry1.dso.mil/ironbank/redhat/ubi/ubi7-minimal:7.9
     scripts:
-      retry: true
+      retry: false
       before:
         # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
         - |
-          test $(/usr/sbin/kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '.items | length') -gt 0
+          timeout 600 bash -c $'while [[ "$(./kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r \'.items | length\')" -lt 1 ]]; do sleep 2; done' || false
 
   - name: jenkins
     required: true
@@ -209,8 +212,8 @@ components:
       - jenkins/inbound-agent:4.11-1
       - maorfr/kube-tasks:0.2.0
     scripts:
-      retry: true
+      retry: false
       before:
         # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
         - |
-          test $(/usr/sbin/kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '.items | length') -gt 0
+          timeout 600 bash -c $'while [[ "$(./kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r \'.items | length\')" -lt 1 ]]; do sleep 2; done' || false
