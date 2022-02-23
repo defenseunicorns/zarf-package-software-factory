@@ -164,6 +164,7 @@ components:
       - source: https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl
         shasum: 2d0f5ba6faa787878b642c151ccb2c3390ce4c1e6c8e2b59568b3869ba407c4f
         target: ./kubectl
+        executable: true
 
   - name: atlassian
     required: true
