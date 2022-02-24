@@ -3,17 +3,18 @@ Pre-built Zarf Package of a Software Factory (a.k.a. "DI2-ME")
 
 Deploys the components of a software factory with the following services, all running on top of Big Bang Core:
 
-- SonarQube*
 - GitLab*
 - GitLab Runner*
 - Minio Operator*
-- Mattermost Operator*
-- Mattermost*
 - Nexus*
 - Jira
 - Confluence
 - Jenkins
 
+Coming Soon:
+
+- SonarQube*
+- Mattermost*
 
 **Deployed using Big Bang Umbrella*
 
@@ -29,7 +30,7 @@ All version of this package will not be compatible with all versions of Zarf. He
 
 ## Known Issues
 
-- Due to issues with Elasticsearch this package doesn't work yet in some distros. It does work in the Vagrant VM detailed below. Upcoming work to update to the latest version of Big Bang and swap the EFK stack out for the PLG stack (Promtail, Loki, Grafana) should resolve this issue. Keep in mind the big note above about the package being huge. Unless you have the Mother of All Laptops you'll need to turn a bunch of stuff off before you try to deploy it locally using Vagrant.
+- Due to issues with Elasticsearch this package doesn't work yet in some distros. It does work in K3s (using `zarf init --components k3s,gitops-service`). Upcoming work to update to the latest version of Big Bang and swap the EFK stack out for the PLG stack (Promtail, Loki, Grafana) should resolve this issue. Keep in mind the big note above about the package being huge. Unless you have the Mother of All Laptops you'll need to turn a bunch of stuff off before you try to deploy it locally using Vagrant.
 
 - Inside the Vagrant VM the services are available on the standard port 443. Outside the VM if you want to pull something up in your browser that traffic is being routed to port **8443** to avoid needing to be root when running the Vagrant box.
 
@@ -43,7 +44,7 @@ All version of this package will not be compatible with all versions of Zarf. He
 - Clone this repo
 - `make` present in PATH
 - `sha256sum` present in PATH
-- TONS of CPU and RAM. Our testing shows the EC2 instance type m6i.8xlarge works pretty well at about $1.50/hour, which can be reduced further if you do a spot instance.
+- TONS of CPU and RAM. Our testing shows the AWS EC2 instance type m6i.8xlarge works pretty well at about $1.50/hour, which can be reduced further if you do a spot instance.
 - [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/), only if you are going to use a Vagrant VM, which is incompatible when using an EC2 instance.
 
 ## Instructions
@@ -99,7 +100,7 @@ Depending on where you want to run the package you just created, there are a few
     - `zarf-init.tar.zst`
     - `zarf-package-software-factory.tar.zst`
 
-1. Have a Kubernetes cluster ready that you'll be deploying to. Have your KUBECONFIG be configured such that running something like `kubectl get nodes` will connect to the right cluster.
+1. (optional, unstable) Have a Kubernetes cluster ready that you'll be deploying to. Have your KUBECONFIG be configured such that running something like `kubectl get nodes` will connect to the right cluster. OR use the built-in K3s that Zarf comes bundled with.
 
 1. Deploy
 
