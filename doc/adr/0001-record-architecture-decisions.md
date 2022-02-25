@@ -67,3 +67,5 @@ The consequences of one ADR are very likely to become the context for subsequent
 Developers and project stakeholders can see the ADRs, even as the team composition changes over time.
 
 The motivation behind previous decisions is visible for everyone, present and future. Nobody is left scratching their heads to understand, "What were they thinking?" and the time to change old decisions will be clear from changes in the project's context.
+
+Developers will be able (but not required) to use the tool [adr-tools](https://github.com/npryce/adr-tools), since the decision on how we do ADRs perfectly synchronizes with the way `adr-tools` operates.
