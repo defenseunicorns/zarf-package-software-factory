@@ -56,6 +56,8 @@ We will use a format with just a few parts, so each document is easy to digest:
 
 **Consequences**: This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
 
+We will format ADRs such that they comply with the way that the tool [adr-tools](https://github.com/npryce/adr-tools) creates and interacts with ADRs.
+
 The whole document should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
 
 ## Consequences
@@ -68,4 +70,4 @@ Developers and project stakeholders can see the ADRs, even as the team compositi
 
 The motivation behind previous decisions is visible for everyone, present and future. Nobody is left scratching their heads to understand, "What were they thinking?" and the time to change old decisions will be clear from changes in the project's context.
 
-Developers will be able (but not required) to use the tool [adr-tools](https://github.com/npryce/adr-tools), since the decision on how we do ADRs perfectly synchronizes with the way `adr-tools` operates.
+Developers will be encouraged (but not required) to use the tool [adr-tools](https://github.com/npryce/adr-tools), since the decision on how we do ADRs perfectly synchronizes with the way `adr-tools` operates.
