@@ -28,7 +28,6 @@ When faced with the option between GitLab and Keycloak as the SSO provider, the 
 
 - After the 1.0 release, we will again look at CAC auth as a requirement and adjust as necessary, by either figuring out how to do it in GitLab, or switching to Keycloak or some other SSO solution. Since SSO uses Open Standards OAuth 2.0 and OIDC, it actually is not very hard to swap out the SSO provider if we need to.
 
-
 ## Consequences
 
 - We will be immediately unblocked from being able to wire up all the services with SSO, without having to first spend a lot of time investigating how to do CAC auth successfully.
