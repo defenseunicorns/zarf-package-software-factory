@@ -222,3 +222,43 @@ components:
         # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
         - |
           timeout 600 bash -c 'while [[ "$(./kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '"'"'.items | length'"'"')" -lt 1 ]]; do sleep 2; done' || false
+
+  - name: postgres-operator
+    required: true
+    secretName: "private-registry"
+    manifests:
+      - name: postgres-example-config
+        files:
+          - manifests/postgres-operator/patch-svc-accounts.yaml
+          - manifests/postgres-operator/pgadmin-zarf-connect.yaml
+          - manifests/postgres-operator/postgres-cluster.yaml
+          - manifests/postgres-operator/postgres-operator.yaml
+          - manifests/postgres-operator/postgres-operator-ui-zarf-connect.yaml
+    charts:
+      - name: postgres-operator
+        url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+        version: 1.7.0
+        namespace: postgres-operator
+        valuesFiles:
+          - values/postgres-operator.yaml
+      - name: postgres-operator-ui
+        url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator-ui
+        version: 1.7.0
+        namespace: postgres-operator
+        valuesFiles:
+          - values/postgres-operator-ui.yaml
+      - name: pgadmin4
+        url: https://helm.runix.net
+        version: 1.7.2
+        namespace: postgres-operator
+        valuesFiles:
+          - values/pgadmin.yaml
+    images:
+      - registry.opensource.zalan.do/acid/postgres-operator:v1.7.0
+      - registry.opensource.zalan.do/acid/spilo-13:2.1-p1
+      - registry.opensource.zalan.do/acid/logical-backup:v1.7.0
+      - registry.opensource.zalan.do/acid/pgbouncer:master-18
+      - registry.opensource.zalan.do/acid/postgres-operator-ui:v1.7.0
+      - docker.io/dpage/pgadmin4:5.5
+      - docker.io/rancher/pause:3.1
+
