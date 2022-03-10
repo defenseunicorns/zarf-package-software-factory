@@ -604,60 +604,60 @@ addons:
           enabled: true
         certificates:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/alpine-certificates
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/alpine-certificates"
         kubectl:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/kubectl
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/kubectl"
         busybox:
           image:
-            repository: registry1.dso.mil/ironbank/redhat/ubi/ubi8
+            repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8"
       upgradeCheck:
         image:
-          repository: registry1.dso.mil/ironbank/redhat/ubi/ubi8
+          repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8"
       redis:
         metrics:
           image:
-            registry: registry1.dso.mil/ironbank/bitnami
+            registry: "###ZARF_REGISTRY###/ironbank/bitnami"
         image:
-          registry: registry1.dso.mil/ironbank/bitnami
+          registry: "###ZARF_REGISTRY###/ironbank/bitnami"
       registry:
         image:
-          repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-container-registry
+          repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-container-registry"
       shared-secrets:
         selfsign:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/cfssl-self-sign
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/cfssl-self-sign"
       gitlab:
         toolbox:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-toolbox
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-toolbox"
         gitlab-exporter:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-exporter
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-exporter"
         migrations:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-toolbox
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-toolbox"
         webservice:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-webservice
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-webservice"
           workhorse:
-            image: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-workhorse
+            image: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-workhorse"
         sidekiq:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-sidekiq
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-sidekiq"
         gitaly:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitaly
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitaly"
         gitlab-shell:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-shell
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-shell"
         praefect:
           image:
-            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitaly
+            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitaly"
       minio:
-        image: registry1.dso.mil/ironbank/opensource/minio/minio
+        image: "###ZARF_REGISTRY###/ironbank/opensource/minio/minio"
         minioMc:
-          image: registry1.dso.mil/ironbank/opensource/minio/mc
+          image: "###ZARF_REGISTRY###/ironbank/opensource/minio/mc"
       istio:
         enabled: true
         injection: enabled
@@ -669,7 +669,7 @@ addons:
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab-runner.git
     values:
-      image: registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner:v14.6.0
+      image: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab-runner/gitlab-runner:v14.6.0"
       runners:
         config: |
           [[runners]]
@@ -677,8 +677,8 @@ addons:
             cache_dir = "/tmp/gitlab-runner/cache"
             [runners.kubernetes]
               namespace = "{{.Release.Namespace}}"
-              image = "registry1.dso.mil/ironbank/redhat/ubi/ubi8:8.4"
-              helper_image = "registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner-helper:v14.4.0"
+              image = "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8:8.4"
+              helper_image = "###ZARF_REGISTRY###/ironbank/gitlab/gitlab-runner/gitlab-runner-helper:v14.4.0"
               image_pull_secrets = ["private-registry"]
             [runners.kubernetes.pod_labels]
               "job_id" = "${CI_JOB_ID}"
