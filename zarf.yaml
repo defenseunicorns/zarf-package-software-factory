@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.15.0/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.15.1/zarf.schema.json
 kind: ZarfPackageConfig
 metadata:
   name: software-factory
@@ -13,147 +13,15 @@ components:
     manifests:
       - name: flux-installer
         kustomizations:
-          - https://repo1.dso.mil/platform-one/big-bang/bigbang.git//base/flux?ref=1.17.0
+          - https://repo1.dso.mil/platform-one/big-bang/bigbang.git//base/flux?ref=1.28.0
     images:
       # Flux images
-      - registry1.dso.mil/ironbank/fluxcd/helm-controller:v0.11.0
-      - registry1.dso.mil/ironbank/fluxcd/kustomize-controller:v0.13.0
-      - registry1.dso.mil/ironbank/fluxcd/notification-controller:v0.15.0
-      - registry1.dso.mil/ironbank/fluxcd/source-controller:v0.14.0
+      - registry1.dso.mil/ironbank/fluxcd/helm-controller:v0.16.0
+      - registry1.dso.mil/ironbank/fluxcd/kustomize-controller:v0.20.0
+      - registry1.dso.mil/ironbank/fluxcd/notification-controller:v0.21.0
+      - registry1.dso.mil/ironbank/fluxcd/source-controller:v0.21.1
 
-  - name: bb-umbrella
-    required: true
-    secretName: "private-registry"
-    manifests:
-      - name: bb-umbrella-config
-        kustomizations:
-          - "kustomizations/bigbang"
-    repos:
-      - https://repo1.dso.mil/platform-one/big-bang/bigbang.git@1.17.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git@0.3.0-bb.7
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git@3.5.2-bb.1
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git@1.10.4-bb.3
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git@1.10.4-bb.1
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git@2.23.0-bb.2
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git@1.39.0-bb.2
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git@1.6.0-bb.2
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git@0.1.21-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git@0.16.6-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git@14.0.0-bb.10
-      - https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git@0.0.9-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube.git@9.6.3-bb.2
-      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git@4.12.9-bb.6
-      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git@0.29.0-bb.1
-      - https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost.git@0.2.4-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator.git@1.16.0-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus.git@36.0.0-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git@4.1.2-bb.3
-      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git@4.1.2-bb.6
-      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git@4.2.3-bb.1
-      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git@4.2.3-bb.1
-
-    images:
-      # common
-      - registry1.dso.mil/ironbank/big-bang/base:8.4
-
-      # cluster-auditor
-      - registry1.dso.mil/ironbank/cluster-auditor/opa-collector:0.3.2
-
-      # policy
-      - registry1.dso.mil/ironbank/opensource/kubernetes-1.21/kubectl:v1.21.1
-      - registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper:v3.5.2
-
-      # istio-controlplane
-      - registry1.dso.mil/ironbank/opensource/istio/istioctl:1.10.4
-      - registry1.dso.mil/ironbank/opensource/istio/install-cni:1.10.4
-      - registry1.dso.mil/ironbank/opensource/istio/proxyv2:1.10.4
-      - registry1.dso.mil/ironbank/opensource/istio/pilot:1.10.4
-
-      # istio-operator
-      - registry1.dso.mil/ironbank/opensource/istio/operator:1.10.4
-
-      # jaeger
-      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-operator:1.24.0
-      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-es-index-cleaner:1.24.0
-      - registry1.dso.mil/ironbank/opensource/jaegertracing/all-in-one:1.24.0
-      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-agent:1.24.0
-      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-ingester:1.24.0
-      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-query:1.24.0
-      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-collector:1.24.0
-
-      # kiali
-      - registry1.dso.mil/ironbank/opensource/kiali/kiali-operator:v1.39.0
-      - registry1.dso.mil/ironbank/opensource/kiali/kiali:v1.39.0
-
-      # eck-operator
-      - registry1.dso.mil/ironbank/elastic/eck-operator/eck-operator:1.6.0
-
-      # elasticsearch-kibana
-      - registry1.dso.mil/ironbank/elastic/kibana/kibana:7.12.0
-      - registry1.dso.mil/ironbank/elastic/elasticsearch/elasticsearch:7.13.4
-
-      # fluentbit
-      - registry1.dso.mil/ironbank/opensource/fluent/fluent-bit:1.8.6
-
-      # monitoring
-      - registry1.dso.mil/ironbank/opensource/prometheus/alertmanager:v0.21.0
-      - registry1.dso.mil/ironbank/opensource/grafana/grafana:7.5.2
-      - registry1.dso.mil/ironbank/opensource/bats/bats:1.2.1
-      - registry1.dso.mil/ironbank/kiwigrid/k8s-sidecar:1.10.6
-      - registry1.dso.mil/ironbank/opensource/coreos/kube-state-metrics:v1.9.8
-      - registry1.dso.mil/ironbank/opensource/prometheus/node-exporter:v1.0.1
-      - registry1.dso.mil/ironbank/opensource/jet/kube-webhook-certgen:v1.5.1
-      - registry1.dso.mil/ironbank/opensource/prometheus-operator/prometheus-operator:v0.46.0
-      - registry1.dso.mil/ironbank/opensource/jimmidyson/configmap-reload:v0.5.0
-      - registry1.dso.mil/ironbank/opensource/prometheus-operator/prometheus-config-reloader:v0.46.0
-      - registry1.dso.mil/ironbank/opensource/kubernetes-1.20/kubectl-1.20:v1.20.8
-      - registry1.dso.mil/ironbank/opensource/prometheus/prometheus:v2.25.0
-
-      # twistlock
-      - registry1.dso.mil/ironbank/twistlock/console/console:21.04.439
-
-      # sonarqube
-      - registry1.dso.mil/ironbank/big-bang/sonarqube:8.9-community
-      - registry1.dso.mil/ironbank/opensource/postgres/postgresql96:9.6.20
-      - registry.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube/postgresql:11.7.0-debian-10-r26
-
-      # gitlab
-      - registry1.dso.mil/ironbank/gitlab/gitlab/alpine-certificates:13.12.9
-      - registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner:v13.12.0
-      - registry1.dso.mil/ironbank/gitlab/gitlab/kubectl:13.12.9
-      - registry1.dso.mil/ironbank/redhat/ubi/ubi8:8.4
-      - registry1.dso.mil/ironbank/bitnami/analytics/redis-exporter:1.18.0
-      - registry1.dso.mil/ironbank/opensource/redis/redis5:5.0.9
-      - registry.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab/postgresql:11.9.0
-      - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-container-registry:13.12.9
-      - registry1.dso.mil/ironbank/gitlab/gitlab/cfssl-self-sign:1.4.1
-      - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-task-runner:13.12.9
-      - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-exporter:13.12.9
-      - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-webservice:13.12.9
-      - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-workhorse:13.12.9
-      - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-sidekiq:13.12.9
-      - registry1.dso.mil/ironbank/gitlab/gitlab/gitaly:13.12.9
-      - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-shell:13.12.9
-      - registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2021-04-06T23-11-00Z
-      - registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2021-03-23T05-46-11Z
-      - docker.io/rancher/pause:3.1
-
-      # minio & minio-operator
-      - registry1.dso.mil/ironbank/opensource/minio/operator:v4.1.2
-      - registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2021-08-31T05-46-54Z
-      - registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2021-09-02T09-21-27Z
-
-      # mattermost & mattermost-operator
-      - registry1.dso.mil/ironbank/opensource/mattermost/mattermost:5.39.0
-      - registry1.dso.mil/ironbank/opensource/mattermost/mattermost-operator:v1.16.0
-      - registry1.dso.mil/ironbank/opensource/postgres/postgresql11:11.10
-      - registry1.dso.mil/ironbank/opensource/postgres/postgresql12:12.8
-
-      # nexus
-      - registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.4
-      - registry1.dso.mil/ironbank/sonatype/nexus/nexus:3.36.0-01
-
-  - name: bin-deps
+  - name: deps
     required: true
     files:
       # We need jq and kubectl because the script uses it to check whether Istio is running yet
@@ -165,6 +33,117 @@ components:
         shasum: 2d0f5ba6faa787878b642c151ccb2c3390ce4c1e6c8e2b59568b3869ba407c4f
         target: ./kubectl
         executable: true
+
+  - name: big-bang
+    required: true
+    secretName: "private-registry"
+    manifests:
+      - name: big-bang-config
+        kustomizations:
+          - "kustomizations/bigbang"
+    scripts:
+      retry: false
+      after:
+        # Wait for Istio to be running before moving on. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
+        - |
+          timeout 600 bash -c 'while [[ "$(./kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '"'"'.items | length'"'"')" -lt 1 ]]; do sleep 2; done' || false
+    repos:
+      - https://repo1.dso.mil/platform-one/big-bang/bigbang.git@1.28.0
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git@1.11.5-bb.2
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git@1.11.5-bb.1
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git@2.27.1-bb.4
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git@1.45.0-bb.3
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git@1.2.0-bb.1
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git@3.7.0-bb.9
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git@0.6.0-bb.2
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git@1.9.1-bb.4
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git@0.19.19-bb.0
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git@30.0.1-bb.8
+      - https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git@0.4.0-bb.0
+      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git@4.4.3-bb.2
+      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git@4.4.3-bb.3
+      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git@5.6.2-bb.5
+      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git@0.36.0-bb.2
+      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus.git@37.3.0-bb.1
+
+    images:
+      # istio-controlplane
+      - registry1.dso.mil/ironbank/big-bang/base:1.0.0
+      - registry1.dso.mil/ironbank/opensource/istio/pilot:1.11.5
+      - registry1.dso.mil/ironbank/opensource/istio/proxyv2:1.11.5
+      - registry1.dso.mil/ironbank/opensource/istio/install-cni:1.11.5
+
+      # istio-operator
+      - registry1.dso.mil/ironbank/opensource/istio/operator:1.11.5
+
+      # jaeger
+      # - registry1.dso.mil/ironbank/big-bang/base:1.0.0 -- Already present in istio-controlplane section
+      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-operator:1.29.1
+      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-es-index-cleaner:1.29.0
+      - registry1.dso.mil/ironbank/opensource/jaegertracing/all-in-one:1.29.0
+      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-agent:1.29.0
+      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-ingester:1.29.0
+      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-query:1.29.0
+      - registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-collector:1.29.0
+
+      # kiali
+      - registry1.dso.mil/ironbank/opensource/kiali/kiali-operator:v1.45.0
+      - registry1.dso.mil/ironbank/opensource/kiali/kiali:v1.45.0
+      - registry1.dso.mil/ironbank/big-bang/base:8.4
+
+      # cluster-auditor
+      - registry1.dso.mil/ironbank/bigbang/cluster-auditor/opa-exporter:v0.0.3
+
+      # policy (OPA Gatekeeper)
+      - registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.22.2
+      - registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper:v3.7.0
+
+      # elasticsearch-kibana
+      - registry1.dso.mil/ironbank/elastic/kibana/kibana:7.16.2
+      - registry1.dso.mil/ironbank/elastic/elasticsearch/elasticsearch:7.16.2
+      # - registry1.dso.mil/ironbank/big-bang/base:8.4 -- Already present in kiali section
+      - registry1.dso.mil/ironbank/stedolan/jq:1.6
+
+      # eck-operator
+      - registry1.dso.mil/ironbank/elastic/eck-operator/eck-operator:1.9.1
+      # - registry1.dso.mil/ironbank/big-bang/base:8.4 -- Already present in kiali section
+
+      # fluentbit
+      - registry1.dso.mil/ironbank/opensource/fluent/fluent-bit:1.8.12
+      # - registry1.dso.mil/ironbank/stedolan/jq:1.6 -- Already present in elasticsearch-kibana section
+
+      # monitoring
+      # - registry1.dso.mil/ironbank/big-bang/base:1.0.0 -- Already present in istio-controlplane section
+      - registry1.dso.mil/ironbank/opensource/prometheus/alertmanager:v0.23.0
+      - registry1.dso.mil/ironbank/opensource/grafana/grafana:8.3.3
+      - registry1.dso.mil/ironbank/opensource/bats/bats:1.5.0
+      - registry1.dso.mil/ironbank/kiwigrid/k8s-sidecar:1.15.0
+      # - registry1.dso.mil/ironbank/big-bang/base:1.0.0 -- Already present in istio-controlplane section
+      - registry1.dso.mil/ironbank/opensource/kubernetes/kube-state-metrics:v2.3.0
+      - registry1.dso.mil/ironbank/opensource/prometheus/node-exporter:v1.3.1
+      - registry1.dso.mil/ironbank/opensource/ingress-nginx/kube-webhook-certgen:v1.1.1
+      # - registry1.dso.mil/ironbank/big-bang/base:1.0.0 -- Already present in istio-controlplane section
+      - registry1.dso.mil/ironbank/opensource/prometheus-operator/prometheus-operator:v0.53.1
+      - registry1.dso.mil/ironbank/opensource/prometheus-operator/prometheus-config-reloader:v0.53.1
+      - registry1.dso.mil/ironbank/opensource/thanos/thanos:v0.24.0
+      - registry1.dso.mil/ironbank/opensource/kubernetes-1.20/kubectl-1.20:v1.20.11
+      - registry1.dso.mil/ironbank/opensource/prometheus/prometheus:v2.32.1
+
+      # twistlock
+      - registry1.dso.mil/ironbank/twistlock/console/console:22.01.840
+      # - registry1.dso.mil/ironbank/stedolan/jq:1.6 -- Already present in elasticsearch-kibana section
+
+      # minio-operator
+      - registry1.dso.mil/ironbank/opensource/minio/operator:v4.4.3
+      # - registry1.dso.mil/ironbank/big-bang/base:8.4 -- Already present in kiali section
+
+      # minio
+
+      # gitlab
+
+      # gitlab-runner
+
+      # nexus
 
   - name: atlassian
     required: true
@@ -190,12 +169,6 @@ components:
       # confluence
       - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.13.0
       - registry1.dso.mil/ironbank/redhat/ubi/ubi7-minimal:7.9
-    scripts:
-      retry: false
-      before:
-        # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
-        - |
-          timeout 600 bash -c 'while [[ "$(./kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '"'"'.items | length'"'"')" -lt 1 ]]; do sleep 2; done' || false
 
   - name: jenkins
     required: true
@@ -216,9 +189,3 @@ components:
       - kiwigrid/k8s-sidecar:1.14.2
       - jenkins/inbound-agent:4.11-1
       - maorfr/kube-tasks:0.2.0
-    scripts:
-      retry: false
-      before:
-        # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
-        - |
-          timeout 600 bash -c 'while [[ "$(./kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '"'"'.items | length'"'"')" -lt 1 ]]; do sleep 2; done' || false
