@@ -146,7 +146,7 @@ components:
       - registry1.dso.mil/ironbank/bitnami/analytics/redis-exporter:1.35.0
       - registry1.dso.mil/ironbank/bitnami/redis:6.2.5
       - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-container-registry:14.6.2
-      - registry1.dso.mil/ironbank/gitlab/gitlab/cfssl-self-sign:14.6.2
+      - registry1.dso.mil/ironbank/gitlab/gitlab/cfssl-self-sign:1.4.1
       - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-toolbox:14.6.2
       - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-exporter:14.6.2
       # - registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-toolbox:14.6.2 -- Already present
