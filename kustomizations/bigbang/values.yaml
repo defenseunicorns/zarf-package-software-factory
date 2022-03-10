@@ -590,193 +590,111 @@ addons:
       tenantPatchJob:
         image:
           repository: "###ZARF_REGISTRY###/ironbank/big-bang/base"
-  
+
   minio:
     enabled: false
-  
+
   gitlab:
     enabled: true
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio-operator.git
     values:
-      
-
-
-
-
-
-
-
-
-  gitlab:
-    enabled: true
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
-    values:
       global:
-        certificates:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/alpine-certificates"
-        kubectl:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/kubectl"
-        busybox:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8"
         istio:
           enabled: true
-        imagePullSecrets:
-          - "private-registry"
+        certificates:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/alpine-certificates
+        kubectl:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/kubectl
+        busybox:
+          image:
+            repository: registry1.dso.mil/ironbank/redhat/ubi/ubi8
+      upgradeCheck:
+        image:
+          repository: registry1.dso.mil/ironbank/redhat/ubi/ubi8
+      redis:
+        metrics:
+          image:
+            registry: registry1.dso.mil/ironbank/bitnami
+        image:
+          registry: registry1.dso.mil/ironbank/bitnami
+      registry:
+        image:
+          repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-container-registry
+      shared-secrets:
+        selfsign:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/cfssl-self-sign
+      gitlab:
+        toolbox:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-toolbox
+        gitlab-exporter:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-exporter
+        migrations:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-toolbox
+        webservice:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-webservice
+          workhorse:
+            image: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-workhorse
+        sidekiq:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-sidekiq
+        gitaly:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitaly
+        gitlab-shell:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-shell
+        praefect:
+          image:
+            repository: registry1.dso.mil/ironbank/gitlab/gitlab/gitaly
+      minio:
+        image: registry1.dso.mil/ironbank/opensource/minio/minio
+        minioMc:
+          image: registry1.dso.mil/ironbank/opensource/minio/mc
       istio:
         enabled: true
         injection: enabled
         gitlab:
           gateways:
             - istio-system/public
-      upgradeCheck:
-        image:
-          repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8"
-      redis:
-        metrics:
-          image:
-            registry: "###ZARF_REGISTRY###/ironbank/bitnami"
-        image:
-          registry: "###ZARF_REGISTRY###/ironbank/opensource"
-      registry:
-        image:
-          repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-container-registry"
-      shared-secrets:
-        selfsign:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/cfssl-self-sign"
-      gitlab:
-        task-runner:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-task-runner"
-        gitlab-exporter:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-exporter"
-        migrations:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-task-runner"
-        webservice:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-webservice"
-          workhorse:
-            image: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-workhorse"
-        sidekiq:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-sidekiq"
-        gitaly:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitaly"
-        gitlab-shell:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-shell"
-        praefect:
-          image:
-            repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitaly"
-      minio:
-        image: "###ZARF_REGISTRY###/ironbank/opensource/minio/minio"
-        minioMc:
-          image: "###ZARF_REGISTRY###/ironbank/opensource/minio/mc"
   gitlabRunner:
     enabled: true
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab-runner.git
     values:
-      image: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab-runner/gitlab-runner:v13.12.0"
+      image: registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner:v14.6.0
       runners:
         config: |
           [[runners]]
             clone_url = "http://gitlab-webservice-default.gitlab.svc.cluster.local:8181"
             cache_dir = "/tmp/gitlab-runner/cache"
             [runners.kubernetes]
-              image = "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8:8.4"
-              helper_image = "###ZARF_REGISTRY###/ironbank/gitlab/gitlab-runner/gitlab-runner-helper:v13.12.0"
+              namespace = "{{.Release.Namespace}}"
+              image = "registry1.dso.mil/ironbank/redhat/ubi/ubi8:8.4"
+              helper_image = "registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner-helper:v14.4.0"
               image_pull_secrets = ["private-registry"]
             [runners.kubernetes.pod_labels]
               "job_id" = "${CI_JOB_ID}"
               "job_name" = "${CI_JOB_NAME}"
               "pipeline_id" = "${CI_PIPELINE_ID}"
-  minioOperator:
-    enabled: true
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio-operator.git
-    values:
-      operator:
-        image:
-          repository: "###ZARF_REGISTRY###/ironbank/opensource/minio/operator"
-      istio:
-        enabled: true
-  mattermostoperator:
-    # Disabling Mattermost for now, since it isn't working properly and there are other higher priorities to get working.
-    enabled: false
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__collaboration-tools__mattermost-operator.git
-      tag: "1.16.0-bb.0"
-    values:
-      image:
-        repository: "###ZARF_REGISTRY###/ironbank/opensource/mattermost/mattermost-operator"
-      istio:
-        enabled: true
-  mattermost:
-    # Disabling Mattermost for now, since it isn't working properly and there are other higher priorities to get working
-    enabled: false
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__collaboration-tools__mattermost.git
-      tag: 0.2.4-bb.0
-    values:
-      image:
-        name: "###ZARF_REGISTRY###/ironbank/opensource/mattermost/mattermost"
-      istio:
-        enabled: true
-        chat:
-          gateways:
-            - istio-system/public
-      minio:
-        install: true
-        bucketCreationImage: "###ZARF_REGISTRY###/ironbank/opensource/minio/mc:RELEASE.2021-09-02T09-21-27Z"
-      postgresql:
-        image:
-          registry: "###ZARF_REGISTRY###/ironbank"
-      database:
-        readinessCheck:
-          image: "###ZARF_REGISTRY###/ironbank/opensource/postgres/postgresql12:12.8"
   nexus:
     enabled: true
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__nexus.git
-      tag: 36.0.0-bb.0
     values:
-      job_image:
-        repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8-minimal"
-      image:
-        repository: "###ZARF_REGISTRY###/ironbank/sonatype/nexus/nexus"
       istio:
         enabled: true
         nexus:
           gateways:
             - istio-system/public
-  keycloak:
-    enabled: false
-
-  # All the other add-ons that we aren't using
-  argocd:
-    enabled: false
-  authservice:
-    enabled: false
-  anchore:
-    enabled: false
-  minio:
-    enabled: false
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio.git
-      tag: "4.2.3-bb.1"
-    values:
-      istio:
-        enabled: true
-        gateways:
-          - istio-system/public
-  velero:
-    enabled: false
+      job_image:
+        repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8-minimal"
+      image:
+        repository: "###ZARF_REGISTRY###/ironbank/sonatype/nexus/nexus"
