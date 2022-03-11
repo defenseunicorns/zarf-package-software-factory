@@ -10,7 +10,7 @@ git:
 
 networkPolicies:
   enabled: true
-  # When in prod use a real CIDR. Don't do this, it isn't secure. This is done here since it is a demo and the CIDR changes based on which Linux distro you are running on.
+  # When in prod use a real CIDR. Don't do this, it isn't secure.
   controlPlaneCidr: "0.0.0.0/0"
   nodeCidr: "0.0.0.0/0"
   vpcCidr: "0.0.0.0/0"
@@ -25,8 +25,8 @@ istio:
       kubernetesResourceSpec:
         resources:
           requests:
-            cpu: "50m"
-            memory: "256Mi"
+            cpu: "100m"
+            memory: "512Mi"
           limits:
             cpu: "500m"
             memory: "512Mi"
@@ -159,8 +159,8 @@ istio:
     istiod:
       resources:
         requests:
-          cpu: "50m"
-          memory: "512Mi"
+          cpu: "100m"
+          memory: "1Gi"
         limits:
           cpu: "500m"
           memory: "1Gi"
@@ -181,11 +181,11 @@ istiooperator:
     operator:
       resources:
         limits:
-          cpu: "200m"
+          cpu: "500m"
           memory: "256Mi"
         requests:
-          cpu: "50m"
-          memory: "128Mi"
+          cpu: "100m"
+          memory: "256Mi"
 
 jaeger:
   enabled: true
@@ -205,10 +205,10 @@ jaeger:
           image: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/all-in-one:1.29.0"
           resources:
             requests:
-              cpu: "50m"
-              memory: "64Mi"
+              cpu: "100m"
+              memory: "128Mi"
             limits:
-              cpu: "200m"
+              cpu: "500m"
               memory: "128Mi"
         agent:
           image: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/jaeger-agent:1.29.0"
@@ -220,18 +220,18 @@ jaeger:
           image: "###ZARF_REGISTRY###/ironbank/opensource/jaegertracing/jaeger-collector:1.29.0"
           resources:
             requests:
-              cpu: "50m"
-              memory: "64Mi"
+              cpu: "100m"
+              memory: "128Mi"
             limits:
-              cpu: "200m"
+              cpu: "500m"
               memory: "128Mi"
     resources:
       limits:
-        cpu: "100m"
+        cpu: "500m"
         memory: "128Mi"
       requests:
-        cpu: "50m"
-        memory: "64Mi"
+        cpu: "100m"
+        memory: "128Mi"
 
 kiali:
   enabled: true
@@ -242,11 +242,11 @@ kiali:
       repo: "###ZARF_REGISTRY###/ironbank/opensource/kiali/kiali-operator"
     resources:
       requests:
-        cpu: "50m"
+        cpu: "100m"
         memory: "256Mi"
       limits:
-        cpu: "100m"
-        memory: "512Mi"
+        cpu: "500m"
+        memory: "256Mi"
     cr:
       spec:
         deployment:
@@ -254,9 +254,9 @@ kiali:
           resources:
             requests:
               cpu: "100m"
-              memory: "128Mi"
+              memory: "368Mi"
             limits:
-              cpu: "200m"
+              cpu: "500m"
               memory: "368Mi"
     svcPatchJob:
       image:
@@ -271,11 +271,11 @@ clusterAuditor:
       repo: "###ZARF_REGISTRY###/ironbank/bigbang/cluster-auditor/opa-exporter"
     resources:
       requests:
-        cpu: "50m"
-        memory: "150Mi"
+        cpu: "100m"
+        memory: "512Mi"
       limits:
-        cpu: "300m"
-        memory: "300Mi"
+        cpu: "500m"
+        memory: "512Mi"
 
 gatekeeper:
   enabled: true
@@ -292,19 +292,19 @@ gatekeeper:
     controllerManager:
       resources:
         limits:
+          cpu: "1"
+          memory: "2Gi"
+        requests:
           cpu: "175m"
           memory: "512Mi"
-        requests:
-          cpu: "50m"
-          memory: "256Mi"
     audit:
       resources:
         limits:
-          cpu: "500m"
-          memory: "768Mi"
+          cpu: "1.2"
+          memory: "2Gi"
         requests:
-          cpu: "50m"
-          memory: "256Mi"
+          cpu: "200m"
+          memory: "768Mi"
     bbtests:
       scripts:
         image: "###ZARF_REGISTRY###/ironbank/opensource/kubernetes/kubectl:v1.22.2"
@@ -346,8 +346,8 @@ logging:
       count: 1
       resources:
         requests:
-          memory: "512Mi"
-          cpu: "50m"
+          memory: "1Gi"
+          cpu: "100m"
         limits:
           memory: "1Gi"
           cpu: "500m"
@@ -361,8 +361,8 @@ logging:
             cpu: "500m"
             memory: "3Gi"
           requests:
-            cpu: "50m"
-            memory: "1Gi"
+            cpu: "100m"
+            memory: "3Gi"
       data:
         count: 1
         resources:
@@ -370,8 +370,8 @@ logging:
             cpu: "500m"
             memory: "3Gi"
           requests:
-            cpu: "50m"
-            memory: "1Gi"
+            cpu: "100m"
+            memory: "3Gi"
     upgradeJob:
       image:
         repository: "###ZARF_REGISTRY###/ironbank/big-bang/base"
@@ -391,8 +391,8 @@ eckoperator:
         cpu: "200m"
         memory: "256Mi"
       requests:
-        cpu: "50m"
-        memory: "128Mi"
+        cpu: "100m"
+        memory: "256Mi"
     upgradeCrds:
       image:
         repository: "###ZARF_REGISTRY###/ironbank/big-bang/base"
@@ -406,11 +406,11 @@ fluentbit:
       repository: "###ZARF_REGISTRY###/ironbank/opensource/fluent/fluent-bit"
     resources:
       limits:
-        cpu: "100m"
+        cpu: "500m"
         memory: "256Mi"
       requests:
-        cpu: "50m"
-        memory: "64Mi"
+        cpu: "100m"
+        memory: "256Mi"
     bbtests:
       scripts:
         image: "###ZARF_REGISTRY###/ironbank/stedolan/jq:1.6"
@@ -425,31 +425,31 @@ monitoring:
       resources:
         requests:
           memory: "128Mi"
-          cpu: "50m"
+          cpu: "100m"
         limits:
           memory: "256Mi"
-          cpu: "100m"
+          cpu: "200m"
     alertmanager:
       alertmanagerSpec:
         image:
           repository: "###ZARF_REGISTRY###/ironbank/opensource/prometheus/alertmanager"
         resources:
           limits:
-            cpu: "100m"
-            memory: "100Mi"
+            cpu: "500m"
+            memory: "256Mi"
           requests:
             cpu: "100m"
-            memory: "50Mi"
+            memory: "256Mi"
     grafana:
       image:
         repository: "###ZARF_REGISTRY###/ironbank/opensource/grafana/grafana"
       resources:
         limits:
+          cpu: "500m"
+          memory: "512Mi"
+        requests:
           cpu: "100m"
           memory: "256Mi"
-        requests:
-          cpu: "50m"
-          memory: "128Mi"
       testFramework:
         image: "###ZARF_REGISTRY###/ironbank/opensource/bats/bats"
       sidecar:
@@ -457,7 +457,7 @@ monitoring:
           repository: "###ZARF_REGISTRY###/ironbank/kiwigrid/k8s-sidecar"
         resources:
           limits:
-            cpu: "100m"
+            cpu: "500m"
             memory: "100Mi"
           requests:
             cpu: "50m"
@@ -477,21 +477,21 @@ monitoring:
         repository: "###ZARF_REGISTRY###/ironbank/opensource/kubernetes/kube-state-metrics"
       resources:
         limits:
-          cpu: "100m"
+          cpu: "500m"
           memory: "128Mi"
         requests:
-          cpu: "50m"
-          memory: "64Mi"
+          cpu: "10m"
+          memory: "128Mi"
     prometheus-node-exporter:
       image:
         repository: "###ZARF_REGISTRY###/ironbank/opensource/prometheus/node-exporter"
       resources:
         limits:
-          cpu: "200m"
-          memory: "50Mi"
+          cpu: "500m"
+          memory: "128Mi"
         requests:
-          cpu: "50m"
-          memory: "50Mi"
+          cpu: "100m"
+          memory: "128Mi"
     prometheusOperator:
       admissionWebhooks:
         patch:
@@ -499,28 +499,28 @@ monitoring:
             repository: "###ZARF_REGISTRY###/ironbank/opensource/ingress-nginx/kube-webhook-certgen"
           resources:
             limits:
-              cpu: "50m"
-              memory: "50Mi"
+              cpu: "100m"
+              memory: "128Mi"
             requests:
               cpu: "50m"
-              memory: "50Mi"
+              memory: "128Mi"
         cleanupProxy:
           image:
             repository: "###ZARF_REGISTRY###/ironbank/big-bang/base"
           resources:
             limits:
-              cpu: "50m"
-              memory: "50Mi"
+              cpu: "100m"
+              memory: "128Mi"
             requests:
               cpu: "50m"
-              memory: "50Mi"
+              memory: "128Mi"
       resources:
         limits:
-          cpu: "200m"
+          cpu: "500m"
           memory: "512Mi"
         requests:
           cpu: "100m"
-          memory: "256Mi"
+          memory: "512Mi"
       image:
         repository: "###ZARF_REGISTRY###/ironbank/opensource/prometheus-operator/prometheus-operator"
       prometheusConfigReloader:
@@ -529,10 +529,10 @@ monitoring:
         resources:
           requests:
             cpu: "50m"
-            memory: "50Mi"
+            memory: "128Mi"
           limits:
             cpu: "100m"
-            memory: "50Mi"
+            memory: "128Mi"
       thanosImage:
         repository: "###ZARF_REGISTRY###/ironbank/opensource/thanos/thanos"
       kubectlImage:
@@ -544,9 +544,9 @@ monitoring:
         resources:
           limits:
             cpu: "300m"
-            memory: "5Gi"
+            memory: "2Gi"
           requests:
-            cpu: "50m"
+            cpu: "100m"
             memory: "2Gi"
 
 twistlock:
@@ -560,10 +560,10 @@ twistlock:
     resources:
       limits:
         memory: "1Gi"
-        cpu: "250m"
+        cpu: "500m"
       requests:
-        memory: "256Mi"
-        cpu: "50m"
+        memory: "1Gi"
+        cpu: "100m"
     bbtests:
       scripts:
         image: "###ZARF_REGISTRY###/ironbank/stedolan/jq:1.6"
@@ -614,47 +614,283 @@ addons:
       upgradeCheck:
         image:
           repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8"
+        resources:
+          requests:
+            cpu: 500m
+            memory: 500Mi
+          limits:
+            cpu: 500m
+            memory: 500Mi
       redis:
         metrics:
           image:
             registry: "###ZARF_REGISTRY###/ironbank/bitnami"
+          resources:
+            limits:
+              cpu: 250m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
         image:
           registry: "###ZARF_REGISTRY###/ironbank/bitnami"
+        master:
+          resources:
+            limits:
+              cpu: 250m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+        # :face_vomiting: TODO: Upstream merge request to make the naming more inclusive
+        slave:
+          resources:
+            limits:
+              cpu: 250m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+        sentinel:
+          resources:
+            limits:
+              cpu: 250m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+        volumePermissions:
+          resources:
+            limits:
+              cpu: 250m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+        sysctlImage:
+          resources:
+            limits:
+              cpu: 250m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+      postgresql:
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
       registry:
         image:
           repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-container-registry"
+        init:
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 200m
+              memory: 200Mi
+        resources:
+          limits:
+            cpu: 200m
+            memory: 1024Mi
+          requests:
+            cpu: 200m
+            memory: 1024Mi
       shared-secrets:
         selfsign:
           image:
             repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/cfssl-self-sign"
+        resources:
+          requests:
+            cpu: 300m
+            memory: 200Mi
+          limits:
+            cpu: 300m
+            memory: 200Mi
       gitlab:
         toolbox:
           image:
             repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-toolbox"
+          init:
+            resources:
+              requests:
+                cpu: 200m
+                memory: 200Mi
+              limits:
+                cpu: 200m
+                memory: 200Mi
+          resources:
+            requests:
+              cpu: 2
+              memory: 3.5Gi
+            limits:
+              cpu: 2
+              memory: 3.5Gi
+          backups:
+            cron:
+              resources:
+                requests:
+                  cpu: 350m
+                  memory: 350Mi
+                limits:
+                  cpu: 350m
+                  memory: 350Mi
         gitlab-exporter:
+          init:
+            resources:
+              limits:
+                cpu: 200m
+                memory: 200Mi
+              requests:
+                cpu: 200m
+                memory: 200Mi
+          resources:
+            limits:
+              cpu: 150m
+              memory: 200Mi
+            requests:
+              cpu: 150m
+              memory: 200Mi
           image:
             repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-exporter"
         migrations:
+          init:
+            resources:
+              limits:
+                cpu: 200m
+                memory: 200Mi
+              requests:
+                cpu: 200m
+                memory: 200Mi
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1G
+            requests:
+              cpu: 500m
+              memory: 1G
           image:
             repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-toolbox"
         webservice:
+          init:
+            resources:
+              limits:
+                cpu: 200m
+                memory: 200Mi
+              requests:
+                cpu: 200m
+                memory: 200Mi
+          resources:
+            limits:
+              cpu: 600m
+              memory: 2.5G
+            requests:
+              cpu: 600m
+              memory: 2.5G
           image:
             repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-webservice"
           workhorse:
+            resources:
+              limits:
+                cpu: 600m
+                memory: 2.5G
+              requests:
+                cpu: 600m
+                memory: 2.5G
             image: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-workhorse"
         sidekiq:
           image:
             repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-sidekiq"
+          init:
+            resources:
+              limits:
+                cpu: 200m
+                memory: 200Mi
+              requests:
+                cpu: 200m
+                memory: 200Mi
+          resources:
+            requests:
+              memory: 3G
+              cpu: 1500m
+            limits:
+              memory: 3G
+              cpu: 1500m
         gitaly:
           image:
             repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitaly"
+          init:
+            resources:
+              limits:
+                cpu: 200m
+                memory: 200Mi
+              requests:
+                cpu: 200m
+                memory: 200Mi
+          resources:
+            requests:
+              cpu: 400m
+              memory: 600Mi
+            limits:
+              cpu: 400m
+              memory: 600Mi
         gitlab-shell:
           image:
             repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitlab-shell"
+          init:
+            resources:
+              limits:
+                cpu: 200m
+                memory: 200Mi
+              requests:
+                cpu: 200m
+                memory: 200Mi
+          resources:
+            limits:
+              cpu: 300m
+              memory: 300Mi
+            requests:
+              cpu: 300m
+              memory: 300Mi
         praefect:
           image:
             repository: "###ZARF_REGISTRY###/ironbank/gitlab/gitlab/gitaly"
+          init:
+            resources:
+              limits:
+                cpu: 200m
+                memory: 200Mi
+              requests:
+                cpu: 200m
+                memory: 200Mi
+          resources:
+            requests:
+              cpu: 1
+              memory: 1Gi
+            limits:
+              cpu: 1
+              memory: 1Gi
       minio:
+        init:
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 200m
+              memory: 200Mi
+        resources:
+          limits:
+            cpu: 200m
+            memory: 300Mi
+          requests:
+            cpu: 200m
+            memory: 300Mi
         image: "###ZARF_REGISTRY###/ironbank/opensource/minio/minio"
         minioMc:
           image: "###ZARF_REGISTRY###/ironbank/opensource/minio/mc"
@@ -684,6 +920,13 @@ addons:
               "job_id" = "${CI_JOB_ID}"
               "job_name" = "${CI_JOB_NAME}"
               "pipeline_id" = "${CI_PIPELINE_ID}"
+      resources:
+        limits:
+          memory: 256Mi
+          cpu: 200m
+        requests:
+          memory: 256Mi
+          cpu: 200m
   nexus:
     enabled: true
     git:
@@ -698,3 +941,11 @@ addons:
         repository: "###ZARF_REGISTRY###/ironbank/redhat/ubi/ubi8-minimal"
       image:
         repository: "###ZARF_REGISTRY###/ironbank/sonatype/nexus/nexus"
+      nexus:
+        resources:
+          requests:
+            cpu: 4
+            memory: 8000Mi
+          limits:
+            cpu: 4
+            memory: 8000Mi
