@@ -4,7 +4,7 @@ metadata:
   name: postgres-pod-config
   namespace: postgres-operator
 data:
-  AWS_ENDPOINT: https://minio.bigbang.dev
+  AWS_ENDPOINT: minio-minio-minio-instance.minio.svc.cluster.local
   AWS_ACCESS_KEY_ID: minio
   AWS_SECRET_ACCESS_KEY: minio123
   BACKUP_NUM_TO_RETAIN: "3"

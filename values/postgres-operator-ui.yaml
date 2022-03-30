@@ -6,7 +6,7 @@ resources:
     cpu: "200m"
     memory: "200Mi"
 envs:
-  # IMPORTANT: While operator chart and UI chart are idendependent, this is the interface between
+  # IMPORTANT: While operator chart and UI chart are independent, this is the interface between
   # UI and operator API. Insert the service name of the operator API here!
   operatorApiUrl: "http://postgres-operator:8080"
   operatorClusterNameLabel: "cluster-name"
@@ -16,9 +16,9 @@ envs:
     - "acid"
 extraEnvs:
   - name: WALE_S3_ENDPOINT
-    value: "https+path://minio.bigbang.dev:443"
+    value: "http+path://minio-minio-minio-instance.minio.svc.cluster.local:80"
   - name: AWS_ENDPOINT
-    value: "https://minio.bigbang.dev"
+    value: "http://minio-minio-minio-instance.minio.svc.cluster.local"
   - name: SPILO_S3_BACKUP_PREFIX
     value: "spilo/"
   - name: AWS_ACCESS_KEY_ID

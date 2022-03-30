@@ -166,63 +166,6 @@ components:
         target: ./kubectl
         executable: true
 
-  - name: atlassian
-    required: true
-    secretName: "private-registry"
-    charts:
-      - name: jira
-        url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
-        gitPath: /chart
-        version: 0.1.0-bb.7
-        namespace: jira
-        valuesFiles:
-          - values/jira.yaml
-      - name: confluence
-        url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
-        gitPath: /chart
-        version: 0.1.0-bb.9
-        namespace: confluence
-        valuesFiles:
-          - values/confluence.yaml
-    images:
-      # jira
-      - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:8.18.1
-      # confluence
-      - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.13.0
-      - registry1.dso.mil/ironbank/redhat/ubi/ubi7-minimal:7.9
-    scripts:
-      retry: false
-      before:
-        # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
-        - |
-          timeout 600 bash -c 'while [[ "$(./kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '"'"'.items | length'"'"')" -lt 1 ]]; do sleep 2; done' || false
-
-  - name: jenkins
-    required: true
-    secretName: "private-registry"
-    charts:
-      - name: jenkins
-        url: https://charts.jenkins.io
-        version: 3.9.4
-        namespace: jenkins
-        valuesFiles:
-          - values/jenkins.yaml
-    manifests:
-      - name: jenkins-manifests
-        files:
-          - manifests/jenkins-virtualservice.yaml
-    images:
-      - jenkins/jenkins:2.319.1-jdk11
-      - kiwigrid/k8s-sidecar:1.14.2
-      - jenkins/inbound-agent:4.11-1
-      - maorfr/kube-tasks:0.2.0
-    scripts:
-      retry: false
-      before:
-        # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
-        - |
-          timeout 600 bash -c 'while [[ "$(./kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '"'"'.items | length'"'"')" -lt 1 ]]; do sleep 2; done' || false
-
   - name: postgres-operator
     required: true
     secretName: "private-registry"
@@ -261,4 +204,69 @@ components:
       - registry.opensource.zalan.do/acid/postgres-operator-ui:v1.7.0
       - docker.io/dpage/pgadmin4:5.5
       - docker.io/rancher/pause:3.1
+
+  - name: atlassian
+    required: true
+    secretName: "private-registry"
+    charts:
+      - name: jira
+        url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
+        gitPath: /chart
+        version: 0.1.0-bb.7
+        namespace: jira
+        valuesFiles:
+          - values/jira.yaml
+      - name: confluence
+        url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
+        gitPath: /chart
+        version: 0.1.0-bb.9
+        namespace: confluence
+        valuesFiles:
+          - values/confluence.yaml
+    images:
+      # jira
+      - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:8.18.1
+      # confluence
+      - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.13.0
+      - registry1.dso.mil/ironbank/redhat/ubi/ubi7-minimal:7.9
+    scripts:
+      retry: false
+      before:
+        # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
+        - |
+          timeout 600 bash -c 'while [[ "$(./kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '"'"'.items | length'"'"')" -lt 1 ]]; do sleep 2; done' || false
+      after:
+        - |
+          kubectl delete secret confluence.acid-zarf-atlassian.credentials.postgresql.acid.zalan.do --namespace=confluence
+        - |
+          kubectl get secret confluence.acid-zarf-atlassian.credentials.postgresql.acid.zalan.do --namespace=postgres-operator -o yaml | sed 's/namespace: .*/namespace: confluence/' | kubectl apply --namespace=confluence -f -
+        - |
+          kubectl delete --all pods --namespace=confluence
+
+  - name: jenkins
+    required: true
+    secretName: "private-registry"
+    charts:
+      - name: jenkins
+        url: https://charts.jenkins.io
+        version: 3.9.4
+        namespace: jenkins
+        valuesFiles:
+          - values/jenkins.yaml
+    manifests:
+      - name: jenkins-manifests
+        files:
+          - manifests/jenkins-virtualservice.yaml
+    images:
+      - jenkins/jenkins:2.319.1-jdk11
+      - kiwigrid/k8s-sidecar:1.14.2
+      - jenkins/inbound-agent:4.11-1
+      - maorfr/kube-tasks:0.2.0
+    scripts:
+      retry: false
+      before:
+        # Check to see if istiod is running before trying to deploy. If Istio is running then so is Gatekeeper. This is a poor man's version of "DependsOn" since we aren't doing real gitops yet
+        - |
+          timeout 600 bash -c 'while [[ "$(./kubectl get pods -n istio-system -l app=istiod --field-selector=status.phase=Running -o json | ./jq -r '"'"'.items | length'"'"')" -lt 1 ]]; do sleep 2; done' || false
+
 

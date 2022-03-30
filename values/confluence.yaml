@@ -9,3 +9,30 @@ istio:
   enabled: true
   gateways:
     - istio-system/public
+volumes:
+  localHome:
+    persistentVolumeClaim:
+      create: true
+      resources:
+        requests:
+          storage: 100m
+
+  shared-home:
+    persistentVolumeClaim:
+      create: true
+      resources:
+        requests:
+          storage: 100m 
+
+database:
+  type: "postgresql"
+  url: "jdbc:postgresql://acid-zarf-atlassian.postgres-operator.svc.cluster.local:5432/confluence"
+  user: '''''' 
+  credentials:
+    secretName: "confluence.acid-zarf-atlassian.credentials.postgresql.acid.zalan.do"
+    usernameSecretKey: "username"
+    passwordSecretKey: "password"
+# resources:
+#  jvm:
+#    maxHeap: "5g"
+
