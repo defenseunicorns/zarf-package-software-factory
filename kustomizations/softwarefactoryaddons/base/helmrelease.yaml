@@ -1,0 +1,134 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: jira
+  namespace: softwarefactoryaddons
+spec:
+  targetNamespace: jira
+  releaseName: jira
+  interval: 10m
+  chart:
+    spec:
+      chart: chart
+      sourceRef:
+        kind: GitRepository
+        name: jira
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  valuesFrom:
+    - kind: Secret
+      name: jira-common-bb
+      valuesKey: jira-common-bb-values.yaml
+    - kind: ConfigMap
+      name: jira-common
+      valuesKey: jira-common-values.yaml
+    - kind: Secret
+      name: jira-environment-bb
+      valuesKey: jira-environment-bb-values.yaml
+    - kind: ConfigMap
+      name: jira-environment
+      valuesKey: jira-environment-values.yaml
+  dependsOn:
+    - name: istio
+      namespace: bigbang
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: confluence
+  namespace: softwarefactoryaddons
+spec:
+  targetNamespace: confluence
+  releaseName: confluence
+  interval: 10m
+  chart:
+    spec:
+      chart: chart
+      sourceRef:
+        kind: GitRepository
+        name: confluence
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  valuesFrom:
+    - kind: Secret
+      name: confluence-common-bb
+      valuesKey: confluence-common-bb-values.yaml
+    - kind: ConfigMap
+      name: confluence-common
+      valuesKey: confluence-common-values.yaml
+    - kind: Secret
+      name: confluence-environment-bb
+      valuesKey: confluence-environment-bb-values.yaml
+    - kind: ConfigMap
+      name: confluence-environment
+      valuesKey: confluence-environment-values.yaml
+  dependsOn:
+    - name: istio
+      namespace: bigbang
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: jenkins
+  namespace: softwarefactoryaddons
+spec:
+  targetNamespace: jenkins
+  releaseName: jenkins
+  interval: 10m
+  chart:
+    spec:
+      chart: charts/jenkins
+      sourceRef:
+        kind: GitRepository
+        name: jenkins
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  valuesFrom:
+    - kind: Secret
+      name: jenkins-common-bb
+      valuesKey: jenkins-common-bb-values.yaml
+    - kind: ConfigMap
+      name: jenkins-common
+      valuesKey: jenkins-common-values.yaml
+    - kind: Secret
+      name: jenkins-environment-bb
+      valuesKey: jenkins-environment-bb-values.yaml
+    - kind: ConfigMap
+      name: jenkins-environment
+      valuesKey: jenkins-environment-values.yaml
+  dependsOn:
+    - name: istio
+      namespace: bigbang

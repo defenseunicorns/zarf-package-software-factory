@@ -1,6 +1,5 @@
 image:
-  repository: registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.13.0
-  tag: "7.13.0"
+  repository: "${ZARF_REGISTRY}/ironbank/atlassian/jira-data-center/jira-node"
 imagePullSecrets:
   - name: private-registry
 ingress:

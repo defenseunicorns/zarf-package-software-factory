@@ -1,0 +1,38 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: jira
+  namespace: softwarefactoryaddons
+spec:
+  interval: 5m
+  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__jira.git
+  secretRef:
+    name: zarf-git-secret
+  ref:
+    tag: 0.1.0-bb.7
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: confluence
+  namespace: softwarefactoryaddons
+spec:
+  interval: 5m
+  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__confluence.git
+  secretRef:
+    name: zarf-git-secret
+  ref:
+    tag: 0.1.0-bb.9
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: jenkins
+  namespace: softwarefactoryaddons
+spec:
+  interval: 5m
+  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__jenkinsci__helm-charts.git
+  secretRef:
+    name: zarf-git-secret
+  ref:
+    tag: jenkins-3.9.4

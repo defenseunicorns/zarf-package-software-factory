@@ -1,0 +1,117 @@
+controller:
+  image: "${ZARF_REGISTRY}/jenkins/jenkins"
+  tag: "2.319.1-jdk11"
+  imagePullSecretName: "private-registry"
+  adminUser: "admin"
+  adminPassword: "admin"
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "256Mi"
+    limits:
+      cpu: "2000m"
+      memory: "4096Mi"
+  initContainerResources:
+    requests:
+      cpu: "50m"
+      memory: "256Mi"
+    limits:
+      cpu: "2000m"
+      memory: "4096Mi"
+  installPlugins:
+    # Top level plugins
+    - kubernetes:3580.v78271e5631dc
+    - workflow-aggregator:2.7
+    - git:4.11.0
+    - configuration-as-code:1414.v878271fc496f
+    # Dependencies of the top level plugins. They need to be specified explicitly or the top level plugins
+    # will try to grab the latest versions of them, which will break other dependency trees. It sucks
+    # to have to maintain this list, but it is the only way that this author knows for how to make
+    # consistently repeatable Jenkins deployments. This list is logged in the Jenkins init container
+    # when Jenkins starts up. The list below needs to be updated when ever the list of top level plugins
+    # changes. To update it, delete the list below, run the deployment, and get the new list of all
+    # plugins from the init container logs.
+    # To fix the formatting:
+    # Use this find regex:           - (?<name>.*?) (?<version>.*?)$
+    # And this replace regex:        - ${name}:${version}
+    - pipeline-milestone-step:100.v60a_03cd446e1
+    - snakeyaml-api:1.29.1
+    - trilead-api:1.0.13
+    - workflow-multibranch:711.vdfef37cda_816
+    - javax-mail-api:1.6.2-5
+    - pipeline-stage-tags-metadata:1.9.3
+    - javax-activation-api:1.2.0-2
+    - plugin-util-api:2.16.0
+    - git-client:3.11.0
+    - variant:1.4
+    - scm-api:595.vd5a_df5eb_0e39
+    - kubernetes-client-api:5.12.1-187.v577c3e368fb_6
+    - pipeline-stage-step:291.vf0a8a7aeeb50
+    - font-awesome-api:6.0.0-1
+    - pipeline-model-extensions:1.9.3
+    - bootstrap4-api:4.6.0-3
+    - workflow-cps-global-lib:564.ve62a_4eb_b_e039
+    - workflow-support:813.vb_d7c3d2984a_0
+    - mailer:408.vd726a_1130320
+    - checks-api:1.7.2
+    - jackson2-api:2.13.2-260.v43d711474c77
+    - workflow-scm-step:2.13
+    - pipeline-model-api:1.9.3
+    - popper-api:1.16.1-2
+    - lockable-resources:2.14
+    - pipeline-input-step:446.vf27b_0b_83500e
+    - metrics:4.1.6.1
+    - jquery3-api:3.6.0-2
+    - git-server:1.10
+    - credentials-binding:1.27.1
+    - kubernetes-credentials:0.9.0
+    - pipeline-build-step:2.16
+    - credentials:1087.v16065d268466
+    - pipeline-model-definition:1.9.3
+    - caffeine-api:2.9.2-29.v717aac953ff3
+    - workflow-step-api:622.vb_8e7c15b_c95a_
+    - plain-credentials:1.8
+    - matrix-project:758.v7a_ea_491852f3
+    - bouncycastle-api:2.25
+    - ace-editor:1.1
+    - authentication-tokens:1.4
+    - workflow-durable-task-step:1128.v8c259d125340
+    - bootstrap5-api:5.1.3-6
+    - ssh-credentials:1.19
+    - cloudbees-folder:6.714.v79e858ef76a_2
+    - durable-task:495.v29cd95ec10f2
+    - popper2-api:2.11.4-1
+    - workflow-basic-steps:2.24
+    - workflow-job:1145.v7f2433caa07f
+    - jsch:0.1.55.2
+    - junit:1.54
+    - echarts-api:5.3.0-2
+    - structs:308.v852b473a2b8c
+    - apache-httpcomponents-client-4-api:4.5.13-1.0
+    - workflow-cps:2660.vb_c0412dc4e6d
+    - sshd:3.1.0
+    - display-url-api:2.3.5
+    - script-security:1138.v8e727069a_025
+    - branch-api:2.1044.v2c007e51b_87f
+    - workflow-api:1143.v2d42f1e9dea_5
+  jenkinsUrlProtocol: "https"
+  jenkinsUrl: "jenkins.bigbang.dev"
+  sidecars:
+    configAutoReload:
+      image: "${ZARF_REGISTRY}/kiwigrid/k8s-sidecar:1.14.2"
+agent:
+  enabled: true
+  image: "${ZARF_REGISTRY}/jenkins/inbound-agent"
+  tag: "4.11-1"
+  imagePullSecretName: "private-registry"
+  resources:
+    requests:
+      cpu: "512m"
+      memory: "512Mi"
+    limits:
+      cpu: "512m"
+      memory: "512Mi"
+  alwaysPullImage: true
+persistence:
+  enabled: true
+  storageClass: "local-path"

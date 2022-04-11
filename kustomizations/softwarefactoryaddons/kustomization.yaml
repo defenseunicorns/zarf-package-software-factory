@@ -1,0 +1,19 @@
+resources:
+  - base
+
+configMapGenerator:
+  - name: jira-common
+    namespace: softwarefactoryaddons
+    behavior: merge
+    files:
+      - jira-common-values.yaml
+  - name: confluence-common
+    namespace: softwarefactoryaddons
+    behavior: merge
+    files:
+      - confluence-common-values.yaml
+  - name: jenkins-common
+    namespace: softwarefactoryaddons
+    behavior: merge
+    files:
+      - jenkins-common-values.yaml

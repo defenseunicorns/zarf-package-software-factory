@@ -1,2 +1,4 @@
-.DS_Store
+.idea/
+.vagrant/
 build/
+.DS_Store

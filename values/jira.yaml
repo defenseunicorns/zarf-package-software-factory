@@ -1,8 +1,0 @@
-imagePullSecrets:
-  - name: private-registry
-ingress:
-  nginx: false
-istio:
-  enabled: true
-  gateways:
-    - istio-system/public

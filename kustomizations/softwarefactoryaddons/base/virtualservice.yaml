@@ -11,6 +11,6 @@ spec:
   http:
     - route:
         - destination:
-            host: zarf-jenkins.jenkins.svc.cluster.local
+            host: jenkins.jenkins.svc.cluster.local
             port:
               number: 8080
