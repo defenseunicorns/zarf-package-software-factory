@@ -47,11 +47,11 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__defenseunicorns__zarf-package-software-factory.git
+  url: $CONFIG_REPO_URL
   secretRef:
     name: zarf-git-secret
   ref:
-    branch: feature/gitlab-sso-docs
+    branch: main
 #    tag: X.Y.Z
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
