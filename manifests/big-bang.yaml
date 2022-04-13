@@ -26,7 +26,7 @@ spec:
   secretRef:
     name: zarf-git-secret
   ref:
-    branch: feature/use-real-gitops
+    branch: main
 #    tag: X.Y.Z
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
