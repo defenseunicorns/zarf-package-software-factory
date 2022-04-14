@@ -42,7 +42,7 @@ Since you will need to make environment-specific changes to the system's configu
 
 4. Modify the package to use your DNS domain and your TLS certificate and key:
 
-TODO: write this stuff. It will need to use SOPS since it will have a real TLS key, which isn't so bad on EKS but will be a challenge to get working in the airgap. For now the bigbang.dev domain and TLS cert/key can be used for dev/test.
+   **TODO:** write this stuff. It will need to use SOPS since it will have a real TLS key, which isn't so bad on EKS but will be a challenge to get working in the airgap. For now the bigbang.dev domain and TLS cert/key can be used for dev/test.
 
 > IMPORTANT NOTE: _**YOUR TLS CERT KEY MUST BE TREATED AS A SECRET**_. Never commit the actual secret to a git repository.
 
