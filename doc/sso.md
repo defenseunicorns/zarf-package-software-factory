@@ -1,20 +1,8 @@
-# Manual SSO configuration
-
-This folder contains the steps for manual configuration of SSO, which will be provided while we work on automating the declarative configuration.
-
-## Procedure
+# Configure Single Sign-On
 
 NOTE: `bigbang.dev` is the default domain. If you are using a different domain, substitute `bigbang.dev` for your domain in all URLs
 
-### Deploy the software factory
-
-```shell
-zarf init --components k3s,gitops-service --confirm
-zarf package deploy zarf-package-flux-amd64.tar.zst --confirm
-zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm
-```
-
-### Configure GitLab
+## Configure GitLab
 
 1. Navigate to [https://gitlab.bigbang.dev](https://gitlab.bigbang.dev))
 2. Retrieve the initial root password for GitLab:
@@ -29,4 +17,4 @@ zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm
 
 ### Configure Jenkins
 
-1. 
+TODO: Write this section. It will entail creating an Application in GitLab admin console, which will create a new, nondeterministic, Application ID and Secret, which will need to be committed to the config repo in the Jenkins helm values.

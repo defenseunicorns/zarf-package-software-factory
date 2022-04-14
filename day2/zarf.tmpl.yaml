@@ -1,10 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.17.0/zarf.schema.json
 kind: ZarfPackageConfig
 metadata:
-  name:
+  name: day2-update
 
 components:
-  - name: increment
+  - name: day2-update
     required: true
     repos:
-      - https://github.com/defenseunicorns/zarf-package-software-factory.git
+      - $CONFIG_REPO_URL
