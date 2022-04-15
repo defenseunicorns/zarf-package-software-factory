@@ -90,7 +90,7 @@ spec:
       kind: HelmRelease
       namespace: bigbang
       name: twistlock
-  timeout: 60m
+  timeout: 15m
   postBuild:
     substitute:
       ZARF_REGISTRY: "###ZARF_REGISTRY###"
