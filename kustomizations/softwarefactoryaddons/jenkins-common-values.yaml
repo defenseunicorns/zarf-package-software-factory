@@ -186,6 +186,10 @@ controller:
         # =====================================================
 
       main: |-
+        unclassified:
+          location:
+            adminAddress: "Software Factory Admin <admin@example.com>"
+            url: https://jenkins.bigbang.dev
         jenkins:
           systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code (JCasC) Plugin.\n\n"
           disableRememberMe: true
@@ -253,10 +257,6 @@ controller:
             creationOfLegacyTokenEnabled: false
             tokenGenerationOnCreationEnabled: false
             usageStatisticsEnabled: true
-        unclassified:
-          location:
-            adminAddress: "Software Factory Admin <admin@example.com>"
-            url: https://jenkins.bigbang.dev
 
 agent:
   enabled: true
