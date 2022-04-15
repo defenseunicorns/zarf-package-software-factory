@@ -150,7 +150,7 @@ controller:
                     resourceRequestCpu: "512m"
                     resourceRequestMemory: "512Mi"
                     workingDir: "/home/jenkins/agent"
-                id: "6549f2da428c0fc7ea219f48f8bb193b210bf3b2950ce33a4c85fd85636fcb45"
+                # id: "6549f2da428c0fc7ea219f48f8bb193b210bf3b2950ce33a4c85fd85636fcb45"
                 imagePullSecrets:
                   - name: "private-registry"
                 label: "jenkins-jenkins-agent"
