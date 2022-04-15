@@ -109,7 +109,7 @@ controller:
           users:
             - id: "admin"
               name: "Jenkins Admin"
-              password: "admin"
+              password: "admin2"
               properties:
                 - "apiToken"
                 - "mailer"
