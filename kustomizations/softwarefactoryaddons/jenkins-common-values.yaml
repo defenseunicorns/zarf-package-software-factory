@@ -200,7 +200,8 @@ controller:
           labelString: ""
           projectNamingStrategy: "standard"
           markupFormatter:
-            plainText
+            rawHtml:
+              disableSyntaxHighlighting: true
           clouds:
             - kubernetes:
                 containerCapStr: "10"
