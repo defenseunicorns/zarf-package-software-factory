@@ -4,6 +4,12 @@ controller:
   imagePullSecretName: "private-registry"
   #  adminUser: "admin"
   #  adminPassword: "admin"
+  containerSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    # readOnlyRootFilesystem needs to be false because of the way Jenkins does Configuration as Code, by modifying files in the folder /var/jenkins_home/casc_configs
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
   resources:
     requests:
       cpu: "50m"
