@@ -138,7 +138,7 @@ controller:
             templates:
               - containers:
                   - alwaysPullImage: true
-                    args: "^${computer.jnlpmac} ^${computer.name}"
+                    args: "^$${computer.jnlpmac} ^$${computer.name}"
                     envVars:
                       - envVar:
                           key: "JENKINS_URL"
