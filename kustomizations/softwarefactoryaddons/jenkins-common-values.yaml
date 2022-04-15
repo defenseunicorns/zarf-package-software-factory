@@ -100,6 +100,7 @@ controller:
   jenkinsUrl: "jenkins.bigbang.dev"
   sidecars:
     configAutoReload:
+      enabled: false
       image: "${ZARF_REGISTRY}/kiwigrid/k8s-sidecar:1.14.2"
   JCasC:
     jenkins:
@@ -276,6 +277,7 @@ controller:
       junitTestResultStorage:
         storage: "file"
       location:
+        url: "https://jenkins.bigbang.dev"
         adminAddress: "Software Factory Admin <admin@example.com>"
       mailer:
         charset: "UTF-8"
