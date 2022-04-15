@@ -158,9 +158,9 @@ controller:
           allowsSignup: false
           enableCaptcha: false
           users:
-            - id: "${chart-admin-username}"
+            - id: "$${chart-admin-username}"
               name: "Jenkins Admin"
-              password: "${chart-admin-password}"
+              password: "$${chart-admin-password}"
         # =====================================================
         # WHEN SWITCHING TO GITLAB SSO UNCOMMENT THIS SECTION
         # =====================================================
