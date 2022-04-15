@@ -103,86 +103,90 @@ controller:
       enabled: false
       image: "${ZARF_REGISTRY}/kiwigrid/k8s-sidecar:1.14.2"
   JCasC:
-    jenkins:
-      systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code (JCasC) Plugin.\n\n"
-    #   authorizationStrategy:
-    #     # WHEN SWITCHING TO GITLAB SSO COMMENT OUT THIS SECTION
-    #     # =====================================================
-    #     # loggedInUsersCanDoAnything:
-    #     #   allowAnonymousRead: false
-    #     # =====================================================
-    #     # WHEN SWITCHING TO GITLAB SSO UNCOMMENT THIS SECTION
-    #     # =====================================================
-    #     gitLab:
-    #       # Comma separated list of organization names that if a user is registered with will have admin rights.
-    #       adminOrganizationNames: ""
-    #       # Comma separated list of user names that when authenticated should be given administrator rights.
-    #       adminUserNames: "root"
-    #       # If true, will grant the ViewStatus permission to everyone that connects to the Jenkins instance. Anyone will be able to see the status
-    #       # of a job, but nothing else. This is useful especially for plugins like Embeddable Build Status Plugin
-    #       allowAnonymousJobStatusPermission: false
-    #       # If true, will grant the READ permission to everyone that connects to the Jenkins instance. Anyone will be able to see all the jobs
-    #       # and related state but only authenticated users will be able to BUILD the jobs.
-    #       allowAnonymousReadPermission: false
-    #       # If true, opens a hole in security to allow unauthenticated access to /cc.xml at the root of the server. This URI provides monitoring
-    #       # capability to a range of desktop clients. Enabling this option reveals limited information about your build to the whole world. Use with care.
-    #       allowCcTrayPermission: false
-    #       # The GitLab plugin has a web hook trigger that can be used to notify Jenkins when a push has occurred and that a build should also happen.
-    #       # By enabling this permission you grant anonymous external READ access to the /gitlab-webhook URL so that the request can be received.
-    #       # The GitLab plugin checks that a change has actually occurred so this should be safe to enable.
-    #       allowGitlabWebHookPermission: true
-    #       # If true, will grant the create job permission to all authenticated GitLab users even those that aren't members of the declared organizations.
-    #       authenticatedUserCreateJobPermission: true
-    #       # If true, will grant READ permission to all authenticated GitLab users even those that aren't members of the declared organizations.
-    #       authenticatedUserReadPermission: true
-    #       # If true, will grant all authenticated users the ability to stop building a job
-    #       authenticatedUserStopBuildPermission: false
-    #       # Comma separated list of organization names that if a user is registered with will have job view and build rights.
-    #       organizationNames: ""
-    #       # If true will use GitLab repository permissions to determine Jenkins permissions for each project.
-    #       #   - Public projects - all authenticated users can READ. Only collaborators can BUILD, EDIT, CONFIGURE, or DELETE
-    #       #   - Private projects - only collaborators can READ, BUILD, EDIT, CONFIGURE, or DELETE
-    #       useRepositoryPermissions: true
-    #       # =====================================================
-    #   securityRealm:
-    #     # WHEN SWITCHING TO GITLAB SSO COMMENT OUT THIS SECTION
-    #     # =====================================================
-    #     # local:
-    #     #   allowsSignup: false
-    #     #   enableCaptcha: false
-    #     #   users:
-    #     #     - id: "admin"
-    #     #       name: "Jenkins Admin"
-    #     #       password: "admin"
-    #     #       properties:
-    #     #         - "apiToken"
-    #     #         - "mailer"
-    #     #         - "myView"
-    #     #         - preferredProvider:
-    #     #             providerId: "default"
-    #     #         - "timezone"
-    #     # =====================================================
-    #     # WHEN SWITCHING TO GITLAB SSO UNCOMMENT THIS SECTION
-    #     # =====================================================
-    #     gitLab:
-    #       # The Client ID hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
-    #       clientID: "fff486498f7ec6f636afddf8deb25f7364803b74ff51f6d5580c7c04aa534560"
-    #       # The Client Secret hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
-    #       clientSecret: "d89f21c2555203f9406a056fc6b4220aa9c7695cea4271e6fc7667c976ccf4d3"
-    #       # The URL to the API root of your GitLab installation (e.g. https://gitlab.company.com. The plugin will automatically add "api/v4" suffix for you).
-    #       #   - The https:// or http:// part needs to be specified
-    #       #   - There should not be any trailing slash (/)
-    #       #   - For GitLab Enterprise, the API URI is usually the same as the Web URI
-    #       gitlabApiUri: "https://gitlab.bigbang.dev"
-    #       # The URL to the web UI root of your GitLab installation (e.g. https://gitlab.company.com).
-    #       #   - The https:// or http:// part needs to be specified.
-    #       #   - There should not be any trailing slash (/).
-    #       gitlabWebUri: "https://gitlab.bigbang.dev"
-    #     # =====================================================
-    # unclassified:
-    #   location:
-    #     url: "https://jenkins.bigbang.dev"
-    #     adminAddress: "Software Factory Admin <admin@example.com>"
+    configScripts:
+      authorizationStrategy: |-
+        # WHEN SWITCHING TO GITLAB SSO COMMENT OUT THIS SECTION
+        # =====================================================
+        # loggedInUsersCanDoAnything:
+        #   allowAnonymousRead: false
+        # =====================================================
+        # WHEN SWITCHING TO GITLAB SSO UNCOMMENT THIS SECTION
+        # =====================================================
+        gitLab:
+          # Comma separated list of organization names that if a user is registered with will have admin rights.
+          adminOrganizationNames: ""
+          # Comma separated list of user names that when authenticated should be given administrator rights.
+          adminUserNames: "root"
+          # If true, will grant the ViewStatus permission to everyone that connects to the Jenkins instance. Anyone will be able to see the status
+          # of a job, but nothing else. This is useful especially for plugins like Embeddable Build Status Plugin
+          allowAnonymousJobStatusPermission: false
+          # If true, will grant the READ permission to everyone that connects to the Jenkins instance. Anyone will be able to see all the jobs
+          # and related state but only authenticated users will be able to BUILD the jobs.
+          allowAnonymousReadPermission: false
+          # If true, opens a hole in security to allow unauthenticated access to /cc.xml at the root of the server. This URI provides monitoring
+          # capability to a range of desktop clients. Enabling this option reveals limited information about your build to the whole world. Use with care.
+          allowCcTrayPermission: false
+          # The GitLab plugin has a web hook trigger that can be used to notify Jenkins when a push has occurred and that a build should also happen.
+          # By enabling this permission you grant anonymous external READ access to the /gitlab-webhook URL so that the request can be received.
+          # The GitLab plugin checks that a change has actually occurred so this should be safe to enable.
+          allowGitlabWebHookPermission: true
+          # If true, will grant the create job permission to all authenticated GitLab users even those that aren't members of the declared organizations.
+          authenticatedUserCreateJobPermission: true
+          # If true, will grant READ permission to all authenticated GitLab users even those that aren't members of the declared organizations.
+          authenticatedUserReadPermission: true
+          # If true, will grant all authenticated users the ability to stop building a job
+          authenticatedUserStopBuildPermission: false
+          # Comma separated list of organization names that if a user is registered with will have job view and build rights.
+          organizationNames: ""
+          # If true will use GitLab repository permissions to determine Jenkins permissions for each project.
+          #   - Public projects - all authenticated users can READ. Only collaborators can BUILD, EDIT, CONFIGURE, or DELETE
+          #   - Private projects - only collaborators can READ, BUILD, EDIT, CONFIGURE, or DELETE
+          useRepositoryPermissions: true
+          # =====================================================
+
+      securityRealm: |-
+        # WHEN SWITCHING TO GITLAB SSO COMMENT OUT THIS SECTION
+        # =====================================================
+        # local:
+        #   allowsSignup: false
+        #   enableCaptcha: false
+        #   users:
+        #     - id: "admin"
+        #       name: "Jenkins Admin"
+        #       password: "admin"
+        #       properties:
+        #         - "apiToken"
+        #         - "mailer"
+        #         - "myView"
+        #         - preferredProvider:
+        #             providerId: "default"
+        #         - "timezone"
+        # =====================================================
+        # WHEN SWITCHING TO GITLAB SSO UNCOMMENT THIS SECTION
+        # =====================================================
+        gitLab:
+          # The Client ID hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
+          clientID: "fff486498f7ec6f636afddf8deb25f7364803b74ff51f6d5580c7c04aa534560"
+          # The Client Secret hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
+          clientSecret: "d89f21c2555203f9406a056fc6b4220aa9c7695cea4271e6fc7667c976ccf4d3"
+          # The URL to the API root of your GitLab installation (e.g. https://gitlab.company.com. The plugin will automatically add "api/v4" suffix for you).
+          #   - The https:// or http:// part needs to be specified
+          #   - There should not be any trailing slash (/)
+          #   - For GitLab Enterprise, the API URI is usually the same as the Web URI
+          gitlabApiUri: "https://gitlab.bigbang.dev"
+          # The URL to the web UI root of your GitLab installation (e.g. https://gitlab.company.com).
+          #   - The https:// or http:// part needs to be specified.
+          #   - There should not be any trailing slash (/).
+          gitlabWebUri: "https://gitlab.bigbang.dev"
+        # =====================================================
+
+      main: |-
+        jenkins:
+          systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code (JCasC) Plugin.\n\n"
+        unclassified:
+          location:
+            url: "https://jenkins.bigbang.dev"
+            adminAddress: "Software Factory Admin <admin@example.com>"
 agent:
   enabled: true
   image: "${ZARF_REGISTRY}/jenkins/inbound-agent"
