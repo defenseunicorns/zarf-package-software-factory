@@ -21,7 +21,7 @@ metadata:
   name: zarf-package-software-factory
   namespace: bigbang
 spec:
-  interval: 5m
+  interval: 1m
   url: $CONFIG_REPO_URL
   secretRef:
     name: zarf-git-secret

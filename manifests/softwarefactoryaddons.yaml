@@ -46,7 +46,7 @@ metadata:
   name: zarf-package-software-factory
   namespace: softwarefactoryaddons
 spec:
-  interval: 5m
+  interval: 1m
   url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__RothAndrew__zarf-package-software-factory.git
   secretRef:
     name: zarf-git-secret
