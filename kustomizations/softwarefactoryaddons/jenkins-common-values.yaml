@@ -106,7 +106,7 @@ controller:
   overwritePlugins: true
   sidecars:
     configAutoReload:
-      enabled: false
+      enabled: true
       image: "${ZARF_REGISTRY}/kiwigrid/k8s-sidecar:1.14.2"
   JCasC:
     defaultConfig: true
