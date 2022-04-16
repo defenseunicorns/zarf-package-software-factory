@@ -79,7 +79,7 @@ spec:
       kind: HelmRelease
       namespace: softwarefactoryaddons
       name: jenkins
-  timeout: 15m
+  timeout: 5m
   postBuild:
     substitute:
       ZARF_REGISTRY: "###ZARF_REGISTRY###"
