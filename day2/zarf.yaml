@@ -7,4 +7,4 @@ components:
   - name: day-two-update
     required: true
     repos:
-      - $CONFIG_REPO_URL
+      - https://github.com/RothAndrew/zarf-package-software-factory.git

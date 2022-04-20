@@ -9,7 +9,7 @@ git:
   existingSecret: "zarf-git-secret"
 
 networkPolicies:
-  enabled: true
+  enabled: false
   # When in prod use a real CIDR. Don't do this, it isn't secure.
   controlPlaneCidr: "0.0.0.0/0"
   nodeCidr: "0.0.0.0/0"
@@ -278,7 +278,7 @@ clusterAuditor:
         memory: "512Mi"
 
 gatekeeper:
-  enabled: true
+  enabled: false
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__policy.git
   values:

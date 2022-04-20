@@ -22,7 +22,7 @@ metadata:
   namespace: bigbang
 spec:
   interval: 1m
-  url: $CONFIG_REPO_URL
+  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__RothAndrew__zarf-package-software-factory.git
   secretRef:
     name: zarf-git-secret
   ref:
