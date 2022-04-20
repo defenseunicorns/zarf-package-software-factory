@@ -159,7 +159,7 @@ controller:
         #   - The https:// or http:// part needs to be specified
         #   - There should not be any trailing slash (/)
         #   - For GitLab Enterprise, the API URI is usually the same as the Web URI
-        gitlabApiUri: "https://gitlab.bigbang.dev"
+        gitlabApiUri: "http://gitlab-webservice-default.gitlab.svc.cluster.local:8080"
         # The URL to the web UI root of your GitLab installation (e.g. https://gitlab.company.com).
         #   - The https:// or http:// part needs to be specified.
         #   - There should not be any trailing slash (/).
