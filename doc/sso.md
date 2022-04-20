@@ -24,4 +24,27 @@ NOTE: `bigbang.dev` is the default domain. If you are using a different domain, 
 
 ### Configure Jenkins
 
-TODO: Write this section. It will entail creating an Application in GitLab admin console, which will create a new, nondeterministic, Application ID and Secret, which will need to be committed to the config repo in the Jenkins helm values.
+:warning: WARNING: This section involves committing and pushing a secret to your config repo. Eventually we plan to support SOPS encryption of secrets, but that's not been documented or configured yet. If you are committing secrets to your git repo make sure the repo is private and the entire repo (and resulting zarf package) is treated as a secret. We highly recommend not committing unencrypted operational secrets to git repos, even when they are private. This project will stay in version "0.0.X" until this is addressed, signifying that it is not ready for production and should only be used in dev/test/kick-the-tires types of environments.
+
+1. Navigate to [https://gitlab.bigbang.dev/admin/applications/new](https://gitlab.bigbang.dev/admin/applications/new) and create a new Application for Jenkins. Click "Save application" when finished.
+   1. Name: `Jenkins`
+   2. Redirect URI: `https://jenkins.bigbang.dev/securityRealm/finishLogin`
+   3. Trusted: Yes (checked)
+   4. Confidential: Yes (checked)
+   5. Expire access tokens: Yes (checked)
+   6. Scopes: "api" checked, all others unchecked
+
+2. Copy/Paste the Application ID and Secret from Gitlab into your config repo in the file `kustomizations/softwarefactoryaddons/jenkins-common-values.yaml` in the parameters that say `YOUR_CLIENT_ID_HERE` AND `YOUR_CLIENT_SECRET_HERE`
+
+3. Uncomment the two blocks that are labeled with `WHEN SWITCHING TO GITLAB SSO UNCOMMENT THIS SECTION`
+
+4. Commit and push the changes to your config repo
+
+5. Create a "Day 2" package and deploy it. This package contains nothing but your config repo, so that Gitea will receive the new commit that you just pushed. For convenience, there is a Makefile in that repo
+
+```shell
+cd day2
+make build-and-deploy
+```
+
+After Flux reconciles the change, Jenkins should now be using GitLab as the SSO provider.
