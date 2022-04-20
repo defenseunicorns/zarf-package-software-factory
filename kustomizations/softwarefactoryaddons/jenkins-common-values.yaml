@@ -149,21 +149,21 @@ controller:
     # =====================================================
     # WHEN SWITCHING TO GITLAB SSO UNCOMMENT THIS SECTION
     # =====================================================
-    # securityRealm: |-
-    #   gitLab:
-    #     # The Client ID hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
-    #     clientID: "9793120e6766795e1d806f12e5ca7c66a8a761779e4926c01d44f72896c9661d"
-    #     # The Client Secret hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
-    #     clientSecret: "244119f7d10831cd4feade5369e1ed7b6184f0863d7daf0ea07b804c78a00fce"
-    #     # The URL to the API root of your GitLab installation (e.g. https://gitlab.company.com. The plugin will automatically add "api/v4" suffix for you).
-    #     #   - The https:// or http:// part needs to be specified
-    #     #   - There should not be any trailing slash (/)
-    #     #   - For GitLab Enterprise, the API URI is usually the same as the Web URI
-    #     gitlabApiUri: "https://gitlab.bigbang.dev"
-    #     # The URL to the web UI root of your GitLab installation (e.g. https://gitlab.company.com).
-    #     #   - The https:// or http:// part needs to be specified.
-    #     #   - There should not be any trailing slash (/).
-    #     gitlabWebUri: "https://gitlab.bigbang.dev"
+    securityRealm: |-
+      gitLab:
+        # The Client ID hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
+        clientID: "9793120e6766795e1d806f12e5ca7c66a8a761779e4926c01d44f72896c9661d"
+        # The Client Secret hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
+        clientSecret: "244119f7d10831cd4feade5369e1ed7b6184f0863d7daf0ea07b804c78a00fce"
+        # The URL to the API root of your GitLab installation (e.g. https://gitlab.company.com. The plugin will automatically add "api/v4" suffix for you).
+        #   - The https:// or http:// part needs to be specified
+        #   - There should not be any trailing slash (/)
+        #   - For GitLab Enterprise, the API URI is usually the same as the Web URI
+        gitlabApiUri: "https://gitlab.bigbang.dev"
+        # The URL to the web UI root of your GitLab installation (e.g. https://gitlab.company.com).
+        #   - The https:// or http:// part needs to be specified.
+        #   - There should not be any trailing slash (/).
+        gitlabWebUri: "https://gitlab.bigbang.dev"
 
     configScripts:
       main: |-
