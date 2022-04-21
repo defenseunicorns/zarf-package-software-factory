@@ -146,9 +146,9 @@ controller:
     securityRealm: |-
       gitLab:
         # The Client ID hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
-        clientID: "4c0ffbf37b49ca61b8d2aa0434404aa6bfcca1f756a24396e381f6afa7fc7c70"
+        clientID: "5843f2fc3c8a9252c7117529b263487d8cb08a1aede8849499ab6c5de4c329c5"
         # The Client Secret hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
-        clientSecret: "2ac53cd4c7ec5c66f2e6e4d34d796f99430db1cbddacb7f5fc9a9b40018fb39e"
+        clientSecret: "adbac6bde3908b9e13dcd1164953cb36833eb6686bd510ce0f08affe4304f3c2"
         # The URL to the API root of your GitLab installation (e.g. https://gitlab.company.com. The plugin will automatically add "api/v4" suffix for you).
         #   - The https:// or http:// part needs to be specified
         #   - There should not be any trailing slash (/)
