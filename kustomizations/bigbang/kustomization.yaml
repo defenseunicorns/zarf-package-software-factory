@@ -7,13 +7,11 @@ configMapGenerator:
     behavior: merge
     files:
       - common/values.yaml
-
-secretGenerator:
-  - name: environment-bb
+  - name: environment
     namespace: bigbang
     behavior: merge
     files:
-      - environment-bb/values.yaml
+      - environment/values.yaml
 
 patchesStrategicMerge:
   - |-
