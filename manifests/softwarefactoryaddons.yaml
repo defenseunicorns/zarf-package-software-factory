@@ -80,6 +80,8 @@ spec:
       namespace: softwarefactoryaddons
       name: jenkins
   timeout: 5m
+  decryption:
+    provider: sops
   postBuild:
     substitute:
       ZARF_REGISTRY: "###ZARF_REGISTRY###"

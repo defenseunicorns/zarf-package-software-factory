@@ -2,3 +2,6 @@
 .vagrant/
 build/
 .DS_Store
+
+# SOPS stuff that should never be committed to the repo
+secret-sops-gpg.yaml
