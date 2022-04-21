@@ -93,6 +93,8 @@ spec:
   timeout: 15m
   decryption:
     provider: sops
+    secretRef:
+      name: sops-gpg
   postBuild:
     substitute:
       ZARF_REGISTRY: "###ZARF_REGISTRY###"
