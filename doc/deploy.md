@@ -1,6 +1,6 @@
 # Deploy the packages
 
-This guide assumes you have already [Forked the repo and built the packages](fork-and-build.md). If you haven't, please do that first.
+This guide assumes you have already [Initialized the cluster](initialize.md). If you haven't, please do that first.
 
 Depending on where you want to run the package you just created, there are a few different paths
 

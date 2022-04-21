@@ -1,5 +1,3 @@
-domain: bigbang.dev
-
 registryCredentials:
   registry: "${ZARF_REGISTRY}"
   username: "zarf-pull"

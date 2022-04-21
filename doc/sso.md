@@ -24,7 +24,11 @@ NOTE: `bigbang.dev` is the default domain. If you are using a different domain, 
 
 ### Configure Jenkins
 
-:warning: WARNING: This section involves committing and pushing a secret to your config repo. Eventually we plan to support SOPS encryption of secrets, but that's not been documented or configured yet. If you are committing secrets to your git repo make sure the repo is private and the entire repo (and resulting zarf package) is treated as a secret. We highly recommend not committing unencrypted operational secrets to git repos, even when they are private. This project will stay in version "0.0.X" until this is addressed, signifying that it is not ready for production and should only be used in dev/test/kick-the-tires types of environments.
+**Warnings and notes**
+
+- :warning: WARNING: This section involves committing and pushing a secret to your config repo. Eventually we plan to support SOPS encryption of secrets, but that's not been documented or configured yet. If you are committing secrets to your git repo make sure the repo is private and the entire repo (and resulting zarf package) is treated as a secret. We highly recommend not committing unencrypted operational secrets to git repos, even when they are private. This project will stay in version "0.0.X" until this is addressed, signifying that it is not ready for production and should only be used in dev/test/kick-the-tires types of environments.
+
+- NOTE: Configuring Jenkins to use GitLab as the SSO provider will not work when using the `bigbang.dev` domain. during the OAuth ping-pong auth flow Jenkins tries to run a POST http request to get a login token, but it isn't able to hit `https://gitlab.bigbang.dev` since that resolves to `127.0.0.1`
 
 1. Navigate to [https://gitlab.bigbang.dev/admin/applications/new](https://gitlab.bigbang.dev/admin/applications/new) and create a new Application for Jenkins. Click "Save application" when finished.
    1. Name: `Jenkins`

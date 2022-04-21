@@ -24,7 +24,7 @@ Coming Soon:
 All versions of this package will not be compatible with all versions of Zarf. Here's a compatibility matrix to use to determine which versions match up
 
 | Package Version                                                                                                                                                                   | Zarf Version                                                             |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |--------------------------------------------------------------------------|
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | [0.0.2](https://github.com/defenseunicorns/zarf-package-software-factory/releases/tag/0.0.2) - [main](https://github.com/defenseunicorns/zarf-package-software-factory/tree/main) | [v0.15.0](https://github.com/defenseunicorns/zarf/releases/tag/v0.15.0)+ |
 | [0.0.1](https://github.com/defenseunicorns/zarf-package-software-factory/releases/tag/0.0.1)                                                                                      | [v0.14.0](https://github.com/defenseunicorns/zarf/releases/tag/v0.14.0)  |
 
@@ -53,7 +53,8 @@ Note that having Zarf installed is not a prerequisite. This repo pulls in its ow
 ## Instructions
 
 1. [Fork the repo and build the packages](doc/fork-and-build.md)
-2. [Deploy](doc/deploy.md)
-3. [Configure Single Sign-On](doc/sso.md)
-4. [Day-2 Ops/Maintenance/Upgrades](doc/day2.md)
-5. [Troubleshooting](doc/troubleshooting.md)
+2. [Initialize the cluster](doc/initialize.md)
+3. [Deploy](doc/deploy.md)
+4. [Configure Single Sign-On](doc/sso.md)
+5. [Day-2 Ops/Maintenance/Upgrades](doc/day2.md)
+6. [Troubleshooting](doc/troubleshooting.md)

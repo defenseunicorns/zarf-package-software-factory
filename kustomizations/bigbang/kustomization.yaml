@@ -1,12 +1,17 @@
 resources:
   - vendor/bigbang/base
 
-configMapGenerator:
-  - name: common
+secretGenerator:
+  - name: common-bb
     namespace: bigbang
     behavior: merge
     files:
-      - values.yaml
+      - common-bb/values.yaml
+  - name: environment-bb
+    namespace: bigbang
+    behavior: merge
+    files:
+      - environment-bb/values.yaml
 
 patchesStrategicMerge:
   - |-
