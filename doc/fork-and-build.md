@@ -42,7 +42,7 @@ Since you will need to make environment-specific changes to the system's configu
 zarf prepare patch-git http://zarf-gitea-http.zarf.svc.cluster.local:3000 manifests/softwarefactoryaddons.yaml
 ``
 
-7. Customize 
+7. Customize `kustomizations/bigbang/environment-bb/values.yaml` -- Replace `bigbang.dev` with your real domain, and change the TLS key and cert to your own key and cert, then SOPS encrypt the file. Click [HERE](sops.md) for instructions on how to set up SOPS encryption.
 
 7. Generate `zarf.yaml`, `manifests/big-bang.yaml`, and `manifests/softwarefactoryaddons.yaml` from the provided templates:
 
