@@ -4,7 +4,7 @@ controller:
   imagePullSecretName: "private-registry"
   adminUser: "admin"
   adminPassword: "admin"
-  jenkinsUrl: "https://jenkins.bigbang.dev"
+  jenkinsUrl: "https://jenkins.di2me.com"
   disableRememberMe: true
   resources:
     requests:
@@ -153,11 +153,11 @@ controller:
         #   - The https:// or http:// part needs to be specified
         #   - There should not be any trailing slash (/)
         #   - For GitLab Enterprise, the API URI is usually the same as the Web URI
-        gitlabApiUri: "https://gitlab.bigbang.dev"
+        gitlabApiUri: "https://gitlab.di2me.com"
         # The URL to the web UI root of your GitLab installation (e.g. https://gitlab.company.com).
         #   - The https:// or http:// part needs to be specified.
         #   - There should not be any trailing slash (/).
-        gitlabWebUri: "https://gitlab.bigbang.dev"
+        gitlabWebUri: "https://gitlab.di2me.com"
 
     configScripts:
       main: |-
