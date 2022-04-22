@@ -38,7 +38,15 @@ Since you will need to make environment-specific changes to the system's configu
 
 1. Customize `kustomizations/bigbang/environment-bb/values.yaml` -- Replace `bigbang.dev` with your real domain, and change the TLS key and cert to your own key and cert, then SOPS encrypt the file. Click [HERE](sops.md) for instructions on how to set up SOPS encryption.
 
-1. Customize `kustomizations/softwarefactoryaddons/jenkins/environment-bb-values.yaml` -- Replace `bigbang.dev` with your real domain. Later on in the [SSO](sso.md) step you'll also update the `clientID` and `clientSecret` parameters but we can't do that until after GitLab is deployed. Encrypt the file with SOPS if you want at this point, though the only things in the file that are likely to be considered secrets are the client ID and client secret, which won't have been added yet.
+    ```shell
+    sops -e -i kustomizations/bigbang/environment-bb/values.yaml
+    ```
+
+1. Customize `kustomizations/softwarefactoryaddons/jenkins/environment-bb-values.yaml` -- Replace `bigbang.dev` with your real domain. Do a find and replace on the whole file, it appears in multiple places. Later on in the [SSO](sso.md) step you'll also update the `clientID` and `clientSecret` parameters but we can't do that until after GitLab is deployed. Encrypt the file with SOPS if you want at this point, though the only things in the file that are likely to be considered secrets are the client ID and client secret, which won't have been added yet.
+
+    ```shell
+    sops -e -i kustomizations/softwarefactoryaddons/jenkins/environment-bb-values.yaml
+    ```
 
 1. Customize `kustomizations/softwarefactoryaddons/base/virtualservice.yaml` -- Replace `bigbang.dev` with your real domain.
 
