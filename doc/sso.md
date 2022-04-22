@@ -30,6 +30,8 @@ NOTE: `bigbang.dev` is the default domain. If you are using a different domain, 
 
 - NOTE: Configuring Jenkins to use GitLab as the SSO provider will not work when using the `bigbang.dev` domain. During the OAuth ping-pong auth flow Jenkins tries to run a POST http request to get a login token, but it isn't able to hit `https://gitlab.bigbang.dev` since that resolves to `127.0.0.1`. This may be fixable through the use of an Istio [ServiceEntry](https://istio.io/latest/docs/reference/config/networking/service-entry/). More investigation needed.
 
+### Instructions
+
 1. Navigate to [https://gitlab.bigbang.dev/admin/applications/new](https://gitlab.bigbang.dev/admin/applications/new) and create a new Application for Jenkins. Click "Save application" when finished.
    1. Name: `Jenkins`
    2. Redirect URI: `https://jenkins.bigbang.dev/securityRealm/finishLogin`
@@ -42,13 +44,21 @@ NOTE: `bigbang.dev` is the default domain. If you are using a different domain, 
 
 1. :warning: Encrypt `kustomizations/softwarefactoryaddons/jenkins/environment-bb-values.yaml` with SOPS. See the [SOPS guide](sops.md) for instructions.
 
+    ```shell
+    sops -e -i kustomizations/softwarefactoryaddons/jenkins/environment-bb-values.yaml
+    ```
+
 1. Commit and push the changes to your config repo
 
 1. Create a "Day 2" package and deploy it. This package contains nothing but your config repo, so that Gitea will receive the new commit that you just pushed. For convenience, there is a Makefile in that repo
 
-```shell
-cd day2
-make build-and-deploy
-```
+    ```shell
+    cd day2
+    zarf package create --confirm
+    
+    # Sneakernet the package if you need to
+
+    zarf package deploy zarf-package-day-two-update-amd64.tar.zst --confirm
+    ```
 
 After Flux reconciles the change, Jenkins should now be using GitLab as the SSO provider.
