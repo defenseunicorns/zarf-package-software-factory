@@ -1,0 +1,54 @@
+# ENCRYPT THIS FILE!!! DON'T COMMIT IT TO THE REPO UNENCRYPTED! IT CONTAINS SECRETS!!!
+
+controller:
+  jenkinsUrl: https://jenkins.bigbang.dev
+  adminUser: admin
+  adminPassword: admin
+  JCasC:
+    authorizationStrategy: |-
+      gitLab:
+        # Comma separated list of organization names that if a user is registered with will have admin rights.
+        adminOrganizationNames: ""
+        # Comma separated list of user names that when authenticated should be given administrator rights.
+        adminUserNames: "root"
+        # If true, will grant the ViewStatus permission to everyone that connects to the Jenkins instance. Anyone will be able to see the status
+        # of a job, but nothing else. This is useful especially for plugins like Embeddable Build Status Plugin
+        allowAnonymousJobStatusPermission: false
+        # If true, will grant the READ permission to everyone that connects to the Jenkins instance. Anyone will be able to see all the jobs
+        # and related state but only authenticated users will be able to BUILD the jobs.
+        allowAnonymousReadPermission: false
+        # If true, opens a hole in security to allow unauthenticated access to /cc.xml at the root of the server. This URI provides monitoring
+        # capability to a range of desktop clients. Enabling this option reveals limited information about your build to the whole world. Use with care.
+        allowCcTrayPermission: false
+        # The GitLab plugin has a web hook trigger that can be used to notify Jenkins when a push has occurred and that a build should also happen.
+        # By enabling this permission you grant anonymous external READ access to the /gitlab-webhook URL so that the request can be received.
+        # The GitLab plugin checks that a change has actually occurred so this should be safe to enable.
+        allowGitlabWebHookPermission: true
+        # If true, will grant the create job permission to all authenticated GitLab users even those that aren't members of the declared organizations.
+        authenticatedUserCreateJobPermission: true
+        # If true, will grant READ permission to all authenticated GitLab users even those that aren't members of the declared organizations.
+        authenticatedUserReadPermission: true
+        # If true, will grant all authenticated users the ability to stop building a job
+        authenticatedUserStopBuildPermission: false
+        # Comma separated list of organization names that if a user is registered with will have job view and build rights.
+        organizationNames: ""
+        # If true will use GitLab repository permissions to determine Jenkins permissions for each project.
+        #   - Public projects - all authenticated users can READ. Only collaborators can BUILD, EDIT, CONFIGURE, or DELETE
+        #   - Private projects - only collaborators can READ, BUILD, EDIT, CONFIGURE, or DELETE
+        useRepositoryPermissions: true
+
+    securityRealm: |-
+      gitLab:
+        # The Client ID hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
+        clientID: "YOUR_CLIENT_ID_HERE"
+        # The Client Secret hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
+        clientSecret: "YOUR_CLIENT_SECRET_HERE"
+        # The URL to the API root of your GitLab installation (e.g. https://gitlab.company.com. The plugin will automatically add "api/v4" suffix for you).
+        #   - The https:// or http:// part needs to be specified
+        #   - There should not be any trailing slash (/)
+        #   - For GitLab Enterprise, the API URI is usually the same as the Web URI
+        gitlabApiUri: "https://gitlab.bigbang.dev"
+        # The URL to the web UI root of your GitLab installation (e.g. https://gitlab.company.com).
+        #   - The https:// or http:// part needs to be specified.
+        #   - There should not be any trailing slash (/).
+        gitlabWebUri: "https://gitlab.bigbang.dev"

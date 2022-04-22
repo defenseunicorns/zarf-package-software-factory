@@ -7,6 +7,16 @@ metadata:
   architecture: amd64
 
 components:
+  - name: setup
+    required: true
+    secretName: "private-registry"
+    manifests:
+      - name: setup-config
+        files:
+          - manifests/setup.yaml
+    repos:
+      - https://github.com/RothAndrew/zarf-package-software-factory.git
+
   - name: big-bang
     required: true
     secretName: "private-registry"
@@ -15,7 +25,6 @@ components:
         files:
           - manifests/big-bang.yaml
     repos:
-      - https://github.com/RothAndrew/zarf-package-software-factory.git
       - https://repo1.dso.mil/platform-one/big-bang/bigbang.git@1.28.0
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git@1.11.5-bb.2
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git@1.11.5-bb.1

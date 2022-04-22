@@ -3,8 +3,17 @@ kind: Namespace
 metadata:
   name: softwarefactoryaddons
   labels:
-    istio-injection: disabled
     owner: softwarefactoryaddons
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: zarf-git-secret
+  namespace: softwarefactoryaddons
+stringData:
+  username: "zarf-git-user"
+  password: "###ZARF_GIT_AUTH_PUSH###"
 ---
 apiVersion: v1
 kind: Namespace
@@ -30,35 +39,11 @@ metadata:
     istio-injection: enabled
     owner: softwarefactoryaddons
 ---
-apiVersion: v1
-kind: Secret
-type: Opaque
-metadata:
-  name: zarf-git-secret
-  namespace: softwarefactoryaddons
-stringData:
-  username: "zarf-git-user"
-  password: "###ZARF_GIT_AUTH_PUSH###"
----
-apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: GitRepository
-metadata:
-  name: zarf-package-software-factory
-  namespace: softwarefactoryaddons
-spec:
-  interval: 1m
-  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__RothAndrew__zarf-package-software-factory.git
-  secretRef:
-    name: zarf-git-secret
-  ref:
-    branch: feature/gitlab-sso-docs
-#    tag: X.Y.Z
----
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
   name: softwarefactoryaddons
-  namespace: softwarefactoryaddons
+  namespace: flux-system
 spec:
   interval: 5m
   path: "./kustomizations/softwarefactoryaddons"
@@ -80,6 +65,10 @@ spec:
       namespace: softwarefactoryaddons
       name: jenkins
   timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-gpg
   postBuild:
     substitute:
       ZARF_REGISTRY: "###ZARF_REGISTRY###"

@@ -4,16 +4,23 @@ resources:
 configMapGenerator:
   - name: jira-common
     namespace: softwarefactoryaddons
-    behavior: merge
+    behavior: replace
     files:
-      - jira-common-values.yaml
+      - values.yaml=jira/values.yaml
   - name: confluence-common
     namespace: softwarefactoryaddons
-    behavior: merge
+    behavior: replace
     files:
-      - confluence-common-values.yaml
+      - values.yaml=confluence/values.yaml
   - name: jenkins-common
     namespace: softwarefactoryaddons
-    behavior: merge
+    behavior: replace
     files:
-      - jenkins-common-values.yaml
+      - values.yaml=jenkins/common-values.yaml
+
+secretGenerator:
+  - name: jenkins-environment-bb
+    namespace: softwarefactoryaddons
+    behavior: replace
+    files:
+      - values.yaml=jenkins/environment-bb-values.yaml

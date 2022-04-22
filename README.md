@@ -24,7 +24,7 @@ Coming Soon:
 All versions of this package will not be compatible with all versions of Zarf. Here's a compatibility matrix to use to determine which versions match up
 
 | Package Version                                                                                                                                                                   | Zarf Version                                                             |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |--------------------------------------------------------------------------|
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | [0.0.2](https://github.com/defenseunicorns/zarf-package-software-factory/releases/tag/0.0.2) - [main](https://github.com/defenseunicorns/zarf-package-software-factory/tree/main) | [v0.15.0](https://github.com/defenseunicorns/zarf/releases/tag/v0.15.0)+ |
 | [0.0.1](https://github.com/defenseunicorns/zarf-package-software-factory/releases/tag/0.0.1)                                                                                      | [v0.14.0](https://github.com/defenseunicorns/zarf/releases/tag/v0.14.0)  |
 
@@ -34,9 +34,7 @@ All versions of this package will not be compatible with all versions of Zarf. H
 
 - Due to issues with Elasticsearch this package doesn't work yet in some k8s distros. It does work in K3s (using `zarf init --components k3s,gitops-service`). Upcoming work to swap the EFK stack out for the PLG stack (Promtail, Loki, Grafana) should resolve this issue. Keep in mind the big note above about the package being huge. Unless you have the Mother of All Laptops you'll need to turn a bunch of stuff off before you try to deploy it locally using Vagrant.
 
-- Inside the Vagrant VM the services are available on the standard port 443. Outside the VM if you want to pull something up in your browser that traffic is being routed to port **8443** to avoid needing to be root when running the Vagrant box.
-
-- Secrets like the TLS cert are currently stored in a ConfigMap, they need to be moved to a Secret.
+- If you are using Vagrant, inside the Vagrant VM the services are available on the standard port 443. Outside the VM if you want to pull something up in your browser that traffic is being routed to port **8443** to avoid needing to be root when running the Vagrant box.
 
 ## Prerequisites
 
@@ -52,8 +50,9 @@ Note that having Zarf installed is not a prerequisite. This repo pulls in its ow
 
 ## Instructions
 
-1. [Fork the repo and build the packages](doc/fork-and-build.md)
-2. [Deploy](doc/deploy.md)
-3. [Configure Single Sign-On](doc/sso.md)
-4. [Day-2 Ops/Maintenance/Upgrades](doc/day2.md)
-5. [Troubleshooting](doc/troubleshooting.md)
+1. [Fork the repo, customize, and build the packages](doc/fork-and-build.md)
+2. [Initialize the cluster](doc/initialize.md)
+3. [Deploy](doc/deploy.md)
+4. [Configure Single Sign-On](doc/sso.md)
+5. [Day-2 Ops/Maintenance/Upgrades](doc/day2.md)
+6. [Troubleshooting](doc/troubleshooting.md)

@@ -4,9 +4,16 @@ resources:
 configMapGenerator:
   - name: common
     namespace: bigbang
-    behavior: merge
+    behavior: replace
     files:
-      - values.yaml
+      - values.yaml=common/values.yaml
+
+secretGenerator:
+  - name: environment-bb
+    namespace: bigbang
+    behavior: replace
+    files:
+      - values.yaml=environment-bb/values.yaml
 
 patchesStrategicMerge:
   - |-
