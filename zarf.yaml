@@ -7,6 +7,14 @@ metadata:
   architecture: amd64
 
 components:
+  - name: setup
+    required: true
+    secretName: "private-registry"
+    manifests:
+      - name: setup-config
+        files:
+          - manifests/setup.yaml
+
   - name: big-bang
     required: true
     secretName: "private-registry"
