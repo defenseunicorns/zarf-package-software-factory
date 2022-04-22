@@ -3,6 +3,7 @@ kind: Namespace
 metadata:
   name: softwarefactoryaddons
   labels:
+    istio-injection: disabled
     owner: softwarefactoryaddons
 ---
 apiVersion: v1
