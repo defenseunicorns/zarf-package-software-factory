@@ -52,4 +52,4 @@ Since you will need to make environment-specific changes to the system's configu
     make all
     ```
 
-Now that the necessary packages are created, it is time to [Initialize the cluster](initialize.md).
+Now that the necessary packages are created, it is time to [Deploy](deploy.md).
