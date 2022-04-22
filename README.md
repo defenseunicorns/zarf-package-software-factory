@@ -39,7 +39,6 @@ All versions of this package will not be compatible with all versions of Zarf. H
 ## Prerequisites
 
 - [Logged into registry1.dso.mil](https://github.com/defenseunicorns/zarf/blob/master/docs/ironbank.md)
-- Clone this repo
 - `make` present in PATH
 - `sha256sum` present in PATH
 - TONS of CPU and RAM. Our testing shows the AWS EC2 instance type m6i.8xlarge works pretty well at about $1.50/hour, which can be reduced further if you do a spot instance.
