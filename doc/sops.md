@@ -16,7 +16,7 @@ For full details, see [this docs page on the Flux site](https://fluxcd.io/docs/g
     export KEY_FP="YourKeyFingerprintHere"
     ```
 
-4. Export the public key into the Git repository so your teammates can use it to encrypt files.
+4. Export the public key into the Git repository so your teammates can use it to encrypt files. Commit and push the file to your repo.
 
     ```shell
     # Create the public key file
@@ -25,7 +25,7 @@ For full details, see [this docs page on the Flux site](https://fluxcd.io/docs/g
     gpg --import ./.sops.pub.asc
     ```
 
-5. Create the SOPS configuration file
+5. Create the SOPS configuration file. Commit and push the file to your repo.
 
     ```shell
     cat <<EOF > ./.sops.yaml

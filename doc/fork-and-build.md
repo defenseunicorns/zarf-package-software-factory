@@ -38,40 +38,18 @@ Since you will need to make environment-specific changes to the system's configu
 
 1. Customize `kustomizations/bigbang/environment-bb/values.yaml` -- Replace `bigbang.dev` with your real domain, and change the TLS key and cert to your own key and cert, then SOPS encrypt the file. Click [HERE](sops.md) for instructions on how to set up SOPS encryption.
 
-1. Generate `zarf.yaml`, `manifests/big-bang.yaml`, and `manifests/softwarefactoryaddons.yaml` from the provided templates:
-
-    ```shell
-    # First download Zarf. Assuming you are on MacOS, otherwise on Linux switch the target to `build/zarf` and the calls to `build/zarf` instead of `build/zarf-mac-intel`
-    make build/zarf-mac-intel
-    # Then use the provided template files to generate the real one
-    export CONFIG_REPO_URL="https://gitsite.com/yourusername/new-repository.git"
-    envsubst '$CONFIG_REPO_URL' < zarf.tmpl.yaml > zarf.yaml
-    envsubst '$CONFIG_REPO_URL' < day2/zarf.tmpl.yaml > day2/zarf.yaml
-    envsubst '$CONFIG_REPO_URL' < manifests/big-bang.tmpl.yaml > manifests/big-bang.yaml
-    envsubst '$CONFIG_REPO_URL' < manifests/softwarefactoryaddons.tmpl.yaml > manifests/softwarefactoryaddons.yaml
-    # These ones will require you to confirm that you want to perform this action by typing "y"
-    build/zarf-mac-intel prepare patch-git "http://zarf-gitea-http.zarf.svc.cluster.local:3000" manifests/big-bang.yaml
-    build/zarf-mac-intel prepare patch-git "http://zarf-gitea-http.zarf.svc.cluster.local:3000" manifests/softwarefactoryaddons.yaml
-    ```
-
-1. Modify the package to use your DNS domain and your TLS certificate and key:
-
-   **TODO:** write this stuff. It will need to use SOPS since it will have a real TLS key, which isn't so bad on EKS but will be a challenge to get working in the airgap. For now the bigbang.dev domain and TLS cert/key can be used for dev/test.
-
-   > IMPORTANT NOTE: _**YOUR TLS CERT KEY MUST BE TREATED AS A SECRET**_. Never commit the actual secret to a git repository.
-
 1.  Commit the changes to the repo
 
-   ```shell
-   git add .
-   git commit -m "Add environment-specific configuration"
-   git push
-   ```
+    ```shell
+    git add .
+    git commit -m "Add environment-specific configuration"
+    git push
+    ```
 
 1. Build the packages
 
-   ```shell
-   make all
-   ```
+    ```shell
+    make all
+    ```
 
 Now that the necessary packages are created, it is time to [Initialize the cluster](initialize.md).
