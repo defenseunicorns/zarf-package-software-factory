@@ -29,16 +29,16 @@ spec:
   valuesFrom:
     - kind: Secret
       name: jira-common-bb
-      valuesKey: jira-common-bb-values.yaml
+      valuesKey: values.yaml
     - kind: ConfigMap
       name: jira-common
-      valuesKey: jira-common-values.yaml
+      valuesKey: values.yaml
     - kind: Secret
       name: jira-environment-bb
-      valuesKey: jira-environment-bb-values.yaml
+      valuesKey: values.yaml
     - kind: ConfigMap
       name: jira-environment
-      valuesKey: jira-environment-values.yaml
+      valuesKey: values.yaml
   dependsOn:
     - name: istio
       namespace: bigbang
@@ -74,16 +74,16 @@ spec:
   valuesFrom:
     - kind: Secret
       name: confluence-common-bb
-      valuesKey: confluence-common-bb-values.yaml
+      valuesKey: values.yaml
     - kind: ConfigMap
       name: confluence-common
-      valuesKey: confluence-common-values.yaml
+      valuesKey: values.yaml
     - kind: Secret
       name: confluence-environment-bb
-      valuesKey: confluence-environment-bb-values.yaml
+      valuesKey: values.yaml
     - kind: ConfigMap
       name: confluence-environment
-      valuesKey: confluence-environment-values.yaml
+      valuesKey: values.yaml
   dependsOn:
     - name: istio
       namespace: bigbang
@@ -119,16 +119,16 @@ spec:
   valuesFrom:
     - kind: Secret
       name: jenkins-common-bb
-      valuesKey: jenkins-common-bb-values.yaml
+      valuesKey: values.yaml
     - kind: ConfigMap
       name: jenkins-common
-      valuesKey: jenkins-common-values.yaml
+      valuesKey: values.yaml
     - kind: Secret
       name: jenkins-environment-bb
-      valuesKey: jenkins-environment-bb-values.yaml
+      valuesKey: values.yaml
     - kind: ConfigMap
       name: jenkins-environment
-      valuesKey: jenkins-environment-values.yaml
+      valuesKey: values.yaml
   dependsOn:
     - name: istio
       namespace: bigbang

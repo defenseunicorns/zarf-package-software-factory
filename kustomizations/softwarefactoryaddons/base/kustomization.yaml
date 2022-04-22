@@ -1,5 +1,5 @@
 configurations:
-- transformer.yaml
+  - transformer.yaml
 
 commonLabels:
   owner: softwarefactoryaddons
@@ -15,32 +15,32 @@ configMapGenerator:
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - jira-common-values.yaml=
+      - values.yaml=
   - name: jira-environment
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - jira-environment-values.yaml=
+      - values.yaml=
   - name: confluence-common
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - confluence-common-values.yaml=
+      - values.yaml=
   - name: confluence-environment
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - confluence-environment-values.yaml=
+      - values.yaml=
   - name: jenkins-common
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - jenkins-common-values.yaml=
+      - values.yaml=
   - name: jenkins-environment
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - jenkins-environment-values.yaml=
+      - values.yaml=
 
 # Flux combines secrets and configmaps in `valuesFrom`.  Kustomize
 # cannot distinguish between them when applying suffixes.  Therefore,
@@ -52,29 +52,29 @@ secretGenerator:
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - jira-common-bb-values.yaml=
+      - values.yaml=
   - name: jira-environment-bb
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - jira-environment-bb-values.yaml=
+      - values.yaml=
   - name: confluence-common-bb
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - confluence-common-bb-values.yaml=
+      - values.yaml=
   - name: confluence-environment-bb
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - confluence-environment-bb-values.yaml=
+      - values.yaml=
   - name: jenkins-common-bb
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - jenkins-common-bb-values.yaml=
+      - values.yaml=
   - name: jenkins-environment-bb
     namespace: softwarefactoryaddons
     behavior: create
     literals:
-      - jenkins-environment-bb-values.yaml=
+      - values.yaml=
