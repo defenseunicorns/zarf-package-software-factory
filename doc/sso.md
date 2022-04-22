@@ -6,9 +6,9 @@ NOTE: `bigbang.dev` is the default domain. If you are using a different domain, 
 
 1. Retrieve the initial root password for GitLab:
 
-   ```shell
-   kubectl get secret gitlab-gitlab-initial-root-password -n gitlab -o jsonpath='{.data.password}' | base64 --decode
-   ```
+    ```shell
+    kubectl get secret gitlab-gitlab-initial-root-password -n gitlab -o jsonpath='{.data.password}' | base64 --decode
+    ```
 
 3. Navigate to [https://gitlab.bigbang.dev](https://gitlab.bigbang.dev)
 
@@ -26,9 +26,9 @@ NOTE: `bigbang.dev` is the default domain. If you are using a different domain, 
 
 **Warnings and notes**
 
-- :warning: WARNING: This section involves committing and pushing a secret to your config repo. Eventually we plan to support SOPS encryption of secrets, but that's not been documented or configured yet. If you are committing secrets to your git repo make sure the repo is private and the entire repo (and resulting zarf package) is treated as a secret. We highly recommend not committing unencrypted operational secrets to git repos, even when they are private. This project will stay in version "0.0.X" until this is addressed, signifying that it is not ready for production and should only be used in dev/test/kick-the-tires types of environments.
+- :warning: WARNING: This section involves committing and pushing a secret to your config repo. The file needs to be encrypted with SOPS before you push it to your repo. See the [SOPS guide](sops.md) for instructions.
 
-- NOTE: Configuring Jenkins to use GitLab as the SSO provider will not work when using the `bigbang.dev` domain. during the OAuth ping-pong auth flow Jenkins tries to run a POST http request to get a login token, but it isn't able to hit `https://gitlab.bigbang.dev` since that resolves to `127.0.0.1`
+- NOTE: Configuring Jenkins to use GitLab as the SSO provider will not work when using the `bigbang.dev` domain. During the OAuth ping-pong auth flow Jenkins tries to run a POST http request to get a login token, but it isn't able to hit `https://gitlab.bigbang.dev` since that resolves to `127.0.0.1`. This may be fixable through the use of an Istio [ServiceEntry](https://istio.io/latest/docs/reference/config/networking/service-entry/). More investigation needed.
 
 1. Navigate to [https://gitlab.bigbang.dev/admin/applications/new](https://gitlab.bigbang.dev/admin/applications/new) and create a new Application for Jenkins. Click "Save application" when finished.
    1. Name: `Jenkins`
@@ -38,13 +38,13 @@ NOTE: `bigbang.dev` is the default domain. If you are using a different domain, 
    5. Expire access tokens: Yes (checked)
    6. Scopes: "api" checked, all others unchecked
 
-2. Copy/Paste the Application ID and Secret from Gitlab into your config repo in the file `kustomizations/softwarefactoryaddons/jenkins-common-values.yaml` in the parameters that say `YOUR_CLIENT_ID_HERE` AND `YOUR_CLIENT_SECRET_HERE`
+1. Copy/Paste the Application ID and Secret from Gitlab into your config repo in the file `kustomizations/softwarefactoryaddons/jenkins/environment-bb-values.yaml` in the parameters that say `YOUR_CLIENT_ID_HERE` AND `YOUR_CLIENT_SECRET_HERE`
 
-3. Uncomment the two blocks that are labeled with `WHEN SWITCHING TO GITLAB SSO UNCOMMENT THIS SECTION`
+1. :warning: Encrypt `kustomizations/softwarefactoryaddons/jenkins/environment-bb-values.yaml` with SOPS. See the [SOPS guide](sops.md) for instructions.
 
-4. Commit and push the changes to your config repo
+1. Commit and push the changes to your config repo
 
-5. Create a "Day 2" package and deploy it. This package contains nothing but your config repo, so that Gitea will receive the new commit that you just pushed. For convenience, there is a Makefile in that repo
+1. Create a "Day 2" package and deploy it. This package contains nothing but your config repo, so that Gitea will receive the new commit that you just pushed. For convenience, there is a Makefile in that repo
 
 ```shell
 cd day2
