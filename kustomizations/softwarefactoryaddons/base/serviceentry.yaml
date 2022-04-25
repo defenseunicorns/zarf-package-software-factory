@@ -12,24 +12,4 @@ spec:
     - number: 443
       name: https
       protocol: TLS
-  resolution: NONE
----
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  name: localdev-tls-routing-gitlab
-  namespace: istio-system
-spec:
-  hosts:
-    - gitlab.bigbang.dev
-  exportTo:
-    - "*"
-  tls:
-    - match:
-        - sniHosts:
-            - gitlab.bigbang.dev
-      route:
-        - destination:
-            host: gitlab-webservice-default.gitlab.svc.cluster.local
-            port:
-              number: 8181
+  resolution: DNS
