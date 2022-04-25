@@ -17,11 +17,13 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: localdev-tls-routing
-  namespace: gitlab
+  name: localdev-tls-routing-gitlab
+  namespace: istio-system
 spec:
   hosts:
     - gitlab.bigbang.dev
+  exportTo:
+    - "*"
   tls:
     - match:
         - sniHosts:
