@@ -19,5 +19,5 @@ spec:
   secretRef:
     name: zarf-git-secret
   ref:
-    branch: main
+    branch: feature/service-entry
 #    tag: X.Y.Z
