@@ -2,6 +2,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
   name: external-svc-https
+  namespace: istio-system
 spec:
   hosts:
     - "*.bigbang.dev"
