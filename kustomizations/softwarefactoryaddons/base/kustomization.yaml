@@ -9,6 +9,7 @@ resources:
   - gitrepository.yaml
   - helmrelease.yaml
   - virtualservice.yaml
+  - serviceentry.yaml
 
 configMapGenerator:
   - name: jira-common
