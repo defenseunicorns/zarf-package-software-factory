@@ -5,11 +5,29 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-    - "gitlab.bigbang.dev"
-    - "jenkins.bigbang.dev"
+    - "bigbang.dev"
+    - "*.bigbang.dev"
   location: MESH_EXTERNAL
   ports:
     - number: 443
       name: https
       protocol: TLS
-  resolution: DNS
+  resolution: NONE
+---
+ApiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: localdev-tls-routing
+  namespace: gitlab
+spec:
+  hosts:
+    - gitlab.bigbang.dev
+  tls:
+    - match:
+        - sniHosts:
+            - gitlab.bigbang.dev
+      route:
+        - destination:
+            host: gitlab-webservice-default.gitlab.svc.cluster.local
+            port:
+              number: 8181
