@@ -5,7 +5,8 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-    - "*.bigbang.dev"
+    - "gitlab.bigbang.dev"
+    - "jenkins.bigbang.dev"
   location: MESH_EXTERNAL
   ports:
     - number: 443
