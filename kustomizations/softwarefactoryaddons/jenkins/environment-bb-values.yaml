@@ -1,39 +1,54 @@
-#ENC[AES256_GCM,data:2pNRb78Lt1BbAToY9ldbMEPv8eIWaArGQ8Hf1XSR8DhSZqrHzD1NhI4IJgKxsnJu9wVKH8dfYuT2wrsvXsFn+v5js/uvx+LzFlf/NQfJ5v8Y4fTt0A==,iv:iIzNS6+dzWvSCbcZanP0D+QLAZIu1SsOL6cIQKzyNjI=,tag:gHGnSodx/bD21F4FBw3Ayg==,type:comment]
-controller:
-    jenkinsUrl: ENC[AES256_GCM,data:3m5rbkQis6D3tD3Fr4FL3THQSrzPudYPsw==,iv:yluNy+4YiMye9VpFsuYm48gL2/pHkt3dbdyilUh5qz0=,tag:6dL2hc0SwJjVVMpmVB20yA==,type:str]
-    adminUser: ENC[AES256_GCM,data:OlaZ1yk=,iv:voGntm/Qiro/d2QPiAmKHCX6Mt59uvm3y8DqSfl9XCA=,tag:PohNvIL8qJ0Hm19t+LH+UA==,type:str]
-    adminPassword: ENC[AES256_GCM,data:sCGKtTk=,iv:mp2/xrqEEZo+56hBHdkyqIn1IwtjybcQAZ1z/PuTheE=,tag:cxwRF/LIxHW6X6wodeSHCg==,type:str]
-    JCasC:
-        authorizationStrategy: ENC[AES256_GCM,data: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,iv:uK3yCsbwDEARFGsGG8bKGhP14UBu8aJywPJQbeQxC4s=,tag:JGH/FtweIj824cE2zglFQA==,type:str]
-        securityRealm: ENC[AES256_GCM,data:Zd4ge65JuUt2bWfKFuiWI8x8OUSdGOFBiJy3EoGCQZYdeGf+0NkNgQWI4d/tjFIVEV5ACKzwBP7fAP6TVSJ+LKq6WIGshGs87RcxvEaih8Exjbcb1Uk/4x3dA2yhOXcLMrjspRbnU5Zn7S8gFAlfugaZq/whgdM3SChgM0/Ul8HiI7gQyHNwBhqeVRYiFaXyGnx1Yofz5mK32CInN/YKLieujDvQdbNKl4NTR7j3JbBfVSCXNE+d9+BOawy9Fa1ffjNuVPXL3EvbWPi8Z8j0IjnsDS+9XFEQJFF+FZ0QMHHwo9EM/Cxw0JyiC2shpQ98cZOx217gJsXPF9F+i/COSCnIO9HhVjttE1NWilT4fuDXQW2doKunqZ1Zd9hwSmPD772R2GKDwkCOKzFDBoVuldeR+p65Cve0+twL+RxTA3ZymKUdB2Hwf/ydIdXjoUCfFtNpEMfmbw/yKN39731r85OSienrBkTPeu+QN8Gl9mzOwaRzId7MRNg7C2F9TrGv3RWwAI4zeP0KqiDRkmXa9VYOv/pWHWjVXPtVvGFNgCBA0UlB+b3zaGS0QRjqHNytBkZowaEH/CvivFOpXLQOH94hmm0U2jwGVVSZ6x9JAgHoiYhA1mYq/7QcAnlRe9/zaSYONWC04aQO9Z4zmJ/OQg1cwfl1KAiR5rLydHDm0tFxsjnydDls/HNkFQ4NFQdq279gOob3y6pWWdViEOrMAXkMsyDXf7JJjY+yjzYkgnM6HBttnTxnwunQYwQARqEF4TrJr3rNWpUCvjV5aZs3rg5jdlzDUlluGrT7uFyDDR3luNSeniZFZ2rx6deM0yMEhGH2tUjEU0SnJRNOEQUN7g2dgbrn77P7p/ncBz+TD+hiSMCE5vKF/j+KjOPJPrjZWXhrsF98bbu+Oj8w/ocb2CcWoBxW3tb+n8QJyNaUNmcSUjwC2dNHDy84S+niRCGpVSchtdomuyYvdge+8axI9vOvav79PnuVoIuxD5QTKVRLmhuuldbsGXyeR8PJzfCwdO6sis2rxP27VXTuiZMweAXDi2Ngll1FX8w4V3bd65CAdrc9Cp0fkEjpB138NHoBUwZEs93+nfmuRghEwauYz9a9gWfN4NcXtDDJ038678RfwVzG5OtqmSdecUZgDz1eVGbh1KVhPKhrk6PHk/SoQRqUZ41j2TtNH2Lfllp3i2XSJQuHo8D0ggi9aPfxmZr1JoHCFgUzgveCkv/U4IBw9NQRBTkzInIFuBe1kCIeu/8NPhM0gj8VimtE0OjjsJ1LIc3G3hJvZWyfz1/MOXMwf3XJYnqfmSfPvQdlH02LxfAOurhNZxrDP36sqViHzvkMFhbeGH6Vjtl7wyHOQq97lBuxGort7JdVIv7Qqg1BgrMAyRIYoQ==,iv:wtm8xkqExegcZCQDaxLzuuNnga75kegAbQPYRSI57SY=,tag:ngD9qkSiAk6aiD0mOG7rYA==,type:str]
-sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
-    age: []
-    lastmodified: "2022-04-26T16:24:46Z"
-    mac: ENC[AES256_GCM,data:Fn/L1hKtLyKbjgVivYyQw673fZ9aPZ5a9l/mTBFOhGL9kSV6RAiZYA1SktOTDwkIYpS58nwMqdRzcEfx3RHXh8k6wAmfCV0y6h492+ZJgk0ZwNkiAjbXKk6msWbsd/Cjh5cCOrfWmZJ0gilwI6cN8lqZBADABOWqmiGfHVkd3/4=,iv:UgE39g+fxkiw3Sg1gLQQIcwe2CiXQQiBtxH+yw3Q2IA=,tag:1gwJZtcuHWWCqqN3I8/21A==,type:str]
-    pgp:
-        - created_at: "2022-04-26T16:24:46Z"
-          enc: |-
-            -----BEGIN PGP MESSAGE-----
+# ENCRYPT THIS FILE!!! DON'T COMMIT IT TO THE REPO UNENCRYPTED! IT CONTAINS SECRETS!!!
 
-            wcFMA4IMH31oP3+UARAAV/OabLApRTUSmCgweMHPquSUNwr7BylOkrUgSa+xbiJ3
-            hjYK2RHcLVaXF8S8SuPgNyUK6yKOinyyoKvXfDxEzjH9L4gWQ4e+HFbgRsxJH3Hm
-            T7oOGpTZhbALBclbZQnIuZfzTjyUh34KOkpuyGYHSXvxmeYp6FZg5tVhcCv/Od40
-            mBpTIE3aDFW+a9fi1TJBOhduXMgDa7GXsaNGzsD3NRdXVkxxYm0ViLtLMqXWLJ0l
-            NLuo74NscggiGJA3RN7dHFcmwZVcdkZLlM+ng+VjtYMgWG8Ur4P+A8Y8xRuI+Ags
-            gauAFLGHcL8HroDeb5OsKIimZ1W4O0imACdLu57KKFhFeH8/Zhj2A5HZ4+arS/s0
-            G2PF7TGf+MkqNdYzhGezRR3c8ZS4aK0SVvkBPVb3zGvY0ef1Xc+jemFlBAFuci5C
-            OeBr/uiVlyY/bEcPOQuRyPX+nPNv7ili6/8ye2e2VmYJZB1yN0mrkE8NH43jCGqk
-            IBJPmdNgcUv/Ae4AfXzstegMTrMCsqYq9bnxi5iDJ/iCAYUXp48GviIkuaKrb3gS
-            6oZmSERe9aEloVyqMTCBSm4VDqJQnMmb3PWmhEETgK7Ns4DubP/0C1SLZpWdDP14
-            BTNrdQDnJFXKlgVgyP3YPHDUtKjbHR23WRhCTQ1mogvaYS3NLxWvvEMv6GGvYxDS
-            5gHN8omczgPfcZH7cw9calIKLjNhF3vBQNW40BC/PzWPZ0sd5G3nqpN8omg62A1v
-            5xnbn3cHyJ3hFf/d4YZShoTkQS02xvjp/CeUrMdaW6VRUuL/uDc0AA==
-            =J2Ex
-            -----END PGP MESSAGE-----
-          fp: 9FD61D29F9CC53FDAFD8631ECD9E6FDD97561640
-    unencrypted_suffix: _unencrypted
-    version: 3.7.2
+controller:
+  jenkinsUrl: https://jenkins.bigbang.dev
+  adminUser: admin
+  adminPassword: admin
+  JCasC:
+    authorizationStrategy: |-
+      gitLab:
+        # Comma separated list of organization names that if a user is registered with will have admin rights.
+        adminOrganizationNames: ""
+        # Comma separated list of user names that when authenticated should be given administrator rights.
+        adminUserNames: "root"
+        # If true, will grant the ViewStatus permission to everyone that connects to the Jenkins instance. Anyone will be able to see the status
+        # of a job, but nothing else. This is useful especially for plugins like Embeddable Build Status Plugin
+        allowAnonymousJobStatusPermission: false
+        # If true, will grant the READ permission to everyone that connects to the Jenkins instance. Anyone will be able to see all the jobs
+        # and related state but only authenticated users will be able to BUILD the jobs.
+        allowAnonymousReadPermission: false
+        # If true, opens a hole in security to allow unauthenticated access to /cc.xml at the root of the server. This URI provides monitoring
+        # capability to a range of desktop clients. Enabling this option reveals limited information about your build to the whole world. Use with care.
+        allowCcTrayPermission: false
+        # The GitLab plugin has a web hook trigger that can be used to notify Jenkins when a push has occurred and that a build should also happen.
+        # By enabling this permission you grant anonymous external READ access to the /gitlab-webhook URL so that the request can be received.
+        # The GitLab plugin checks that a change has actually occurred so this should be safe to enable.
+        allowGitlabWebHookPermission: true
+        # If true, will grant the create job permission to all authenticated GitLab users even those that aren't members of the declared organizations.
+        authenticatedUserCreateJobPermission: true
+        # If true, will grant READ permission to all authenticated GitLab users even those that aren't members of the declared organizations.
+        authenticatedUserReadPermission: true
+        # If true, will grant all authenticated users the ability to stop building a job
+        authenticatedUserStopBuildPermission: false
+        # Comma separated list of organization names that if a user is registered with will have job view and build rights.
+        organizationNames: ""
+        # If true will use GitLab repository permissions to determine Jenkins permissions for each project.
+        #   - Public projects - all authenticated users can READ. Only collaborators can BUILD, EDIT, CONFIGURE, or DELETE
+        #   - Private projects - only collaborators can READ, BUILD, EDIT, CONFIGURE, or DELETE
+        useRepositoryPermissions: true
+
+    securityRealm: |-
+      gitLab:
+        # The Client ID hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
+        clientID: "YOUR_CLIENT_ID_HERE"
+        # The Client Secret hash from the GitLab Application entry being configured. See https://gitlab.com/settings/applications.
+        clientSecret: "YOUR_CLIENT_SECRET_HERE"
+        # The URL to the API root of your GitLab installation (e.g. https://gitlab.company.com. The plugin will automatically add "api/v4" suffix for you).
+        #   - The https:// or http:// part needs to be specified
+        #   - There should not be any trailing slash (/)
+        #   - For GitLab Enterprise, the API URI is usually the same as the Web URI
+        gitlabApiUri: "https://gitlab.bigbang.dev"
+        # The URL to the web UI root of your GitLab installation (e.g. https://gitlab.company.com).
+        #   - The https:// or http:// part needs to be specified.
+        #   - There should not be any trailing slash (/).
+        gitlabWebUri: "https://gitlab.bigbang.dev"
