@@ -30,7 +30,7 @@ NOTE: `bigbang.dev` is the default domain. If you are using a different domain, 
 
 - NOTE: Configuring Jenkins to use GitLab as the SSO provider will not work when using the `bigbang.dev` domain. During the OAuth ping-pong auth flow Jenkins tries to run a POST http request to get a login token, but it isn't able to hit `https://gitlab.bigbang.dev` since that resolves to `127.0.0.1`. This may be fixable through the use of an Istio [ServiceEntry](https://istio.io/latest/docs/reference/config/networking/service-entry/). More investigation needed.
 
-### Instructions
+#### Instructions
 
 1. Navigate to [https://gitlab.bigbang.dev/admin/applications/new](https://gitlab.bigbang.dev/admin/applications/new) and create a new Application for Jenkins. Click "Save application" when finished.
    1. Name: `Jenkins`
@@ -62,3 +62,53 @@ NOTE: `bigbang.dev` is the default domain. If you are using a different domain, 
     ```
 
 After Flux reconciles the change, Jenkins should now be using GitLab as the SSO provider.
+
+### Configure Jira
+
+#### Notes
+
+- A limitation of Jira's SSO configuration is that you still need to create Jira users for each GitLab user that is going to use Jira. This may be able to be resolved using Jira's "Just-In-Time" user creation, but so far we haven't been able to get that working. The Jira user's username must be the same as the GitLab user that is logging in.
+- The SSO login for Jira is weird. When you go to the Jira website you then have to click the "Login" button in the top right of the page.
+
+1. Create a new Application in GitLab: Admin > Applications > New application
+   1. Name: Jira
+   1. Redirect URI: `https://jira.bigbang.dev/plugins/servlet/oidc/callback`
+   1. Trusted: Yes (checked)
+   1. Confidential: Yes (checked)
+   1. Expire access tokens: Yes (checked)
+   1. Scopes: "api" checked, all others unchecked
+
+1. Navigate to [https://jira.bigbang.dev](https://jira.bigbang.dev)
+
+1. Set up Jira. This guide will use the "I'll set it up myself" option.
+
+   1. Click "I'll set it up myself" then click Next
+
+   1. Use "Built In" for database connection. (Note: For eval purposes only. In production, Jira needs to use an external database)
+
+   1. Set up application properties
+      1. Application Title: "Jira"
+      1. Mode: Private
+      1. Base URL: Should be prefilled. `https://jira.bigbang.dev`
+
+   1. Specify your license key -- If you have one apply it. If not, click "generate a Jira trial license" to generate one
+
+   1. Set up administrator account -- Use your own information, but make the username `root`. Keep the password that you set. You'll need to use it to do administrative stuff.
+
+   1. Set up email notifications -- Choose "Later", unless you have your own SMTP server that you can use that is external to the kubernetes cluster
+
+1. Create an initial project
+
+1. Navigate to Settings > System > Authentication methods, click "Add configuration"
+   1. Name: `GitLab`
+   1. Authentication method: OpenID Connect single sign-on
+   1. Issuer URL: `https://gitlab.bigbang.dev`
+   1. Client ID: The Client ID from the GitLab Application you created earlier
+   1. Client Secret: The Client Secret from the GitLab Application you created earlier
+   1. Username mapping: `${nickname}`
+   1. Additional scopes: none
+   1. Additional settings / Fill the data automatically from my chosen identity provider: checked
+   1. JIT provisioning / Create users on login to the application: unchecked
+   1. Remember user logins: user's preference
+   1. Show IdP on the login page: checked
+   1. Login button text: user's preference. Recommend `Continue with GitLab`

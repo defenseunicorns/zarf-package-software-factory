@@ -15,7 +15,7 @@ components:
         files:
           - manifests/setup.yaml
     repos:
-      - https://github.com/defenseunicorns/zarf-package-software-factory.git
+      - https://github.com/RothAndrew/zarf-package-software-factory.git
 
   - name: big-bang
     required: true

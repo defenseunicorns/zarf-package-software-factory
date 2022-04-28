@@ -50,6 +50,8 @@ Since you will need to make environment-specific changes to the system's configu
 
 1. Customize `kustomizations/softwarefactoryaddons/base/virtualservice.yaml` -- Replace `bigbang.dev` with your real domain.
 
+1. Customize `kustomizations/softwarefactoryaddons/jira/values.yaml` -- Replace `bigbang.dev` with your real domain
+
 1.  Commit the changes to the repo
 
     ```shell
