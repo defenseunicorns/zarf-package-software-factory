@@ -51,8 +51,7 @@ Note that having Zarf installed is not a prerequisite. This repo pulls in its ow
 ## Instructions
 
 1. [Fork the repo, customize, and build the packages](doc/fork-and-build.md)
-2. [Initialize the cluster](doc/initialize.md)
-3. [Deploy](doc/deploy.md)
-4. [Configure Single Sign-On](doc/sso.md)
-5. [Day-2 Ops/Maintenance/Upgrades](doc/day2.md)
-6. [Troubleshooting](doc/troubleshooting.md)
+1. [Deploy](doc/deploy.md)
+1. [Configure Single Sign-On](doc/sso.md)
+1. [Day-2 Ops/Maintenance/Upgrades](doc/day2.md)
+1. [Troubleshooting](doc/troubleshooting.md)
