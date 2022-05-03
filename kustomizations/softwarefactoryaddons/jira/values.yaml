@@ -4,8 +4,8 @@ imagePullSecrets:
   - name: private-registry
 ingress:
   nginx: false
-proxyName: jira.di2me.com
-hostname: di2me.com
+proxyName: jira.bigbang.dev
+hostname: bigbang.dev
 istio:
   enabled: true
   gateways:
