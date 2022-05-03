@@ -78,7 +78,7 @@ After Flux reconciles the change, Jenkins should now be using GitLab as the SSO 
    1. Trusted: Yes (checked)
    1. Confidential: Yes (checked)
    1. Expire access tokens: Yes (checked)
-   1. Scopes: "api" checked, all others unchecked
+   1. Scopes: "openid" checked, all others unchecked
 
 1. Navigate to [https://jira.bigbang.dev](https://jira.bigbang.dev)
 
@@ -114,3 +114,48 @@ After Flux reconciles the change, Jenkins should now be using GitLab as the SSO 
    1. Remember user logins: user's preference
    1. Show IdP on the login page: checked
    1. Login button text: user's preference. Recommend `Continue with GitLab`
+
+### Configure Confluence
+
+#### Notes
+
+- A limitation of Confluence's SSO configuration is that you still need to create Confluence users for each GitLab user that is going to use Confluence. This may be able to be resolved using Confluence's "Just-In-Time" user creation, but so far we haven't been able to get that working. The Confluence user's username must be the same as the GitLab user that is logging in.
+
+#### Instructions
+
+1. Create a new Application in GitLab: Admin > Applications > New application
+   1. Name: `Confluence`
+   1. Redirect URI: `https://confluence.bigbang.dev/plugins/servlet/oidc/callback`
+   1. Trusted: Yes (checked)
+   1. Confidential: Yes (checked)
+   1. Expire access tokens: Yes (checked)
+   1. Scopes: "openid" checked, all others unchecked
+
+1. Navigate to [https://confluence.bigbang.dev](https://confluence.bigbang.dev)
+
+1. Apply your confluence license. If you don't have one it will let you create a trial license (requires internet access)
+
+1. Choose your deployment type. Right now we only support "Standalone".
+
+1. Load Content. This tutorial will use "Example Site", but you may want to choose to restore from a backup or create an empty site
+
+1. Configure User Management. Choose "Manage Users and Groups within Confluence"
+
+1. Configure System Administrator Account
+   1. Username: `root`
+   1. Name: User's preference
+   1. Email: User's preference
+   1. Password: User's preference.
+   1. Confirm: Same as Password
+
+1. Click "Further Configuration", then go to the "SSO 2.0" page
+   1. Authentication method: OpenID Connect single sign-on
+   1. Issuer URL: `https://gitlab.bigbang.dev`
+   1. Client ID: The Client ID from the Application you made earlier in GitLab
+   1. Client Secret: The Client Secret from the Application you made earlier in GitLab
+   1. Additional scopes: none
+   1. Username mapping: `${nickname}`
+   1. Additional settings / Fill the data automatically from my chosen identity provider: checked
+   1. JIT provisioning / Create users on login to the application: unchecked
+   1. Remember user logins: user's preference
+   1. Login mode: Use OpenID Connect as primary authentication
