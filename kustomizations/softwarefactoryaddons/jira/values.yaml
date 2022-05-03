@@ -8,3 +8,5 @@ istio:
   enabled: true
   gateways:
     - istio-system/public
+proxyName: jira.bigbang.dev
+hostname: bigbang.dev

@@ -281,7 +281,7 @@ fluentbit:
     resources:
       limits:
         cpu: "500m"
-        memory: "256Mi"
+        memory: "750Mi"
       requests:
         cpu: "100m"
         memory: "256Mi"

@@ -1,0 +1,26 @@
+apiVersion: "acid.zalan.do/v1"
+kind: "postgresql"
+metadata:
+  name: "acid-confluence"
+  namespace: "confluence"
+spec:
+  teamId: "acid"
+  postgresql:
+    version: "13"
+  numberOfInstances: 3
+  volume:
+    size: "2Gi"
+  users:
+    # role for confluence application
+    confluence: []
+  databases:
+    confluence: confluence
+  # enableLogicalBackup: true
+  # logicalBackupSchedule: "*/2 * * * *"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: "1"
+      memory: 2000Mi

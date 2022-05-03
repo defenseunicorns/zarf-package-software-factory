@@ -1,0 +1,36 @@
+image:
+  # v0.1.0-bb.9 of this chart has a bug that doesn't use the "tag" parameter. Upgrading the version of confluence should fix
+  repository: "${ZARF_REGISTRY}/ironbank/atlassian/confluence-data-center/confluence-node:7.13.0"
+imagePullSecrets:
+  - name: private-registry
+ingress:
+  nginx: false
+istio:
+  enabled: true
+  gateways:
+    - istio-system/public
+# The chart won't let us specify a secret that already exists. See https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence/-/issues/10
+# database:
+#   url: "jdbc:postgresql://acid-confluence.confluence.svc.cluster.local:5432/confluence"
+#   credentials:
+#     secretName: "confluence.acid-confluence.credentials.postgresql.acid.zalan.do"
+#     usernameSecretKey: "username"
+#     passwordSecretKey: "password"
+
+confluence:
+  # Trying to set the env vars myself instead of using the above commented out section
+  additionalEnvironmentVariables:
+    - name: ATL_DB_TYPE
+      value: "postgresql"
+    - name: ATL_JDBC_URL
+      value: "jdbc:postgresql://acid-confluence.confluence.svc.cluster.local:5432/confluence"
+    - name: ATL_JDBC_USER
+      valueFrom:
+        secretKeyRef:
+          name: "confluence.acid-confluence.credentials.postgresql.acid.zalan.do"
+          key: "username"
+    - name: ATL_JDBC_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: "confluence.acid-confluence.credentials.postgresql.acid.zalan.do"
+          key: "password"
