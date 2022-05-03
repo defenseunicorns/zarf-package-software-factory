@@ -45,6 +45,15 @@ istio:
         hub: "${ZARF_REGISTRY}/ironbank/opensource/istio"
     postInstallHook:
       image: "${ZARF_REGISTRY}/ironbank/big-bang/base:1.0.0"
+  gateways:
+    public:
+      ingressGateway: public-ingressgateway
+      hosts:
+        - code.{{ .Values.domain }}
+        - jenkins.{{ .Values.domain }}
+        - jira.{{ .Values.domain }}
+        - confluence.{{ .Values.domain }}
+        - nexus.{{ .Values.domain }}
 
 istiooperator:
   enabled: true
