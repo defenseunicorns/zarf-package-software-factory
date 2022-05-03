@@ -1,6 +1,8 @@
 # zarf-package-software-factory
 Pre-built Zarf Package of a Software Factory (a.k.a. "DI2-ME")
 
+:construction: **This project is still early in its development.** Early adopters are expected to have a good understanding of how Kubernetes works as well as how to operate and maintain the various services present in this package. This package is intended to significantly speed up the initial deployment and configuration of a software factory, as well as provide a simple upgrade path for updates and security fixes. It will not absolve the user from understanding what it takes to operate a software factory in a production setting. We plan to transition to an open beta soon™ (maybe _sooner_ if any smarties out there want to come help out :smile:), where we will anticipate people starting to use this package operationally, with the caveat that it will require a lot more care and feeding than we intend it to require by the time version 1.0 releases.
+
 Deploys the components of a software factory with the following services, all running on top of Big Bang Core:
 
 - GitLab*
