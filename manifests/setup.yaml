@@ -19,5 +19,5 @@ spec:
   secretRef:
     name: zarf-git-secret
   ref:
-    branch: feature/68-no-pound
+    branch: main
 #    tag: X.Y.Z
