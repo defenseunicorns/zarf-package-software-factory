@@ -19,5 +19,5 @@ spec:
   secretRef:
     name: zarf-git-secret
   ref:
-    branch: main
+    branch: feature/#68-disable-vs
 #    tag: X.Y.Z
