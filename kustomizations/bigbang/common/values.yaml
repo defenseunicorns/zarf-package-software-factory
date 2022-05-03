@@ -49,7 +49,7 @@ istio:
     public:
       ingressGateway: public-ingressgateway
       hosts:
-        - code.{{ .Values.domain }}
+        - gitlab.{{ .Values.domain }}
         - jenkins.{{ .Values.domain }}
         - jira.{{ .Values.domain }}
         - confluence.{{ .Values.domain }}
