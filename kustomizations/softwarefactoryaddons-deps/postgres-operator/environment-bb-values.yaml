@@ -1,0 +1,10 @@
+# configAwsOrGcp:
+#   wal_s3_bucket: "postgres-operator-backups"
+# configLogicalBackup:
+#   # logical_backup_docker_image: "registry1.dso.mil/.../logical-backup:v1.7.0"
+#   logical_backup_s3_endpoint: "http://minio.minio-operator.svc.cluster.local"
+#   logical_backup_s3_access_key_id: "minio"
+#   logical_backup_s3_bucket: "postgres-operator-backups"
+#   logical_backup_s3_secret_access_key: "minio123"
+#   logical_backup_s3_sse: ""
+#   logical_backup_schedule: "*/2 * * * *"

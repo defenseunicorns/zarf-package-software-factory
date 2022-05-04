@@ -74,17 +74,17 @@ build:
 
 build/zarf: | build
 	@echo "Downloading zarf"
-	@wget --no-verbose --show-progress --progress=dot:giga https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf -O build/zarf
+	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf -O build/zarf
 	@chmod +x build/zarf
 
 build/zarf-mac-intel: | build
 	@echo "Downloading zarf-mac-intel"
-	@wget --no-verbose --show-progress --progress=dot:giga https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-mac-intel -O build/zarf-mac-intel
+	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-mac-intel -O build/zarf-mac-intel
 	@chmod +x build/zarf-mac-intel
 
 build/zarf-init-amd64.tar.zst: | build
 	@echo "Downloading zarf-init-amd64.tar.zst"
-	@wget --no-verbose --show-progress --progress=dot:giga https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -O build/zarf-init-amd64.tar.zst
+	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -O build/zarf-init-amd64.tar.zst
 
 build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN)
 	@rm -rf ./tmp

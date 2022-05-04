@@ -1,0 +1,12 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: postgres-operator
+  namespace: softwarefactoryaddons
+spec:
+  interval: 5m
+  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__zalando__postgres-operator.git
+  secretRef:
+    name: zarf-git-secret
+  ref:
+    tag: v1.7.0

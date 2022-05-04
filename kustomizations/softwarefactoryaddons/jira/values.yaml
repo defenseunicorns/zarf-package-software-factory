@@ -4,7 +4,18 @@ imagePullSecrets:
   - name: private-registry
 ingress:
   nginx: false
+proxyName: jira.bigbang.dev
+hostname: bigbang.dev
 istio:
   enabled: true
   gateways:
     - istio-system/public
+jira:
+  resources:
+    container:
+      requests:
+        cpu: "100m"
+        memory: "2Gi"
+      limits:
+        cpu: "10"
+        memory: "4Gi"

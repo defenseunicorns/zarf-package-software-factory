@@ -45,6 +45,15 @@ istio:
         hub: "${ZARF_REGISTRY}/ironbank/opensource/istio"
     postInstallHook:
       image: "${ZARF_REGISTRY}/ironbank/big-bang/base:1.0.0"
+  gateways:
+    public:
+      ingressGateway: public-ingressgateway
+      hosts:
+        - gitlab.{{ .Values.domain }}
+        - jenkins.{{ .Values.domain }}
+        - jira.{{ .Values.domain }}
+        - confluence.{{ .Values.domain }}
+        - nexus.{{ .Values.domain }}
 
 istiooperator:
   enabled: true
@@ -281,7 +290,7 @@ fluentbit:
     resources:
       limits:
         cpu: "500m"
-        memory: "256Mi"
+        memory: "750Mi"
       requests:
         cpu: "100m"
         memory: "256Mi"
