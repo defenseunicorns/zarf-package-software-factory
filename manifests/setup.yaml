@@ -19,5 +19,5 @@ spec:
   secretRef:
     name: zarf-git-secret
   ref:
-    branch: main_airgap
+    branch: feature/postgres-database-for-jira
 #    tag: X.Y.Z
