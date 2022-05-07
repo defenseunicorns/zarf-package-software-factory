@@ -22,8 +22,6 @@ jira:
   additionalEnvironmentVariables:
     - name: ATL_DB_TYPE
       value: "postgres72"
-    - name: ATL_DB_DRIVER
-      value: "org.postgresql.Driver"
     - name: ATL_JDBC_URL
       value: "jdbc:postgresql://acid-jira.jira.svc.cluster.local:5432/jira"
     - name: ATL_JDBC_USER
