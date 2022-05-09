@@ -37,10 +37,9 @@ jira:
 additionalInitContainers:
   - name: wait-for-database
     image: "${ZARF_REGISTRY}/acid/spilo-13:2.1-p1"
-    # command: ["sh", "-c", "sleep 999999"]
     command:
       [
         "sh",
         "-c",
-        'for i in {1..120}; do sleep 1; echo "Attempt $${i} to get a clean connection to the database"; if pg_isready -h acid-jira.jira.svc.cluster.local -p 5432 -d jira; then exit 0; fi; done; exit 1',
+        'echo "Sleeping for 2 minutes so the database has time to start up"; sleep 120',
       ]
