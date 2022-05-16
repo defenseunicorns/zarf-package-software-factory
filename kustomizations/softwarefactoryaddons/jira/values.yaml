@@ -19,3 +19,27 @@ jira:
       limits:
         cpu: "10"
         memory: "4Gi"
+  additionalEnvironmentVariables:
+    - name: ATL_DB_TYPE
+      value: "postgres72"
+    - name: ATL_JDBC_URL
+      value: "jdbc:postgresql://acid-jira.jira.svc.cluster.local:5432/jira"
+    - name: ATL_JDBC_USER
+      valueFrom:
+        secretKeyRef:
+          name: "jira.acid-jira.credentials.postgresql.acid.zalan.do"
+          key: "username"
+    - name: ATL_JDBC_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: "jira.acid-jira.credentials.postgresql.acid.zalan.do"
+          key: "password"
+additionalInitContainers:
+  - name: wait-for-database
+    image: "${ZARF_REGISTRY}/acid/spilo-13:2.1-p1"
+    command:
+      [
+        "sh",
+        "-c",
+        'echo "Sleeping for 2 minutes so the database has time to start up"; sleep 120',
+      ]
