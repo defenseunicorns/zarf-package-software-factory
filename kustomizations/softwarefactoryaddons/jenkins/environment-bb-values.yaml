@@ -1,7 +1,7 @@
 # ENCRYPT THIS FILE!!! DON'T COMMIT IT TO THE REPO UNENCRYPTED! IT CONTAINS SECRETS!!!
 
 controller:
-  jenkinsUrl: https://jenkins.di2me.com
+  jenkinsUrl: https://jenkins.bigbang.dev
   adminUser: admin
   adminPassword: admin
   JCasC:
@@ -47,8 +47,8 @@ controller:
         #   - The https:// or http:// part needs to be specified
         #   - There should not be any trailing slash (/)
         #   - For GitLab Enterprise, the API URI is usually the same as the Web URI
-        gitlabApiUri: "https://gitlab.di2me.com"
+        gitlabApiUri: "https://gitlab.bigbang.dev"
         # The URL to the web UI root of your GitLab installation (e.g. https://gitlab.company.com).
         #   - The https:// or http:// part needs to be specified.
         #   - There should not be any trailing slash (/).
-        gitlabWebUri: "https://gitlab.di2me.com"
+        gitlabWebUri: "https://gitlab.bigbang.dev"
