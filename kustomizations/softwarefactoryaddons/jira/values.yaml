@@ -48,10 +48,9 @@ volumes:
     persistentVolumeClaim:
       create: true
       # storageClassName: your-storage-class-here
-      resources: {}
-      # resources:
-      #   requests:
-      #     storage: 1Gi
+      resources:
+        requests:
+          storage: 1Gi
 
   # sharedHome requires an RWX storageclass
   # sharedHome:
