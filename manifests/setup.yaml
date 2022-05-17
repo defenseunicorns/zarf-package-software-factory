@@ -19,5 +19,5 @@ spec:
   secretRef:
     name: zarf-git-secret
   ref:
-    branch: main_airgap
+    branch: feature/persistence-for-jira-and-confluence
 #    tag: X.Y.Z
