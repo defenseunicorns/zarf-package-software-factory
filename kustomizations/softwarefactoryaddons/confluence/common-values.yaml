@@ -39,6 +39,7 @@ volumes:
     persistentVolumeClaim:
       create: true
       # storageClassName: your-storage-class-here
+      resources: {}
       # resources:
       #   requests:
       #     storage: 1Gi
