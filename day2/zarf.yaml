@@ -7,4 +7,4 @@ components:
   - name: day-two-update
     required: true
     repos:
-      - https://github.com/RothAndrew/zarf-package-software-factory.git
+      - https://github.com/defenseunicorns/zarf-package-software-factory.git

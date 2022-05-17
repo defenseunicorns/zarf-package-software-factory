@@ -7,7 +7,7 @@ spec:
   gateways:
     - istio-system/public
   hosts:
-    - jenkins.di2me.com
+    - jenkins.bigbang.dev
   http:
     - route:
         - destination:
