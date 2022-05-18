@@ -1,6 +1,6 @@
 controller:
-  image: "${ZARF_REGISTRY}/jenkins/jenkins"
-  tag: "2.319.1-jdk11"
+  image: "${ZARF_REGISTRY}/ironbank/opensource/jenkins/jenkins"
+  tag: "2.320"
   imagePullSecretName: "private-registry"
   disableRememberMe: true
   resources:

@@ -174,7 +174,7 @@ components:
     images:
       - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:8.18.1
       - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.13.0
-      - jenkins/jenkins:2.319.1-jdk11
+      - registry1.dso.mil/ironbank/opensource/jenkins/jenkins:2.320
       - jenkins/inbound-agent:4.11-1
       - kiwigrid/k8s-sidecar:1.14.2
       # - registry.opensource.zalan.do/acid/spilo-13:2.1-p1 -- Already present in softwarefactoryaddons-deps component
