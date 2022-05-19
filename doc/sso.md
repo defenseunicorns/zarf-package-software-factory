@@ -55,7 +55,7 @@ NOTE: `bigbang.dev` is the default domain. If you are using a different domain, 
     ```shell
     cd day2
     zarf package create --confirm
-    
+
     # Sneakernet the package if you need to
 
     zarf package deploy zarf-package-day-two-update-amd64.tar.zst --confirm
