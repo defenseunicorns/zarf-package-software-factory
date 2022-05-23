@@ -36,11 +36,11 @@ RUN dnf install -y --refresh \
   && dnf clean all \
   && rm -rf /var/cache/yum/
 
-# hadolint ignore=DL3059
-RUN useradd -ms /bin/bash buildharness
+# # hadolint ignore=DL3059
+# RUN useradd -ms /bin/bash buildharness
 
-USER buildharness
-WORKDIR /home/buildharness
+# USER buildharness
+# WORKDIR /home/buildharness
 
 # Install asdf. Get versions from https://github.com/asdf-vm/asdf/releases
 ARG ASDF_VERSION="0.10.1"
@@ -94,14 +94,14 @@ RUN asdf plugin add tfsec \
   && asdf install tfsec "${TFSEC_VERSION}" \
   && asdf global tfsec "${TFSEC_VERSION}"
 
-# Support tools installed as buildharness when running as root user
-USER root
-ENV ASDF_DATA_DIR="/home/buildharness/.asdf"
-RUN cp /home/buildharness/.tool-versions /root/.tool-versions
-ENV HELM_PLUGINS="/home/buildharness/.local/share/helm/plugins"
-ENV HELM_REGISTRY_CONFIG="/home/buildharness/.config/helm/registry.json"
-ENV HELM_REPOSITORY_CACHE="/home/buildharness/.cache/helm/repository"
-ENV HELM_REPOSITORY_CONFIG="/home/buildharness/.config/helm/repositories.yaml"
-USER buildharness
+# # Support tools installed as buildharness when running as root user
+# USER root
+# ENV ASDF_DATA_DIR="/home/buildharness/.asdf"
+# RUN cp /home/buildharness/.tool-versions /root/.tool-versions
+# ENV HELM_PLUGINS="/home/buildharness/.local/share/helm/plugins"
+# ENV HELM_REGISTRY_CONFIG="/home/buildharness/.config/helm/registry.json"
+# ENV HELM_REPOSITORY_CACHE="/home/buildharness/.cache/helm/repository"
+# ENV HELM_REPOSITORY_CONFIG="/home/buildharness/.config/helm/repositories.yaml"
+# USER buildharness
 
 CMD ["/bin/bash"]
