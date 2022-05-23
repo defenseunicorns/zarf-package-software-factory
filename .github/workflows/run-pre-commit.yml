@@ -14,17 +14,14 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      # - name: Set PY Env Var
-      #   run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
-      # - name: Setup Caching
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: "${{ github.workspace }}/.cache/pre-commit"
-      #     key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+      - name: Set PY Env Var
+        run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
+
+      - name: Setup Caching
+        uses: actions/cache@v3
+        with:
+          path: "${{ github.workspace }}/.cache/pre-commit"
+          key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
       - name: Run `pre-commit run -a`
-        run: |
-          env
-          asdf version
-          asdf plugin list all
-          asdf plugin list
-        # run: make run-pre-commit-hooks
+        run: make run-pre-commit-hooks
