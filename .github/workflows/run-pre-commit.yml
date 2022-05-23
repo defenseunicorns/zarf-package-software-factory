@@ -23,5 +23,5 @@ jobs:
       #     key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
       - name: Run `pre-commit run -a`
         run: |
-          asdf reshim && pre-commit run -a
+          python --version
         # run: make run-pre-commit-hooks
