@@ -37,7 +37,7 @@ help: ## Show a list of all targets
 
 .PHONY: build-harness-shell
 build-harness-shell: ## Open a shell in the build harness container with the project mounted
-	docker run -it --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:0.0.3 bash
+	docker run -it --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:0.0.4 bash
 
 .PHONY: run-pre-commit-hooks
 run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if any hooks fail. Recommend running with `make build-harness-shell` followed by `make run-pre-commit-hooks`
