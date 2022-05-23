@@ -6,22 +6,29 @@ on:
 jobs:
   run-pre-commit:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:0.0.5
-      env:
-        PRE_COMMIT_HOME: "${{ github.workspace }}/.cache/pre-commit"
     steps:
-      - name: Checkout Repo
+      - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Set PY Env Var
-        run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
-
-      - name: Setup Caching
+      - name: Init pre-commit cache
         uses: actions/cache@v3
         with:
           path: "${{ github.workspace }}/.cache/pre-commit"
-          key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+          key: pre-commit|${{ hashFiles('.tool-versions') }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Init docker cache
+        id: init-docker-cache
+        uses: actions/cache@v3
+        with:
+          path: "${{ github.workspace }}/.cache/docker"
+          key: docker|${{ hashFiles('Makefile') }}
+
+      - name: Docker save build harness
+        if: steps.init-docker-cache.outputs.cache-hit != 'true'
+        run: make docker-save-build-harness
+
+      - name: Load build harness
+        run: make docker-load-build-harness
 
       - name: Run `pre-commit run -a`
         run: make run-pre-commit-hooks
