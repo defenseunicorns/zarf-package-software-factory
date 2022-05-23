@@ -50,7 +50,8 @@ RUN git clone --branch "v${ASDF_VERSION}" --depth 1 https://github.com/asdf-vm/a
   && echo -e '\nsource $HOME/.asdf/asdf.sh' >> "${HOME}/.bashrc" \
   && echo -e '\nsource $HOME/.asdf/asdf.sh' >> "${HOME}/.profile" \
   && source "${HOME}/.asdf/asdf.sh"
-ENV PATH="/home/buildharness/.asdf/shims:/home/buildharness/.asdf/bin:${PATH}"
+ENV PATH="/root/.asdf/shims:/root/.asdf/bin:${PATH}"
+# ENV PATH="/home/buildharness/.asdf/shims:/home/buildharness/.asdf/bin:${PATH}"
 
 # Install python. Get versions using 'asdf list all python'
 ARG PYTHON_VERSION="3.10.4"
