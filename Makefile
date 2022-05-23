@@ -50,7 +50,12 @@ docker-load-build-harness: ## Loads the saved build harness docker image
 
 .PHONY: run-pre-commit-hooks
 run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if any hooks fail. Uses Docker for maximum compatibility
+	mkdir -p .cache/pre-commit
 	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) pre-commit run -a
+
+.PHONY: fix-pre-commit-cache-permissions
+fix-pre-commit-cache-permissions: ## Fixes the permissions on the pre-commit cache
+	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+r .cache/pre-commit
 
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
