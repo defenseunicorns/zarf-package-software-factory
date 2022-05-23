@@ -23,6 +23,5 @@ jobs:
       #     key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
       - name: Run `pre-commit run -a`
         run: |
-          ls -la /root/.asdf
-          ls -la /root/.asdf/shims
+          asdf reshim && pre-commit run -a
         # run: make run-pre-commit-hooks
