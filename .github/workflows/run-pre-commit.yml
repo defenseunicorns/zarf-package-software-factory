@@ -25,5 +25,6 @@ jobs:
 
       - name: Run `pre-commit run -a`
         run: |
-          bash -c 'pre-commit run -a'
+          asdf plugin list
+          asdf list pre-commit
         # run: make run-pre-commit-hooks
