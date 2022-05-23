@@ -40,6 +40,7 @@ help: ## Show a list of all targets
 
 .PHONY: docker-save-build-harness
 docker-save-build-harness: ## Pulls the build harness docker image and saves it to a tarball
+	mkdir -p .cache/docker
 	docker pull ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
 	docker save -o .cache/docker/build-harness.tar ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
 
