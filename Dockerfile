@@ -5,11 +5,6 @@ FROM rockylinux:8
 # Make all shells run in a safer way. Ref: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 SHELL [ "/bin/bash", "-euxo", "pipefail", "-c" ]
 
-WORKDIR /
-
-# Need root to do rooty things.
-USER root
-
 # hadolint ignore=DL3041
 RUN dnf install -y --refresh \
   bind-utils \
@@ -35,12 +30,6 @@ RUN dnf install -y --refresh \
   xz \
   && dnf clean all \
   && rm -rf /var/cache/yum/
-
-# # hadolint ignore=DL3059
-# RUN useradd -ms /bin/bash buildharness
-
-# USER buildharness
-# WORKDIR /home/buildharness
 
 # Install asdf. Get versions from https://github.com/asdf-vm/asdf/releases
 ARG ASDF_VERSION="0.10.1"
@@ -95,14 +84,7 @@ RUN asdf plugin add tfsec \
   && asdf install tfsec "${TFSEC_VERSION}" \
   && asdf global tfsec "${TFSEC_VERSION}"
 
-# # Support tools installed as buildharness when running as root user
-# USER root
-# ENV ASDF_DATA_DIR="/home/buildharness/.asdf"
-# RUN cp /home/buildharness/.tool-versions /root/.tool-versions
-# ENV HELM_PLUGINS="/home/buildharness/.local/share/helm/plugins"
-# ENV HELM_REGISTRY_CONFIG="/home/buildharness/.config/helm/registry.json"
-# ENV HELM_REPOSITORY_CACHE="/home/buildharness/.cache/helm/repository"
-# ENV HELM_REPOSITORY_CONFIG="/home/buildharness/.config/helm/repositories.yaml"
-# USER buildharness
+# Support tools installed as root when running as any other user
+ENV ASDF_DATA_DIR="/root/.asdf"
 
 CMD ["/bin/bash"]
