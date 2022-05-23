@@ -28,6 +28,7 @@ RUN dnf install -y --refresh \
   openssl-devel \
   perl-Digest-SHA \
   readline-devel \
+  sqlite-devel \
   unzip \
   wget \
   which \
