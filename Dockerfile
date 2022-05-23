@@ -46,43 +46,37 @@ ENV PATH="/root/.asdf/shims:/root/.asdf/bin:${PATH}"
 ARG PYTHON_VERSION="3.10.4"
 ENV PYTHON_VERSION=${PYTHON_VERSION}
 RUN asdf plugin add python \
-  && asdf install python "${PYTHON_VERSION}" \
-  && asdf global python "${PYTHON_VERSION}"
+  && asdf install python "${PYTHON_VERSION}"
 
 # Install hadolint. Get versions using 'asdf list all hadolint'
 ARG HADOLINT_VERSION="2.10.0"
 ENV HADOLINT_VERSION=${HADOLINT_VERSION}
 RUN asdf plugin add hadolint \
-  && asdf install hadolint "${HADOLINT_VERSION}" \
-  && asdf global hadolint "${HADOLINT_VERSION}"
+  && asdf install hadolint "${HADOLINT_VERSION}"
 
 # Install pre-commit. Get versions using 'asdf list all pre-commit'
 ARG PRE_COMMIT_VERSION="2.19.0"
 ENV PRE_COMMIT_VERSION=${PRE_COMMIT_VERSION}
 RUN asdf plugin add pre-commit \
-  && asdf install pre-commit "${PRE_COMMIT_VERSION}" \
-  && asdf global pre-commit "${PRE_COMMIT_VERSION}"
+  && asdf install pre-commit "${PRE_COMMIT_VERSION}"
 
 # Install Terraform. Get versions using 'asdf list all terraform'
 ARG TERRAFORM_VERSION="1.2.0"
 ENV TERRAFORM_VERSION=${TERRAFORM_VERSION}
 RUN asdf plugin add terraform \
-  && asdf install terraform "${TERRAFORM_VERSION}" \
-  && asdf global terraform "${TERRAFORM_VERSION}"
+  && asdf install terraform "${TERRAFORM_VERSION}"
 
 # Install tflint. Get versions using 'asdf list all tflint'
 ARG TFLINT_VERSION="0.28.1"
 ENV TFLINT_VERSION=${TFLINT_VERSION}
 RUN asdf plugin add tflint \
-  && asdf install tflint "${TFLINT_VERSION}" \
-  && asdf global tflint "${TFLINT_VERSION}"
+  && asdf install tflint "${TFLINT_VERSION}"
 
 # Install tfsec. Get versions using 'asdf list all tfsec'
 ARG TFSEC_VERSION="0.39.37"
 ENV TFSEC_VERSION=${TFSEC_VERSION}
 RUN asdf plugin add tfsec \
-  && asdf install tfsec "${TFSEC_VERSION}" \
-  && asdf global tfsec "${TFSEC_VERSION}"
+  && asdf install tfsec "${TFSEC_VERSION}"
 
 # Support tools installed as root when running as any other user
 ENV ASDF_DATA_DIR="/root/.asdf"
