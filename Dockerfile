@@ -12,13 +12,26 @@ USER root
 
 # hadolint ignore=DL3041
 RUN dnf install -y --refresh \
+  bind-utils \
+  bzip2 \
+  bzip2-devel \
   findutils \
+  gcc \
+  gcc-c++ \
+  gettext \
   git \
   jq \
+  libffi-devel \
+  libxslt-devel \
   make \
+  ncurses-devel \
+  openssl-devel \
+  perl-Digest-SHA \
+  readline-devel \
   unzip \
   wget \
   which \
+  xz \
   && dnf clean all \
   && rm -rf /var/cache/yum/
 
@@ -37,6 +50,13 @@ RUN git clone --branch "v${ASDF_VERSION}" --depth 1 https://github.com/asdf-vm/a
   && echo -e '\nsource $HOME/.asdf/asdf.sh' >> "${HOME}/.profile" \
   && source "${HOME}/.asdf/asdf.sh"
 ENV PATH="/home/buildharness/.asdf/shims:/home/buildharness/.asdf/bin:${PATH}"
+
+# Install python. Get versions using 'asdf list all python'
+ARG PYTHON_VERSION="3.10.4"
+ENV PYTHON_VERSION=${PYTHON_VERSION}
+RUN asdf plugin add python \
+  && asdf install python "${PYTHON_VERSION}" \
+  && asdf global python "${PYTHON_VERSION}"
 
 # Install hadolint. Get versions using 'asdf list all hadolint'
 ARG HADOLINT_VERSION="2.10.0"

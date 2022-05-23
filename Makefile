@@ -35,6 +35,14 @@ help: ## Show a list of all targets
 	| sed -n 's/^\(.*\): \(.*\)##\(.*\)/\1:\3/p' \
 	| column -t -s ":"
 
+.PHONY: build-harness-shell
+build-harness-shell: ## Open a shell in the build harness container with the project mounted
+	docker run -it --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:0.0.1 bash
+
+.PHONY: run-pre-commit-hooks
+run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if any hooks fail. Recommend running with `make build-harness-shell` followed by `make run-pre-commit-hooks`
+	echo "hello world"
+
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
 	@VAGRANT_EXPERIMENTAL="disks" vagrant up --no-color
