@@ -8,7 +8,6 @@ metadata:
 
 components:
   - name: setup
-    foo: bar
     required: true
     secretName: "private-registry"
     manifests:
