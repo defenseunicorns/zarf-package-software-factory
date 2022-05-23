@@ -23,6 +23,6 @@ jobs:
       #     key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
       - name: Run `pre-commit run -a`
         run: |
-          asdf plugin list
-          asdf list pre-commit
+          ls -la /root/.asdf
+          ls -la /root/.asdf/shims
         # run: make run-pre-commit-hooks
