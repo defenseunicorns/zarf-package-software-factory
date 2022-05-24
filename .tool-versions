@@ -4,3 +4,4 @@ pre-commit 2.19.0
 terraform 1.2.0
 tflint 0.28.1
 tfsec 0.39.37
+golang 1.18.2
