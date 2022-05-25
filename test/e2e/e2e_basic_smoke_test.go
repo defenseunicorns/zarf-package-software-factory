@@ -1,9 +1,10 @@
 package test
 
 import (
+	"testing"
+
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/utils"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestBasicSmoke(t *testing.T) {
