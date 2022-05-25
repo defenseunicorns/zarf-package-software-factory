@@ -57,6 +57,10 @@ run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if 
 fix-pre-commit-cache-permissions: ## Fixes the permissions on the pre-commit cache
 	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+rx .cache/pre-commit
 
+.PHONY: test
+test: ## Run all automated tests. Requires access to an AWS account. Costs money.
+	echo "hello world"
+
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
 	@VAGRANT_EXPERIMENTAL="disks" vagrant up --no-color
