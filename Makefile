@@ -62,7 +62,7 @@ fix-pre-commit-cache-permissions: ## Fixes the permissions on the pre-commit cac
 
 .PHONY: test
 test: ## Run all automated tests. Requires access to an AWS account. Costs money.
-	docker run --rm -v "${PWD}:/app" --workdir "/app" -e AWS_REGION -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) go test -v -timeout 1h test/e2e/...
+	docker run --rm -v "${PWD}:/app" --workdir "/app/test/e2e" -e REPO_URL -e GIT_BRANCH -e AWS_REGION -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) go test -v -timeout 1h ./...
 
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
