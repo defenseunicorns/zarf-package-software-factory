@@ -1,0 +1,40 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=1024"]
+      - id: check-merge-conflict
+      - id: detect-aws-credentials
+        args:
+          - "--allow-missing-credentials"
+      - id: detect-private-key
+        exclude: |
+          (?x)^(
+            kustomizations/bigbang/environment-bb/values.yaml
+          )$
+      - id: end-of-file-fixer
+        exclude: "^kustomizations/bigbang/vendor/.*$"
+      - id: fix-byte-order-marker
+      - id: trailing-whitespace
+        exclude: "^kustomizations/bigbang/vendor/.*$"
+        args: [--markdown-linebreak-ext=md]
+      - id: check-yaml
+        args:
+          - "--allow-multiple-documents"
+  - repo: https://github.com/sirosen/fix-smartquotes
+    rev: 0.2.0
+    hooks:
+      - id: fix-smartquotes
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.14.0
+    hooks:
+      - id: check-jsonschema
+        name: "Validate Zarf Configs Against Schema"
+        files: "zarf.yaml"
+        types: [yaml]
+        args:
+          [
+            "--schemafile",
+            "https://raw.githubusercontent.com/defenseunicorns/zarf/v0.17.0/zarf.schema.json",
+          ]

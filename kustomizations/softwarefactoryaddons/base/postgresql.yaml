@@ -24,3 +24,29 @@ spec:
     limits:
       cpu: "1"
       memory: 2000Mi
+---
+apiVersion: "acid.zalan.do/v1"
+kind: "postgresql"
+metadata:
+  name: "acid-jira"
+  namespace: "jira"
+spec:
+  teamId: "acid"
+  postgresql:
+    version: "11"
+  numberOfInstances: 3
+  volume:
+    size: "2Gi"
+  users:
+    jira: []
+  databases:
+    jira: jira
+  # enableLogicalBackup: true
+  # logicalBackupSchedule: "*/2 * * * *"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: "1"
+      memory: 2000Mi

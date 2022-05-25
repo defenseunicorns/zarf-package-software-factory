@@ -8,6 +8,9 @@ BIGBANG_VERSION := 1.28.0
 # the build folder.
 ZARF_VERSION := v0.17.0
 
+# The version of the build harness container to use
+BUILD_HARNESS_VERSION := 0.0.6
+
 # Figure out which Zarf binary we should use based on the operating system we are on
 ZARF_BIN := zarf
 UNAME_S := $(shell uname -s)
@@ -34,6 +37,25 @@ help: ## Show a list of all targets
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 	| sed -n 's/^\(.*\): \(.*\)##\(.*\)/\1:\3/p' \
 	| column -t -s ":"
+
+.PHONY: docker-save-build-harness
+docker-save-build-harness: ## Pulls the build harness docker image and saves it to a tarball
+	mkdir -p .cache/docker
+	docker pull ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
+	docker save -o .cache/docker/build-harness.tar ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
+
+.PHONY: docker-load-build-harness
+docker-load-build-harness: ## Loads the saved build harness docker image
+	docker load -i .cache/docker/build-harness.tar
+
+.PHONY: run-pre-commit-hooks
+run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if any hooks fail. Uses Docker for maximum compatibility
+	mkdir -p .cache/pre-commit
+	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) pre-commit run -a
+
+.PHONY: fix-pre-commit-cache-permissions
+fix-pre-commit-cache-permissions: ## Fixes the permissions on the pre-commit cache
+	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+rx .cache/pre-commit
 
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples

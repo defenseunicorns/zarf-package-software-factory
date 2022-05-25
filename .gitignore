@@ -1,7 +1,10 @@
+.cache/
 .idea/
+.vscode/
 .vagrant/
 build/
 .DS_Store
+*.tar.zst
 
 # SOPS stuff that should never be committed to the repo
 secret-sops-gpg.yaml

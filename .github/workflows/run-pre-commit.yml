@@ -1,0 +1,34 @@
+name: run-pre-commit
+
+on:
+  - pull_request
+
+jobs:
+  run-pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Init pre-commit cache
+        uses: actions/cache@v3
+        with:
+          path: "${{ github.workspace }}/.cache/pre-commit"
+          key: pre-commit|${{ hashFiles('.tool-versions') }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Init docker cache
+        id: init-docker-cache
+        uses: actions/cache@v3
+        with:
+          path: "${{ github.workspace }}/.cache/docker"
+          key: docker|${{ hashFiles('Makefile') }}
+
+      - name: Docker save build harness
+        if: steps.init-docker-cache.outputs.cache-hit != 'true'
+        run: make docker-save-build-harness
+
+      - name: Load build harness
+        run: make docker-load-build-harness
+
+      - name: Run `pre-commit run -a`
+        run: make run-pre-commit-hooks fix-pre-commit-cache-permissions
