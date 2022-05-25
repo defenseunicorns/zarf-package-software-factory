@@ -1,7 +1,7 @@
 terraform {
   # Follow best practice for root module version constraing
   # See https://www.terraform.io/docs/language/expressions/version-constraints.html
-  required_version = "~> 1.1.0"
+  required_version = "~> 1.2.0"
 }
 
 locals {
@@ -27,17 +27,12 @@ resource "aws_instance" "public" {
 
   user_data = <<EOF
 #!/bin/bash
-echo "Installing jq"
-apt-get install -y jq
 
-echo "Installing git"
-apt-get install -y git
+# install deps
+apt-get install -y jq git make wget
 
-echo "Updating max_map_count for elasticsearch support"
+# elasticsearch needs this
 sysctl -w vm.max_map_count=262144
-
-echo "Creating a simulated airgap by modifying the machine's hosts file"
-echo "0.0.0.0 registry.opensource.zalan.do ghcr.io registry.hub.docker.com hub.docker.com charts.helm.sh repo1.dso.mil github.com registry.dso.mil registry1.dso.mil docker.io index.docker.io auth.docker.io registry-1.docker.io dseasb33srnrn.cloudfront.net production.cloudflare.docker.com" >> /etc/hosts
 
 EOF
 

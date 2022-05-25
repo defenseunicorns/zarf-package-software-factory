@@ -9,7 +9,7 @@ BIGBANG_VERSION := 1.28.0
 ZARF_VERSION := v0.17.0
 
 # The version of the build harness container to use
-BUILD_HARNESS_VERSION := 0.0.6
+BUILD_HARNESS_VERSION := 0.0.7
 
 # Figure out which Zarf binary we should use based on the operating system we are on
 ZARF_BIN := zarf
@@ -32,9 +32,12 @@ endif
 # Idiomatic way to force a target to always run, by having it depend on this dummy target
 FORCE:
 
+foo:
+	echo $(MAKEFILE_LIST)
+
 .PHONY: help
 help: ## Show a list of all targets
-	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
+	@grep -E '^\S*:.*##.*$$' $(MAKEFILE_LIST) \
 	| sed -n 's/^\(.*\): \(.*\)##\(.*\)/\1:\3/p' \
 	| column -t -s ":"
 
@@ -94,21 +97,21 @@ vendor-big-bang-base: ## Vendor the BigBang base kustomization, since Flux doesn
 build:
 	@mkdir -p build
 
-build/zarf: | build
+build/zarf: | build ## Download the Linux flavor of Zarf to the build dir
 	@echo "Downloading zarf"
 	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf -O build/zarf
 	@chmod +x build/zarf
 
-build/zarf-mac-intel: | build
+build/zarf-mac-intel: | build ## Download the Mac (Intel) flavor of Zarf to the build dir
 	@echo "Downloading zarf-mac-intel"
 	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-mac-intel -O build/zarf-mac-intel
 	@chmod +x build/zarf-mac-intel
 
-build/zarf-init-amd64.tar.zst: | build
+build/zarf-init-amd64.tar.zst: | build ## Download the init package
 	@echo "Downloading zarf-init-amd64.tar.zst"
 	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -O build/zarf-init-amd64.tar.zst
 
-build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN)
+build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux package
 	@rm -rf ./tmp
 	@mkdir -p ./tmp
 	@git clone -b $(ZARF_VERSION) --depth 1 https://github.com/defenseunicorns/zarf.git tmp/zarf
@@ -116,7 +119,7 @@ build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN)
 	@mv tmp/zarf/packages/flux-iron-bank/zarf-package-flux-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst
 	@rm -rf ./tmp
 
-build/zarf-package-software-factory-amd64.tar.zst: FORCE | build/$(ZARF_BIN)
+build/zarf-package-software-factory-amd64.tar.zst: FORCE | build/$(ZARF_BIN) ## Build the Software Factory package
 	@echo "Creating the deploy package"
 	@build/$(ZARF_BIN) package create --confirm
 	@mv zarf-package-software-factory-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst
