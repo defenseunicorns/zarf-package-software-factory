@@ -104,7 +104,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
-          REPO_URL: ${{ github.repositoryUrl }}
+          REPO_URL: https://github.com/${{ github.repository }}.git
           GIT_BRANCH: ${{ github.ref_name }}
         run: |
           make test
