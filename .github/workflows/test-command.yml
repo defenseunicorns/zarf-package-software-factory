@@ -76,7 +76,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: parse
     if: needs.parse.outputs.run-e2e == 'true'
-    container: ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:0.0.7
     steps:
       # Update GitHub status for pending pipeline run
       - name: "Update GitHub Status for pending"
