@@ -60,11 +60,10 @@ fix-cache-permissions: ## Fixes the permissions on the pre-commit cache
 # TODO: Figure out how to make it log to the console in real time so the user isn't sitting there wondering if it is working or not.
 .PHONY: test
 test: ## Run all automated tests. Requires access to an AWS account. Costs money.
-	mkdir -p .cache/go
-	mkdir -p .cache/go-build
-	# TODO: Figure out how to make it log to the console in real time so the user isn't sitting there wondering if it is working or not.
+	@mkdir -p .cache/go
+	@mkdir -p .cache/go-build
 	@echo "Running automated tests. This will take several minutes. Right now it doesn't log anything to the console until the tests are done. If you interrupt the test run you will need to log into AWS console and manually delete any orphaned infrastructure."
-	docker run --rm -v "${PWD}:/app" -v "${PWD}/.cache/go:/root/go" -v "${PWD}/.cache/go-build:/root/.cache/go-build" --workdir "/app/test/e2e" -e GOPATH=/root/go -e GOCACHE=/root/.cache/go-build -e REPO_URL -e GIT_BRANCH -e AWS_REGION -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) go test -v -timeout 1h -p 1 ./...
+	@docker run --rm -v "${PWD}:/app" -v "${PWD}/.cache/go:/root/go" -v "${PWD}/.cache/go-build:/root/.cache/go-build" --workdir "/app/test/e2e" -e GOPATH=/root/go -e GOCACHE=/root/.cache/go-build -e REPO_URL -e GIT_BRANCH -e AWS_REGION -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) go test -v -timeout 1h -p 1 ./...
 
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
