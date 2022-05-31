@@ -9,7 +9,7 @@ BIGBANG_VERSION := 1.28.0
 ZARF_VERSION := v0.17.0
 
 # The version of the build harness container to use
-BUILD_HARNESS_VERSION := 0.0.6
+BUILD_HARNESS_VERSION := 0.0.7
 
 # Figure out which Zarf binary we should use based on the operating system we are on
 ZARF_BIN := zarf
@@ -34,7 +34,7 @@ FORCE:
 
 .PHONY: help
 help: ## Show a list of all targets
-	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
+	@grep -E '^\S*:.*##.*$$' $(MAKEFILE_LIST) \
 	| sed -n 's/^\(.*\): \(.*\)##\(.*\)/\1:\3/p' \
 	| column -t -s ":"
 
@@ -53,9 +53,17 @@ run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if 
 	mkdir -p .cache/pre-commit
 	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) pre-commit run -a
 
-.PHONY: fix-pre-commit-cache-permissions
-fix-pre-commit-cache-permissions: ## Fixes the permissions on the pre-commit cache
-	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+rx .cache/pre-commit
+.PHONY: fix-cache-permissions
+fix-cache-permissions: ## Fixes the permissions on the pre-commit cache
+	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+rx .cache
+
+# TODO: Figure out how to make it log to the console in real time so the user isn't sitting there wondering if it is working or not.
+.PHONY: test
+test: ## Run all automated tests. Requires access to an AWS account. Costs money.
+	@mkdir -p .cache/go
+	@mkdir -p .cache/go-build
+	@echo "Running automated tests. This will take several minutes. Right now it doesn't log anything to the console until the tests are done. If you interrupt the test run you will need to log into AWS console and manually delete any orphaned infrastructure."
+	@docker run --rm -v "${PWD}:/app" -v "${PWD}/.cache/go:/root/go" -v "${PWD}/.cache/go-build:/root/.cache/go-build" --workdir "/app/test/e2e" -e GOPATH=/root/go -e GOCACHE=/root/.cache/go-build -e REPO_URL -e GIT_BRANCH -e AWS_REGION -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) go test -v -timeout 1h -p 1 ./...
 
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
@@ -94,21 +102,21 @@ vendor-big-bang-base: ## Vendor the BigBang base kustomization, since Flux doesn
 build:
 	@mkdir -p build
 
-build/zarf: | build
+build/zarf: | build ## Download the Linux flavor of Zarf to the build dir
 	@echo "Downloading zarf"
 	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf -O build/zarf
 	@chmod +x build/zarf
 
-build/zarf-mac-intel: | build
+build/zarf-mac-intel: | build ## Download the Mac (Intel) flavor of Zarf to the build dir
 	@echo "Downloading zarf-mac-intel"
 	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-mac-intel -O build/zarf-mac-intel
 	@chmod +x build/zarf-mac-intel
 
-build/zarf-init-amd64.tar.zst: | build
+build/zarf-init-amd64.tar.zst: | build ## Download the init package
 	@echo "Downloading zarf-init-amd64.tar.zst"
 	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -O build/zarf-init-amd64.tar.zst
 
-build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN)
+build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux package
 	@rm -rf ./tmp
 	@mkdir -p ./tmp
 	@git clone -b $(ZARF_VERSION) --depth 1 https://github.com/defenseunicorns/zarf.git tmp/zarf
@@ -116,7 +124,7 @@ build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN)
 	@mv tmp/zarf/packages/flux-iron-bank/zarf-package-flux-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst
 	@rm -rf ./tmp
 
-build/zarf-package-software-factory-amd64.tar.zst: FORCE | build/$(ZARF_BIN)
+build/zarf-package-software-factory-amd64.tar.zst: FORCE | build/$(ZARF_BIN) ## Build the Software Factory package
 	@echo "Creating the deploy package"
 	@build/$(ZARF_BIN) package create --confirm
 	@mv zarf-package-software-factory-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst

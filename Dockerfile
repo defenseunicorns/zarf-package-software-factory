@@ -42,6 +42,12 @@ RUN git clone --branch "v${ASDF_VERSION}" --depth 1 https://github.com/asdf-vm/a
 ENV PATH="/root/.asdf/shims:/root/.asdf/bin:${PATH}"
 # ENV PATH="/home/buildharness/.asdf/shims:/home/buildharness/.asdf/bin:${PATH}"
 
+# Install golang. Get versions using 'asdf list all golang'
+ARG GOLANG_VERSION="1.18.2"
+ENV GOLANG_VERSION=${GOLANG_VERSION}
+RUN asdf plugin add golang \
+  && asdf install golang "${GOLANG_VERSION}"
+
 # Install python. Get versions using 'asdf list all python'
 ARG PYTHON_VERSION="3.10.4"
 ENV PYTHON_VERSION=${PYTHON_VERSION}
