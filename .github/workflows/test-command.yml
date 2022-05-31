@@ -102,34 +102,30 @@ jobs:
       - name: Init gopath cache
         uses: actions/cache@v3
         with:
-          path: |
-            "${{ github.workspace }}/.cache/go"
-          key: gopath|${{ hashFiles('.tool-versions') }}|${{ hashFiles('go.sum') }}
-          restore-keys: |
-            gopath|
+          path: "${{ github.workspace }}/.cache/go"
+          key: "gopath|${{ hashFiles('.tool-versions') }}|${{ hashFiles('go.sum') }}"
 
       - name: Init gobuild cache
         uses: actions/cache@v3
         with:
-          path: |
-            "${{ github.workspace }}/.cache/go-build"
-          key: gobuild|${{ hashFiles('.tool-versions') }}|${{ hashFiles('go.sum') }}
-          restore-keys: |
-            gobuild|
+          path: "${{ github.workspace }}/.cache/go-build"
+          key: "gobuild|${{ hashFiles('.tool-versions') }}|${{ hashFiles('go.sum') }}"
 
       - name: Init docker cache
         id: init-docker-cache
         uses: actions/cache@v3
         with:
           path: "${{ github.workspace }}/.cache/docker"
-          key: docker|${{ hashFiles('Makefile') }}
+          key: "docker|${{ hashFiles('Makefile') }}"
 
       - name: Docker save build harness
         if: steps.init-docker-cache.outputs.cache-hit != 'true'
-        run: make docker-save-build-harness
+        run: |
+          make docker-save-build-harness
 
       - name: Load build harness
-        run: make docker-load-build-harness
+        run: |
+          make docker-load-build-harness
 
       - name: "Run E2E tests"
         env:
