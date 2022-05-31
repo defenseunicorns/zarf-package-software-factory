@@ -103,8 +103,6 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 	// Clone the repo
 	output, err := platform.RunSSHCommand(fmt.Sprintf("git clone --depth 1 %v --branch %v --single-branch ~/app", repoUrl, gitBranch))
 	require.NoError(t, err, output)
-
-	return platform
 }
 
 func getRepoUrl() (string, error) {
