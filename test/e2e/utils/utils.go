@@ -24,7 +24,13 @@ import (
 	terratesting "github.com/gruntwork-io/terratest/modules/testing"
 )
 
-func SetupTestPlatform(t *testing.T) *types.TestPlatform {
+func InitTestPlatform(t *testing.T) *types.TestPlatform {
+	tempFolder := teststructure.CopyTerraformFolderToTemp(t, "..", "tf/public-ec2-instance")
+	platform := types.NewTestPlatform(t, tempFolder)
+	return platform
+}
+
+func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 	repoUrl, err := getRepoUrl()
 	require.NoError(t, err)
 	gitBranch, err := getGitBranch()
@@ -36,7 +42,6 @@ func SetupTestPlatform(t *testing.T) *types.TestPlatform {
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
 	instanceType := "m6i.8xlarge"
 
-	tempFolder := teststructure.CopyTerraformFolderToTemp(t, "..", "tf/public-ec2-instance")
 	// Since Terraform is going to be run with that temp folder as the CWD, we also need our .tool-versions file to be
 	// in that directory so that the right version of Terraform is being run there. I can neither confirm nor deny that
 	// this took me 2 days to figure out...
@@ -58,6 +63,7 @@ func SetupTestPlatform(t *testing.T) *types.TestPlatform {
 			require.NoError(t, err)
 		}
 	}
+	tempFolder := platform.TestFolder
 	err = copyFile(filePath, fmt.Sprintf("%v/.tool-versions", tempFolder))
 	require.NoError(t, err)
 
@@ -74,7 +80,6 @@ func SetupTestPlatform(t *testing.T) *types.TestPlatform {
 			"instance_type": instanceType,
 		},
 	})
-	platform := types.NewTestPlatform(t, tempFolder)
 
 	teststructure.RunTestStage(t, "SETUP", func() {
 		teststructure.SaveTerraformOptions(t, tempFolder, terraformOptions)

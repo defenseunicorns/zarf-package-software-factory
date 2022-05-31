@@ -10,8 +10,9 @@ import (
 func TestBasicSmoke(t *testing.T) {
 	// BOILERPLATE, EXPECTED TO BE PRESENT AT THE BEGINNING OF EVERY TEST
 	t.Parallel()
-	platform := utils.SetupTestPlatform(t)
+	platform := utils.InitTestPlatform(t)
 	defer platform.Teardown()
+	utils.SetupTestPlatform(t, platform)
 
 	// TEST CODE STARTS HERE
 	output, err := platform.RunSSHCommand("ls -la ~/app")
