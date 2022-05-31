@@ -31,4 +31,4 @@ jobs:
         run: make docker-load-build-harness
 
       - name: Run `pre-commit run -a`
-        run: make run-pre-commit-hooks fix-pre-commit-cache-permissions
+        run: make run-pre-commit-hooks fix-cache-permissions
