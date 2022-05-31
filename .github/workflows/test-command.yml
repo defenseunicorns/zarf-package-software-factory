@@ -99,15 +99,23 @@ jobs:
           repository: ${{ github.event.client_payload.pull_request.head.repo.full_name }}
           ref: ${{ github.event.client_payload.pull_request.head.ref }}
 
-      - name: Init golang cache
+      - name: Init gopath cache
         uses: actions/cache@v3
         with:
           path: |
             "${{ github.workspace }}/.cache/go"
-            "${{ github.workspace }}/.cache/go-build"
-          key: go|${{ hashFiles('go.sum') }}
+          key: gopath|${{ hashFiles('.tool-versions') }}|${{ hashFiles('go.sum') }}
           restore-keys: |
-            go|
+            gopath|
+
+      - name: Init gobuild cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            "${{ github.workspace }}/.cache/go-build"
+          key: gobuild|${{ hashFiles('.tool-versions') }}|${{ hashFiles('go.sum') }}
+          restore-keys: |
+            gobuild|
 
       - name: Init docker cache
         id: init-docker-cache
