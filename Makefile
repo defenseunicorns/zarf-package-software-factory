@@ -53,10 +53,11 @@ run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if 
 	mkdir -p .cache/pre-commit
 	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) pre-commit run -a
 
-.PHONY: fix-pre-commit-cache-permissions
-fix-pre-commit-cache-permissions: ## Fixes the permissions on the pre-commit cache
-	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+rx .cache/pre-commit
+.PHONY: fix-cache-permissions
+fix-cache-permissions: ## Fixes the permissions on the pre-commit cache
+	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+rx .cache
 
+# TODO: Figure out how to make it log to the console in real time so the user isn't sitting there wondering if it is working or not.
 .PHONY: test
 test: ## Run all automated tests. Requires access to an AWS account. Costs money.
 	# TODO: Figure out how to make it log to the console in real time so the user isn't sitting there wondering if it is working or not.
