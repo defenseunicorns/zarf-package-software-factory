@@ -1,15 +1,18 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
+	"io"
+	"os"
+	"testing"
+	"time"
+
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/types"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/retry"
 	teststructure "github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/stretchr/testify/require"
-	"os"
-	"testing"
-	"time"
 
 	"github.com/gruntwork-io/terratest/modules/aws"
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -26,7 +29,32 @@ func SetupTestPlatform(t *testing.T) *types.TestPlatform {
 	stage := "terratest"
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
 	instanceType := "m6i.8xlarge"
+
 	tempFolder := teststructure.CopyTerraformFolderToTemp(t, "..", "tf/public-ec2-instance")
+	// Since Terraform is going to be run with that temp folder as the CWD, we also need our .tool-versions file to be
+	// in that directory so that the right version of Terraform is being run there. I can neither confirm nor deny that
+	// this took me 2 days to figure out...
+	// Since we can't be sure what the working directory is, we are going to walk up one directory at a time until we
+	// find a .tool-versions file and then copy it into the temp folder
+	found := false
+	filePath := ".tool-versions"
+	for !found {
+		//nolint:gocritic
+		if _, err := os.Stat(filePath); err == nil {
+			// The file exists
+			found = true
+		} else if errors.Is(err, os.ErrNotExist) {
+			// The file does *not* exist. Add a "../" and try again
+			filePath = fmt.Sprintf("../%v", filePath)
+		} else {
+			// Schrodinger: file may or may not exist. See err for details.
+			// Therefore, do *NOT* use !os.IsNotExist(err) to test for file existence
+			require.NoError(t, err)
+		}
+	}
+	err = copyFile(filePath, fmt.Sprintf("%v/.tool-versions", tempFolder))
+	require.NoError(t, err)
+
 	keyPairName := fmt.Sprintf("%s-%s-%s", namespace, stage, name)
 	keyPair := aws.CreateAndImportEC2KeyPair(t, awsRegion, keyPairName)
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
@@ -68,13 +96,6 @@ func SetupTestPlatform(t *testing.T) *types.TestPlatform {
 	return platform
 }
 
-//# grab the repo, install everything, and init zarf
-//git clone --depth 1 ${var.repo_url} --branch ${var.git_branch} --single-branch /app
-//(cd /app && make build/zarf)
-///app/build/zarf tools registry login registry1.dso.mil -u ${var.registry1_username} -p ${var.registry1_password}
-//(cd /app && make build/zarf-init-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst)
-///app/build/zarf init --
-
 func getRepoUrl() (string, error) {
 	val, present := os.LookupEnv("REPO_URL")
 	if !present {
@@ -105,4 +126,66 @@ func getAwsRegion() (string, error) {
 	} else {
 		return val, nil
 	}
+}
+
+// CopyFile copies a file from src to dst. If src and dst files exist, and are
+// the same, then return success. Otherwise, attempt to create a hard link
+// between the two files. If that fail, copy the file contents from src to dst.
+func copyFile(src string, dst string) error {
+	sfi, err := os.Stat(src)
+	if err != nil {
+		return err
+	}
+	if !sfi.Mode().IsRegular() {
+		// cannot copy non-regular files (e.g., directories,
+		// symlinks, devices, etc.)
+		return fmt.Errorf("CopyFile: non-regular source file %s (%q)", sfi.Name(), sfi.Mode().String())
+	}
+	dfi, err := os.Stat(dst)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			return err
+		}
+	} else {
+		if !(dfi.Mode().IsRegular()) {
+			return fmt.Errorf("CopyFile: non-regular destination file %s (%q)", dfi.Name(), dfi.Mode().String())
+		}
+		if os.SameFile(sfi, dfi) {
+			return nil
+		}
+	}
+	if err = os.Link(src, dst); err == nil {
+		return err
+	}
+	err = copyFileContents(src, dst)
+	return nil
+}
+
+// copyFileContents copies the contents of the file named src to the file named
+// by dst. The file will be created if it does not already exist. If the
+// destination file exists, all it's contents will be replaced by the contents
+// of the source file.
+func copyFileContents(src string, dst string) error {
+	in, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer func(in *os.File) {
+		_ = in.Close()
+	}(in)
+	out, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		cerr := out.Close()
+		if err == nil {
+			err = cerr
+		}
+	}()
+	if _, err = io.Copy(out, in); err != nil {
+		return err
+	}
+	err = out.Sync()
+	return nil
 }

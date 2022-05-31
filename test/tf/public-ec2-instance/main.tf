@@ -16,11 +16,14 @@ provider "aws" {
 # CREATE A PUBLIC EC2 INSTANCE
 # ---------------------------------------------------------------------------------------------------------------------
 
-resource "aws_instance" "public" {
+resource "aws_spot_instance_request" "public" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.public.id]
   key_name               = var.key_pair_name
+  wait_for_fulfillment   = true
+  spot_type              = "one-time"
+
 
   # This EC2 Instance has a public IP and will be accessible directly from the public Internet
   associate_public_ip_address = true
