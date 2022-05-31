@@ -59,6 +59,8 @@ fix-pre-commit-cache-permissions: ## Fixes the permissions on the pre-commit cac
 
 .PHONY: test
 test: ## Run all automated tests. Requires access to an AWS account. Costs money.
+	# TODO: Figure out how to make it log to the console in real time so the user isn't sitting there wondering if it is working or not.
+	@echo "Running automated tests. This will take several minutes. Right now it doesn't log anything to the console until the tests are done. If you interrupt the test run you will need to log into AWS console and manually delete any orphaned infrastructure."
 	docker run --rm -v "${PWD}:/app" -v "${PWD}/.cache/go:/root/go" --workdir "/app/test/e2e" -e GOPATH=/root/go -e REPO_URL -e GIT_BRANCH -e AWS_REGION -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) go test -v -timeout 1h ./...
 
 .PHONY: vm-init
