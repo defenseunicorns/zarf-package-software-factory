@@ -28,10 +28,12 @@ func NewTestPlatform(t *testing.T, testFolder string) *TestPlatform {
 }
 
 func (platform *TestPlatform) Teardown() {
-	keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
-	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
-	terraform.Destroy(platform.T, terraformOptions)
-	aws.DeleteEC2KeyPair(platform.T, keyPair)
+	teststructure.RunTestStage(platform.T, "TEARDOWN", func() {
+		keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
+		terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
+		terraform.Destroy(platform.T, terraformOptions)
+		aws.DeleteEC2KeyPair(platform.T, keyPair)
+	})
 }
 
 func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error) {

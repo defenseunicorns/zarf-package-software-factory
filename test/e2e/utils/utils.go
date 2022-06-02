@@ -46,7 +46,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 	require.NoError(t, err)
 	registry1Username, err := getEnvVar("REGISTRY1_USERNAME")
 	require.NoError(t, err)
-	registry1Password, err := getEnvVar("REGISTRY_PASSWORD")
+	registry1Password, err := getEnvVar("REGISTRY1_PASSWORD")
 	require.NoError(t, err)
 	namespace := "di2me"
 	stage := "terratest"
@@ -111,33 +111,35 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 	})
 	require.NoError(t, err)
 
-	// Clone the repo
-	output, err := platform.RunSSHCommandAsSudo(fmt.Sprintf("git clone --depth 1 %v --branch %v --single-branch ~/app", repoUrl, gitBranch))
-	require.NoError(t, err, output)
-	// Install Zarf
-	output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf")
-	require.NoError(t, err, output)
-	// Log into registry1.dso.mil
-	output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf("~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v", registry1Username, registry1Password))
-	require.NoError(t, err, output)
-	// Install the rest of the packages
-	output, err = platform.RunSSHCommandAsSudo("cd ~/app && make all")
-	require.NoError(t, err, output)
-	// Zarf init
-	output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-init-amd64.tar.zst --components k3s,gitops-service --confirm")
-	require.NoError(t, err, output)
-	// Deploy Flux
-	output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm")
-	require.NoError(t, err, output)
-	// Generate a bogus gpg key so it can be applied to flux since flux complains if one isn't present, even if one isn't needed
-	output, err = platform.RunSSHCommandAsSudo("gpg --batch --passphrase '' --quick-gen-key user@example.com default default")
-	require.NoError(t, err, output)
-	// Apply the bogus gpg key so Flux won't complain
-	output, err = platform.RunSSHCommandAsSudo("gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin")
-	require.NoError(t, err, output)
-	// Deploy software factory
-	output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm")
-	require.NoError(t, err, output)
+	teststructure.RunTestStage(platform.T, "TEST", func() {
+		// Clone the repo
+		output, err := platform.RunSSHCommandAsSudo(fmt.Sprintf("git clone --depth 1 %v --branch %v --single-branch ~/app", repoUrl, gitBranch))
+		require.NoError(t, err, output)
+		// Install Zarf
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf")
+		require.NoError(t, err, output)
+		// Log into registry1.dso.mil
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf("~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v", registry1Username, registry1Password))
+		require.NoError(t, err, output)
+		// Install the rest of the packages
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make all")
+		require.NoError(t, err, output)
+		// Zarf init
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-init-amd64.tar.zst --components k3s,gitops-service --confirm")
+		require.NoError(t, err, output)
+		// Deploy Flux
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm")
+		require.NoError(t, err, output)
+		// Generate a bogus gpg key so it can be applied to flux since flux complains if one isn't present, even if one isn't needed
+		output, err = platform.RunSSHCommandAsSudo("gpg --batch --passphrase '' --quick-gen-key user@example.com default default")
+		require.NoError(t, err, output)
+		// Apply the bogus gpg key so Flux won't complain
+		output, err = platform.RunSSHCommandAsSudo("gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin")
+		require.NoError(t, err, output)
+		// Deploy software factory
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm")
+		require.NoError(t, err, output)
+	})
 }
 
 func getEnvVar(varName string) (string, error) {

@@ -30,7 +30,11 @@ resource "aws_instance" "public" {
 #!/bin/bash
 
 # install deps
-apt-get install -y jq git make wget
+apt-get update
+apt-get install -y jq
+apt-get install -y git
+apt-get install -y make
+apt-get install -y wget
 
 # elasticsearch needs this
 sysctl -w vm.max_map_count=262144
