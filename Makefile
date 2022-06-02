@@ -132,5 +132,5 @@ build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux pac
 
 build/zarf-package-software-factory-amd64.tar.zst: FORCE | build/$(ZARF_BIN) ## Build the Software Factory package
 	@echo "Creating the deploy package"
-	@build/$(ZARF_BIN) package create --confirm
+	@build/$(ZARF_BIN) package create --confirm -l debug
 	@mv zarf-package-software-factory-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst
