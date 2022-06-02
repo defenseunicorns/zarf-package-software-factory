@@ -1,11 +1,13 @@
 package types
 
 import (
+	"fmt"
+	"testing"
+
 	"github.com/gruntwork-io/terratest/modules/aws"
 	"github.com/gruntwork-io/terratest/modules/ssh"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	teststructure "github.com/gruntwork-io/terratest/modules/test-structure"
-	"testing"
 )
 
 type TestPlatform struct {
@@ -32,7 +34,7 @@ func (platform *TestPlatform) Teardown() {
 	aws.DeleteEC2KeyPair(platform.T, keyPair)
 }
 
-func (platform *TestPlatform) RunSSHCommand(command string) (string, error) {
+func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error) {
 	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
 	keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
 	host := ssh.Host{
@@ -40,7 +42,18 @@ func (platform *TestPlatform) RunSSHCommand(command string) (string, error) {
 		SshKeyPair:  keyPair.KeyPair,
 		SshUserName: "ubuntu",
 	}
-	return ssh.CheckSshCommandE(platform.T, host, command)
+	return ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`sudo bash -c "%v"`, command))
+}
+
+func (platform *TestPlatform) RunSSHCommandAsSudoWithTimeout(command string, timeoutSeconds int) (string, error) {
+	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
+	keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
+	host := ssh.Host{
+		Hostname:    terraform.Output(platform.T, terraformOptions, "public_instance_ip"),
+		SshKeyPair:  keyPair.KeyPair,
+		SshUserName: "ubuntu",
+	}
+	return ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`timeout %v sudo bash -c "%v"`, timeoutSeconds, command))
 }
 
 //func (e2e *E2ETest) runSSHCommand(format string, a ...interface{}) (string, error) {
