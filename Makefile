@@ -110,17 +110,17 @@ build:
 
 build/zarf: | build ## Download the Linux flavor of Zarf to the build dir
 	@echo "Downloading zarf"
-	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf -O build/zarf
+	@wget -q https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf -O build/zarf
 	@chmod +x build/zarf
 
 build/zarf-mac-intel: | build ## Download the Mac (Intel) flavor of Zarf to the build dir
 	@echo "Downloading zarf-mac-intel"
-	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-mac-intel -O build/zarf-mac-intel
+	@wget -q https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-mac-intel -O build/zarf-mac-intel
 	@chmod +x build/zarf-mac-intel
 
 build/zarf-init-amd64.tar.zst: | build ## Download the init package
 	@echo "Downloading zarf-init-amd64.tar.zst"
-	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -O build/zarf-init-amd64.tar.zst
+	@wget -q https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -O build/zarf-init-amd64.tar.zst
 
 build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux package
 	@rm -rf ./tmp

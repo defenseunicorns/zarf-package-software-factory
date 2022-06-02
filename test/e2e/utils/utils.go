@@ -128,6 +128,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err, output)
 		// Install the rest of the packages
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make all")
+		logger.Default.Logf(t, output)
 		require.NoError(t, err, output)
 		// Try to be idempotent
 		_, _ = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf destroy --confirm")
