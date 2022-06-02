@@ -7,6 +7,17 @@ metadata:
   architecture: amd64
 
 components:
+  - name: bigbang_dev-dns-modification
+    required: true
+    files:
+      - source: ./files/modify-coredns.sh
+        target: ./modify-coredns.sh
+        executable: true
+    scripts:
+      retry: false
+      after:
+        - ./modify-coredns.sh
+
   - name: setup
     required: true
     secretName: "private-registry"
