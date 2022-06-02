@@ -142,7 +142,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm")
 		require.NoError(t, err, output)
 		// Generate a bogus gpg key so it can be applied to flux since flux complains if one isn't present, even if one isn't needed. Only do it if it doesn't already exist.
-		output, err = platform.RunSSHCommandAsSudo("[[ gpg --list-secret-keys user@example.com ]] || gpg --batch --passphrase '' --quick-gen-key user@example.com default default")
+		output, err = platform.RunSSHCommandAsSudo("gpg --list-secret-keys user@example.com || gpg --batch --passphrase '' --quick-gen-key user@example.com default default")
 		require.NoError(t, err, output)
 		// Apply the bogus gpg key so Flux won't complain
 		output, err = platform.RunSSHCommandAsSudo("gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin")
