@@ -38,10 +38,12 @@ func InitTestPlatform(t *testing.T) *types.TestPlatform {
 // It is finished when the zarf command returns from deploying the software factory package. It is
 // the responsibility of the test being run to do the appropriate waiting for services to come up.
 func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
-	repoURL, err := getEnvVar("REPO_URL")
-	require.NoError(t, err)
-	gitBranch, err := getEnvVar("GIT_BRANCH")
-	require.NoError(t, err)
+	// repoURL, err := getEnvVar("REPO_URL")
+	// require.NoError(t, err)
+	// gitBranch, err := getEnvVar("GIT_BRANCH")
+	// require.NoError(t, err)
+	repoURL := "https://github.com/defenseunicorns/zarf-package-software-factory.git"
+	gitBranch := "feature/build-e2e-test"
 	awsRegion, err := getAwsRegion()
 	require.NoError(t, err)
 	registry1Username, err := getEnvVar("REGISTRY1_USERNAME")
