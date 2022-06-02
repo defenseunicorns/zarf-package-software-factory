@@ -54,6 +54,7 @@ istio:
         - jira.{{ .Values.domain }}
         - confluence.{{ .Values.domain }}
         - nexus.{{ .Values.domain }}
+        - registry.{{ .Values.domain }}
 
 istiooperator:
   enabled: true

@@ -19,6 +19,8 @@ jira:
       limits:
         cpu: "10"
         memory: "4Gi"
+    jvm:
+      maxHeap: "3g"
   additionalEnvironmentVariables:
     - name: ATL_DB_TYPE
       value: "postgres72"
