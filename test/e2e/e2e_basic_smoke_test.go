@@ -29,13 +29,13 @@ func TestBasicSmoke(t *testing.T) {
 		output, err := platform.RunSSHCommandAsSudo("kubectl get nodes")
 		require.NoError(t, err, output)
 		// Wait up to 16 minutes for the "bigbang" kustomization to report "Ready==True". Our testing shows if everything goes right this should take 11-13 minutes.
-		output, err = platform.RunSSHCommandAsSudoWithTimeout(`while [[ $(kubectl get kustomization bigbang -n flux-system -o json | jq -r '.status.conditions[] | select(.type == "Ready") | .status') != "True" ]]; do sleep 3; done`, 960)
+		output, err = platform.RunSSHCommandAsSudo("kubectl wait --timeout=960s -n flux-system --for=condition=Ready kustomization/bigbang")
 		require.NoError(t, err, output)
 		// Wait up to 2 additional minutes for the "softwarefactoryaddons-deps" kustomization to report "Ready==True".
-		output, err = platform.RunSSHCommandAsSudoWithTimeout(`while [[ $(kubectl get kustomization softwarefactoryaddons-deps -n flux-system -o json | jq -r '.status.conditions[] | select(.type == "Ready") | .status') != "True" ]]; do sleep 3; done`, 120)
+		output, err = platform.RunSSHCommandAsSudo("kubectl wait --timeout=120s -n flux-system --for=condition=Ready kustomization/softwarefactoryaddons-deps")
 		require.NoError(t, err, output)
 		// Wait up to 2 additional minutes for the "softwarefactoryaddons" kustomization to report "Ready==True".
-		output, err = platform.RunSSHCommandAsSudoWithTimeout(`while [[ $(kubectl get kustomization softwarefactoryaddons -n flux-system -o json | jq -r '.status.conditions[] | select(.type == "Ready") | .status') != "True" ]]; do sleep 3; done`, 120)
+		output, err = platform.RunSSHCommandAsSudo("kubectl wait --timeout=120s -n flux-system --for=condition=Ready kustomization/softwarefactoryaddons")
 		require.NoError(t, err, output)
 	})
 }

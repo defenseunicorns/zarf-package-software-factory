@@ -46,19 +46,3 @@ func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error
 	}
 	return ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`sudo bash -c "%v"`, command))
 }
-
-func (platform *TestPlatform) RunSSHCommandAsSudoWithTimeout(command string, timeoutSeconds int) (string, error) {
-	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
-	keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
-	host := ssh.Host{
-		Hostname:    terraform.Output(platform.T, terraformOptions, "public_instance_ip"),
-		SshKeyPair:  keyPair.KeyPair,
-		SshUserName: "ubuntu",
-	}
-	return ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`timeout %v sudo bash -c "%v"`, timeoutSeconds, command))
-}
-
-//func (e2e *E2ETest) runSSHCommand(format string, a ...interface{}) (string, error) {
-//	command := fmt.Sprintf(format, a...)
-//	return ssh.CheckSshCommandE(e2e.testing, e2e.publicHost, command)
-//}
