@@ -26,18 +26,6 @@ resource "aws_instance" "public" {
   # This EC2 Instance has a public IP and will be accessible directly from the public Internet
   associate_public_ip_address = true
 
-  user_data = <<EOF
-#!/bin/bash
-# redirect logs so they can be found in instance -> actions -> instance settings -> get system log
-exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-
-# install deps
-apt-get update && apt-get install -y jq git make wget
-
-# elasticsearch needs this
-sysctl -w vm.max_map_count=262144
-EOF
-
   tags = {
     Name = "${local.fullname}-public"
   }
