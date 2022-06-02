@@ -40,22 +40,22 @@ help: ## Show a list of all targets
 
 .PHONY: docker-save-build-harness
 docker-save-build-harness: ## Pulls the build harness docker image and saves it to a tarball
-	mkdir -p .cache/docker
-	docker pull ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
-	docker save -o .cache/docker/build-harness.tar ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
+	@mkdir -p .cache/docker
+	@docker pull ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
+	@docker save -o .cache/docker/build-harness.tar ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
 
 .PHONY: docker-load-build-harness
 docker-load-build-harness: ## Loads the saved build harness docker image
-	docker load -i .cache/docker/build-harness.tar
+	@docker load -i .cache/docker/build-harness.tar
 
 .PHONY: run-pre-commit-hooks
 run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if any hooks fail. Uses Docker for maximum compatibility
-	mkdir -p .cache/pre-commit
-	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) pre-commit run -a
+	@mkdir -p .cache/pre-commit
+	@docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) pre-commit run -a
 
 .PHONY: fix-cache-permissions
 fix-cache-permissions: ## Fixes the permissions on the pre-commit cache
-	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+rx .cache
+	@docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+rx .cache
 
 # TODO: Figure out how to make it log to the console in real time so the user isn't sitting there wondering if it is working or not.
 .PHONY: test
@@ -67,9 +67,9 @@ test: ## Run all automated tests. Requires access to an AWS account. Costs money
 
 .PHONY: test-ssh
 test-ssh: ## Run this if you set SKIP_TEARDOWN=1 and want to SSH into the still-running test server. Don't forget to unset SKIP_TEARDOWN when you're done
-	cd test/tf/public-ec2-instance && terraform init
-	cd test/tf/public-ec2-instance/.test-data && cat Ec2KeyPair.json | jq -r .PrivateKey > privatekey.pem && chmod 600 privatekey.pem
-	cd test/tf/public-ec2-instance && ssh -i .test-data/privatekey.pem ubuntu@$$(terraform output public_instance_ip | tr -d '"')
+	@cd test/tf/public-ec2-instance && terraform init
+	@cd test/tf/public-ec2-instance/.test-data && cat Ec2KeyPair.json | jq -r .PrivateKey > privatekey.pem && chmod 600 privatekey.pem
+	@cd test/tf/public-ec2-instance && ssh -i .test-data/privatekey.pem ubuntu@$$(terraform output public_instance_ip | tr -d '"')
 
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
@@ -78,7 +78,7 @@ vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic us
 
 .PHONY: vm-ssh
 vm-ssh: ## SSH into the Vagrant VM
-	vagrant ssh
+	@vagrant ssh
 
 .PHONY: vm-destroy
 vm-destroy: ## Destroy the Vagrant VM
