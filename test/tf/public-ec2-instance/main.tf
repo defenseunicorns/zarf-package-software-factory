@@ -28,17 +28,14 @@ resource "aws_instance" "public" {
 
   user_data = <<EOF
 #!/bin/bash
+# redirect logs so they can be found in instance -> actions -> instance settings -> get system log
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
 # install deps
-apt-get update
-apt-get install -y jq
-apt-get install -y git
-apt-get install -y make
-apt-get install -y wget
+apt-get update && apt-get install -y jq git make wget
 
 # elasticsearch needs this
 sysctl -w vm.max_map_count=262144
-
 EOF
 
   tags = {

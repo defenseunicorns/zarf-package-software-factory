@@ -38,7 +38,7 @@ func InitTestPlatform(t *testing.T) *types.TestPlatform {
 // It is finished when the zarf command returns from deploying the software factory package. It is
 // the responsibility of the test being run to do the appropriate waiting for services to come up.
 func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
-	repoUrl, err := getEnvVar("REPO_URL")
+	repoURL, err := getEnvVar("REPO_URL")
 	require.NoError(t, err)
 	gitBranch, err := getEnvVar("GIT_BRANCH")
 	require.NoError(t, err)
@@ -52,71 +52,74 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 	stage := "terratest"
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
 	instanceType := "m6i.8xlarge"
-
-	// Since Terraform is going to be run with that temp folder as the CWD, we also need our .tool-versions file to be
-	// in that directory so that the right version of Terraform is being run there. I can neither confirm nor deny that
-	// this took me 2 days to figure out...
-	// Since we can't be sure what the working directory is, we are going to walk up one directory at a time until we
-	// find a .tool-versions file and then copy it into the temp folder
-	found := false
-	filePath := ".tool-versions"
-	for !found {
-		//nolint:gocritic
-		if _, err := os.Stat(filePath); err == nil {
-			// The file exists
-			found = true
-		} else if errors.Is(err, os.ErrNotExist) {
-			// The file does *not* exist. Add a "../" and try again
-			filePath = fmt.Sprintf("../%v", filePath)
-		} else {
-			// Schrodinger: file may or may not exist. See err for details.
-			// Therefore, do *NOT* use !os.IsNotExist(err) to test for file existence
-			require.NoError(t, err)
-		}
-	}
-	tempFolder := platform.TestFolder
-	err = copyFile(filePath, fmt.Sprintf("%v/.tool-versions", tempFolder))
-	require.NoError(t, err)
-
-	keyPairName := fmt.Sprintf("%s-%s-%s", namespace, stage, name)
-	keyPair := aws.CreateAndImportEC2KeyPair(t, awsRegion, keyPairName)
-	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-		TerraformDir: tempFolder,
-		Vars: map[string]interface{}{
-			"aws_region":    awsRegion,
-			"namespace":     namespace,
-			"stage":         stage,
-			"name":          name,
-			"key_pair_name": keyPairName,
-			"instance_type": instanceType,
-		},
-	})
-
 	teststructure.RunTestStage(t, "SETUP", func() {
+		// Since Terraform is going to be run with that temp folder as the CWD, we also need our .tool-versions file to be
+		// in that directory so that the right version of Terraform is being run there. I can neither confirm nor deny that
+		// this took me 2 days to figure out...
+		// Since we can't be sure what the working directory is, we are going to walk up one directory at a time until we
+		// find a .tool-versions file and then copy it into the temp folder
+		found := false
+		filePath := ".tool-versions"
+		for !found {
+			//nolint:gocritic
+			if _, err := os.Stat(filePath); err == nil {
+				// The file exists
+				found = true
+			} else if errors.Is(err, os.ErrNotExist) {
+				// The file does *not* exist. Add a "../" and try again
+				filePath = fmt.Sprintf("../%v", filePath)
+			} else {
+				// Schrodinger: file may or may not exist. See err for details.
+				// Therefore, do *NOT* use !os.IsNotExist(err) to test for file existence
+				require.NoError(t, err)
+			}
+		}
+		tempFolder := platform.TestFolder
+		err = copyFile(filePath, fmt.Sprintf("%v/.tool-versions", tempFolder))
+		require.NoError(t, err)
+
+		keyPairName := fmt.Sprintf("%s-%s-%s", namespace, stage, name)
+		keyPair := aws.CreateAndImportEC2KeyPair(t, awsRegion, keyPairName)
+		terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
+			TerraformDir: tempFolder,
+			Vars: map[string]interface{}{
+				"aws_region":    awsRegion,
+				"namespace":     namespace,
+				"stage":         stage,
+				"name":          name,
+				"key_pair_name": keyPairName,
+				"instance_type": instanceType,
+			},
+		})
 		teststructure.SaveTerraformOptions(t, tempFolder, terraformOptions)
 		SaveEc2KeyPair(t, tempFolder, keyPair)
 		terraform.InitAndApply(t, terraformOptions)
-	})
 
-	// It can take a minute or so for the instance to boot up, so retry a few times
-	maxRetries := 15
-	timeBetweenRetries, err := time.ParseDuration("5s")
-	require.NoError(t, err)
-	_, err = retry.DoWithRetryE(t, "Wait for the instance to be ready", maxRetries, timeBetweenRetries, func() (string, error) {
-		_, err := platform.RunSSHCommandAsSudo("whoami")
-		if err != nil {
-			return "", err
-		}
-		return "", nil
+		// It can take a minute or so for the instance to boot up, so retry a few times
+		maxRetries := 15
+		timeBetweenRetries, err := time.ParseDuration("5s")
+		require.NoError(t, err)
+		_, err = retry.DoWithRetryE(t, "Wait for the instance to be ready", maxRetries, timeBetweenRetries, func() (string, error) {
+			_, err := platform.RunSSHCommandAsSudo("whoami")
+			if err != nil {
+				return "", err
+			}
+			return "", nil
+		})
+		require.NoError(t, err)
+
+		// Install dependencies. Doing it here since the instance user-data is being flaky, still saying things like make are not installed
+		output, err := platform.RunSSHCommandAsSudo("apt-get update && apt-get install -y jq git make wget && sysctl -w vm.max_map_count=262144")
+		require.NoError(t, err, output)
+
+		// Clone the repo idempotently
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf("rm -rf ~/app && git clone --depth 1 %v --branch %v --single-branch ~/app", repoURL, gitBranch))
+		require.NoError(t, err, output)
 	})
-	require.NoError(t, err)
 
 	teststructure.RunTestStage(platform.T, "TEST", func() {
-		// Clone the repo
-		output, err := platform.RunSSHCommandAsSudo(fmt.Sprintf("git clone --depth 1 %v --branch %v --single-branch ~/app", repoUrl, gitBranch))
-		require.NoError(t, err, output)
 		// Install Zarf
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf")
+		output, err := platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf")
 		require.NoError(t, err, output)
 		// Log into registry1.dso.mil
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf("~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v", registry1Username, registry1Password))
@@ -124,14 +127,16 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		// Install the rest of the packages
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make all")
 		require.NoError(t, err, output)
+		// Try to be idempotent
+		_, _ = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf destroy --confirm")
 		// Zarf init
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-init-amd64.tar.zst --components k3s,gitops-service --confirm")
 		require.NoError(t, err, output)
 		// Deploy Flux
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm")
 		require.NoError(t, err, output)
-		// Generate a bogus gpg key so it can be applied to flux since flux complains if one isn't present, even if one isn't needed
-		output, err = platform.RunSSHCommandAsSudo("gpg --batch --passphrase '' --quick-gen-key user@example.com default default")
+		// Generate a bogus gpg key so it can be applied to flux since flux complains if one isn't present, even if one isn't needed. Only do it if it doesn't already exist.
+		output, err = platform.RunSSHCommandAsSudo("[[ gpg --list-secret-keys user@example.com ]] || gpg --batch --passphrase '' --quick-gen-key user@example.com default default")
 		require.NoError(t, err, output)
 		// Apply the bogus gpg key so Flux won't complain
 		output, err = platform.RunSSHCommandAsSudo("gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin")
