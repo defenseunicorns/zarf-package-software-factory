@@ -3,9 +3,7 @@ package utils
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -25,12 +23,6 @@ import (
 	terratesting "github.com/gruntwork-io/terratest/modules/testing"
 )
 
-func InitTestPlatform(t *testing.T) *types.TestPlatform {
-	tempFolder := teststructure.CopyTerraformFolderToTemp(t, "..", "tf/public-ec2-instance")
-	platform := types.NewTestPlatform(t, tempFolder)
-	return platform
-}
-
 // SetupTestPlatform uses Terratest to create an EC2 instance. It then (on the new instance) downloads
 // the repo specified by env var REPO_URL at the ref specified by env var GIT_BRANCH, installs Zarf,
 // logs into registry1.dso.mil using env vars REGISTRY1_USERNAME and REGISTRY1_PASSWORD, builds all
@@ -38,6 +30,7 @@ func InitTestPlatform(t *testing.T) *types.TestPlatform {
 // It is finished when the zarf command returns from deploying the software factory package. It is
 // the responsibility of the test being run to do the appropriate waiting for services to come up.
 func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
+	t.Helper()
 	repoURL, err := getEnvVar("REPO_URL")
 	require.NoError(t, err)
 	gitBranch, err := getEnvVar("GIT_BRANCH")
@@ -53,35 +46,10 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
 	instanceType := "m6i.8xlarge"
 	teststructure.RunTestStage(t, "SETUP", func() {
-		// Since Terraform is going to be run with that temp folder as the CWD, we also need our .tool-versions file to be
-		// in that directory so that the right version of Terraform is being run there. I can neither confirm nor deny that
-		// this took me 2 days to figure out...
-		// Since we can't be sure what the working directory is, we are going to walk up one directory at a time until we
-		// find a .tool-versions file and then copy it into the temp folder
-		found := false
-		filePath := ".tool-versions"
-		for !found {
-			//nolint:gocritic
-			if _, err := os.Stat(filePath); err == nil {
-				// The file exists
-				found = true
-			} else if errors.Is(err, os.ErrNotExist) {
-				// The file does *not* exist. Add a "../" and try again
-				filePath = fmt.Sprintf("../%v", filePath)
-			} else {
-				// Schrodinger: file may or may not exist. See err for details.
-				// Therefore, do *NOT* use !os.IsNotExist(err) to test for file existence
-				require.NoError(t, err)
-			}
-		}
-		tempFolder := platform.TestFolder
-		err = copyFile(filePath, fmt.Sprintf("%v/.tool-versions", tempFolder))
-		require.NoError(t, err)
-
 		keyPairName := fmt.Sprintf("%s-%s-%s", namespace, stage, name)
 		keyPair := aws.CreateAndImportEC2KeyPair(t, awsRegion, keyPairName)
 		terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-			TerraformDir: tempFolder,
+			TerraformDir: platform.TestFolder,
 			Vars: map[string]interface{}{
 				"aws_region":    awsRegion,
 				"namespace":     namespace,
@@ -91,8 +59,8 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 				"instance_type": instanceType,
 			},
 		})
-		teststructure.SaveTerraformOptions(t, tempFolder, terraformOptions)
-		SaveEc2KeyPair(t, tempFolder, keyPair)
+		teststructure.SaveTerraformOptions(t, platform.TestFolder, terraformOptions)
+		SaveEc2KeyPair(t, platform.TestFolder, keyPair)
 		terraform.InitAndApply(t, terraformOptions)
 
 		// It can take a minute or so for the instance to boot up, so retry a few times
@@ -115,11 +83,9 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		// Clone the repo idempotently
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf("rm -rf ~/app && git clone --depth 1 %v --branch %v --single-branch ~/app", repoURL, gitBranch))
 		require.NoError(t, err, output)
-	})
 
-	teststructure.RunTestStage(platform.T, "TEST", func() {
 		// Install Zarf
-		output, err := platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf")
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf")
 		require.NoError(t, err, output)
 		// Log into registry1.dso.mil
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf("~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v", registry1Username, registry1Password))
@@ -151,6 +117,10 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 	})
 }
 
+func prepareRunningInstance() {
+
+}
+
 func getEnvVar(varName string) (string, error) {
 	val, present := os.LookupEnv(varName)
 	if !present {
@@ -172,68 +142,6 @@ func getAwsRegion() (string, error) {
 	} else {
 		return val, nil
 	}
-}
-
-// CopyFile copies a file from src to dst. If src and dst files exist, and are
-// the same, then return success. Otherwise, attempt to create a hard link
-// between the two files. If that fail, copy the file contents from src to dst.
-func copyFile(src string, dst string) error {
-	sfi, err := os.Stat(src)
-	if err != nil {
-		return err
-	}
-	if !sfi.Mode().IsRegular() {
-		// cannot copy non-regular files (e.g., directories,
-		// symlinks, devices, etc.)
-		return fmt.Errorf("CopyFile: non-regular source file %s (%q)", sfi.Name(), sfi.Mode().String())
-	}
-	dfi, err := os.Stat(dst)
-	if err != nil {
-		if !os.IsNotExist(err) {
-			return err
-		}
-	} else {
-		if !(dfi.Mode().IsRegular()) {
-			return fmt.Errorf("CopyFile: non-regular destination file %s (%q)", dfi.Name(), dfi.Mode().String())
-		}
-		if os.SameFile(sfi, dfi) {
-			return nil
-		}
-	}
-	if err = os.Link(src, dst); err == nil {
-		return err
-	}
-	err = copyFileContents(src, dst)
-	return nil
-}
-
-// copyFileContents copies the contents of the file named src to the file named
-// by dst. The file will be created if it does not already exist. If the
-// destination file exists, all it's contents will be replaced by the contents
-// of the source file.
-func copyFileContents(src string, dst string) error {
-	in, err := os.Open(src)
-	if err != nil {
-		return err
-	}
-	defer func(in *os.File) {
-		_ = in.Close()
-	}(in)
-	out, err := os.Create(dst)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		cerr := out.Close()
-		if err == nil {
-			err = cerr
-		}
-	}()
-	if _, err = io.Copy(out, in); err != nil {
-		return err
-	}
-	err = out.Sync()
-	return nil
 }
 
 // SaveEc2KeyPair serializes and saves an Ec2KeyPair into the given folder. This allows you to create an Ec2KeyPair during setup

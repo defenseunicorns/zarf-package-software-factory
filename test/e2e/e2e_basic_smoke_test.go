@@ -1,9 +1,10 @@
-package test
+package test_test
 
 import (
 	"context"
 	"testing"
 
+	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/types"
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/utils"
 	teststructure "github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/stretchr/testify/require"
@@ -16,7 +17,7 @@ func TestBasicSmoke(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	go utils.HoldYourDamnHorses(ctx, t)
 	defer cancel()
-	platform := utils.InitTestPlatform(t)
+	platform := types.NewTestPlatform(t)
 	defer platform.Teardown()
 	utils.SetupTestPlatform(t, platform)
 	// The repo has now been downloaded to /root/app and the software factory package deployment has been initiated.

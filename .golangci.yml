@@ -5,13 +5,15 @@ run:
 linters:
   enable-all: true
   disable:
+    - exhaustivestruct
+    - exhaustruct
     - goerr113
-    - gofumpt
+    #   - gofumpt
     - lll
     - stylecheck
-    - testpackage
-    - varnamelen
-    - wrapcheck
+    #   - testpackage
+    #   - varnamelen
+    #   - wrapcheck
     - wsl
 issues:
   exclude-use-default: false
