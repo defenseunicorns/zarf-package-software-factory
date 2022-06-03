@@ -31,14 +31,14 @@ func TestAllServicesRunning(t *testing.T) {
 		// Just make sure we can hit the cluster
 		output, err := platform.RunSSHCommandAsSudo("kubectl get nodes")
 		require.NoError(t, err, output)
-		// Wait up to 16 minutes for the "bigbang" kustomization to report "Ready==True". Our testing shows if everything goes right this should take 11-13 minutes.
-		output, err = platform.RunSSHCommandAsSudo("kubectl wait --timeout=960s -n flux-system --for=condition=Ready kustomization/bigbang")
+		// Wait up to 18 minutes for the "bigbang" kustomization to report "Ready==True". Our testing shows if everything goes right this should take 11-13 minutes.
+		output, err = platform.RunSSHCommandAsSudo("kubectl wait --timeout=1080s -n flux-system --for=condition=Ready kustomization/bigbang")
 		require.NoError(t, err, output)
-		// Wait up to 2 additional minutes for the "softwarefactoryaddons-deps" kustomization to report "Ready==True".
-		output, err = platform.RunSSHCommandAsSudo("kubectl wait --timeout=120s -n flux-system --for=condition=Ready kustomization/softwarefactoryaddons-deps")
+		// Wait up to 4 additional minutes for the "softwarefactoryaddons-deps" kustomization to report "Ready==True".
+		output, err = platform.RunSSHCommandAsSudo("kubectl wait --timeout=240s -n flux-system --for=condition=Ready kustomization/softwarefactoryaddons-deps")
 		require.NoError(t, err, output)
-		// Wait up to 2 additional minutes for the "softwarefactoryaddons" kustomization to report "Ready==True".
-		output, err = platform.RunSSHCommandAsSudo("kubectl wait --timeout=120s -n flux-system --for=condition=Ready kustomization/softwarefactoryaddons")
+		// Wait up to 4 additional minutes for the "softwarefactoryaddons" kustomization to report "Ready==True".
+		output, err = platform.RunSSHCommandAsSudo("kubectl wait --timeout=240s -n flux-system --for=condition=Ready kustomization/softwarefactoryaddons")
 		require.NoError(t, err, output)
 	})
 }
