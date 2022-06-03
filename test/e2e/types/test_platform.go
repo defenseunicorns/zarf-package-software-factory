@@ -101,12 +101,13 @@ func copyFile(src string, dest string) error {
 		if !os.IsNotExist(err) {
 			return fmt.Errorf("unknown error: %w", err)
 		}
-	}
-	if !(destFileInfo.Mode().IsRegular()) {
-		return fmt.Errorf("non-regular destination file %s (%q)", destFileInfo.Name(), destFileInfo.Mode().String())
-	}
-	if os.SameFile(sourceFileInfo, destFileInfo) {
-		return nil
+	} else {
+		if !(destFileInfo.Mode().IsRegular()) {
+			return fmt.Errorf("non-regular destination file %s (%q)", destFileInfo.Name(), destFileInfo.Mode().String())
+		}
+		if os.SameFile(sourceFileInfo, destFileInfo) {
+			return nil
+		}
 	}
 	err = os.Link(src, dest)
 	if err == nil {
