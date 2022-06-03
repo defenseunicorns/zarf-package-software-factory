@@ -63,7 +63,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err)
 
 		// Install dependencies. Doing it here since the instance user-data is being flaky, still saying things like make are not installed
-		output, err := platform.RunSSHCommandAsSudo("apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install -y jq git make wget && sysctl -w vm.max_map_count=262144")
+		output, err := platform.RunSSHCommandAsSudo("apt update && apt upgrade -y && apt dist-upgrade -y && apt install -y jq git make wget && sysctl -w vm.max_map_count=262144")
 		require.NoError(t, err, output)
 
 		// Clone the repo idempotently
@@ -155,6 +155,9 @@ func waitForInstanceReady(t *testing.T, platform *types.TestPlatform, timeBetwee
 	if err != nil {
 		return fmt.Errorf("error while waiting for instance to be ready: %w", err)
 	}
+
+	// Wait another 5 seconds because race conditions suck
+	time.Sleep(5 * time.Second) //nolint:gomnd
 
 	return nil
 }
