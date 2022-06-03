@@ -9,7 +9,7 @@ BIGBANG_VERSION := 1.28.0
 ZARF_VERSION := v0.17.0
 
 # The version of the build harness container to use
-BUILD_HARNESS_VERSION := 0.0.7
+BUILD_HARNESS_VERSION := 0.0.8
 
 # Figure out which Zarf binary we should use based on the operating system we are on
 ZARF_BIN := zarf
@@ -40,30 +40,36 @@ help: ## Show a list of all targets
 
 .PHONY: docker-save-build-harness
 docker-save-build-harness: ## Pulls the build harness docker image and saves it to a tarball
-	mkdir -p .cache/docker
-	docker pull ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
-	docker save -o .cache/docker/build-harness.tar ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
+	@mkdir -p .cache/docker
+	@docker pull ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
+	@docker save -o .cache/docker/build-harness.tar ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION)
 
 .PHONY: docker-load-build-harness
 docker-load-build-harness: ## Loads the saved build harness docker image
-	docker load -i .cache/docker/build-harness.tar
+	@docker load -i .cache/docker/build-harness.tar
 
 .PHONY: run-pre-commit-hooks
 run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if any hooks fail. Uses Docker for maximum compatibility
-	mkdir -p .cache/pre-commit
-	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) pre-commit run -a
+	@mkdir -p .cache/pre-commit
+	@docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) pre-commit run -a
 
 .PHONY: fix-cache-permissions
 fix-cache-permissions: ## Fixes the permissions on the pre-commit cache
-	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+rx .cache
+	@docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) chmod -R a+rx .cache
 
 # TODO: Figure out how to make it log to the console in real time so the user isn't sitting there wondering if it is working or not.
 .PHONY: test
 test: ## Run all automated tests. Requires access to an AWS account. Costs money.
 	@mkdir -p .cache/go
 	@mkdir -p .cache/go-build
-	@echo "Running automated tests. This will take several minutes. Right now it doesn't log anything to the console until the tests are done. If you interrupt the test run you will need to log into AWS console and manually delete any orphaned infrastructure."
-	@docker run --rm -v "${PWD}:/app" -v "${PWD}/.cache/go:/root/go" -v "${PWD}/.cache/go-build:/root/.cache/go-build" --workdir "/app/test/e2e" -e GOPATH=/root/go -e GOCACHE=/root/.cache/go-build -e REPO_URL -e GIT_BRANCH -e AWS_REGION -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) go test -v -timeout 1h -p 1 ./...
+	@echo "Running automated tests. This will take several minutes. At times it does not log anything to the console. If you interrupt the test run you will need to log into AWS console and manually delete any orphaned infrastructure."
+	@docker run --rm -v "${PWD}:/app" -v "${PWD}/.cache/go:/root/go" -v "${PWD}/.cache/go-build:/root/.cache/go-build" --workdir "/app/test/e2e" -e GOPATH=/root/go -e GOCACHE=/root/.cache/go-build -e REPO_URL -e GIT_BRANCH -e REGISTRY1_USERNAME -e REGISTRY1_PASSWORD -e AWS_REGION -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e SKIP_SETUP -e SKIP_TEST -e SKIP_TEARDOWN ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) go test -v -timeout 1h -p 1 ./...
+
+.PHONY: test-ssh
+test-ssh: ## Run this if you set SKIP_TEARDOWN=1 and want to SSH into the still-running test server. Don't forget to unset SKIP_TEARDOWN when you're done
+	@cd test/tf/public-ec2-instance && terraform init
+	@cd test/tf/public-ec2-instance/.test-data && cat Ec2KeyPair.json | jq -r .PrivateKey > privatekey.pem && chmod 600 privatekey.pem
+	@cd test/tf/public-ec2-instance && ssh -i .test-data/privatekey.pem ubuntu@$$(terraform output public_instance_ip | tr -d '"')
 
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
@@ -72,7 +78,7 @@ vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic us
 
 .PHONY: vm-ssh
 vm-ssh: ## SSH into the Vagrant VM
-	vagrant ssh
+	@vagrant ssh
 
 .PHONY: vm-destroy
 vm-destroy: ## Destroy the Vagrant VM
@@ -104,17 +110,17 @@ build:
 
 build/zarf: | build ## Download the Linux flavor of Zarf to the build dir
 	@echo "Downloading zarf"
-	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf -O build/zarf
+	@wget -q https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf -O build/zarf
 	@chmod +x build/zarf
 
 build/zarf-mac-intel: | build ## Download the Mac (Intel) flavor of Zarf to the build dir
 	@echo "Downloading zarf-mac-intel"
-	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-mac-intel -O build/zarf-mac-intel
+	@wget -q https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-mac-intel -O build/zarf-mac-intel
 	@chmod +x build/zarf-mac-intel
 
 build/zarf-init-amd64.tar.zst: | build ## Download the init package
 	@echo "Downloading zarf-init-amd64.tar.zst"
-	@wget https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -O build/zarf-init-amd64.tar.zst
+	@wget -q https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -O build/zarf-init-amd64.tar.zst
 
 build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux package
 	@rm -rf ./tmp

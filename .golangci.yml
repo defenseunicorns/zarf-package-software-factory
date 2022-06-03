@@ -5,13 +5,18 @@ run:
 linters:
   enable-all: true
   disable:
+    - exhaustivestruct
+    - exhaustruct
     - goerr113
-    - gofumpt
+    #   - gofumpt
     - lll
     - stylecheck
-    - testpackage
+    #   - testpackage
     - varnamelen
-    - wrapcheck
+    #   - wrapcheck
     - wsl
+linters-settings:
+  funlen:
+    lines: 100
 issues:
   exclude-use-default: false

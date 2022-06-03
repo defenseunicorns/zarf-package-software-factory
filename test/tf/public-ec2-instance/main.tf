@@ -22,20 +22,12 @@ resource "aws_instance" "public" {
   vpc_security_group_ids = [aws_security_group.public.id]
   key_name               = var.key_pair_name
 
+  root_block_device {
+    volume_size = 200
+  }
 
   # This EC2 Instance has a public IP and will be accessible directly from the public Internet
   associate_public_ip_address = true
-
-  user_data = <<EOF
-#!/bin/bash
-
-# install deps
-apt-get install -y jq git make wget
-
-# elasticsearch needs this
-sysctl -w vm.max_map_count=262144
-
-EOF
 
   tags = {
     Name = "${local.fullname}-public"

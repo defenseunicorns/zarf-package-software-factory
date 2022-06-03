@@ -48,6 +48,12 @@ ENV GOLANG_VERSION=${GOLANG_VERSION}
 RUN asdf plugin add golang \
   && asdf install golang "${GOLANG_VERSION}"
 
+# Install golangci-lint. Get versions using 'asdf list all golangci-lint'
+ARG GOLANGCILINT_VERSION="1.46.2"
+ENV GOLANGCILINT_VERSION=${GOLANGCILINT_VERSION}
+RUN asdf plugin add golangci-lint \
+  && asdf install golangci-lint "${GOLANGCILINT_VERSION}"
+
 # Install python. Get versions using 'asdf list all python'
 ARG PYTHON_VERSION="3.10.4"
 ENV PYTHON_VERSION=${PYTHON_VERSION}
