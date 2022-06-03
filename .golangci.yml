@@ -12,8 +12,11 @@ linters:
     - lll
     - stylecheck
     #   - testpackage
-    #   - varnamelen
+    - varnamelen
     #   - wrapcheck
     - wsl
+linters-settings:
+  funlen:
+    lines: 100
 issues:
   exclude-use-default: false

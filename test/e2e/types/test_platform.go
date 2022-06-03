@@ -56,16 +56,6 @@ func NewTestPlatform(t *testing.T) *TestPlatform {
 	return testPlatform
 }
 
-// Teardown brings down the Terraform infrastructure that was created.
-func (platform *TestPlatform) Teardown() {
-	teststructure.RunTestStage(platform.T, "TEARDOWN", func() {
-		keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
-		terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
-		terraform.Destroy(platform.T, terraformOptions)
-		aws.DeleteEC2KeyPair(platform.T, keyPair)
-	})
-}
-
 // RunSSHCommandAsSudo provides a simple way to run a shell command on the server that is created using Terraform.
 func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error) {
 	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
@@ -81,6 +71,16 @@ func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error
 	}
 
 	return output, nil
+}
+
+// Teardown brings down the Terraform infrastructure that was created.
+func (platform *TestPlatform) Teardown() {
+	teststructure.RunTestStage(platform.T, "TEARDOWN", func() {
+		keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
+		terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
+		terraform.Destroy(platform.T, terraformOptions)
+		aws.DeleteEC2KeyPair(platform.T, keyPair)
+	})
 }
 
 // copyFile copies a file from src to dst. If src and dst files exist, and are

@@ -3,6 +3,7 @@ package test_test
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/types"
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/utils"
@@ -15,7 +16,7 @@ func TestBasicSmoke(t *testing.T) {
 
 	t.Parallel()
 	ctx, cancel := context.WithCancel(context.Background())
-	go utils.HoldYourDamnHorses(ctx, t)
+	go utils.HoldYourDamnHorses(ctx, t, 10*time.Second)
 	defer cancel()
 	platform := types.NewTestPlatform(t)
 	defer platform.Teardown()

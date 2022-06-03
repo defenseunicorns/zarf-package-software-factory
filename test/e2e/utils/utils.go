@@ -2,25 +2,20 @@ package utils
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path/filepath"
 	"testing"
 	"time"
 
+	customteststructure "github.com/defenseunicorns/zarf-package-software-factory/test/e2e/terratest/teststructure"
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/types"
-	"github.com/gruntwork-io/terratest/modules/files"
+	"github.com/gruntwork-io/terratest/modules/aws"
 	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/retry"
+	"github.com/gruntwork-io/terratest/modules/terraform"
 	teststructure "github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/stretchr/testify/require"
-
-	"github.com/gruntwork-io/terratest/modules/aws"
-	"github.com/gruntwork-io/terratest/modules/terraform"
-	terratesting "github.com/gruntwork-io/terratest/modules/testing"
 )
 
 // SetupTestPlatform uses Terratest to create an EC2 instance. It then (on the new instance) downloads
@@ -60,20 +55,11 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 			},
 		})
 		teststructure.SaveTerraformOptions(t, platform.TestFolder, terraformOptions)
-		SaveEc2KeyPair(t, platform.TestFolder, keyPair)
+		customteststructure.SaveEc2KeyPair(t, platform.TestFolder, keyPair)
 		terraform.InitAndApply(t, terraformOptions)
 
 		// It can take a minute or so for the instance to boot up, so retry a few times
-		maxRetries := 15
-		timeBetweenRetries, err := time.ParseDuration("5s")
-		require.NoError(t, err)
-		_, err = retry.DoWithRetryE(t, "Wait for the instance to be ready", maxRetries, timeBetweenRetries, func() (string, error) {
-			_, err := platform.RunSSHCommandAsSudo("whoami")
-			if err != nil {
-				return "", err
-			}
-			return "", nil
-		})
+		err = waitForInstanceReady(t, platform, 5*time.Second, 15) //nolint:gomnd
 		require.NoError(t, err)
 
 		// Install dependencies. Doing it here since the instance user-data is being flaky, still saying things like make are not installed
@@ -117,8 +103,18 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 	})
 }
 
-func prepareRunningInstance() {
+// getAwsRegion returns the desired AWS region to use by first checking the env var AWS_REGION, then checking
+// AWS_DEFAULT_REGION if AWS_REGION isn't set. If neither is set it returns an error.
+func getAwsRegion() (string, error) {
+	val, present := os.LookupEnv("AWS_REGION")
+	if !present {
+		val, present = os.LookupEnv("AWS_DEFAULT_REGION")
+	}
+	if !present {
+		return "", fmt.Errorf("expected either AWS_REGION or AWS_DEFAULT_REGION env var to be set, but they were not")
+	}
 
+	return val, nil
 }
 
 func getEnvVar(varName string) (string, error) {
@@ -130,145 +126,9 @@ func getEnvVar(varName string) (string, error) {
 	return val, nil
 }
 
-// getAwsRegion returns the desired AWS region to use by first checking the env var AWS_REGION, then checking
-// AWS_DEFAULT_REGION if AWS_REGION isn't set. If neither is set it returns an error
-func getAwsRegion() (string, error) {
-	val, present := os.LookupEnv("AWS_REGION")
-	if !present {
-		val, present = os.LookupEnv("AWS_DEFAULT_REGION")
-	}
-	if !present {
-		return "", fmt.Errorf("expected either AWS_REGION or AWS_DEFAULT_REGION env var to be set, but they were not")
-	} else {
-		return val, nil
-	}
-}
-
-// SaveEc2KeyPair serializes and saves an Ec2KeyPair into the given folder. This allows you to create an Ec2KeyPair during setup
-// and to reuse that Ec2KeyPair later during validation and teardown.
-// This function is directly copied from https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13
-// due to this issue: https://github.com/gruntwork-io/terratest/issues/1135
-func SaveEc2KeyPair(t terratesting.TestingT, testFolder string, keyPair *aws.Ec2Keypair) {
-	saveTestData(t, formatEc2KeyPairPath(testFolder), keyPair)
-}
-
-// SaveTestData serializes and saves a value used at test time to the given path. This allows you to create some sort of test data
-// (e.g., TerraformOptions) during setup and to reuse this data later during validation and teardown.
-// This function is directly copied from https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13
-// due to this issue: https://github.com/gruntwork-io/terratest/issues/1135
-func saveTestData(t terratesting.TestingT, path string, value interface{}) {
-	logger.Logf(t, "Storing test data in %s so it can be reused later", path)
-
-	if IsTestDataPresent(t, path) {
-		logger.Logf(t, "[WARNING] The named test data at path %s is non-empty. Save operation will overwrite existing value with \"%v\".\n.", path, value)
-	}
-
-	bytes, err := json.Marshal(value)
-	if err != nil {
-		t.Fatalf("Failed to convert value %s to JSON: %v", path, err)
-	}
-
-	// Don't log this data, it exposes the EC2 Key Pair's private key in the logs, which are public on GitHub Actions
-	// logger.Logf(t, "Marshalled JSON: %s", string(bytes))
-
-	parentDir := filepath.Dir(path)
-	if err := os.MkdirAll(parentDir, 0777); err != nil {
-		t.Fatalf("Failed to create folder %s: %v", parentDir, err)
-	}
-
-	if err := ioutil.WriteFile(path, bytes, 0644); err != nil {
-		t.Fatalf("Failed to save value %s: %v", path, err)
-	}
-}
-
-// formatEc2KeyPairPath formats a path to save an Ec2KeyPair in the given folder.
-// This function is directly copied from https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13
-// due to this issue: https://github.com/gruntwork-io/terratest/issues/1135
-func formatEc2KeyPairPath(testFolder string) string {
-	return formatTestDataPath(testFolder, "Ec2KeyPair.json")
-}
-
-// FormatTestDataPath formats a path to save test data.
-// This function is directly copied from https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13
-// due to this issue: https://github.com/gruntwork-io/terratest/issues/1135
-func formatTestDataPath(testFolder string, filename string) string {
-	return filepath.Join(testFolder, ".test-data", filename)
-}
-
-// IsTestDataPresent returns true if a file exists at $path and the test data there is non-empty.
-// This function is directly copied from https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13
-// due to this issue: https://github.com/gruntwork-io/terratest/issues/1135
-func IsTestDataPresent(t terratesting.TestingT, path string) bool {
-	exists, err := files.FileExistsE(path)
-	if err != nil {
-		t.Fatalf("Failed to load test data from %s due to unexpected error: %v", path, err)
-	}
-	if !exists {
-		return false
-	}
-
-	bytes, err := ioutil.ReadFile(path)
-
-	if err != nil {
-		t.Fatalf("Failed to load test data from %s due to unexpected error: %v", path, err)
-	}
-
-	if isEmptyJSON(t, bytes) {
-		return false
-	}
-
-	return true
-}
-
-// isEmptyJSON returns true if the given bytes are empty, or in a valid JSON format that can reasonably be considered empty.
-// The types used are based on the type possibilities listed at https://golang.org/src/encoding/json/decode.go?s=4062:4110#L51
-// This function is directly copied from https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13
-// due to this issue: https://github.com/gruntwork-io/terratest/issues/1135
-func isEmptyJSON(t terratesting.TestingT, bytes []byte) bool {
-	var value interface{}
-
-	if len(bytes) == 0 {
-		return true
-	}
-
-	if err := json.Unmarshal(bytes, &value); err != nil {
-		t.Fatalf("Failed to parse JSON while testing whether it is empty: %v", err)
-	}
-
-	if value == nil {
-		return true
-	}
-
-	valueBool, ok := value.(bool)
-	if ok && !valueBool {
-		return true
-	}
-
-	valueFloat64, ok := value.(float64)
-	if ok && valueFloat64 == 0 {
-		return true
-	}
-
-	valueString, ok := value.(string)
-	if ok && valueString == "" {
-		return true
-	}
-
-	valueSlice, ok := value.([]interface{})
-	if ok && len(valueSlice) == 0 {
-		return true
-	}
-
-	valueMap, ok := value.(map[string]interface{})
-	if ok && len(valueMap) == 0 {
-		return true
-	}
-
-	return false
-}
-
 // HoldYourDamnHorses logs a message every 10 seconds, because humans suck at waiting and sometimes CI systems do too.
-func HoldYourDamnHorses(ctx context.Context, t *testing.T) {
+func HoldYourDamnHorses(ctx context.Context, t *testing.T, period time.Duration) {
+	t.Helper()
 	for {
 		select {
 		case <-ctx.Done():
@@ -276,6 +136,23 @@ func HoldYourDamnHorses(ctx context.Context, t *testing.T) {
 		default:
 			logger.Default.Logf(t, "The test is still running! Don't kill me!")
 		}
-		time.Sleep(10 * time.Second)
+		time.Sleep(period)
 	}
+}
+
+func waitForInstanceReady(t *testing.T, platform *types.TestPlatform, timeBetweenRetries time.Duration, maxRetries int) error {
+	t.Helper()
+	_, err := retry.DoWithRetryE(t, "Wait for the instance to be ready", maxRetries, timeBetweenRetries, func() (string, error) {
+		_, err := platform.RunSSHCommandAsSudo("whoami")
+		if err != nil {
+			return "", fmt.Errorf("unknown error: %w", err)
+		}
+
+		return "", nil
+	})
+	if err != nil {
+		return fmt.Errorf("error while waiting for instance to be ready: %w", err)
+	}
+
+	return nil
 }
