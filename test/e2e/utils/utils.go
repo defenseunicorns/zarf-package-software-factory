@@ -117,6 +117,7 @@ func getAwsRegion() (string, error) {
 	return val, nil
 }
 
+// getEnvVar gets an environment variable, returning an error if it isn't found.
 func getEnvVar(varName string) (string, error) {
 	val, present := os.LookupEnv(varName)
 	if !present {
@@ -126,7 +127,7 @@ func getEnvVar(varName string) (string, error) {
 	return val, nil
 }
 
-// HoldYourDamnHorses logs a message every 10 seconds, because humans suck at waiting and sometimes CI systems do too.
+// HoldYourDamnHorses logs a message periodically, because humans suck at waiting and sometimes CI systems do too.
 func HoldYourDamnHorses(ctx context.Context, t *testing.T, period time.Duration) {
 	t.Helper()
 	for {
@@ -140,6 +141,7 @@ func HoldYourDamnHorses(ctx context.Context, t *testing.T, period time.Duration)
 	}
 }
 
+// waitForInstanceReady tries/retries a simple SSH command until it works successfully, meaning the server is ready to accept connections.
 func waitForInstanceReady(t *testing.T, platform *types.TestPlatform, timeBetweenRetries time.Duration, maxRetries int) error {
 	t.Helper()
 	_, err := retry.DoWithRetryE(t, "Wait for the instance to be ready", maxRetries, timeBetweenRetries, func() (string, error) {

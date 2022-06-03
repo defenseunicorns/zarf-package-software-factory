@@ -11,7 +11,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestBasicSmoke(t *testing.T) {
+// TestAllServicesRunning waits until all services report that they are ready.
+func TestAllServicesRunning(t *testing.T) {
 	// BOILERPLATE, EXPECTED TO BE PRESENT AT THE BEGINNING OF EVERY TEST FUNCTION
 
 	t.Parallel()
