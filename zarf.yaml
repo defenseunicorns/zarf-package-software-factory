@@ -173,7 +173,7 @@ components:
       - https://github.com/jenkinsci/helm-charts.git@jenkins-3.9.4
     images:
       - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:8.18.1
-      - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.13.0
+      - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.17.4
       - registry1.dso.mil/ironbank/opensource/jenkins/jenkins:2.320
       - jenkins/inbound-agent:4.11-1
       - kiwigrid/k8s-sidecar:1.14.2
