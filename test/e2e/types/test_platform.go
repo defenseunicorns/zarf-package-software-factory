@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/aws"
+	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/ssh"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	teststructure "github.com/gruntwork-io/terratest/modules/test-structure"
@@ -67,7 +68,9 @@ func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error
 	}
 	output, err := ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`sudo bash -c "%v"`, command))
 	if err != nil {
-		return "nil", fmt.Errorf("failed to run ssh command: %w", err)
+		logger.Default.Logf(platform.T, output)
+
+		return "nil", fmt.Errorf("ssh command failed: %w", err)
 	}
 
 	return output, nil
