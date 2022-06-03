@@ -63,7 +63,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err)
 
 		// Install dependencies. Doing it here since the instance user-data is being flaky, still saying things like make are not installed
-		output, err := platform.RunSSHCommandAsSudo("apt-get update && apt-get install -y jq git make wget && sysctl -w vm.max_map_count=262144")
+		output, err := platform.RunSSHCommandAsSudo("apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install -y jq git make wget && sysctl -w vm.max_map_count=262144")
 		require.NoError(t, err, output)
 
 		// Clone the repo idempotently
