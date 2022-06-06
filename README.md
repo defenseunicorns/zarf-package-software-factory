@@ -48,10 +48,12 @@ All versions of this package will not be compatible with all versions of Zarf. H
 
 Note that having Zarf installed is not a prerequisite. This repo pulls in its own version of Zarf so that it can be versioned separately from whatever your system has installed. To change the version of Zarf used modify the ZARF_VERSION variable in the Makefile
 
-## Instructions
+## Documentation
 
 1. [Fork the repo, customize, and build the packages](doc/fork-and-build.md)
 1. [Deploy](doc/deploy.md)
+1. [Configure SOPS encryption](doc/sops.md)
 1. [Configure Single Sign-On](doc/sso.md)
 1. [Day-2 Ops/Maintenance/Upgrades](doc/day2.md)
+1. [Backup and Restore](doc/backup-and-restore/README.md)
 1. [Troubleshooting](doc/troubleshooting.md)
