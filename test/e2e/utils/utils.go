@@ -100,6 +100,9 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		// Deploy software factory
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm")
 		require.NoError(t, err, output)
+		// We have to patch the zarf-package-software-factory GitRepo to point at the right branch
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '[{"op": "replace", "path": "/spec/ref/branch", "value": "%v"}]'`, gitBranch))
+		require.NoError(t, err, output)
 	})
 }
 
