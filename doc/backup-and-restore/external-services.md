@@ -2,7 +2,7 @@
 
 :construction: **This document is under construction**. Stay tuned for more details.
 
-Use this document to perform backup and restore of a cluster that uses external services for object storage and databases, such as Amazon's S3 and RDS.
+Use this document to perform backup and restore of a cluster that uses external services for object storage and databases, such as Amazon's S3 and RDS. Since external services are being used it's not as easy as just backing up the whole cluster with Velero. Instead you'll need to configure and perform backup/restore on a service-by-service basis.
 
 ## GitLab
 
