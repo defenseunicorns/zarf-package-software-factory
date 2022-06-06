@@ -1,4 +1,4 @@
-# Contributing to Zarf
+# Contributing to zarf-package-software-factory
 
 First off, thanks so much for wanting to help out! :tada:
 
