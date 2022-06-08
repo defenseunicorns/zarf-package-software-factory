@@ -50,13 +50,12 @@ fi
 rm -f $TMP_FILE
 
 # get existing data values from the configmap
-_NODEHOSTS=$(kubectl get cm -n $NAMESPACE $CONFIGMAP -o jsonpath='{ .data.NodeHosts }')
 _COREFILE=$(kubectl get cm -n $NAMESPACE $CONFIGMAP -o jsonpath='{ .data.Corefile }')
 
 # modify the Corefile with the rewrite string
 _COREFILE=$(echo "$_COREFILE" | sed "$MATCHSTRING/a \ \ \ \ $REWRITE_CMD")
 
-# build a new configmap (start with the boilerplate)
+# build a configmap patch
 cat << EOF > $TMP_FILE
 data:
   Corefile: |
@@ -64,8 +63,10 @@ $(while IFS= read -r line; do printf '%4s%s\n' '' "$line"; done <<< "$_COREFILE"
 EOF
 
 # apply the configmap
-echo "Attempting to apply the following ConfigMap:"
-echo "$TMP_FILE"
+echo "Attempting to apply the following ConfigMap patch:"
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+cat $TMP_FILE
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 kubectl patch configmap -n $NAMESPACE $CONFIGMAP --patch-file $TMP_FILE
 
 # restart coredns
