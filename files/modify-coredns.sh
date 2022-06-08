@@ -58,16 +58,7 @@ _COREFILE=$(echo "$_COREFILE" | sed "$MATCHSTRING/a \ \ \ \ $REWRITE_CMD")
 
 # build a new configmap (start with the boilerplate)
 cat << EOF > $TMP_FILE
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  annotations:
-    kubectl.kubernetes.io/last-applied-configuration: ""
-  name: coredns
-  namespace: kube-system
 data:
-  NodeHosts: |
-$(while IFS= read -r line; do printf '%4s%s\n' '' "$line"; done <<< "$_NODEHOSTS")
   Corefile: |
 $(while IFS= read -r line; do printf '%4s%s\n' '' "$line"; done <<< "$_COREFILE")
 EOF
@@ -75,7 +66,7 @@ EOF
 # apply the configmap
 echo "Attempting to apply the following ConfigMap:"
 echo "$TMP_FILE"
-kubectl apply -f $TMP_FILE
+kubectl patch configmap -n $NAMESPACE $CONFIGMAP --patch-file $TMP_FILE
 
 # restart coredns
 kubectl rollout restart -n $NAMESPACE deployment/$DEPLOYMENT
