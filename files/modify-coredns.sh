@@ -63,12 +63,6 @@ kind: ConfigMap
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: ""
-    objectset.rio.cattle.io/id: ""
-    objectset.rio.cattle.io/owner-gvk: k3s.cattle.io/v1, Kind=Addon
-    objectset.rio.cattle.io/owner-name: coredns
-    objectset.rio.cattle.io/owner-namespace: kube-system
-  labels:
-    objectset.rio.cattle.io/hash: ""
   name: coredns
   namespace: kube-system
 data:
@@ -79,7 +73,12 @@ $(while IFS= read -r line; do printf '%4s%s\n' '' "$line"; done <<< "$_COREFILE"
 EOF
 
 # apply the configmap
+echo "Attempting to apply the following ConfigMap:"
+echo "$TMP_FILE"
 kubectl apply -f $TMP_FILE
 
 # restart coredns
 kubectl rollout restart -n $NAMESPACE deployment/$DEPLOYMENT
+
+# cleanup the tmp file
+rm -f $TMP_FILE
