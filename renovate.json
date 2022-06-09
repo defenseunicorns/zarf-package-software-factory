@@ -28,10 +28,11 @@
     {
       "fileMatch": [
         "^zarf.yaml$",
-        "^Makefile$"
+        "^Makefile$",
+        "^.pre-commit-config.yaml$"
       ],
       "matchStrings": [
-        "# yaml-language-server: \\$schema=https:\/\/raw.githubusercontent.com\/defenseunicorns\/zarf\/(?<currentValue>.+)\/zarf.schema.json",
+        "https:\/\/raw.githubusercontent.com\/defenseunicorns\/zarf\/(?<currentValue>.+)\/zarf.schema.json",
         "ZARF_VERSION := (?<currentValue>.+)"
       ],
       "depNameTemplate": "https://github.com/defenseunicorns/zarf.git",
