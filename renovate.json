@@ -8,7 +8,7 @@
   "prHourlyLimit": 0,
   "prBodyNotes": [
     "- :warning: E2E tests need to be run, they have a manual trigger. To start them add a comment to this PR that says `/test all`",
-    "{{#if (containsString depType 'zarf')}}- :warning: Please ensure the images are also updated in `zarf.yaml`. Hint: Try using `zarf prepare find-images`{{/if}}. Right now this process is manual (add commits to this branch), but we intend to automate it later.",
+    "{{#if (containsString depType 'zarfcomponents')}}- :warning: Please ensure the images are also updated in `zarf.yaml`. Hint: Try using `zarf prepare find-images`{{/if}}. Right now this process is manual (add commits to this branch), but we intend to automate it later.",
     "{{#if (containsString depType 'bigbang')}}- :warning: Please ensure the git repos that Big Bang depends on are also updated in `zarf.yaml`. You can find them by going to [values.yaml](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/{{newVersion}}/chart/values.yaml) in the Big Bang repo in the `<subrepo>.git.tag` parameter for each repo. {{/if}}. Right now this process is manual (add commits to this branch), but we intend to automate it later."
   ],
   "regexManagers": [
@@ -23,7 +23,20 @@
       ],
       "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/bigbang.git",
       "datasourceTemplate": "git-tags",
-      "depTypeTemplate": "zarf-bigbang"
+      "depTypeTemplate": "zarfcomponents-bigbang"
+    },
+    {
+      "fileMatch": [
+        "^zarf.yaml$",
+        "^Makefile$"
+      ],
+      "matchStrings": [
+        "# yaml-language-server: \\$schema=https:\/\/raw.githubusercontent.com\/defenseunicorns\/zarf\/(?<currentValue>.+)\/zarf.schema.json",
+        "ZARF_VERSION := (?<currentValue>.+)"
+      ],
+      "depNameTemplate": "https://github.com/defenseunicorns/zarf.git",
+      "datasourceTemplate": "git-tags",
+      "depTypeTemplate": "zarfbin"
     }
   ]
 }
