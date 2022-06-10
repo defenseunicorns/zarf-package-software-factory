@@ -48,7 +48,7 @@
       ],
       "depNameTemplate": "ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness",
       "datasourceTemplate": "docker",
-      "depTypeTempalte": "buildharness"
+      "depTypeTemplate": "buildharness"
     }
   ]
 }
