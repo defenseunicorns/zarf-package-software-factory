@@ -55,7 +55,7 @@ RUN asdf plugin add golangci-lint \
   && asdf install golangci-lint "${GOLANGCILINT_VERSION}"
 
 # Install python. Get versions using 'asdf list all python'
-ARG PYTHON_VERSION="3.10.4"
+ARG PYTHON_VERSION="3.10.5"
 ENV PYTHON_VERSION=${PYTHON_VERSION}
 RUN asdf plugin add python \
   && asdf install python "${PYTHON_VERSION}"
@@ -73,31 +73,31 @@ RUN asdf plugin add pre-commit \
   && asdf install pre-commit "${PRE_COMMIT_VERSION}"
 
 # Install Terraform. Get versions using 'asdf list all terraform'
-ARG TERRAFORM_VERSION="1.2.0"
+ARG TERRAFORM_VERSION="1.2.2"
 ENV TERRAFORM_VERSION=${TERRAFORM_VERSION}
 RUN asdf plugin add terraform \
   && asdf install terraform "${TERRAFORM_VERSION}"
 
 # Install tflint. Get versions using 'asdf list all tflint'
-ARG TFLINT_VERSION="0.28.1"
+ARG TFLINT_VERSION="0.37.0"
 ENV TFLINT_VERSION=${TFLINT_VERSION}
 RUN asdf plugin add tflint \
   && asdf install tflint "${TFLINT_VERSION}"
 
 # Install tfsec. Get versions using 'asdf list all tfsec'
-ARG TFSEC_VERSION="0.39.37"
+ARG TFSEC_VERSION="1.23.3"
 ENV TFSEC_VERSION=${TFSEC_VERSION}
 RUN asdf plugin add tfsec \
   && asdf install tfsec "${TFSEC_VERSION}"
 
 # Install sops. Get versions using 'asdf list all sops'
-ARG SOPS_VERSION="3.7.2"
+ARG SOPS_VERSION="3.7.3"
 ENV SOPS_VERSION=${SOPS_VERSION}
 RUN asdf plugin add sops \
   && asdf install sops "${SOPS_VERSION}"
 
 # Install make. Get versions using 'asdf list all make'
-ARG MAKE_VERSION="4.2.1"
+ARG MAKE_VERSION="4.3"
 ENV MAKE_VERSION=${MAKE_VERSION}
 RUN asdf plugin add make \
   && asdf install make "${MAKE_VERSION}"
