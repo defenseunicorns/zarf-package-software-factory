@@ -93,7 +93,7 @@ jobs:
 
       # Checkout the code from GitHub Pull Request
       - name: "Checkout the code"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT }}
           repository: ${{ github.event.client_payload.pull_request.head.repo.full_name }}
