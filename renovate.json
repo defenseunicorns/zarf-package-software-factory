@@ -38,6 +38,17 @@
       "depNameTemplate": "https://github.com/defenseunicorns/zarf.git",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfbin"
+    },
+    {
+      "fileMatch": [
+        "^Makefile$"
+      ],
+      "matchStrings": [
+        "BUILD_HARNESS_VERSION := (?<currentValue>.+)"
+      ],
+      "depNameTemplate": "ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness",
+      "datasourceTemplate": "docker",
+      "depTypeTempalte": "buildharness"
     }
   ]
 }
