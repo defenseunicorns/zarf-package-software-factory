@@ -6,6 +6,7 @@
     "renovate"
   ],
   "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
   "prBodyNotes": [
     "- :warning: The E2E tests need to be run, they have a manual trigger. To start them add a comment to this PR that says `/test all`",
     "{{#if (containsString depType 'zarfcomponents')}}- :warning: Please ensure the images are also updated in `zarf.yaml`. Hint: Try using `zarf prepare find-images`. Right now this process is manual (add commits to this branch), but we intend to automate it later.{{/if}}",
@@ -64,7 +65,6 @@
         "BUILD_HARNESS_VERSION := (?<currentValue>\\S+)"
       ],
       "depNameTemplate": "ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness",
-      "packageNameTemplate": "build-harness",
       "datasourceTemplate": "docker",
       "depTypeTemplate": "buildharness"
     },
