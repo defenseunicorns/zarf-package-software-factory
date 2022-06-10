@@ -91,7 +91,7 @@ RUN asdf plugin add tfsec \
   && asdf install tfsec "${TFSEC_VERSION}"
 
 # Install sops. Get versions using 'asdf list all sops'
-ARG SOPS_VERSION="3.7.2"
+ARG SOPS_VERSION="3.7.3"
 ENV SOPS_VERSION=${SOPS_VERSION}
 RUN asdf plugin add sops \
   && asdf install sops "${SOPS_VERSION}"
