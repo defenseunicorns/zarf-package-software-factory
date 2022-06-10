@@ -79,7 +79,7 @@ RUN asdf plugin add terraform \
   && asdf install terraform "${TERRAFORM_VERSION}"
 
 # Install tflint. Get versions using 'asdf list all tflint'
-ARG TFLINT_VERSION="0.28.1"
+ARG TFLINT_VERSION="0.37.0"
 ENV TFLINT_VERSION=${TFLINT_VERSION}
 RUN asdf plugin add tflint \
   && asdf install tflint "${TFLINT_VERSION}"
