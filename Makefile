@@ -6,7 +6,7 @@ BIGBANG_VERSION := 1.28.0
 
 # The version of Zarf to use. To keep this repo as portable as possible the Zarf binary will be downloaded and added to
 # the build folder.
-ZARF_VERSION := v0.17.0
+ZARF_VERSION := v0.19.3
 
 # The version of the build harness container to use
 BUILD_HARNESS_VERSION := 0.0.8
