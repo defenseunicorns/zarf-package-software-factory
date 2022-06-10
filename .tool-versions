@@ -7,4 +7,4 @@ terraform 1.2.0
 tflint 0.37.0
 tfsec 1.23.3
 sops 3.7.2
-make 4.2.1
+make 4.3
