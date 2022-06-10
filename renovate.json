@@ -15,6 +15,7 @@
     "enabled": true
   },
   "regexManagers": [
+    // Big Bang version
     {
       "fileMatch": [
         "^zarf.yaml$",
@@ -28,6 +29,7 @@
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfcomponents-bigbang"
     },
+    // Zarf version
     {
       "fileMatch": [
         "^zarf\\.yaml$",
@@ -42,6 +44,7 @@
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfbin"
     },
+    // Build Harness version
     {
       "fileMatch": [
         "^Makefile$"
@@ -52,6 +55,15 @@
       "depNameTemplate": "ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness",
       "datasourceTemplate": "docker",
       "depTypeTemplate": "buildharness"
+    },
+    {
+      "fileMatch": [
+        "^Dockerfile$",
+        "^.tool-versions$"
+      ],
+      "matchStrings": [
+        "^"
+      ]
     }
   ]
 }
