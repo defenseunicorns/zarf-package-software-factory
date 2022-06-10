@@ -31,10 +31,11 @@
         "^Makefile$"
       ],
       "matchStrings": [
-        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/bigbang\\.git@(?<currentValue>.+)",
-        "BIGBANG_VERSION := (?<currentValue>.+)"
+        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/bigbang\\.git@(?<currentValue>\\S+)",
+        "BIGBANG_VERSION := (?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/bigbang.git",
+      "packageNameTemplate": "bigbang",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfcomponents-bigbang"
     },
@@ -46,10 +47,11 @@
         "^\\.pre-commit-config\\.yaml$"
       ],
       "matchStrings": [
-        "https:\/\/raw\\.githubusercontent\\.com\/defenseunicorns\/zarf\/(?<currentValue>.+)\/zarf\\.schema\\.json",
-        "ZARF_VERSION := (?<currentValue>.+)"
+        "https:\/\/raw\\.githubusercontent\\.com\/defenseunicorns\/zarf\/(?<currentValue>\\S+)\/zarf\\.schema\\.json",
+        "ZARF_VERSION := (?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://github.com/defenseunicorns/zarf.git",
+      "packageNameTemplate": "zarf",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfbin"
     },
@@ -59,9 +61,10 @@
         "^Makefile$"
       ],
       "matchStrings": [
-        "BUILD_HARNESS_VERSION := (?<currentValue>.+)"
+        "BUILD_HARNESS_VERSION := (?<currentValue>\\S+)"
       ],
       "depNameTemplate": "ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness",
+      "packageNameTemplate": "build-harness",
       "datasourceTemplate": "docker",
       "depTypeTemplate": "buildharness"
     },
@@ -72,9 +75,10 @@
         "^.tool-versions$"
       ],
       "matchStrings": [
-        "ARG ASDF_VERSION=\"(?<currentValue>.+)\""
+        "ARG ASDF_VERSION=\"(?<currentValue>\\S+)\""
       ],
       "depNameTemplate": "https://github.com/asdf-vm/asdf.git",
+      "packageNameTemplate": "asdf",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "buildharness-deps"
     },
@@ -85,9 +89,27 @@
         "^.tool-versions$"
       ],
       "matchStrings": [
-        "ARG GOLANG_VERSION=\"(?<currentValue>.+)\""
+        "^ARG GOLANG_VERSION=\"(?<currentValue>\\S+)\"$",
+        "^golang (?<currentValue>\\S+)$"
       ],
+      "depNameTemplate": "https://github.com/golang/go.git",
+      "packageNameTemplate": "golang",
       "datasourceTemplate": "golang-version",
+      "depTypeTemplate": "buildharness-deps"
+    },
+    // golangci-lint version
+    {
+      "fileMatch": [
+        "^Dockerfile$",
+        "^.tool-versions$"
+      ],
+      "matchStrings": [
+        "^ARG GOLANGCILINT_VERSION=\"(?<currentValue>\\S+)\"$",
+        "^golangci-lint (?<currentValue>\\S+)$"
+      ],
+      "depNameTemplate": "https://github.com/golangci/golangci-lint.git",
+      "packageNameTemplate": "golangci-lint",
+      "datasourceTemplate": "git-tags",
       "depTypeTemplate": "buildharness-deps"
     }
   ]
