@@ -2,7 +2,7 @@ golang 1.18.2
 golangci-lint 1.46.2
 python 3.10.4
 hadolint 2.10.0
-pre-commit 2.18.1
+pre-commit 2.19.0
 terraform 1.2.0
 tflint 0.28.1
 tfsec 0.39.37

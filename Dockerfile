@@ -67,7 +67,7 @@ RUN asdf plugin add hadolint \
   && asdf install hadolint "${HADOLINT_VERSION}"
 
 # Install pre-commit. Get versions using 'asdf list all pre-commit'
-ARG PRE_COMMIT_VERSION="2.18.1"
+ARG PRE_COMMIT_VERSION="2.19.0"
 ENV PRE_COMMIT_VERSION=${PRE_COMMIT_VERSION}
 RUN asdf plugin add pre-commit \
   && asdf install pre-commit "${PRE_COMMIT_VERSION}"
