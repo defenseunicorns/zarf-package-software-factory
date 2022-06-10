@@ -3,7 +3,7 @@ module github.com/defenseunicorns/zarf-package-software-factory
 go 1.18
 
 require (
-	github.com/gruntwork-io/terratest v0.40.12
+	github.com/gruntwork-io/terratest v0.40.16
 	github.com/stretchr/testify v1.7.2
 )
 
@@ -32,7 +32,7 @@ require (
 	github.com/gruntwork-io/go-commons v0.8.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
-	github.com/hashicorp/go-getter v1.5.9 // indirect
+	github.com/hashicorp/go-getter v1.6.1 // indirect
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/go-safetemp v1.0.0 // indirect
 	github.com/hashicorp/go-version v1.3.0 // indirect
@@ -64,7 +64,7 @@ require (
 	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c // indirect
-	golang.org/x/sys v0.0.0-20210603125802-9665404d3644 // indirect
+	golang.org/x/sys v0.0.0-20220517195934-5e4e11fc645e // indirect
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e // indirect
