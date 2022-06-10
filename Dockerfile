@@ -43,13 +43,13 @@ ENV PATH="/root/.asdf/shims:/root/.asdf/bin:${PATH}"
 # ENV PATH="/home/buildharness/.asdf/shims:/home/buildharness/.asdf/bin:${PATH}"
 
 # Install golang. Get versions using 'asdf list all golang'
-ARG GOLANG_VERSION="1.18.2"
+ARG GOLANG_VERSION="1.18.3"
 ENV GOLANG_VERSION=${GOLANG_VERSION}
 RUN asdf plugin add golang \
   && asdf install golang "${GOLANG_VERSION}"
 
 # Install golangci-lint. Get versions using 'asdf list all golangci-lint'
-ARG GOLANGCILINT_VERSION="1.46.1"
+ARG GOLANGCILINT_VERSION="1.46.2"
 ENV GOLANGCILINT_VERSION=${GOLANGCILINT_VERSION}
 RUN asdf plugin add golangci-lint \
   && asdf install golangci-lint "${GOLANGCILINT_VERSION}"
