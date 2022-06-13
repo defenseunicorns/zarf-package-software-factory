@@ -85,7 +85,7 @@ RUN asdf plugin add tflint \
   && asdf install tflint "${TFLINT_VERSION}"
 
 # Install tfsec. Get versions using 'asdf list all tfsec'
-ARG TFSEC_VERSION="1.23.3"
+ARG TFSEC_VERSION="1.24.0"
 ENV TFSEC_VERSION=${TFSEC_VERSION}
 RUN asdf plugin add tfsec \
   && asdf install tfsec "${TFSEC_VERSION}"
