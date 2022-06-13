@@ -152,7 +152,7 @@ components:
         files:
           - manifests/softwarefactoryaddons-deps.yaml
     repos:
-      - https://github.com/zalando/postgres-operator.git@v1.7.0
+      - https://github.com/zalando/postgres-operator.git@v1.8.1
     images:
       - registry.opensource.zalan.do/acid/postgres-operator:v1.7.0
       - registry.opensource.zalan.do/acid/spilo-13:2.1-p1
