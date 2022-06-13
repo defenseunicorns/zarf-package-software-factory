@@ -31,6 +31,55 @@
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfcomponents-bigbang"
     },
+    // Postgres Operator version
+    {
+      "fileMatch": [
+        "^zarf.yaml$"
+      ],
+      "matchStrings": [
+        "https:\/\/github\\.com\/zalando\/postgres-operator\\.git@(?<currentValue>\\S+)"
+      ],
+      "depNameTemplate": "https://github.com/zalando/postgres-operator.git",
+      "datasourceTemplate": "git-tags",
+      "depTypeTemplate": "zarfcomponents"
+    },
+    // Jira version
+    {
+      "fileMatch": [
+        "^zarf.yaml$"
+      ],
+      "matchStrings": [
+        " https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/jira\\.git@(?<currentValue>\\S+)"
+      ],
+      "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git",
+      "datasourceTemplate": "git-tags",
+      "depTypeTemplate": "zarfcomponents"
+    },
+    // Confluence version
+    {
+      "fileMatch": [
+        "^zarf.yaml$"
+      ],
+      "matchStrings": [
+        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/confluence\\.git@(?<currentValue>\\S+)"
+      ],
+      "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git",
+      "datasourceTemplate": "git-tags",
+      "depTypeTemplate": "zarfcomponents"
+    },
+    // Jenkins version
+    {
+      "fileMatch": [
+        "^zarf.yaml$"
+      ],
+      "matchStrings": [
+        "https:\/\/github\\.com\/jenkinsci\/helm-charts\\.git@jenkins-(?<currentValue>\\S+)"
+      ],
+      "depNameTemplate": "https://github.com/jenkinsci/helm-charts.git",
+      "datasourceTemplate": "git-tags",
+      "depTypeTemplate": "zarfcomponents",
+      "extractVersionTemplate": "^jenkins-(?<version>.*)$"
+    },
     // Zarf version
     {
       "fileMatch": [
