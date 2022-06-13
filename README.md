@@ -62,7 +62,7 @@ To run this package in "self-contained" mode, follow these steps.
 1. [Backup and Restore](doc/backup-and-restore/README.md)
 1. [Troubleshooting](doc/troubleshooting.md)
 
-If you want to customize your deployment by utilizing external PostgreSQL databases and S3 buckets, you can follow along with these docs:
+If you want to customize your deployment by utilizing external PostgreSQL databases and S3 buckets, you can additionally follow along with these docs:
 
 1. [Disable Postgres Operator and MinIO](doc/disable-postgres-operator-and-minio.md)
 1. [Configure GitLab to use an external database and S3 buckets](doc/configure-gitlab-to-use-an-external-database-and-s3-buckets.md)
