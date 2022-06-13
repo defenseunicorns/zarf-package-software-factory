@@ -170,7 +170,7 @@ components:
     repos:
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git@0.1.0-bb.7
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git@0.1.0-bb.9
-      - https://github.com/jenkinsci/helm-charts.git@jenkins-3.9.4
+      - https://github.com/jenkinsci/helm-charts.git@jenkins-4.1.8
     images:
       - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:8.18.1
       - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.17.4
