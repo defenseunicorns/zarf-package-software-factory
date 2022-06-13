@@ -82,11 +82,7 @@ After Flux reconciles the change, Jenkins should now be using GitLab as the SSO 
 
 1. Navigate to [https://jira.bigbang.dev](https://jira.bigbang.dev)
 
-1. Set up Jira. This guide will use the "I'll set it up myself" option.
-
-   1. Click "I'll set it up myself" then click Next
-
-   1. Use "Built In" for database connection. (Note: For eval purposes only. In production, Jira needs to use an external database. We're working on adding Zalando's Postgres Operator to the package.)
+1. Set up Jira.
 
    1. Set up application properties
       1. Application Title: "Jira"
@@ -114,6 +110,10 @@ After Flux reconciles the change, Jenkins should now be using GitLab as the SSO 
    1. Remember user logins: user's preference
    1. Show IdP on the login page: checked
    1. Login button text: user's preference. Recommend `Continue with GitLab`
+
+1. Navigate back to the Authentication methods page and disable "Allow basic authentication on API calls" -- Personal Access Tokens should be used in all cases for programmatic API access.
+
+1. Finally, disable "Username and password" authentication, so that users are not able to bypass SSO.
 
 ### Configure Confluence
 

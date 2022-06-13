@@ -32,10 +32,10 @@ RUN dnf install -y --refresh \
   && rm -rf /var/cache/yum/
 
 # Install asdf. Get versions from https://github.com/asdf-vm/asdf/releases
-ARG ASDF_VERSION="0.10.1"
+ARG ASDF_VERSION="0.10.2"
 ENV ASDF_VERSION=${ASDF_VERSION}
 # hadolint ignore=SC2016
-RUN git clone --branch "v${ASDF_VERSION}" --depth 1 https://github.com/asdf-vm/asdf.git "${HOME}/.asdf" \
+RUN git clone --branch v"${ASDF_VERSION}" --depth 1 https://github.com/asdf-vm/asdf.git "${HOME}/.asdf" \
   && echo -e '\nsource $HOME/.asdf/asdf.sh' >> "${HOME}/.bashrc" \
   && echo -e '\nsource $HOME/.asdf/asdf.sh' >> "${HOME}/.profile" \
   && source "${HOME}/.asdf/asdf.sh"
@@ -43,7 +43,7 @@ ENV PATH="/root/.asdf/shims:/root/.asdf/bin:${PATH}"
 # ENV PATH="/home/buildharness/.asdf/shims:/home/buildharness/.asdf/bin:${PATH}"
 
 # Install golang. Get versions using 'asdf list all golang'
-ARG GOLANG_VERSION="1.18.2"
+ARG GOLANG_VERSION="1.18.3"
 ENV GOLANG_VERSION=${GOLANG_VERSION}
 RUN asdf plugin add golang \
   && asdf install golang "${GOLANG_VERSION}"
@@ -55,7 +55,7 @@ RUN asdf plugin add golangci-lint \
   && asdf install golangci-lint "${GOLANGCILINT_VERSION}"
 
 # Install python. Get versions using 'asdf list all python'
-ARG PYTHON_VERSION="3.10.4"
+ARG PYTHON_VERSION="3.10.5"
 ENV PYTHON_VERSION=${PYTHON_VERSION}
 RUN asdf plugin add python \
   && asdf install python "${PYTHON_VERSION}"
@@ -73,22 +73,34 @@ RUN asdf plugin add pre-commit \
   && asdf install pre-commit "${PRE_COMMIT_VERSION}"
 
 # Install Terraform. Get versions using 'asdf list all terraform'
-ARG TERRAFORM_VERSION="1.2.0"
+ARG TERRAFORM_VERSION="1.2.2"
 ENV TERRAFORM_VERSION=${TERRAFORM_VERSION}
 RUN asdf plugin add terraform \
   && asdf install terraform "${TERRAFORM_VERSION}"
 
 # Install tflint. Get versions using 'asdf list all tflint'
-ARG TFLINT_VERSION="0.28.1"
+ARG TFLINT_VERSION="0.37.0"
 ENV TFLINT_VERSION=${TFLINT_VERSION}
 RUN asdf plugin add tflint \
   && asdf install tflint "${TFLINT_VERSION}"
 
 # Install tfsec. Get versions using 'asdf list all tfsec'
-ARG TFSEC_VERSION="0.39.37"
+ARG TFSEC_VERSION="1.24.0"
 ENV TFSEC_VERSION=${TFSEC_VERSION}
 RUN asdf plugin add tfsec \
   && asdf install tfsec "${TFSEC_VERSION}"
+
+# Install sops. Get versions using 'asdf list all sops'
+ARG SOPS_VERSION="3.7.3"
+ENV SOPS_VERSION=${SOPS_VERSION}
+RUN asdf plugin add sops \
+  && asdf install sops "${SOPS_VERSION}"
+
+# Install make. Get versions using 'asdf list all make'
+ARG MAKE_VERSION="4.3"
+ENV MAKE_VERSION=${MAKE_VERSION}
+RUN asdf plugin add make \
+  && asdf install make "${MAKE_VERSION}"
 
 # Support tools installed as root when running as any other user
 ENV ASDF_DATA_DIR="/root/.asdf"
