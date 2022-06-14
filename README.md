@@ -23,14 +23,11 @@ Coming Soon:
 ![warning](img/warning.png)
 
 ## Zarf Compatibility
-All versions of this package will not be compatible with all versions of Zarf. Here's a compatibility matrix to use to determine which versions match up
-
-| Package Version                                                                                                                                                                   | Zarf Version                                                             |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| [0.0.2](https://github.com/defenseunicorns/zarf-package-software-factory/releases/tag/0.0.2) - [main](https://github.com/defenseunicorns/zarf-package-software-factory/tree/main) | [v0.15.0](https://github.com/defenseunicorns/zarf/releases/tag/v0.15.0)+ |
-| [0.0.1](https://github.com/defenseunicorns/zarf-package-software-factory/releases/tag/0.0.1)                                                                                      | [v0.14.0](https://github.com/defenseunicorns/zarf/releases/tag/v0.14.0)  |
+All versions of this package will not be compatible with all versions of Zarf. For maximum repeatability each version of this package expects a specific version of Zarf. This is taken care of by using `make` targets that download the correct version of Zarf to the `/build` directory. When you run `make all` you're downloading the right version of Zarf automatically.
 
 ## Known Issues
+
+- :warning: We do not currently test compatibility from one version to the next. The user of this package is expected to first deploy to a test environment when doing upgrades. We will start testing upgrade paths as we get closer to a v1.0 release.
 
 - Jenkins won't work in disconnected environments due to its dependency on plugins pulled from the internet. Work is needed to figure out and implement a method of doing locally sourced plugins.
 
