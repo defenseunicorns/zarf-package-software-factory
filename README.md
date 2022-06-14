@@ -50,6 +50,10 @@ Note that having Zarf installed is not a prerequisite. This repo pulls in its ow
 
 ## Documentation
 
+To run this package in "self-contained" mode, follow these steps.
+
+> "self-contained" mode means the package will deploy its own PostgreSQL databases and S3 buckets, using Zalando's Postgres Operator and MinIO, respectively.
+
 1. [Fork the repo, customize, and build the packages](doc/fork-and-build.md)
 1. [Deploy](doc/deploy.md)
 1. [Configure SOPS encryption](doc/sops.md)
@@ -57,3 +61,10 @@ Note that having Zarf installed is not a prerequisite. This repo pulls in its ow
 1. [Day-2 Ops/Maintenance/Upgrades](doc/day2.md)
 1. [Backup and Restore](doc/backup-and-restore/README.md)
 1. [Troubleshooting](doc/troubleshooting.md)
+
+If you want to customize your deployment by utilizing external PostgreSQL databases and S3 buckets, you can additionally follow along with these docs:
+
+1. [Disable Postgres Operator and MinIO](doc/disable-postgres-operator-and-minio.md)
+1. [Configure GitLab to use an external database and S3 buckets](doc/configure-gitlab-to-use-an-external-database-and-s3-buckets.md)
+1. [Configure Jira to use an external database](doc/configure-jira-to-use-an-external-database.md)
+1. [Configure Confluence to use an external database](doc/configure-confluence-to-use-an-external-database.md)
