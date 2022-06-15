@@ -181,13 +181,13 @@ components:
 
   - name: flux-cli
     required: false
-    description: 
+    description:
       Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration (like 
       Git repositories), and automating updates to configuration when there is new code to deploy.
     scripts:
       after:
         - "./zarf tools archiver decompress flux.tar.gz /usr/sbin/flux"
-        - "chmod +x /usr/sbin/flux"
+        - "chmod +x /usr/sbin/after/flux"
     files:
       - source: https://github.com/fluxcd/flux2/releases/download/v0.31.1/flux_0.31.1_linux_amd64.tar.gz
         shasum: 640d2f9b403f446fbb7ee7b99bf58341aa1a98d64688b9f47e533b78dd212166
