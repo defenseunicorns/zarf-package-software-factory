@@ -53,7 +53,7 @@ func TestAllServicesRunning(t *testing.T) {
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/jenkins -n jenkins --watch --timeout=300s`)
 		require.NoError(t, err, output)
 		// Ensure that Jenkins is able to talk to GitLab internally
-		output, err = platform.RunSSHCommandAsSudo(`kubectl exec statefulset/jenkins -n jenkins -c jenkins -- curl -L -s --fail --show-error https://gitlab.bigbang.dev > /dev/null`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 300 bash -c \"while ! kubectl exec statefulset/jenkins -n jenkins -c jenkins -- curl -L -s --fail --show-error https://gitlab.bigbang.dev > /dev/null; do sleep 5; done\"`)
 		require.NoError(t, err, output)
 		// Wait up to 5 minutes for the Jira StatefulSet to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 300 bash -c \"while ! kubectl get statefulset jira -n jira; do sleep 5; done\"`)
@@ -62,7 +62,7 @@ func TestAllServicesRunning(t *testing.T) {
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/jira -n jira --watch --timeout=300s`)
 		require.NoError(t, err, output)
 		// Ensure that Jira is able to talk to GitLab internally
-		output, err = platform.RunSSHCommandAsSudo(`kubectl exec statefulset/jira -n jira -c jira -- curl -L -s --fail --show-error https://gitlab.bigbang.dev > /dev/null`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 300 bash -c \"while ! kubectl exec statefulset/jira -n jira -c jira -- curl -L -s --fail --show-error https://gitlab.bigbang.dev > /dev/null; do sleep 5; done\"`)
 		require.NoError(t, err, output)
 		// Wait up to 5 minutes for the Confluence StatefulSet to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 300 bash -c \"while ! kubectl get statefulset confluence -n confluence; do sleep 5; done\"`)
@@ -71,7 +71,7 @@ func TestAllServicesRunning(t *testing.T) {
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/confluence -n confluence --watch --timeout=300s`)
 		require.NoError(t, err, output)
 		// Ensure that Confluence is able to talk to GitLab internally
-		output, err = platform.RunSSHCommandAsSudo(`kubectl exec statefulset/confluence -n confluence -c confluence -- curl -L -s --fail --show-error https://gitlab.bigbang.dev > /dev/null`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 300 bash -c \"while ! kubectl exec statefulset/confluence -n confluence -c confluence -- curl -L -s --fail --show-error https://gitlab.bigbang.dev > /dev/null; do sleep 5; done\"`)
 		require.NoError(t, err, output)
 	})
 }
