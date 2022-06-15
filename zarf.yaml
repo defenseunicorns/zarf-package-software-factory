@@ -181,7 +181,6 @@ components:
 
   - name: flux-cli
     required: false
-    description: "Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration (like Git repositories), and automating updates to configuration when there is new code to deploy.""
     scripts:
       after:
         - "./zarf tools archiver decompress flux.tar.gz /usr/sbin/flux"
