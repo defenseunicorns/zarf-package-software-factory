@@ -127,7 +127,7 @@ build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux pac
 	@mkdir -p ./tmp
 	@git clone -b v0.17.0 --depth 1 https://github.com/defenseunicorns/zarf.git tmp/zarf
 	@cd tmp/zarf/packages/flux-iron-bank && ../../../../build/$(ZARF_BIN) package create --skip-sbom --confirm
-	@mv tmp/zarf/packages/flux-iron-bank/zarf-package-flux-iron-bank-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst
+	@mv tmp/zarf/packages/flux-iron-bank/zarf-package-flux-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst
 	@rm -rf ./tmp
 
 build/zarf-package-software-factory-amd64.tar.zst: FORCE | build/$(ZARF_BIN) ## Build the Software Factory package
