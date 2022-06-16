@@ -52,7 +52,6 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git@4.4.3-bb.3
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git@5.6.2-bb.5
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git@0.36.0-bb.2
-      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus.git@37.3.0-bb.1
 
     images:
       # istio-controlplane
@@ -150,10 +149,6 @@ components:
 
       # gitlab-runner
       - registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner:v14.6.0
-
-      # nexus
-      - registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.5
-      - registry1.dso.mil/ironbank/sonatype/nexus/nexus:3.37.3-02
 
   - name: softwarefactoryaddons-deps
     required: true

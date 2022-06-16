@@ -53,7 +53,6 @@ istio:
         - jenkins.{{ .Values.domain }}
         - jira.{{ .Values.domain }}
         - confluence.{{ .Values.domain }}
-        - nexus.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
 
 istiooperator:
@@ -813,25 +812,3 @@ addons:
         requests:
           memory: 256Mi
           cpu: 200m
-  nexus:
-    enabled: true
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__nexus.git
-    values:
-      istio:
-        enabled: true
-        nexus:
-          gateways:
-            - istio-system/public
-      job_image:
-        repository: "${ZARF_REGISTRY}/ironbank/redhat/ubi/ubi8-minimal"
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/sonatype/nexus/nexus"
-      nexus:
-        resources:
-          requests:
-            cpu: 4
-            memory: 8000Mi
-          limits:
-            cpu: 4
-            memory: 8000Mi

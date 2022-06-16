@@ -8,7 +8,6 @@ Deploys the components of a software factory with the following services, all ru
 - GitLab*
 - GitLab Runner*
 - Minio Operator*
-- Nexus*
 - Jira
 - Confluence
 - Jenkins
