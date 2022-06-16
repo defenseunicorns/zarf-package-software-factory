@@ -73,6 +73,8 @@ func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error
 		return "nil", fmt.Errorf("ssh command failed: %w", err)
 	}
 
+	logger.Default.Logf(platform.T, output)
+
 	return output, nil
 }
 
