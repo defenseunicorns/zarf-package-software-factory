@@ -16,6 +16,16 @@
   "pre-commit": {
     "enabled": true
   },
+  "packageRules": [
+    {
+      "matchPackagePrefixes": [
+        "https://togithub.com/renovatebot/pre-commit-hooks"
+      ],
+      "schedule": [
+        "before 2am"
+      ]
+    }
+  ],
   "regexManagers": [
     // Big Bang version
     {
