@@ -132,3 +132,48 @@ spec:
   dependsOn:
     - name: istio
       namespace: bigbang
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: artifactory
+  namespace: softwarefactoryaddons
+spec:
+  targetNamespace: artifactory
+  releaseName: artifactory
+  interval: 10m
+  chart:
+    spec:
+      chart: "."
+      sourceRef:
+        kind: GitRepository
+        name: artifactory
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  valuesFrom:
+    - kind: Secret
+      name: artifactory-common-bb
+      valuesKey: values.yaml
+    - kind: ConfigMap
+      name: artifactory-common
+      valuesKey: values.yaml
+    - kind: Secret
+      name: artifactory-environment-bb
+      valuesKey: values.yaml
+    - kind: ConfigMap
+      name: artifactory-environment
+      valuesKey: values.yaml
+  dependsOn:
+    - name: istio
+      namespace: bigbang
