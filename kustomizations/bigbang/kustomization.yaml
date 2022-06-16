@@ -14,15 +14,3 @@ secretGenerator:
     behavior: replace
     files:
       - values.yaml=environment-bb/values.yaml
-
-patchesStrategicMerge:
-  - |-
-    apiVersion: source.toolkit.fluxcd.io/v1beta1
-    kind: GitRepository
-    metadata:
-      name: bigbang
-      namespace: bigbang
-    spec:
-      url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__bigbang.git
-      secretRef:
-        name: zarf-git-secret

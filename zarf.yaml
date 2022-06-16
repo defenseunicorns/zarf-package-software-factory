@@ -20,7 +20,6 @@ components:
 
   - name: setup
     required: true
-    secretName: "private-registry"
     manifests:
       - name: setup-config
         files:
@@ -30,7 +29,6 @@ components:
 
   - name: big-bang
     required: true
-    secretName: "private-registry"
     manifests:
       - name: big-bang-config
         files:
@@ -152,7 +150,6 @@ components:
 
   - name: softwarefactoryaddons-deps
     required: true
-    secretName: "private-registry"
     manifests:
       - name: softwarefactoryaddons-deps-config
         files:
@@ -168,7 +165,6 @@ components:
 
   - name: softwarefactoryaddons
     required: true
-    secretName: "private-registry"
     manifests:
       - name: softwarefactoryaddons-config
         files:
