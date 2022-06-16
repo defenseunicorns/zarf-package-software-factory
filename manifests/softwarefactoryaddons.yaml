@@ -19,6 +19,13 @@ metadata:
   labels:
     istio-injection: enabled
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: artifactory
+  labels:
+    istio-injection: enabled
+---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
@@ -44,6 +51,10 @@ spec:
       kind: HelmRelease
       namespace: softwarefactoryaddons
       name: jenkins
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      namespace: softwarefactoryaddons
+      name: artifactory
   timeout: 5m
   decryption:
     provider: sops
