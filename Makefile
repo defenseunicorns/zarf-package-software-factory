@@ -2,7 +2,7 @@
 #    1. Run `make vendor-big-bang-base` and commit any changes to the repo.
 #    2. Additionally update the following files to use the new version of Big Bang:
 #        - zarf.yaml
-BIGBANG_VERSION := 1.28.0
+BIGBANG_VERSION := 1.36.0
 
 # The version of Zarf to use. To keep this repo as portable as possible the Zarf binary will be downloaded and added to
 # the build folder.
