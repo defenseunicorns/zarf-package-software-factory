@@ -1,7 +1,6 @@
 controller:
-  image: "${ZARF_REGISTRY}/ironbank/opensource/jenkins/jenkins"
+  image: "registry1.dso.mil/ironbank/opensource/jenkins/jenkins"
   tag: "2.320"
-  imagePullSecretName: "private-registry"
   disableRememberMe: true
   resources:
     requests:
@@ -98,7 +97,6 @@ controller:
   sidecars:
     configAutoReload:
       enabled: true
-      image: "${ZARF_REGISTRY}/kiwigrid/k8s-sidecar:1.14.2"
   JCasC:
     defaultConfig: true
 
@@ -109,9 +107,6 @@ controller:
 
 agent:
   enabled: true
-  image: "${ZARF_REGISTRY}/jenkins/inbound-agent"
-  tag: "4.11-1"
-  imagePullSecretName: "private-registry"
   resources:
     requests:
       cpu: "512m"

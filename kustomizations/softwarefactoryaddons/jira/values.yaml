@@ -1,7 +1,3 @@
-image:
-  repository: "${ZARF_REGISTRY}/ironbank/atlassian/jira-data-center/jira-node"
-imagePullSecrets:
-  - name: private-registry
 ingress:
   nginx: false
 proxyName: jira.bigbang.dev
@@ -38,7 +34,7 @@ jira:
           key: "password"
 additionalInitContainers:
   - name: wait-for-database
-    image: "${ZARF_REGISTRY}/acid/spilo-13:2.1-p1"
+    image: "registry.opensource.zalan.do/acid/spilo-13:2.1-p1"
     command:
       [
         "sh",
