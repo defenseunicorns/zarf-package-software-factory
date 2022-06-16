@@ -40,21 +40,8 @@ func TestAllServicesRunning(t *testing.T) {
 		// Wait up to 4 additional minutes for the "softwarefactoryaddons" kustomization to report "Ready==True".
 		output, err = platform.RunSSHCommandAsSudo("kubectl wait --timeout=240s -n flux-system --for=condition=Ready kustomization/softwarefactoryaddons")
 		require.NoError(t, err, output)
-	})
-}
-
-// TestFlux makes sure flux is present.
-func TestFlux(t *testing.T) {
-	t.Parallel()
-	ctx, cancel := context.WithCancel(context.Background())
-	go utils.HoldYourDamnHorses(ctx, t, 10*time.Second)
-	defer cancel()
-	platform := types.NewTestPlatform(t)
-	defer platform.Teardown()
-	utils.SetupTestPlatform(t, platform)
-	// The repo has now been downloaded to /root/app and the software factory package deployment has been initiated.
-	teststructure.RunTestStage(platform.T, "TEST", func() {
-		output, err := platform.RunSSHCommandAsSudo("flux --help")
+		// Make sure flux is present.
+		output, err = platform.RunSSHCommandAsSudo("flux --help")
 		require.NoError(t, err, output)
 	})
 }
