@@ -183,7 +183,7 @@ components:
     required: false
     scripts:
       after:
-        - "./zarf tools archiver decompress flux.tar.gz /usr/sbin/flux"
+        - "tar -xzf flux.tar.gz -C /usr/sbin"
         - "chmod +x /usr/sbin/flux"
         - "rm flux.tar.gz"
     files:
