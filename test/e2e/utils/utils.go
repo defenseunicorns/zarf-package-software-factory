@@ -98,7 +98,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		output, err = platform.RunSSHCommandAsSudo("gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin")
 		require.NoError(t, err, output)
 		// Deploy software factory
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm")
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --components flux-cli --confirm")
 		require.NoError(t, err, output)
 		// We have to patch the zarf-package-software-factory GitRepo to point at the right branch
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '[{"op": "replace", "path": "/spec/ref/branch", "value": "%v"}]'`, gitBranch))
