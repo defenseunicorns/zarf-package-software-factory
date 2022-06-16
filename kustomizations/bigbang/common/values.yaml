@@ -127,19 +127,19 @@ gatekeeper:
     controllerManager:
       resources:
         limits:
-          cpu: "1"
-          memory: "2Gi"
+          cpu: "2"
+          memory: "4Gi"
         requests:
-          cpu: "175m"
-          memory: "512Mi"
+          cpu: "250m"
+          memory: "1Gi"
     audit:
       resources:
         limits:
-          cpu: "1.2"
-          memory: "2Gi"
+          cpu: "2"
+          memory: "4Gi"
         requests:
-          cpu: "200m"
-          memory: "768Mi"
+          cpu: "250m"
+          memory: "1Gi"
     violations:
       allowedDockerRegistries:
         parameters:
