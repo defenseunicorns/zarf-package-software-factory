@@ -14,7 +14,7 @@ networkPolicies:
   vpcCidr: "0.0.0.0/0"
 
 istio:
-  enabled: true
+  enabled: false
   ingressGateways:
     public-ingressgateway:
       type: "LoadBalancer"
@@ -48,7 +48,7 @@ istio:
         - registry.{{ .Values.domain }}
 
 istiooperator:
-  enabled: true
+  enabled: false
   values:
     hub: "${ZARF_REGISTRY}/ironbank/opensource/istio"
     operator:
@@ -61,7 +61,7 @@ istiooperator:
           memory: "256Mi"
 
 jaeger:
-  enabled: true
+  enabled: false
   values:
     jaeger:
       spec:
@@ -90,7 +90,7 @@ jaeger:
         memory: "128Mi"
 
 kiali:
-  enabled: true
+  enabled: false
   values:
     resources:
       requests:
@@ -111,7 +111,7 @@ kiali:
               memory: "368Mi"
 
 clusterAuditor:
-  enabled: true
+  enabled: false
   values:
     resources:
       requests:
@@ -190,7 +190,7 @@ gatekeeper:
             - "local-path-storage"
 
 logging:
-  enabled: true
+  enabled: false
   values:
     kibana:
       count: 1
@@ -222,7 +222,7 @@ logging:
             memory: "3Gi"
 
 eckoperator:
-  enabled: true
+  enabled: false
   values:
     resources:
       limits:
@@ -233,7 +233,7 @@ eckoperator:
         memory: "256Mi"
 
 fluentbit:
-  enabled: true
+  enabled: false
   values:
     resources:
       limits:
@@ -244,7 +244,7 @@ fluentbit:
         memory: "256Mi"
 
 monitoring:
-  enabled: true
+  enabled: false
   values:
     cleanUpgrade:
       resources:
@@ -347,7 +347,7 @@ monitoring:
             memory: "2Gi"
 
 twistlock:
-  enabled: true
+  enabled: false
   values:
     console:
     resources:
@@ -360,7 +360,7 @@ twistlock:
 
 addons:
   minioOperator:
-    enabled: true
+    enabled: false
     values:
       operator:
         resources:
@@ -378,7 +378,7 @@ addons:
     enabled: false
 
   gitlab:
-    enabled: true
+    enabled: false
     values:
       global:
         istio:
@@ -642,7 +642,7 @@ addons:
           gateways:
             - istio-system/public
   gitlabRunner:
-    enabled: true
+    enabled: false
     values:
       resources:
         limits:
