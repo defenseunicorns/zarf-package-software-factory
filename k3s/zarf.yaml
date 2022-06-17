@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.19.4/zarf.schema.json
-kind: ZarfInitConfig
+kind: ZarfPackageConfig
 metadata:
   name: "k3s"
   description: "Used to establish a new Zarf cluster"
@@ -7,6 +7,7 @@ metadata:
 
 components:
   - name: k3s
+    required: true
     description: >
       *** REQUIRES ROOT ***
       Install K3s, certified Kubernetes distribution built for IoT & Edge computing.
