@@ -123,6 +123,10 @@ clusterAuditor:
 
 gatekeeper:
   enabled: true
+  flux:
+    upgrade:
+      remediation:
+        retries: -1
   values:
     controllerManager:
       resources:
