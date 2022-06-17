@@ -30,11 +30,12 @@
     // Big Bang version
     {
       "fileMatch": [
-        "^zarf.yaml$",
+        "zarf.yaml",
         "^Makefile$"
       ],
       "matchStrings": [
         "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/bigbang\\.git@(?<currentValue>\\S+)",
+        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/bigbang\\.git//base/flux?ref=(?<currentValue>\\S+)",
         "BIGBANG_VERSION := (?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/bigbang.git",
