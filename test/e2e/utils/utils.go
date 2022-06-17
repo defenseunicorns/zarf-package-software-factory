@@ -79,14 +79,19 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		// Install the rest of the packages
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-init-amd64.tar.zst")
 		require.NoError(t, err, output)
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-package-k3s-amd64.tar.zst")
+		require.NoError(t, err, output)
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-package-flux-amd64.tar.zst")
 		require.NoError(t, err, output)
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-package-software-factory-amd64.tar.zst")
 		require.NoError(t, err, output)
 		// Try to be idempotent
 		_, _ = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf destroy --confirm")
-		// Zarf init
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-init-amd64.tar.zst --components k3s,git-server --confirm")
+		// K3s
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-k3s-amd64.tar.zst --confirm")
+		require.NoError(t, err, output)
+		// Init package
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-init-amd64.tar.zst --components git-server --confirm")
 		require.NoError(t, err, output)
 		// Deploy Flux
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm")
