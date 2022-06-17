@@ -6,6 +6,23 @@ registryCredentials:
 git:
   existingSecret: "private-git-server"
 
+flux:
+  timeout: 10m
+  interval: 2m
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: -1
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: true
+
 networkPolicies:
   enabled: true
   # When in prod use a real CIDR. Don't do this, it isn't secure.
@@ -123,10 +140,6 @@ clusterAuditor:
 
 gatekeeper:
   enabled: true
-  flux:
-    upgrade:
-      remediation:
-        retries: -1
   values:
     controllerManager:
       resources:
