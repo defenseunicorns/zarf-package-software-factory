@@ -1,4 +1,4 @@
-kind: ZarfInitConfig
+kind: ZarfPackageConfig
 metadata:
   name: "k3s"
   description: "Used to establish a new Zarf cluster"
