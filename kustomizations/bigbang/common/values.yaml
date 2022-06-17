@@ -18,6 +18,7 @@ flux:
     remediation:
       retries: -1
       remediateLastFailure: true
+      strategy: "uninstall"
     cleanupOnFail: true
   rollback:
     timeout: 10m
