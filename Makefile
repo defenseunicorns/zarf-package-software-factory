@@ -2,7 +2,8 @@
 #    1. Run `make vendor-big-bang-base` and commit any changes to the repo.
 #    2. Additionally update the following files to use the new version of Big Bang:
 #        - zarf.yaml
-BIGBANG_VERSION := 1.28.0
+#        - flux/zarf.yaml
+BIGBANG_VERSION := 1.36.0
 
 # The version of Zarf to use. To keep this repo as portable as possible the Zarf binary will be downloaded and added to
 # the build folder.
@@ -123,12 +124,8 @@ build/zarf-init-amd64.tar.zst: | build ## Download the init package
 	@wget -q https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -O build/zarf-init-amd64.tar.zst
 
 build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux package
-	@rm -rf ./tmp
-	@mkdir -p ./tmp
-	@git clone -b v0.17.0 --depth 1 https://github.com/defenseunicorns/zarf.git tmp/zarf
-	@cd tmp/zarf/packages/flux-iron-bank && ../../../../build/$(ZARF_BIN) package create --skip-sbom --confirm
-	@mv tmp/zarf/packages/flux-iron-bank/zarf-package-flux-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst
-	@rm -rf ./tmp
+	@cd flux && ../build/$(ZARF_BIN) package create --skip-sbom --confirm
+	@mv flux/zarf-package-flux-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst
 
 build/zarf-package-software-factory-amd64.tar.zst: FORCE | build/$(ZARF_BIN) ## Build the Software Factory package
 	@echo "Creating the deploy package"

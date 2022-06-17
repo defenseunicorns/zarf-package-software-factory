@@ -80,7 +80,6 @@ components:
       # - registry1.dso.mil/ironbank/bigbang/cluster-auditor/opa-exporter:v0.0.3
 
       # policy (OPA Gatekeeper)
-      - registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.22.2
       - registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper:v3.7.0
 
       # # elasticsearch-kibana
