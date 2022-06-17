@@ -45,7 +45,8 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git@2.0.0-bb.2
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git@0.20.0-bb.1
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git@35.2.0-bb.3
-      - https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git@0.8.0-bb.0
+      # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
+      # - https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git@0.8.0-bb.0
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git@4.4.16-bb.0
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git@4.4.16-bb.0
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git@6.0.1-bb.2
@@ -101,9 +102,10 @@ components:
       - "registry1.dso.mil/ironbank/opensource/prometheus/prometheus:v2.35.0"
 
       # twistlock
-      - "registry1.dso.mil/ironbank/big-bang/base:1.1.0"
-      - "registry1.dso.mil/ironbank/twistlock/console/console:22.01.880"
-      - "registry1.dso.mil/ironbank/twistlock/defender/defender:22.01.880"
+      # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
+      # - "registry1.dso.mil/ironbank/big-bang/base:1.1.0"
+      # - "registry1.dso.mil/ironbank/twistlock/console/console:22.01.880"
+      # - "registry1.dso.mil/ironbank/twistlock/defender/defender:22.01.880"
 
       # minio-operator
       - "registry1.dso.mil/ironbank/opensource/minio/operator:v4.4.16"

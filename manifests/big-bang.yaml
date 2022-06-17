@@ -55,10 +55,11 @@ spec:
       kind: HelmRelease
       namespace: bigbang
       name: monitoring
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: twistlock
+    # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
+    # - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+    #   kind: HelmRelease
+    #   namespace: bigbang
+    #   name: twistlock
   timeout: 15m
   decryption:
     provider: sops
