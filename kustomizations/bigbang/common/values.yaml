@@ -132,13 +132,6 @@ clusterAuditor:
 
 gatekeeper:
   enabled: true
-  flux:
-    install:
-      remediation:
-        retries: -1
-    upgrade:
-      remediation:
-        strategy: "uninstall"
   values:
     istio:
       mtls:
@@ -371,7 +364,8 @@ monitoring:
             memory: "2Gi"
 
 twistlock:
-  enabled: true
+  # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
+  enabled: false
   values:
     istio:
       mtls:
