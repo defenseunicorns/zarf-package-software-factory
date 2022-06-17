@@ -1,0 +1,20 @@
+kind: ZarfPackageConfig
+metadata:
+  name: "flux"
+  description: "Zarf flux package"
+  architecture: amd64
+
+components:
+  - name: flux
+    required: true
+    manifests:
+      - name: flux-installer
+        # This will be built on the package create side and deployed as a regular manifest on package deploy
+        kustomizations:
+          - https://repo1.dso.mil/platform-one/big-bang/bigbang.git//base/flux?ref=1.36.0
+    images:
+      # flux - flux
+      - registry1.dso.mil/ironbank/fluxcd/helm-controller:v0.21.0
+      - registry1.dso.mil/ironbank/fluxcd/kustomize-controller:v0.25.0
+      - registry1.dso.mil/ironbank/fluxcd/notification-controller:v0.23.5
+      - registry1.dso.mil/ironbank/fluxcd/source-controller:v0.24.4
