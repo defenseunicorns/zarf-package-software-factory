@@ -63,6 +63,9 @@ istiooperator:
 jaeger:
   enabled: true
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     jaeger:
       spec:
         allInOne:
@@ -92,6 +95,9 @@ jaeger:
 kiali:
   enabled: true
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     resources:
       requests:
         cpu: "100m"
@@ -113,6 +119,9 @@ kiali:
 clusterAuditor:
   enabled: true
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     resources:
       requests:
         cpu: "100m"
@@ -131,6 +140,9 @@ gatekeeper:
       remediation:
         strategy: "uninstall"
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     controllerManager:
       resources:
         limits:
@@ -192,6 +204,9 @@ gatekeeper:
 logging:
   enabled: true
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     kibana:
       count: 1
       resources:
@@ -224,6 +239,9 @@ logging:
 eckoperator:
   enabled: true
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     resources:
       limits:
         cpu: "200m"
@@ -235,6 +253,9 @@ eckoperator:
 fluentbit:
   enabled: true
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     resources:
       limits:
         cpu: "500m"
@@ -246,6 +267,9 @@ fluentbit:
 monitoring:
   enabled: true
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     cleanUpgrade:
       resources:
         requests:
@@ -349,6 +373,9 @@ monitoring:
 twistlock:
   enabled: true
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     console:
     resources:
       limits:
@@ -373,9 +400,15 @@ addons:
             memory: 256Mi
       istio:
         enabled: true
+        mtls:
+          mode: PERMISSIVE
 
   minio:
     enabled: false
+    values:
+      istio:
+        mtls:
+          mode: PERMISSIVE
 
   gitlab:
     enabled: true
@@ -637,6 +670,8 @@ addons:
             memory: 300Mi
       istio:
         enabled: true
+        mtls:
+          mode: PERMISSIVE
         injection: enabled
         gitlab:
           gateways:
@@ -644,6 +679,9 @@ addons:
   gitlabRunner:
     enabled: true
     values:
+      istio:
+        mtls:
+          mode: PERMISSIVE
       resources:
         limits:
           memory: 256Mi
