@@ -1,3 +1,48 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    owner: bigbang
+  name: bigbang
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: softwarefactoryaddons
+  labels:
+    istio-injection: disabled
+    owner: softwarefactoryaddons
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: postgres-operator
+  labels:
+    istio-injection: disabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jira
+  labels:
+    istio-injection: disabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: confluence
+  labels:
+    istio-injection: disabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins
+  labels:
+    istio-injection: enabled
+---
+
+---
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
@@ -7,5 +52,5 @@ spec:
   interval: 1m
   url: https://github.com/defenseunicorns/zarf-package-software-factory.git
   ref:
-    branch: main
+    branch: renovate/https-github.com-defenseunicorns-zarf.git-0.x
 #    tag: X.Y.Z
