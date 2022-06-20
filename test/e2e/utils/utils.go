@@ -76,10 +76,8 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		// Log into registry1.dso.mil
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf("~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v", registry1Username, registry1Password))
 		require.NoError(t, err, output)
-		// Install the rest of the packages
+		// Build the rest of the packages
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-init-amd64.tar.zst")
-		require.NoError(t, err, output)
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-package-k3s-amd64.tar.zst")
 		require.NoError(t, err, output)
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-package-flux-amd64.tar.zst")
 		require.NoError(t, err, output)
