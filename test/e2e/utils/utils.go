@@ -87,9 +87,6 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err, output)
 		// Try to be idempotent
 		_, _ = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf destroy --confirm")
-		// K3s
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-k3s-amd64.tar.zst --confirm")
-		require.NoError(t, err, output)
 		// Init package
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-init-amd64.tar.zst --components git-server --confirm")
 		require.NoError(t, err, output)
