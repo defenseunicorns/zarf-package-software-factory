@@ -50,5 +50,5 @@ spec:
   interval: 1m
   url: https://github.com/defenseunicorns/zarf-package-software-factory.git
   ref:
-    branch: feature/update-zarf-and-bigbang-versions
+    branch: main
 #    tag: X.Y.Z
