@@ -24,7 +24,6 @@ import (
 // the responsibility of the test being run to do the appropriate waiting for services to come up.
 func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 	t.Helper()
-	t.Errorf("just testing...")
 	repoURL, err := getEnvVar("REPO_URL")
 	require.NoError(t, err)
 	gitBranch, err := getEnvVar("GIT_BRANCH")
