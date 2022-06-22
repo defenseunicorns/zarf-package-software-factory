@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"testing"
@@ -10,7 +9,6 @@ import (
 	customteststructure "github.com/defenseunicorns/zarf-package-software-factory/test/e2e/terratest/teststructure"
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/types"
 	"github.com/gruntwork-io/terratest/modules/aws"
-	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/retry"
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -26,6 +24,7 @@ import (
 // the responsibility of the test being run to do the appropriate waiting for services to come up.
 func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 	t.Helper()
+	t.Errorf("just testing...")
 	repoURL, err := getEnvVar("REPO_URL")
 	require.NoError(t, err)
 	gitBranch, err := getEnvVar("GIT_BRANCH")
@@ -128,20 +127,6 @@ func getEnvVar(varName string) (string, error) {
 	}
 
 	return val, nil
-}
-
-// HoldYourDamnHorses logs a message periodically, because humans suck at waiting and sometimes CI systems do too.
-func HoldYourDamnHorses(ctx context.Context, t *testing.T, period time.Duration) {
-	t.Helper()
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		default:
-			logger.Default.Logf(t, "The test is still running! Don't kill me!")
-		}
-		time.Sleep(period)
-	}
 }
 
 // waitForInstanceReady tries/retries a simple SSH command until it works successfully, meaning the server is ready to accept connections.

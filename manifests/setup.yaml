@@ -50,5 +50,5 @@ spec:
   interval: 1m
   url: https://github.com/defenseunicorns/zarf-package-software-factory.git
   ref:
-    branch: main
+    branch: not-the-real-branch-name
 #    tag: X.Y.Z

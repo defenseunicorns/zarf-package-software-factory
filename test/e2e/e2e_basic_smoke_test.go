@@ -1,9 +1,7 @@
 package test_test
 
 import (
-	"context"
 	"testing"
-	"time"
 
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/types"
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/utils"
@@ -16,9 +14,6 @@ func TestAllServicesRunning(t *testing.T) {
 	// BOILERPLATE, EXPECTED TO BE PRESENT AT THE BEGINNING OF EVERY TEST FUNCTION
 
 	t.Parallel()
-	ctx, cancel := context.WithCancel(context.Background())
-	go utils.HoldYourDamnHorses(ctx, t, 10*time.Second)
-	defer cancel()
 	platform := types.NewTestPlatform(t)
 	defer platform.Teardown()
 	utils.SetupTestPlatform(t, platform)
