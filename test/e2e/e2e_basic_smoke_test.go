@@ -71,5 +71,17 @@ func TestAllServicesRunning(t *testing.T) {
 		// Make sure flux is present.
 		output, err = platform.RunSSHCommandAsSudo("flux --help")
 		require.NoError(t, err, output)
+		// Ensure that Jenkins is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! curl -L -s --fail --show-error https://jenkins.bigbang.dev > /dev/null; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Ensure that Confluence is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! curl -L -s --fail --show-error https://confluence.bigbang.dev > /dev/null; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Ensure that Jira is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! curl -L -s --fail --show-error https://jira.bigbang.dev > /dev/null; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Ensure that GitLab is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! curl -L -s --fail --show-error https://gitlab.bigbang.dev > /dev/null; do sleep 5; done\"`)
+		require.NoError(t, err, output)
 	})
 }
