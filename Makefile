@@ -96,7 +96,7 @@ clean: ## Clean up build files
 	@rm -rf ./build
 
 .PHONY: all
-all: | build/zarf build/zarf-mac-intel build/zarf-init-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst ## Make everything. Will skip downloading/generating dependencies if they already exist.
+all: | build/zarf build/zarf-mac-intel build/zarf-init-amd64.tar.zst build/zarf-package-k3s-amd64.tar.zst build/zarf-package-k3s-images-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst ## Make everything. Will skip downloading/generating dependencies if they already exist.
 
 .PHONY: vendor-big-bang-base
 vendor-big-bang-base: ## Vendor the BigBang base kustomization, since Flux doesn't support private bases. This only needs to be run if you change the version of Big Bang used. Don't forget to commit the changes to the repo.
@@ -128,6 +128,14 @@ build/zarf-mac-intel: | build ## Download the Mac (Intel) flavor of Zarf to the 
 build/zarf-init-amd64.tar.zst: | build ## Download the init package
 	@echo "Downloading zarf-init-amd64.tar.zst"
 	@wget -q https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -O build/zarf-init-amd64.tar.zst
+
+build/zarf-package-k3s-amd64.tar.zst: | build ## Make the K3s package
+	@cd k3s && ../build/$(ZARF_BIN) package create --skip-sbom --confirm
+	@mv k3s/zarf-package-k3s-amd64.tar.zst build/zarf-package-k3s-amd64.tar.zst
+
+build/zarf-package-k3s-images-amd64.tar.zst: | build ## Make the k3s-images package
+	@cd k3s-images && ../build/$(ZARF_BIN) package create --skip-sbom --confirm
+	@mv k3s-images/zarf-package-k3s-images-amd64.tar.zst build/zarf-package-k3s-images-amd64.tar.zst
 
 build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux package
 	@cd flux && ../build/$(ZARF_BIN) package create --skip-sbom --confirm
