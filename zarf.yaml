@@ -82,6 +82,7 @@ components:
       # elasticsearch-kibana
       - "registry1.dso.mil/ironbank/elastic/elasticsearch/elasticsearch:7.17.1"
       - "registry1.dso.mil/ironbank/elastic/kibana/kibana:7.17.1"
+      - "registry1.dso.mil/ironbank/big-bang/base:8.4"
 
       # eck-operator
       - "registry1.dso.mil/ironbank/elastic/eck-operator/eck-operator:2.0.0"
