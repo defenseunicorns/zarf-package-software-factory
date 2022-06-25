@@ -73,19 +73,19 @@ RUN asdf plugin add pre-commit \
   && asdf install pre-commit "${PRE_COMMIT_VERSION}"
 
 # Install Terraform. Get versions using 'asdf list all terraform'
-ARG TERRAFORM_VERSION="1.2.2"
+ARG TERRAFORM_VERSION="1.2.3"
 ENV TERRAFORM_VERSION=${TERRAFORM_VERSION}
 RUN asdf plugin add terraform \
   && asdf install terraform "${TERRAFORM_VERSION}"
 
 # Install tflint. Get versions using 'asdf list all tflint'
-ARG TFLINT_VERSION="0.37.0"
+ARG TFLINT_VERSION="0.38.1"
 ENV TFLINT_VERSION=${TFLINT_VERSION}
 RUN asdf plugin add tflint \
   && asdf install tflint "${TFLINT_VERSION}"
 
 # Install tfsec. Get versions using 'asdf list all tfsec'
-ARG TFSEC_VERSION="1.24.0"
+ARG TFSEC_VERSION="1.26.0"
 ENV TFSEC_VERSION=${TFSEC_VERSION}
 RUN asdf plugin add tfsec \
   && asdf install tfsec "${TFSEC_VERSION}"
