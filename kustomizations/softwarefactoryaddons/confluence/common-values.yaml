@@ -1,6 +1,3 @@
-image:
-  # v0.1.0-bb.9 of this chart has a bug that doesn't use the "tag" parameter. Upgrading the version of confluence should fix
-  repository: "registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.17.4"
 ingress:
   nginx: false
 istio:
