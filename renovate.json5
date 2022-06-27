@@ -30,7 +30,7 @@
     // Big Bang version
     {
       "fileMatch": [
-        "zarf.yaml",
+        "zarf\\.yaml",
         "^Makefile$"
       ],
       "matchStrings": [
@@ -45,7 +45,7 @@
     // Postgres Operator version
     {
       "fileMatch": [
-        "^zarf.yaml$"
+        "^zarf\\.yaml$"
       ],
       "matchStrings": [
         "https:\/\/github\\.com\/zalando\/postgres-operator\\.git@(?<currentValue>\\S+)"
@@ -57,10 +57,12 @@
     // Jira version
     {
       "fileMatch": [
-        "^zarf.yaml$"
+        "^zarf\\.yaml$",
+        "^kustomizations\/softwarefactoryaddons\/base\/gitrepository\\.yaml$"
       ],
       "matchStrings": [
-        " https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/jira\\.git@(?<currentValue>\\S+)"
+        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/jira\\.git@(?<currentValue>\\S+)",
+        "url: https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/jira\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git",
       "datasourceTemplate": "git-tags",
@@ -69,10 +71,12 @@
     // Confluence version
     {
       "fileMatch": [
-        "^zarf.yaml$"
+        "^zarf\\.yaml$",
+        "^kustomizations\/softwarefactoryaddons\/base\/gitrepository\\.yaml$"
       ],
       "matchStrings": [
-        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/confluence\\.git@(?<currentValue>\\S+)"
+        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/confluence\\.git@(?<currentValue>\\S+)",
+        "url: https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/confluence\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git",
       "datasourceTemplate": "git-tags",
@@ -81,10 +85,12 @@
     // Jenkins version
     {
       "fileMatch": [
-        "^zarf.yaml$"
+        "^zarf\\.yaml$",
+        "^kustomizations\/softwarefactoryaddons\/base\/gitrepository\\.yaml$"
       ],
       "matchStrings": [
-        "https:\/\/github\\.com\/jenkinsci\/helm-charts\\.git@jenkins-(?<currentValue>\\S+)"
+        "https:\/\/github\\.com\/jenkinsci\/helm-charts\\.git@jenkins-(?<currentValue>\\S+)",
+        "url: https:\/\/github\\.com\/jenkinsci\/helm-charts\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://github.com/jenkinsci/helm-charts.git",
       "datasourceTemplate": "git-tags",
