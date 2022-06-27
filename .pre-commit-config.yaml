@@ -27,7 +27,7 @@ repos:
     hooks:
       - id: fix-smartquotes
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.16.1
+    rev: 0.16.2
     hooks:
       - id: check-jsonschema
         name: "Validate Zarf Configs Against Schema"
