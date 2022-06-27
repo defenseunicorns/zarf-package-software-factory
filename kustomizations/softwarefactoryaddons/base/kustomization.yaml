@@ -48,7 +48,7 @@ configMapGenerator:
     literals:
       - values.yaml=
   - name: artifactory-environment
-    namespace: softwarefacotryaddons
+    namespace: softwarefactoryaddons
     behavior: create
     literals:
       - values.yaml=
