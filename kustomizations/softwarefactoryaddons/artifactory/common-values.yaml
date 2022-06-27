@@ -1,8 +1,6 @@
 # Helm chart version:
 global:
   artifactoryHaEnabled: false
-  imagePullSecrets:
-    - regcred
 
 rabbitmq:
   enabled: false
