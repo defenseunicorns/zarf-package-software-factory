@@ -17,6 +17,11 @@ configMapGenerator:
     behavior: replace
     files:
       - values.yaml=confluence/common-values.yaml
+  - name: artifactory-common
+    namespace: softwarefactoryaddons
+    behavior: replace
+    files:
+      - values.yaml=artifactory/common-values.yaml
 
 secretGenerator:
   - name: confluence-environment-bb
@@ -29,3 +34,8 @@ secretGenerator:
     behavior: replace
     files:
       - values.yaml=jenkins/environment-bb-values.yaml
+  - name: artifactory-environment-bb
+    namespace: softwarefactoryaddons
+    behavior: replace
+    files:
+      - values.yaml=artifactory/environment-bb-values.yaml

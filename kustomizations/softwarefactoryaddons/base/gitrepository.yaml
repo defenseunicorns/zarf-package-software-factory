@@ -30,3 +30,14 @@ spec:
   url: https://github.com/jenkinsci/helm-charts.git
   ref:
     tag: jenkins-3.9.4
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: artifactory
+  namespace: softwarefactoryaddons
+spec:
+  interval: 5m
+  url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git
+  ref:
+    tag: 0.9.2
