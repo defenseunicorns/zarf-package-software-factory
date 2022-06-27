@@ -46,6 +46,7 @@ istio:
         - jira.{{ .Values.domain }}
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
+        - artifactory.{{ .Values.domain }}
 
 istiooperator:
   enabled: true
