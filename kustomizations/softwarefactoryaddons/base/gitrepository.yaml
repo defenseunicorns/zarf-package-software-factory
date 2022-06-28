@@ -44,6 +44,8 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git
+  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__artifactory.git
   ref:
     tag: 0.9.2
+  secretRef:
+    name: private-git-server
