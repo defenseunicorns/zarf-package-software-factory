@@ -8,6 +8,8 @@ redis:
   enabled: false
 artifactory:
   enabled: true
+  nginx:
+    enabled: false
 artifactory-ha:
   enabled: false
 xray:

@@ -30,4 +30,4 @@ spec:
         - destination:
             host: artifactory.artifactory.svc.cluster.local
             port:
-              number: 8081
+              number: 8082
