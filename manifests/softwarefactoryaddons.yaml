@@ -27,7 +27,7 @@ spec:
       kind: HelmRelease
       namespace: softwarefactoryaddons
       name: artifactory
-  timeout: 5m
+  timeout: 10m
   decryption:
     provider: sops
     secretRef:
