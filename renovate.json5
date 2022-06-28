@@ -100,7 +100,7 @@
     // Zarf version
     {
       "fileMatch": [
-        "^zarf\\.yaml$",
+        "zarf\\.yaml",
         "^Makefile$",
         "^\\.pre-commit-config\\.yaml$"
       ],
