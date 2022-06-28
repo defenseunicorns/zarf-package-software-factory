@@ -6,7 +6,8 @@ metadata:
 spec:
   targetNamespace: jira
   releaseName: jira
-  interval: 10m
+  interval: 5m
+  timeout: 10m
   chart:
     spec:
       chart: chart
@@ -51,7 +52,8 @@ metadata:
 spec:
   targetNamespace: confluence
   releaseName: confluence
-  interval: 10m
+  interval: 5m
+  timeout: 10m
   chart:
     spec:
       chart: chart
@@ -96,7 +98,8 @@ metadata:
 spec:
   targetNamespace: jenkins
   releaseName: jenkins
-  interval: 10m
+  interval: 5m
+  timeout: 10m
   chart:
     spec:
       chart: charts/jenkins
@@ -141,7 +144,8 @@ metadata:
 spec:
   targetNamespace: artifactory
   releaseName: artifactory
-  interval: 10m
+  interval: 5m
+  timeout: 10m
   chart:
     spec:
       chart: "."
