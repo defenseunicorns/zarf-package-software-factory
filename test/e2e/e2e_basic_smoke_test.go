@@ -48,7 +48,7 @@ func TestAllServicesRunning(t *testing.T) {
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/jenkins -n jenkins --watch --timeout=1200s`)
 		require.NoError(t, err, output)
 		// Ensure that Jenkins is able to talk to GitLab internally
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl exec statefulset/jenkins -n jenkins -c jenkins -- curl -L -s --fail --show-error https://gitlab.bigbang.dev > /dev/null; do sleep 5; done\"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl exec statefulset/jenkins -n jenkins -c jenkins -- curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done\"`)
 		require.NoError(t, err, output)
 		// Wait for the Jira StatefulSet to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset jira -n jira; do sleep 5; done\"`)
@@ -57,7 +57,7 @@ func TestAllServicesRunning(t *testing.T) {
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/jira -n jira --watch --timeout=1200s`)
 		require.NoError(t, err, output)
 		// Ensure that Jira is able to talk to GitLab internally
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl exec statefulset/jira -n jira -c jira -- curl -L -s --fail --show-error https://gitlab.bigbang.dev > /dev/null; do sleep 5; done\"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl exec statefulset/jira -n jira -c jira -- curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done\"`)
 		require.NoError(t, err, output)
 		// Wait for the Confluence StatefulSet to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset confluence -n confluence; do sleep 5; done\"`)
@@ -66,7 +66,7 @@ func TestAllServicesRunning(t *testing.T) {
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/confluence -n confluence --watch --timeout=1200s`)
 		require.NoError(t, err, output)
 		// Ensure that Confluence is able to talk to GitLab internally
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl exec statefulset/confluence -n confluence -c confluence -- curl -L -s --fail --show-error https://gitlab.bigbang.dev > /dev/null; do sleep 5; done\"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl exec statefulset/confluence -n confluence -c confluence -- curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done\"`)
 		require.NoError(t, err, output)
 		// Make sure flux is present.
 		output, err = platform.RunSSHCommandAsSudo("flux --help")
@@ -82,6 +82,18 @@ func TestAllServicesRunning(t *testing.T) {
 		require.NoError(t, err, output)
 		// Ensure that GitLab is available outside of the cluster.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Wait for the Artifactory StatefulSet to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset artifactory -n artifactory; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Wait for the Artifactory StatefulSet to report that it is ready
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/artifactory -n artifactory --watch --timeout=1200s`)
+		require.NoError(t, err, output)
+		// Ensure that Artifactory is able to talk to GitLab internally
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl exec statefulset/artifactory -n artifactory -c artifactory -- curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Ensure that Artifactory is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! curl -L -s --fail --show-error https://artifactory.bigbang.dev/artifactory/api/system/ping > /dev/null; do sleep 5; done\"`)
 		require.NoError(t, err, output)
 	})
 }
