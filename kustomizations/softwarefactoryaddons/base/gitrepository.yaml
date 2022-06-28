@@ -8,6 +8,8 @@ spec:
   url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__jira.git
   ref:
     tag: 0.1.0-bb.7
+  secretRef:
+    name: private-git-server
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
@@ -19,6 +21,8 @@ spec:
   url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__confluence.git
   ref:
     tag: 0.1.0-bb.19
+  secretRef:
+    name: private-git-server
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
@@ -30,3 +34,5 @@ spec:
   url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__jenkinsci__helm-charts.git
   ref:
     tag: jenkins-3.9.4
+  secretRef:
+    name: private-git-server

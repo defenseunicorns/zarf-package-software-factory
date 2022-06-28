@@ -8,3 +8,5 @@ spec:
   url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__zalando__postgres-operator.git
   ref:
     tag: v1.7.0
+  secretRef:
+    name: private-git-server
