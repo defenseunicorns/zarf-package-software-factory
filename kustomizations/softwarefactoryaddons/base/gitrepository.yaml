@@ -5,7 +5,7 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
+  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__jira.git
   ref:
     tag: 0.1.0-bb.7
 ---
@@ -16,7 +16,7 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
+  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__confluence.git
   ref:
     tag: 0.1.0-bb.19
 ---
@@ -27,6 +27,6 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: https://github.com/jenkinsci/helm-charts.git
+  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__jenkinsci__helm-charts.git
   ref:
     tag: jenkins-3.9.4

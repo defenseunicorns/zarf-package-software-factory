@@ -15,6 +15,8 @@ networkPolicies:
 
 istio:
   enabled: true
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__istio-controlplane.git
   ingressGateways:
     public-ingressgateway:
       type: "LoadBalancer"
@@ -49,6 +51,8 @@ istio:
 
 istiooperator:
   enabled: true
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__istio-operator.git
   values:
     hub: "${ZARF_REGISTRY}/ironbank/opensource/istio"
     operator:
@@ -62,6 +66,8 @@ istiooperator:
 
 jaeger:
   enabled: true
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__jaeger.git
   values:
     istio:
       mtls:
@@ -94,6 +100,8 @@ jaeger:
 
 kiali:
   enabled: true
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__kiali.git
   values:
     istio:
       mtls:
@@ -118,6 +126,8 @@ kiali:
 
 clusterAuditor:
   enabled: true
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__cluster-auditor.git
   values:
     istio:
       mtls:
@@ -132,6 +142,8 @@ clusterAuditor:
 
 gatekeeper:
   enabled: true
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__policy.git
   values:
     istio:
       mtls:
@@ -196,6 +208,8 @@ gatekeeper:
 
 logging:
   enabled: true
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__elasticsearch-kibana.git
   values:
     istio:
       mtls:
@@ -231,6 +245,8 @@ logging:
 
 eckoperator:
   enabled: true
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__eck-operator.git
   values:
     istio:
       mtls:
@@ -245,6 +261,8 @@ eckoperator:
 
 fluentbit:
   enabled: true
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__fluentbit.git
   values:
     istio:
       mtls:
@@ -259,6 +277,8 @@ fluentbit:
 
 monitoring:
   enabled: true
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__monitoring.git
   values:
     istio:
       mtls:
@@ -366,6 +386,8 @@ monitoring:
 twistlock:
   # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
   enabled: false
+  git:
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__security-tools__twistlock.git
   values:
     istio:
       mtls:
@@ -382,6 +404,8 @@ twistlock:
 addons:
   minioOperator:
     enabled: true
+    git:
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio-operator.git
     values:
       operator:
         resources:
@@ -399,6 +423,8 @@ addons:
 
   minio:
     enabled: false
+    git:
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio.git
     values:
       istio:
         mtls:
@@ -406,6 +432,8 @@ addons:
 
   gitlab:
     enabled: true
+    git:
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
     values:
       global:
         istio:
@@ -672,6 +700,8 @@ addons:
             - istio-system/public
   gitlabRunner:
     enabled: true
+    git:
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab-runner.git
     values:
       istio:
         mtls:
