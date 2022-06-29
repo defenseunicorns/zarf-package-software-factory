@@ -48,6 +48,8 @@ Since you will need to make environment-specific changes to the system's configu
 
 1. Customize `kustomizations/softwarefactoryaddons/confluence/environment-bb-values.yaml` -- Replace `bigbang.dev` with your real domain
 
+1. Customize `kustomizations/softwarefactoryaddons/confluence/environment-bb-values.yaml` -- Replace `bigbang.dev` with your real domain
+
 1.  Commit the changes to the repo
 
     ```shell

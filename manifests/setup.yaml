@@ -41,6 +41,13 @@ metadata:
   labels:
     istio-injection: enabled
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: artifactory
+  labels:
+    istio-injection: enabled
+---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
 metadata:

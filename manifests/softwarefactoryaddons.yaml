@@ -23,7 +23,11 @@ spec:
       kind: HelmRelease
       namespace: softwarefactoryaddons
       name: jenkins
-  timeout: 5m
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      namespace: softwarefactoryaddons
+      name: artifactory
+  timeout: 10m
   decryption:
     provider: sops
     secretRef:

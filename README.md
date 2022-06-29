@@ -11,6 +11,7 @@ Deploys the components of a software factory with the following services, all ru
 - Jira
 - Confluence
 - Jenkins
+- Artifactory
 
 Coming Soon:
 
@@ -37,6 +38,8 @@ All versions of this package will not be compatible with all versions of Zarf. F
 - Due to issues with Elasticsearch this package doesn't work yet in some k8s distros. It does work in K3s (using `zarf init --components k3s,gitops-service`). Upcoming work to swap the EFK stack out for the PLG stack (Promtail, Loki, Grafana) should resolve this issue. Keep in mind the big note above about the package being huge. Unless you have the Mother of All Laptops you'll need to turn a bunch of stuff off before you try to deploy it locally using Vagrant.
 
 - If you are using Vagrant, inside the Vagrant VM the services are available on the standard port 443. Outside the VM if you want to pull something up in your browser that traffic is being routed to port **8443** to avoid needing to be root when running the Vagrant box.
+
+- The version of K3s that Zarf comes with is not compatible, due to issues with creating a Service of type LoadBalancer for Istio. Instead, a custom K3s and "k3s-images" package are used.
 
 ## Prerequisites
 

@@ -48,6 +48,7 @@ istio:
         - jira.{{ .Values.domain }}
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
+        - artifactory.{{ .Values.domain }}
 
 istiooperator:
   enabled: true
@@ -109,20 +110,20 @@ kiali:
     resources:
       requests:
         cpu: "100m"
-        memory: "256Mi"
+        memory: "512Mi"
       limits:
         cpu: "500m"
-        memory: "256Mi"
+        memory: "512Mi"
     cr:
       spec:
         deployment:
           resources:
             requests:
-              cpu: "100m"
-              memory: "368Mi"
+              cpu: "200m"
+              memory: "512Mi"
             limits:
               cpu: "500m"
-              memory: "368Mi"
+              memory: "512Mi"
 
 clusterAuditor:
   enabled: true

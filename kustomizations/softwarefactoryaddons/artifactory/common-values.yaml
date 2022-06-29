@@ -1,0 +1,22 @@
+# Helm chart version:
+global:
+  artifactoryHaEnabled: false
+
+rabbitmq:
+  enabled: false
+redis:
+  enabled: false
+artifactory:
+  enabled: true
+  nginx:
+    enabled: false
+artifactory-ha:
+  enabled: false
+xray:
+  enabled: false
+distribution:
+  enabled: false
+mission-control:
+  enabled: false
+pipelines:
+  enabled: false
