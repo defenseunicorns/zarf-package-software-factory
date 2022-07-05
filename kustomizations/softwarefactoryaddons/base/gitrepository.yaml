@@ -20,7 +20,7 @@ spec:
   interval: 5m
   url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__confluence.git
   ref:
-    tag: 0.1.0-bb.19
+    tag: 0.1.0-bb.20
   secretRef:
     name: private-git-server
 ---
