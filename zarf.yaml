@@ -174,8 +174,8 @@ components:
       - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.18.1
       # Jenkins
       - registry1.dso.mil/ironbank/opensource/jenkins/jenkins:2.346.1-lts
-      - jenkins/inbound-agent:4.11-1
-      - kiwigrid/k8s-sidecar:1.14.2
+      - jenkins/inbound-agent:4.11.2-4
+      - kiwigrid/k8s-sidecar:1.15.0
       # Artifactory
       - releases-docker.jfrog.io/alpine:3.13.5
       - releases-docker.jfrog.io/alpine:3.14.0

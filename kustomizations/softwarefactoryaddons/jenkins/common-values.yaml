@@ -30,9 +30,57 @@ controller:
     # when Jenkins starts up. The list below needs to be updated when ever the list of top level plugins
     # changes. To update it, delete the list below, run the deployment, and get the new list of all
     # plugins from the init container logs.
-    # To fix the formatting:
-    # Use this find regex:           - (?<name>.*?) (?<version>.*?)$
-    # And this replace regex:        - ${name}:${version}
+    - gitlab-api:5.0.1-74.v44f46b_54c775a_a_b_5
+    - pipeline-milestone-step:101.vd572fef9d926
+    - snakeyaml-api:1.30.2-76.vc104f7ce9870
+    - trilead-api:1.57.v6e90e07157e1
+    - commons-text-api:1.9-9.v39a_53e2e0343
+    - workflow-multibranch:716.vc692a_e52371b_
+    - javax-mail-api:1.6.2-6
+    - pipeline-stage-tags-metadata:2.2097.v33db_b_de764b_e
+    - javax-activation-api:1.2.0-3
+    - git-client:3.11.0
+    - variant:1.4
+    - scm-api:608.vfa_f971c5a_a_e9
+    - kubernetes-client-api:5.12.2-193.v26a_6078f65a_9
+    - pipeline-stage-step:293.v200037eefcd5
+    - pipeline-model-extensions:2.2097.v33db_b_de764b_e
+    - pipeline-groovy-lib:593.va_a_fc25d520e9
+    - workflow-support:820.vd1a_6cc65ef33
+    - mailer:414.vcc4c33714601
+    - jackson2-api:2.13.3-285.vc03c0256d517
+    - workflow-scm-step:400.v6b_89a_1317c9a_
+    - pipeline-model-api:2.2097.v33db_b_de764b_e
+    - pipeline-input-step:449.v77f0e8b_845c4
+    - metrics:4.1.6.2
+    - credentials-binding:523.vd859a_4b_122e6
+    - kubernetes-credentials:0.9.0
+    - pipeline-build-step:2.18
+    - credentials:1139.veb_9579fca_33b_
+    - pipeline-model-definition:2.2097.v33db_b_de764b_e
+    - caffeine-api:2.9.3-65.v6a_47d0f4d1fe
+    - workflow-step-api:625.vd896b_f445a_f8
+    - plain-credentials:1.8
+    - bouncycastle-api:2.26
+    - jaxb:2.3.6-1
+    - ace-editor:1.1
+    - authentication-tokens:1.4
+    - workflow-durable-task-step:1155.v79567b_e0a_2de
+    - ssh-credentials:291.v8211e4f8efb_c
+    - cloudbees-folder:6.729.v2b_9d1a_74d673
+    - durable-task:496.va67c6f9eefa7
+    - workflow-basic-steps:948.v2c72a_091b_b_68
+    - workflow-job:1189.va_d37a_e9e4eda_
+    - jsch:0.1.55.2
+    - structs:318.va_f3ccb_729b_71
+    - apache-httpcomponents-client-4-api:4.5.13-1.0
+    - workflow-cps:2725.v7b_c717eb_12ce
+    - display-url-api:2.3.6
+    - commons-lang3-api:3.12.0.0
+    - script-security:1175.v4b_d517d6db_f0
+    - branch-api:2.1046.v0ca_37783ecc5
+    - workflow-api:1165.v02c3db_a_6b_e36
+    - jersey2-api:2.36-2
   overwritePlugins: true
   sidecars:
     configAutoReload:
