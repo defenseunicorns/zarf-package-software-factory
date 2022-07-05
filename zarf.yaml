@@ -162,14 +162,14 @@ components:
         files:
           - manifests/softwarefactoryaddons.yaml
     repos:
-      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git@0.1.0-bb.7
+      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git@1.4.0-bb.0
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git@0.1.0-bb.19
       - https://github.com/jenkinsci/helm-charts.git@jenkins-3.9.4
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git@0.9.2
     images:
       # Jira
-      - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:8.18.1
-      - registry.opensource.zalan.do/acid/spilo-13:2.1-p1
+      - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:9.0.0
+      - registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.5
       # Confluence
       - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.18.1
       # Jenkins

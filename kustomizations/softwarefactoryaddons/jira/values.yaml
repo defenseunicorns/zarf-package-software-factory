@@ -1,3 +1,7 @@
+# Temporary customization due to https://confluence.atlassian.com/jira/jira-server-security-advisory-29nd-june-2022-1142430667.html
+image:
+  tag: "9.0.0"
+
 ingress:
   nginx: false
 proxyName: jira.bigbang.dev
@@ -34,7 +38,7 @@ jira:
           key: "password"
 additionalInitContainers:
   - name: wait-for-database
-    image: "registry.opensource.zalan.do/acid/spilo-13:2.1-p1"
+    image: "registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.5"
     command:
       [
         "sh",
