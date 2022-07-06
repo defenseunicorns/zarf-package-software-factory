@@ -10,7 +10,7 @@ BIGBANG_VERSION := 1.36.0
 ZARF_VERSION := v0.19.5
 
 # The version of the build harness container to use
-BUILD_HARNESS_VERSION := 0.0.11
+BUILD_HARNESS_VERSION := 0.0.12
 
 # Figure out which Zarf binary we should use based on the operating system we are on
 ZARF_BIN := zarf
