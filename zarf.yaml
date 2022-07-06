@@ -162,7 +162,7 @@ components:
         files:
           - manifests/softwarefactoryaddons.yaml
     repos:
-      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git@1.4.0-bb.0
+      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git@1.4.1-bb.0
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git@0.1.0-bb.20
       - https://github.com/jenkinsci/helm-charts.git@jenkins-3.9.4
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git@0.9.2
