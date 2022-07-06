@@ -1,6 +1,6 @@
 controller:
   image: "registry1.dso.mil/ironbank/opensource/jenkins/jenkins"
-  tag: "2.346.1-lts"
+  tag: "2.357"
   disableRememberMe: true
   resources:
     requests:
