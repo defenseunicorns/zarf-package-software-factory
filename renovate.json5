@@ -11,6 +11,7 @@
     "- :warning: The E2E tests need to be run, they have a manual trigger. To start them add a comment to this PR that says `/test all`",
     "{{#if (containsString depType 'zarfcomponents')}}- :warning: Please ensure the images are also updated in `zarf.yaml`. Hint: Try using `zarf prepare find-images`. Right now this process is manual (add commits to this branch), but we intend to automate it later.{{/if}}",
     "{{#if (containsString depType 'bigbang')}}- :warning: Please ensure the git repos that Big Bang depends on are also updated in `zarf.yaml`. You can find them by going to [values.yaml](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/{{newVersion}}/chart/values.yaml) in the Big Bang repo in the `<subrepo>.git.tag` parameter for each repo. Right now this process is manual (add commits to this branch), but we intend to automate it later.{{/if}}",
+    "{{#if (containsString depType 'bigbang')}}- :warning: The vendor folder also needs to be updated. Renovate did not do it automatically. Run `make vendor-big-bang-base` and commit+push any changes.{{/if}}",
     "{{#if (containsString depType 'buildharness-deps')}}- :warning: The Build Harness image needs to be manually released after this PR is merged. Run [this GitHub Action](https://github.com/defenseunicorns/zarf-package-software-factory/actions/workflows/build-build-harness.yml) to kick it off. We intend to make this more automated at some point.{{/if}}"
   ],
   "pre-commit": {
@@ -36,7 +37,7 @@
       ],
       "matchStrings": [
         "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/bigbang\\.git@(?<currentValue>\\S+)",
-        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/bigbang\\.git//base/flux?ref=(?<currentValue>\\S+)",
+        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/bigbang\\.git\/\/base\/flux\\?ref=(?<currentValue>\\S+)",
         "BIGBANG_VERSION := (?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/bigbang.git",
