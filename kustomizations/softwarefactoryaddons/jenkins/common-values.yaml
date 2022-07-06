@@ -93,6 +93,9 @@ controller:
         jenkins:
           systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code (JCasC) Plugin.\n\n"
   probes:
+    startupProbe:
+      periodSeconds: 10
+      failureThreshold: 30
     livenessProbe:
       initialDelaySeconds: 60
     readinessProbe:
