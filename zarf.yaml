@@ -147,13 +147,17 @@ components:
         files:
           - manifests/softwarefactoryaddons-deps.yaml
     repos:
-      - https://github.com/zalando/postgres-operator.git@v1.7.0
+      - https://github.com/zalando/postgres-operator.git@v1.8.2
     images:
-      - registry.opensource.zalan.do/acid/postgres-operator:v1.7.0
-      - registry.opensource.zalan.do/acid/spilo-13:2.1-p1
-      - registry.opensource.zalan.do/acid/logical-backup:v1.7.0
-      - registry.opensource.zalan.do/acid/pgbouncer:master-18
-      - registry.opensource.zalan.do/acid/postgres-operator-ui:v1.7.0
+      # software-factory - softwarefactoryaddons-deps
+      - registry.opensource.zalan.do/acid/postgres-operator:v1.8.2
+      # Possible images - software-factory - softwarefactoryaddons-deps
+      - registry.opensource.zalan.do/acid/logical-backup:v1.8.0
+      - registry.opensource.zalan.do/acid/logical-backup:v1.8.2
+      - registry.opensource.zalan.do/acid/pgbouncer:master-22
+      - registry.opensource.zalan.do/acid/spilo-14:2.1-p6
+      # software-factory - softwarefactoryaddons-deps
+      - registry.opensource.zalan.do/acid/postgres-operator-ui:v1.8.2
 
   - name: softwarefactoryaddons
     required: true
