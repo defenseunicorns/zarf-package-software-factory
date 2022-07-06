@@ -47,7 +47,7 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git@35.5.1-bb.2
       # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
       # - https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git@0.8.0-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git4.4.16-bb.2
+      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git@4.4.16-bb.2
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git@4.4.16-bb.0
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git@6.0.1-bb.2
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git@0.41.0-bb.0
