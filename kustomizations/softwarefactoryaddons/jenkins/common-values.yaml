@@ -92,6 +92,11 @@ controller:
       main: |-
         jenkins:
           systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code (JCasC) Plugin.\n\n"
+  probes:
+    livenessProbe:
+      initialDelaySeconds: 60
+    readinessProbe:
+      initialDelaySeconds: 60
 
 agent:
   enabled: true
