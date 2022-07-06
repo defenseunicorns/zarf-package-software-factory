@@ -168,7 +168,7 @@ components:
     repos:
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git@1.4.1-bb.0
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git@0.1.0-bb.20
-      - https://github.com/jenkinsci/helm-charts.git@jenkins-3.9.4
+      - https://github.com/jenkinsci/helm-charts.git@jenkins-4.1.12
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git@0.9.2
     images:
       # Jira
@@ -178,9 +178,9 @@ components:
       - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.18.1
       - registry1.dso.mil/ironbank/big-bang/base:2.0.0
       # Jenkins
-      - registry1.dso.mil/ironbank/opensource/jenkins/jenkins:2.320
-      - jenkins/inbound-agent:4.11-1
-      - kiwigrid/k8s-sidecar:1.14.2
+      - registry1.dso.mil/ironbank/opensource/jenkins/jenkins:2.346.1-lts
+      - jenkins/inbound-agent:4.11.2-4
+      - kiwigrid/k8s-sidecar:1.15.0
       # Artifactory
       - releases-docker.jfrog.io/alpine:3.13.5
       - releases-docker.jfrog.io/alpine:3.14.0
