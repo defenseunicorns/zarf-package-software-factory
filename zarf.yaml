@@ -27,6 +27,25 @@ components:
     repos:
       - https://github.com/defenseunicorns/zarf-package-software-factory.git
 
+  - name: postgres-operator
+    required: true
+    manifests:
+      - name: postgres-operator-config
+        files:
+          - manifests/postgres-operator.yaml
+    repos:
+      - https://github.com/zalando/postgres-operator.git@v1.8.2
+    images:
+      # software-factory - softwarefactoryaddons-deps
+      - registry.opensource.zalan.do/acid/postgres-operator:v1.8.2
+      # Possible images - software-factory - softwarefactoryaddons-deps
+      - registry.opensource.zalan.do/acid/logical-backup:v1.8.0
+      - registry.opensource.zalan.do/acid/logical-backup:v1.8.2
+      - registry.opensource.zalan.do/acid/pgbouncer:master-22
+      - registry.opensource.zalan.do/acid/spilo-14:2.1-p6
+      # software-factory - softwarefactoryaddons-deps
+      - registry.opensource.zalan.do/acid/postgres-operator-ui:v1.8.2
+
   - name: big-bang
     required: true
     manifests:
@@ -130,7 +149,6 @@ components:
       - "registry1.dso.mil/ironbank/gitlab/gitlab/kubectl:15.0.1"
       - "registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2022-05-09T04-08-26Z"
       - "registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2022-06-03T01-40-53Z"
-      - "registry1.dso.mil/ironbank/opensource/postgres/postgresql12:12.11"
       - "registry1.dso.mil/ironbank/redhat/ubi/ubi8:8.6"
       - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-exporter:15.0.1"
       - "registry1.dso.mil/ironbank/gitlab/gitlab/kubectl:15.0.1"
@@ -139,25 +157,6 @@ components:
       - "registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner:v15.0.0"
       - "registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner-helper:v15.0.0"
       - "registry1.dso.mil/ironbank/redhat/ubi/ubi8:8.6"
-
-  - name: softwarefactoryaddons-deps
-    required: true
-    manifests:
-      - name: softwarefactoryaddons-deps-config
-        files:
-          - manifests/softwarefactoryaddons-deps.yaml
-    repos:
-      - https://github.com/zalando/postgres-operator.git@v1.8.2
-    images:
-      # software-factory - softwarefactoryaddons-deps
-      - registry.opensource.zalan.do/acid/postgres-operator:v1.8.2
-      # Possible images - software-factory - softwarefactoryaddons-deps
-      - registry.opensource.zalan.do/acid/logical-backup:v1.8.0
-      - registry.opensource.zalan.do/acid/logical-backup:v1.8.2
-      - registry.opensource.zalan.do/acid/pgbouncer:master-22
-      - registry.opensource.zalan.do/acid/spilo-14:2.1-p6
-      # software-factory - softwarefactoryaddons-deps
-      - registry.opensource.zalan.do/acid/postgres-operator-ui:v1.8.2
 
   - name: softwarefactoryaddons
     required: true

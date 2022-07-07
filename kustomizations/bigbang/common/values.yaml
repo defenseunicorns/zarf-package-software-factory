@@ -438,7 +438,38 @@ addons:
     values:
       global:
         istio:
-          enabled: true
+          enabled: false
+        psql:
+          host: "acid-gitlab.gitlab.svc.cluster.local"
+          port: 5432
+          database: "gitlabhq_production"
+          username: "gitlab"
+          password:
+            secret: "gitlab.acid-gitlab.credentials.postgresql.acid.zalan.do"
+            key: "password"
+        # ## https://docs.gitlab.com/charts/installation/deployment#outgoing-email
+        # ## Example Outgoing email server settings
+        # smtp:
+        #   enabled: true
+        #   address: smtp.example.com
+        #   port: 587
+        #   user_name: "user@example.com"
+        #   ## https://docs.gitlab.com/charts/installation/secrets#smtp-password
+        #   password:
+        #     secret: "gitlab-smtp-credentials"
+        #     key: "password"
+        #   domain: "example.com"
+        #   authentication: "login"
+        #   starttls_auto: true
+        #   openssl_verify_mode: "peer"
+        #   pool: false
+        # ## https://docs.gitlab.com/charts/installation/deployment#outgoing-email
+        # ## Email persona used in email sent by GitLab
+        # email:
+        #   from: "gitlabadmin@example.com"
+        #   display_name: "GitLab Admin"
+        #   reply_to: "gitlabadmin@example.com"
+        #   subject_suffix: "gitlab"
       upgradeCheck:
         resources:
           requests:
@@ -498,13 +529,7 @@ addons:
               cpu: 250m
               memory: 256Mi
       postgresql:
-        resources:
-          limits:
-            cpu: 500m
-            memory: 500Mi
-          requests:
-            cpu: 500m
-            memory: 500Mi
+        install: false
       registry:
         init:
           resources:

@@ -1,5 +1,6 @@
 resources:
   - vendor/bigbang/base
+  - postgresql/postgresql.yaml
 
 configMapGenerator:
   - name: common
