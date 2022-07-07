@@ -30,6 +30,8 @@ spec:
   dependsOn:
     - name: bigbang
       namespace: bigbang
+    - name: postgres-operator
+      namespace: softwarefactoryaddons
   values:
     resources:
       - apiVersion: "acid.zalan.do/v1"
