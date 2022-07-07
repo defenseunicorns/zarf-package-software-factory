@@ -20,6 +20,10 @@ repos:
         exclude: "^kustomizations/bigbang/vendor/.*$"
         args: [--markdown-linebreak-ext=md]
       - id: check-yaml
+        exclude: |
+          (?x)^(
+            charts/raw/templates/resources.yaml
+          )$
         args:
           - "--allow-multiple-documents"
   - repo: https://github.com/sirosen/fix-smartquotes

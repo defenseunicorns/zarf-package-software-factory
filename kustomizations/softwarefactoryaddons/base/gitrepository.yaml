@@ -37,7 +37,7 @@ spec:
   secretRef:
     name: private-git-server
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta1
+apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
 metadata:
   name: artifactory

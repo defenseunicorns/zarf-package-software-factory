@@ -23,13 +23,6 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: gitlab
-  labels:
-    istio-injection: disabled
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: jira
   labels:
     istio-injection: disabled
