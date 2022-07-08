@@ -33,6 +33,8 @@ spec:
       namespace: bigbang
     - name: postgres-operator
       namespace: softwarefactoryaddons
+    - name: gatekeeper
+      namespace: bigbang
   values:
     resources:
       - apiVersion: "acid.zalan.do/v1"

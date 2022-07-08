@@ -435,10 +435,10 @@ addons:
     enabled: true
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
+    istio:
+      injection: disabled
     values:
       global:
-        istio:
-          enabled: false
         psql:
           host: "acid-gitlab.gitlab.svc.cluster.local"
           port: 5432
@@ -447,6 +447,9 @@ addons:
           password:
             secret: "gitlab.acid-gitlab.credentials.postgresql.acid.zalan.do"
             key: "password"
+      istio:
+        mtls:
+          mode: PERMISSIVE
         # ## https://docs.gitlab.com/charts/installation/deployment#outgoing-email
         # ## Example Outgoing email server settings
         # smtp:
@@ -716,14 +719,6 @@ addons:
           requests:
             cpu: 200m
             memory: 300Mi
-      istio:
-        enabled: true
-        mtls:
-          mode: PERMISSIVE
-        injection: enabled
-        gitlab:
-          gateways:
-            - istio-system/public
   gitlabRunner:
     enabled: true
     git:
