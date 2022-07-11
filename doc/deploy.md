@@ -8,6 +8,8 @@ Depending on where you want to run the package you just created, there are a few
 
 1. Burn to removable media
     - `build/zarf`
+    - `zarf-package-k3s-amd64.tar.zst`
+    - `zarf-package-k3s-images-amd64.tar.zst`
     - `build/zarf-init-amd64.tar.zst`
     - `build/zarf-package-flux-amd64.tar.zst`
     - `build/zarf-package-software-factory-amd64.tar.zst`
@@ -18,8 +20,10 @@ Depending on where you want to run the package you just created, there are a few
 3. Deploy
 
    ```shell
-   # Assuming you want to use the built-in single-node K3s cluster. If you don't, dont add `k3s` to the `--components` flag.
-   ./zarf init --components k3s,gitops-service --confirm
+   # Assuming you want to use the built-in single-node K3s cluster. If you don't, skip the "k3s" and "k3s-images" packages
+   ./zarf package deploy zarf-package-k3s-amd64.tar.zst --confirm
+   ./zarf init --components git-server --confirm
+   ./zarf package deploy zarf-package-k3s-images-amd64.tar.zst --confirm
    ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm
    kubectl apply -f secret-sops-gpg.yaml
    ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm
@@ -40,7 +44,9 @@ Depending on where you want to run the package you just created, there are a few
 1. Deploy
 
     ```shell
-    ./zarf init --components k3s,gitops-service --confirm
+    ./zarf package deploy zarf-package-k3s-amd64.tar.zst --confirm
+    ./zarf init --components git-server --confirm
+    ./zarf package deploy zarf-package-k3s-images-amd64.tar.zst --confirm
     ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm
     kubectl apply -f secret-sops-gpg.yaml
     ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm

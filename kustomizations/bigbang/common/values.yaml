@@ -4,7 +4,7 @@ registryCredentials:
   password: "${ZARF_REGISTRY_AUTH_PULL}"
 
 git:
-  existingSecret: "zarf-git-secret"
+  existingSecret: "private-git-server"
 
 networkPolicies:
   enabled: true
@@ -29,7 +29,6 @@ istio:
             cpu: "500m"
             memory: "512Mi"
   values:
-    hub: "${ZARF_REGISTRY}/ironbank/opensource/istio"
     istiod:
       resources:
         requests:
@@ -40,11 +39,6 @@ istio:
           memory: "1Gi"
       hpaSpec:
         maxReplicas: 1
-    cni:
-      image:
-        hub: "${ZARF_REGISTRY}/ironbank/opensource/istio"
-    postInstallHook:
-      image: "${ZARF_REGISTRY}/ironbank/big-bang/base:1.0.0"
   gateways:
     public:
       ingressGateway: public-ingressgateway
@@ -53,8 +47,8 @@ istio:
         - jenkins.{{ .Values.domain }}
         - jira.{{ .Values.domain }}
         - confluence.{{ .Values.domain }}
-        - nexus.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
+        - artifactory.{{ .Values.domain }}
 
 istiooperator:
   enabled: true
@@ -76,17 +70,12 @@ jaeger:
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__jaeger.git
   values:
-    cleanSvcMonitor:
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/big-bang/base"
-    image:
-      repository: "${ZARF_REGISTRY}/ironbank/opensource/jaegertracing/jaeger-operator"
-    retention:
-      image: "${ZARF_REGISTRY}/ironbank/opensource/jaegertracing/jaeger-es-index-cleaner:1.29.0"
+    istio:
+      mtls:
+        mode: PERMISSIVE
     jaeger:
       spec:
         allInOne:
-          image: "${ZARF_REGISTRY}/ironbank/opensource/jaegertracing/all-in-one:1.29.0"
           resources:
             requests:
               cpu: "100m"
@@ -94,14 +83,7 @@ jaeger:
             limits:
               cpu: "500m"
               memory: "128Mi"
-        agent:
-          image: "${ZARF_REGISTRY}/ironbank/opensource/jaegertracing/jaeger-agent:1.29.0"
-        ingester:
-          image: "${ZARF_REGISTRY}/ironbank/opensource/jaegertracing/jaeger-ingester:1.29.0"
-        query:
-          image: "${ZARF_REGISTRY}/ironbank/opensource/jaegertracing/jaeger-query:1.29.0"
         collector:
-          image: "${ZARF_REGISTRY}/ironbank/opensource/jaegertracing/jaeger-collector:1.29.0"
           resources:
             requests:
               cpu: "100m"
@@ -122,37 +104,35 @@ kiali:
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__kiali.git
   values:
-    image:
-      repo: "${ZARF_REGISTRY}/ironbank/opensource/kiali/kiali-operator"
+    istio:
+      mtls:
+        mode: PERMISSIVE
     resources:
       requests:
         cpu: "100m"
-        memory: "256Mi"
+        memory: "512Mi"
       limits:
         cpu: "500m"
-        memory: "256Mi"
+        memory: "512Mi"
     cr:
       spec:
         deployment:
-          image_name: "${ZARF_REGISTRY}/ironbank/opensource/kiali/kiali"
           resources:
             requests:
-              cpu: "100m"
-              memory: "368Mi"
+              cpu: "200m"
+              memory: "512Mi"
             limits:
               cpu: "500m"
-              memory: "368Mi"
-    svcPatchJob:
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/big-bang/base"
+              memory: "512Mi"
 
 clusterAuditor:
   enabled: true
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__cluster-auditor.git
   values:
-    image:
-      repo: "${ZARF_REGISTRY}/ironbank/bigbang/cluster-auditor/opa-exporter"
+    istio:
+      mtls:
+        mode: PERMISSIVE
     resources:
       requests:
         cpu: "100m"
@@ -166,67 +146,76 @@ gatekeeper:
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__policy.git
   values:
-    postInstall:
-      labelNamespace:
-        image:
-          repository: "${ZARF_REGISTRY}/ironbank/opensource/kubernetes/kubectl"
-    image:
-      repository: "${ZARF_REGISTRY}/ironbank/opensource/openpolicyagent/gatekeeper"
-      crdRepository: "${ZARF_REGISTRY}/ironbank/opensource/kubernetes/kubectl"
+    istio:
+      mtls:
+        mode: PERMISSIVE
     controllerManager:
       resources:
         limits:
-          cpu: "1"
-          memory: "2Gi"
+          cpu: "2"
+          memory: "4Gi"
         requests:
-          cpu: "175m"
-          memory: "512Mi"
+          cpu: "250m"
+          memory: "1Gi"
     audit:
       resources:
         limits:
-          cpu: "1.2"
-          memory: "2Gi"
+          cpu: "2"
+          memory: "4Gi"
         requests:
-          cpu: "200m"
-          memory: "768Mi"
-    bbtests:
-      scripts:
-        image: "${ZARF_REGISTRY}/ironbank/opensource/kubernetes/kubectl:v1.22.2"
+          cpu: "250m"
+          memory: "1Gi"
     violations:
       allowedDockerRegistries:
+        match:
+          # Make Kind/K3d happy
+          excludedNamespaces:
+            - "kube-sytem"
+            - "local-path-storage"
         parameters:
           repos:
             - "${ZARF_REGISTRY}"
           excludedResources:
-            # K3s kube-system stuff, better than excluding the whole namespace
-            - "kube-system/coredns-.*"
-            - "kube-system/local-path-provisioner-.*"
-            - "kube-system/metrics-server-.*"
-            - "kube-system/svclb-.*"
-            - "kube-system/traefik-.*"
             # K3s needs these due to how it creates services of type "LoadBalancer"
             - "istio-system/lb-port-.*"
             - "istio-system/svclb-.*"
             # K3s needs this if you are doing K3s-specific "HelmRelease"-type CRDs
             - ".*/helm-install-.*"
             - ".*/helm"
-            # TODO: Get Zarf images in Iron Bank and don't wildcard the whole namespace
-            - "zarf/.*"
+      allowedHostFilesystem:
+        match:
+          # Make Kind/K3d happy
+          excludedNamespaces:
+            - "kube-sytem"
+            - "local-path-storage"
       hostNetworking:
         parameters:
           excludedResources:
             # K3s needs these due to how it creates services of type "LoadBalancer"
             - "istio-system/svclb-.*"
             - "istio-system/lb-port-.*"
+      restrictedTaint:
+        match:
+          # Make Kind/K3d happy
+          excludedNamespaces:
+            - "kube-sytem"
+            - "local-path-storage"
+      volumeTypes:
+        match:
+          # Make Kind/K3d happy
+          excludedNamespaces:
+            - "kube-sytem"
+            - "local-path-storage"
 
 logging:
   enabled: true
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__elasticsearch-kibana.git
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     kibana:
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/elastic/kibana/kibana"
       count: 1
       resources:
         requests:
@@ -236,8 +225,6 @@ logging:
           memory: "1Gi"
           cpu: "500m"
     elasticsearch:
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/elastic/elasticsearch/elasticsearch"
       master:
         count: 1
         resources:
@@ -256,20 +243,15 @@ logging:
           requests:
             cpu: "100m"
             memory: "3Gi"
-    upgradeJob:
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/big-bang/base"
-    bbtests:
-      scripts:
-        image: "${ZARF_REGISTRY}/ironbank/stedolan/jq:1.6"
 
 eckoperator:
   enabled: true
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__eck-operator.git
   values:
-    image:
-      repository: "${ZARF_REGISTRY}/ironbank/elastic/eck-operator/eck-operator"
+    istio:
+      mtls:
+        mode: PERMISSIVE
     resources:
       limits:
         cpu: "200m"
@@ -277,17 +259,15 @@ eckoperator:
       requests:
         cpu: "100m"
         memory: "256Mi"
-    upgradeCrds:
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/big-bang/base"
 
 fluentbit:
   enabled: true
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__fluentbit.git
   values:
-    image:
-      repository: "${ZARF_REGISTRY}/ironbank/opensource/fluent/fluent-bit"
+    istio:
+      mtls:
+        mode: PERMISSIVE
     resources:
       limits:
         cpu: "500m"
@@ -295,17 +275,16 @@ fluentbit:
       requests:
         cpu: "100m"
         memory: "256Mi"
-    bbtests:
-      scripts:
-        image: "${ZARF_REGISTRY}/ironbank/stedolan/jq:1.6"
 
 monitoring:
   enabled: true
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__monitoring.git
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     cleanUpgrade:
-      image: "${ZARF_REGISTRY}/ironbank/big-bang/base:1.0.0"
       resources:
         requests:
           memory: "128Mi"
@@ -315,8 +294,6 @@ monitoring:
           cpu: "200m"
     alertmanager:
       alertmanagerSpec:
-        image:
-          repository: "${ZARF_REGISTRY}/ironbank/opensource/prometheus/alertmanager"
         resources:
           limits:
             cpu: "500m"
@@ -325,8 +302,6 @@ monitoring:
             cpu: "100m"
             memory: "256Mi"
     grafana:
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/opensource/grafana/grafana"
       resources:
         limits:
           cpu: "500m"
@@ -334,11 +309,7 @@ monitoring:
         requests:
           cpu: "100m"
           memory: "256Mi"
-      testFramework:
-        image: "${ZARF_REGISTRY}/ironbank/opensource/bats/bats"
       sidecar:
-        image:
-          repository: "${ZARF_REGISTRY}/ironbank/kiwigrid/k8s-sidecar"
         resources:
           limits:
             cpu: "500m"
@@ -346,8 +317,6 @@ monitoring:
           requests:
             cpu: "50m"
             memory: "50Mi"
-      downloadDashboardsImage:
-        repository: "${ZARF_REGISTRY}/ironbank/big-bang/base"
       downloadDashboards:
         resources:
           limits:
@@ -357,8 +326,6 @@ monitoring:
             cpu: "20m"
             memory: "20Mi"
     kube-state-metrics:
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/opensource/kubernetes/kube-state-metrics"
       resources:
         limits:
           cpu: "500m"
@@ -367,8 +334,6 @@ monitoring:
           cpu: "10m"
           memory: "128Mi"
     prometheus-node-exporter:
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/opensource/prometheus/node-exporter"
       resources:
         limits:
           cpu: "500m"
@@ -379,8 +344,6 @@ monitoring:
     prometheusOperator:
       admissionWebhooks:
         patch:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/opensource/ingress-nginx/kube-webhook-certgen"
           resources:
             limits:
               cpu: "100m"
@@ -389,8 +352,6 @@ monitoring:
               cpu: "50m"
               memory: "128Mi"
         cleanupProxy:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/big-bang/base"
           resources:
             limits:
               cpu: "100m"
@@ -405,11 +366,7 @@ monitoring:
         requests:
           cpu: "100m"
           memory: "512Mi"
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/opensource/prometheus-operator/prometheus-operator"
       prometheusConfigReloader:
-        image:
-          repository: "${ZARF_REGISTRY}/ironbank/opensource/prometheus-operator/prometheus-config-reloader"
         resources:
           requests:
             cpu: "50m"
@@ -417,14 +374,8 @@ monitoring:
           limits:
             cpu: "100m"
             memory: "128Mi"
-      thanosImage:
-        repository: "${ZARF_REGISTRY}/ironbank/opensource/thanos/thanos"
-      kubectlImage:
-        repository: "${ZARF_REGISTRY}/ironbank/opensource/kubernetes-1.20/kubectl-1.20"
     prometheus:
       prometheusSpec:
-        image:
-          repository: "${ZARF_REGISTRY}/ironbank/opensource/prometheus/prometheus"
         resources:
           limits:
             cpu: "300m"
@@ -434,13 +385,15 @@ monitoring:
             memory: "2Gi"
 
 twistlock:
-  enabled: true
+  # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
+  enabled: false
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__security-tools__twistlock.git
   values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
     console:
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/twistlock/console/console"
     resources:
       limits:
         memory: "1Gi"
@@ -448,9 +401,6 @@ twistlock:
       requests:
         memory: "1Gi"
         cpu: "100m"
-    bbtests:
-      scripts:
-        image: "${ZARF_REGISTRY}/ironbank/stedolan/jq:1.6"
 
 addons:
   minioOperator:
@@ -459,8 +409,6 @@ addons:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio-operator.git
     values:
       operator:
-        image:
-          repository: "${ZARF_REGISTRY}/ironbank/opensource/minio/operator"
         resources:
           requests:
             cpu: 200m
@@ -471,33 +419,61 @@ addons:
             memory: 256Mi
       istio:
         enabled: true
-      tenantPatchJob:
-        image:
-          repository: "${ZARF_REGISTRY}/ironbank/big-bang/base"
+        mtls:
+          mode: PERMISSIVE
 
   minio:
     enabled: false
+    git:
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio.git
+    values:
+      istio:
+        mtls:
+          mode: PERMISSIVE
 
   gitlab:
     enabled: true
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
+    istio:
+      injection: disabled
     values:
       global:
-        istio:
-          enabled: true
-        certificates:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/alpine-certificates"
-        kubectl:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/kubectl"
-        busybox:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/redhat/ubi/ubi8"
+        psql:
+          host: "acid-gitlab.gitlab.svc.cluster.local"
+          port: 5432
+          database: "gitlabhq_production"
+          username: "gitlab"
+          password:
+            secret: "gitlab.acid-gitlab.credentials.postgresql.acid.zalan.do"
+            key: "password"
+      istio:
+        mtls:
+          mode: PERMISSIVE
+        # ## https://docs.gitlab.com/charts/installation/deployment#outgoing-email
+        # ## Example Outgoing email server settings
+        # smtp:
+        #   enabled: true
+        #   address: smtp.example.com
+        #   port: 587
+        #   user_name: "user@example.com"
+        #   ## https://docs.gitlab.com/charts/installation/secrets#smtp-password
+        #   password:
+        #     secret: "gitlab-smtp-credentials"
+        #     key: "password"
+        #   domain: "example.com"
+        #   authentication: "login"
+        #   starttls_auto: true
+        #   openssl_verify_mode: "peer"
+        #   pool: false
+        # ## https://docs.gitlab.com/charts/installation/deployment#outgoing-email
+        # ## Email persona used in email sent by GitLab
+        # email:
+        #   from: "gitlabadmin@example.com"
+        #   display_name: "GitLab Admin"
+        #   reply_to: "gitlabadmin@example.com"
+        #   subject_suffix: "gitlab"
       upgradeCheck:
-        image:
-          repository: "${ZARF_REGISTRY}/ironbank/redhat/ubi/ubi8"
         resources:
           requests:
             cpu: 500m
@@ -507,8 +483,6 @@ addons:
             memory: 500Mi
       redis:
         metrics:
-          image:
-            registry: "${ZARF_REGISTRY}/ironbank/bitnami"
           resources:
             limits:
               cpu: 250m
@@ -516,8 +490,6 @@ addons:
             requests:
               cpu: 250m
               memory: 256Mi
-        image:
-          registry: "${ZARF_REGISTRY}/ironbank/bitnami"
         master:
           resources:
             limits:
@@ -560,18 +532,8 @@ addons:
               cpu: 250m
               memory: 256Mi
       postgresql:
-        resources:
-          limits:
-            cpu: 500m
-            memory: 500Mi
-          requests:
-            cpu: 500m
-            memory: 500Mi
-        image:
-          registry: "${ZARF_REGISTRY}"
+        install: false
       registry:
-        image:
-          repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/gitlab-container-registry"
         init:
           resources:
             limits:
@@ -588,9 +550,6 @@ addons:
             cpu: 200m
             memory: 1024Mi
       shared-secrets:
-        selfsign:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/cfssl-self-sign"
         resources:
           requests:
             cpu: 300m
@@ -600,8 +559,6 @@ addons:
             memory: 200Mi
       gitlab:
         toolbox:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/gitlab-toolbox"
           init:
             resources:
               requests:
@@ -642,8 +599,6 @@ addons:
             requests:
               cpu: 150m
               memory: 200Mi
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/gitlab-exporter"
         migrations:
           init:
             resources:
@@ -660,8 +615,6 @@ addons:
             requests:
               cpu: 500m
               memory: 1Gi
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/gitlab-toolbox"
         webservice:
           init:
             resources:
@@ -678,8 +631,6 @@ addons:
             requests:
               cpu: 600m
               memory: 2.5Gi
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/gitlab-webservice"
           workhorse:
             resources:
               limits:
@@ -688,10 +639,7 @@ addons:
               requests:
                 cpu: 600m
                 memory: 2.5Gi
-            image: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/gitlab-workhorse"
         sidekiq:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/gitlab-sidekiq"
           init:
             resources:
               limits:
@@ -708,8 +656,6 @@ addons:
               memory: 3Gi
               cpu: 1500m
         gitaly:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/gitaly"
           init:
             resources:
               limits:
@@ -726,8 +672,6 @@ addons:
               cpu: 400m
               memory: 600Mi
         gitlab-shell:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/gitlab-shell"
           init:
             resources:
               limits:
@@ -744,8 +688,6 @@ addons:
               cpu: 300m
               memory: 300Mi
         praefect:
-          image:
-            repository: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab/gitaly"
           init:
             resources:
               limits:
@@ -777,35 +719,14 @@ addons:
           requests:
             cpu: 200m
             memory: 300Mi
-        image: "${ZARF_REGISTRY}/ironbank/opensource/minio/minio"
-        minioMc:
-          image: "${ZARF_REGISTRY}/ironbank/opensource/minio/mc"
-      istio:
-        enabled: true
-        injection: enabled
-        gitlab:
-          gateways:
-            - istio-system/public
   gitlabRunner:
     enabled: true
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab-runner.git
     values:
-      image: "${ZARF_REGISTRY}/ironbank/gitlab/gitlab-runner/gitlab-runner:v14.6.0"
-      runners:
-        config: |
-          [[runners]]
-            clone_url = "http://gitlab-webservice-default.gitlab.svc.cluster.local:8181"
-            cache_dir = "/tmp/gitlab-runner/cache"
-            [runners.kubernetes]
-              namespace = "{{.Release.Namespace}}"
-              image = "${ZARF_REGISTRY}/ironbank/redhat/ubi/ubi8:8.4"
-              helper_image = "${ZARF_REGISTRY}/ironbank/gitlab/gitlab-runner/gitlab-runner-helper:v14.4.0"
-              image_pull_secrets = ["private-registry"]
-            [runners.kubernetes.pod_labels]
-              "job_id" = "${CI_JOB_ID}"
-              "job_name" = "${CI_JOB_NAME}"
-              "pipeline_id" = "${CI_PIPELINE_ID}"
+      istio:
+        mtls:
+          mode: PERMISSIVE
       resources:
         limits:
           memory: 256Mi
@@ -813,25 +734,3 @@ addons:
         requests:
           memory: 256Mi
           cpu: 200m
-  nexus:
-    enabled: true
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__nexus.git
-    values:
-      istio:
-        enabled: true
-        nexus:
-          gateways:
-            - istio-system/public
-      job_image:
-        repository: "${ZARF_REGISTRY}/ironbank/redhat/ubi/ubi8-minimal"
-      image:
-        repository: "${ZARF_REGISTRY}/ironbank/sonatype/nexus/nexus"
-      nexus:
-        resources:
-          requests:
-            cpu: 4
-            memory: 8000Mi
-          limits:
-            cpu: 4
-            memory: 8000Mi

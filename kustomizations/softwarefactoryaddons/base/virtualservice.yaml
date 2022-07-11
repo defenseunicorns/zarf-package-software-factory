@@ -14,3 +14,20 @@ spec:
             host: jenkins.jenkins.svc.cluster.local
             port:
               number: 8080
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: artifactory
+  namespace: artifactory
+spec:
+  gateways:
+    - istio-system/public
+  hosts:
+    - artifactory.bigbang.dev
+  http:
+    - route:
+        - destination:
+            host: artifactory.artifactory.svc.cluster.local
+            port:
+              number: 8082

@@ -40,9 +40,6 @@ spec:
     - kind: ConfigMap
       name: postgres-operator-environment
       valuesKey: values.yaml
-  dependsOn:
-    - name: istio
-      namespace: bigbang
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -86,6 +83,3 @@ spec:
     - kind: ConfigMap
       name: postgres-operator-ui-environment
       valuesKey: values.yaml
-  dependsOn:
-    - name: istio
-      namespace: bigbang

@@ -4,7 +4,7 @@ This document will explain how to disable Postgres Operator and Minio, which sho
 
 ## Disable Postgres Operator
 
-1. Comment out or delete the component named `softwarefactoryaddons-deps` in `zarf.yaml`
+1. Comment out or delete the component named `postgres-operator` in `zarf.yaml`
 
 1. Delete `kustomizations/softwarefactoryaddons/base/postgresql.yaml`
 

@@ -1,0 +1,64 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: gitlab-database
+  namespace: bigbang
+spec:
+  targetNamespace: gitlab
+  releaseName: gitlab-database
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+    - name: postgres-operator
+      namespace: softwarefactoryaddons
+    - name: gatekeeper
+      namespace: bigbang
+  values:
+    resources:
+      - apiVersion: "acid.zalan.do/v1"
+        kind: "postgresql"
+        metadata:
+          name: "acid-gitlab"
+        spec:
+          teamId: "acid"
+          postgresql:
+            version: "13"
+          numberOfInstances: 3
+          volume:
+            size: "2Gi"
+          users:
+            # role for gitlab application
+            gitlab: []
+          databases:
+            gitlabhq_production: gitlab
+          # enableLogicalBackup: true
+          # logicalBackupSchedule: "*/2 * * * *"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: "1"
+              memory: 2000Mi

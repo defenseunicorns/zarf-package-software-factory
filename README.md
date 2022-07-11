@@ -8,10 +8,10 @@ Deploys the components of a software factory with the following services, all ru
 - GitLab*
 - GitLab Runner*
 - Minio Operator*
-- Nexus*
 - Jira
 - Confluence
 - Jenkins
+- Artifactory
 
 Coming Soon:
 
@@ -29,11 +29,17 @@ All versions of this package will not be compatible with all versions of Zarf. F
 
 - :warning: We do not currently test compatibility from one version to the next. The user of this package is expected to first deploy to a test environment when doing upgrades. We will start testing upgrade paths as we get closer to a v1.0 release.
 
-- Jenkins won't work in disconnected environments due to its dependency on plugins pulled from the internet. Work is needed to figure out and implement a method of doing locally sourced plugins.
+- Twistlock is disabled for now while we determine how we'll automatically enable it and test it when it requires a license key to be present in the values yaml.
+
+- Several services have Istio sidecar injection disabled until we can determine how to enable it without breaking functionality with Postgres Operator.
+
+- Jenkins won't work in disconnected environments due to its dependency on plugins pulled from the internet. Work is needed to figure out and implement a method of doing locally sourced plugins. Jira and Confluence plugins will have the same issue.
 
 - Due to issues with Elasticsearch this package doesn't work yet in some k8s distros. It does work in K3s (using `zarf init --components k3s,gitops-service`). Upcoming work to swap the EFK stack out for the PLG stack (Promtail, Loki, Grafana) should resolve this issue. Keep in mind the big note above about the package being huge. Unless you have the Mother of All Laptops you'll need to turn a bunch of stuff off before you try to deploy it locally using Vagrant.
 
 - If you are using Vagrant, inside the Vagrant VM the services are available on the standard port 443. Outside the VM if you want to pull something up in your browser that traffic is being routed to port **8443** to avoid needing to be root when running the Vagrant box.
+
+- The version of K3s that Zarf comes with is not compatible, due to issues with creating a Service of type LoadBalancer for Istio. Instead, a custom K3s and "k3s-images" package are used.
 
 ## Prerequisites
 

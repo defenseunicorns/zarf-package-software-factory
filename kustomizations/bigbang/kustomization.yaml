@@ -1,5 +1,6 @@
 resources:
   - vendor/bigbang/base
+  - databases.yaml
 
 configMapGenerator:
   - name: common
@@ -17,7 +18,7 @@ secretGenerator:
 
 patchesStrategicMerge:
   - |-
-    apiVersion: source.toolkit.fluxcd.io/v1beta1
+    apiVersion: source.toolkit.fluxcd.io/v1beta2
     kind: GitRepository
     metadata:
       name: bigbang
@@ -25,4 +26,4 @@ patchesStrategicMerge:
     spec:
       url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__bigbang.git
       secretRef:
-        name: zarf-git-secret
+        name: private-git-server

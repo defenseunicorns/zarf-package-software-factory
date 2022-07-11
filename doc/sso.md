@@ -159,3 +159,32 @@ After Flux reconciles the change, Jenkins should now be using GitLab as the SSO 
    1. JIT provisioning / Create users on login to the application: unchecked
    1. Remember user logins: user's preference
    1. Login mode: Use OpenID Connect as primary authentication
+
+### Configure Artifactory
+
+#### Instructions
+
+1. Create a new Application in GitLab: Admin > Applications > New application
+   1. Name: `Artifactory`
+   1. Redirect URI: `https://artifactory.bigbang.dev/artifactory/api/oauth2/loginResponse`
+   1. Trusted: Yes (checked)
+   1. Confidential: Yes (checked)
+   1. Expire access tokens: Yes (checked)
+   1. Scopes: `read_user, read_api, openid, profile, email` checked, all others unchecked
+
+1. Log in to Artifactory for the first time and do the initial configuration. The initial user is `admin | password`. A 30 day trial license can be obtained [HERE](https://jfrog.com/start-free/).
+
+1. Navigate to [https://artifactory.bigbang.dev/ui/admin/configuration/security/oauth](https://artifactory.bigbang.dev/ui/admin/configuration/security/oauth)
+
+1. Click "Create New Provider" and configure a new provider
+   1. Provider Name: `GitLab`
+   1. Provider Type: `OpenID`
+   1. Client ID: The Client ID from the Application you made earlier in GitLab
+   1. Secret: The Client Secret from the Application you made earlier in GitLab
+   1. Auth URL: `https://gitlab.bigbang.dev/oauth/authorize`
+   1. API URL: `https://gitlab.bigbang.dev/oauth/userinfo`
+   1. Token URL: `https://gitlab.bigbang.dev/oauth/token`
+   1. Click Save
+
+1. Check "Enable OAuth"
+1. Check "Auto Create Users"
