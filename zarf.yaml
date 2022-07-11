@@ -36,14 +36,11 @@ components:
     repos:
       - https://github.com/zalando/postgres-operator.git@v1.8.2
     images:
-      # software-factory - softwarefactoryaddons-deps
       - registry.opensource.zalan.do/acid/postgres-operator:v1.8.2
-      # Possible images - software-factory - softwarefactoryaddons-deps
       - registry.opensource.zalan.do/acid/logical-backup:v1.8.0
       - registry.opensource.zalan.do/acid/logical-backup:v1.8.2
       - registry.opensource.zalan.do/acid/pgbouncer:master-22
       - registry.opensource.zalan.do/acid/spilo-14:2.1-p6
-      # software-factory - softwarefactoryaddons-deps
       - registry.opensource.zalan.do/acid/postgres-operator-ui:v1.8.2
 
   - name: big-bang
