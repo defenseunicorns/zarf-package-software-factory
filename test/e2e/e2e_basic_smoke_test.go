@@ -26,11 +26,11 @@ func TestAllServicesRunning(t *testing.T) {
 		// Just make sure we can hit the cluster
 		output, err := platform.RunSSHCommandAsSudo(`kubectl get nodes`)
 		require.NoError(t, err, output)
+		// Wait for the "postgres-operator" kustomization to report "Ready==True".
+		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/postgres-operator -n flux-system --for=condition=Ready --timeout=1200s`)
+		require.NoError(t, err, output)
 		// Wait for the "bigbang" kustomization to report "Ready==True". Our testing shows if everything goes right this should take 11-13 minutes.
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/bigbang -n flux-system --for=condition=Ready --timeout=1200s`)
-		require.NoError(t, err, output)
-		// Wait for the "softwarefactoryaddons-deps" kustomization to report "Ready==True".
-		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/softwarefactoryaddons-deps -n flux-system --for=condition=Ready --timeout=1200s`)
 		require.NoError(t, err, output)
 		// Wait for the "softwarefactoryaddons" kustomization to report "Ready==True".
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/softwarefactoryaddons -n flux-system --for=condition=Ready --timeout=1200s`)
