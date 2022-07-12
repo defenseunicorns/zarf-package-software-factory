@@ -43,7 +43,7 @@ ENV PATH="/root/.asdf/shims:/root/.asdf/bin:${PATH}"
 # ENV PATH="/home/buildharness/.asdf/shims:/home/buildharness/.asdf/bin:${PATH}"
 
 # Install golang. Get versions using 'asdf list all golang'
-ARG GOLANG_VERSION="1.18.3"
+ARG GOLANG_VERSION="1.18.4"
 ENV GOLANG_VERSION=${GOLANG_VERSION}
 RUN asdf plugin add golang \
   && asdf install golang "${GOLANG_VERSION}"
