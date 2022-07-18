@@ -133,3 +133,7 @@ addons:
   minio:
     accesskey: "changeme"
     secretkey: "changeme"
+  gitlab:
+    objectStorage:
+      accessKey: "changeme" # needs to match addons.minio.accesskey
+      accessSecret: "changeme" # needs to match addons.minio.secretkey

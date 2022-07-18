@@ -430,6 +430,43 @@ addons:
       istio:
         mtls:
           mode: PERMISSIVE
+      tenants:
+        pools:
+          ## Servers specifies the number of MinIO Tenant Pods / Servers in this pool.
+          ## For standalone mode, supply 1. For distributed mode, supply 4 or more.
+          ## Note that the operator does not support upgrading from standalone to distributed mode.
+          - servers: 4
+            ## volumesPerServer specifies the number of volumes attached per MinIO Tenant Pod / Server.
+            volumesPerServer: 4
+            ## size specifies the capacity per volume
+            size: 1Gi
+            ## storageClass specifies the storage class name to be used for this pool
+            storageClassName: ""
+            ## Used to specify a toleration for a pod
+            tolerations: {}
+            ## nodeSelector parameters for MinIO Pods. It specifies a map of key-value pairs. For the pod to be
+            ## eligible to run on a node, the node must have each of the
+            ## indicated key-value pairs as labels.
+            ## Read more here: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+            nodeSelector: {}
+            ## Affinity settings for MinIO pods. Read more about affinity
+            ## here: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity.
+            affinity: {}
+            ## Configure resource requests and limits for MinIO containers
+            resources:
+              requests:
+                cpu: 250m
+                memory: 2Gi
+              limits:
+                cpu: 250m
+                memory: 2Gi
+            ## Configure security context
+            ## BB Note: Defaults for Ironbank image are 1001 for user, group, and fsGroup
+            securityContext:
+              runAsUser: 1001
+              runAsGroup: 1001
+              fsGroup: 1001
+              runAsNonRoot: true
 
   gitlab:
     enabled: true
@@ -437,6 +474,28 @@ addons:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
     istio:
       injection: disabled
+    objectStorage:
+      # -- Type of object storage to use for Gitlab, setting to s3 will assume an external, pre-existing object storage is to be used.
+      # Entering connection info will enable this option and will auto-create any required secrets
+      type: "minio" # supported types are "s3" or "minio"
+      # -- S3 compatible endpoint to use for connection information.
+      # examples: "https://s3.amazonaws.com" "https://s3.us-gov-west-1.amazonaws.com" "http://minio.minio.svc.cluster.local:9000"
+      endpoint: "http://minio.minio.svc.cluster.local:9000"
+      # -- S3 compatible region to use for connection information.
+      region: ""
+      # -- Access key for connecting to object storage endpoint.
+      # -- If using accessKey and accessSecret, the iamProfile must be left as an empty string: ""
+      # accessKey: "" -- Added in environment-bb/values.yaml
+      # -- Secret key for connecting to object storage endpoint.
+      # Unencoded string data. This should be placed in the secret values and then encrypted
+      # accessSecret: "" -- Added in environment-bb/values.yaml
+      # -- Bucket prefix to use for identifying buckets.
+      # Example: "prod" will produce "prod-gitlab-bucket"
+      bucketPrefix: "di2me"
+      # -- NOTE: Current bug with AWS IAM Profiles and Object Storage where only artifacts are stored. Fixed in Gitlab 14.5
+      # -- Name of AWS IAM profile to use.
+      # -- If using an AWS IAM profile, the accessKey and accessSecret values must be left as empty strings eg: ""
+      iamProfile: ""
     values:
       global:
         psql:
