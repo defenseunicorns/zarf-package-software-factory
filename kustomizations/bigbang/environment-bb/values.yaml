@@ -128,3 +128,8 @@ istio:
           he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
           Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
           -----END CERTIFICATE-----
+
+addons:
+  minio:
+    accesskey: "changeme"
+    secretkey: "changeme"
