@@ -482,7 +482,7 @@ addons:
       # examples: "https://s3.amazonaws.com" "https://s3.us-gov-west-1.amazonaws.com" "http://minio.minio.svc.cluster.local:9000"
       endpoint: "http://minio.minio.svc.cluster.local:9000"
       # -- S3 compatible region to use for connection information.
-      region: ""
+      region: "us-east-1"
       # -- Access key for connecting to object storage endpoint.
       # -- If using accessKey and accessSecret, the iamProfile must be left as an empty string: ""
       # accessKey: "" -- Added in environment-bb/values.yaml
