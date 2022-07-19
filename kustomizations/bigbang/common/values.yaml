@@ -432,6 +432,8 @@ addons:
         mtls:
           mode: PERMISSIVE
       tenants:
+        users:
+          -
         buckets:
           # git-lfs bucket
           - name: "git-lfs"
