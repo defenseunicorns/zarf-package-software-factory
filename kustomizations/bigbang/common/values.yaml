@@ -49,6 +49,7 @@ istio:
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
+        - minio.{{ .Values.domain }}
 
 istiooperator:
   enabled: true
