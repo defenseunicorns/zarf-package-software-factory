@@ -74,7 +74,7 @@ istio:
               namespace: istio-system
             patch:
               - op: add
-                path: "/spec/servers/1/tls/tlsProtocol"
+                path: "/spec/servers/1/tls/minProtocolVersion"
                 value: "TLSV1_3"
 
 istiooperator:
