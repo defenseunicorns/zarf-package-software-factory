@@ -32,6 +32,11 @@ resource "aws_instance" "public" {
   tags = {
     Name = "${local.fullname}-public"
   }
+
+  user_data = <<EOF
+#!/bin/bash
+echo "PubkeyAcceptedKeyTypes=+ssh-rsa" >> /etc/ssh/sshd_config
+  EOF
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
