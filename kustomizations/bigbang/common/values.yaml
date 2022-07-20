@@ -50,17 +50,32 @@ istio:
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
   postRenderers:
+    # Only works with Istio 1.14+
+    # - kustomize:
+    #     patchesStrategicMerge:
+    #       - kind: IstioOperator
+    #         apiVersion: install.istio.io/v1alpha1
+    #         metadata:
+    #           name: istiocontrolplane
+    #           namespace: istio-system
+    #         spec:
+    #           meshConfig:
+    #             meshMTLS:
+    #               minProtocolVersion: TLSV1_3
+
+    # Should work with Istio 1.13, but it's ugly.
     - kustomize:
-        patchesStrategicMerge:
-          - kind: IstioOperator
-            apiVersion: install.istio.io/v1alpha1
-            metadata:
-              name: istiocontrolplane
+        patchesJson6902:
+          - target:
+              group: networking.istio.io
+              version: v1beta1
+              kind: Gateway
+              name: public
               namespace: istio-system
-            spec:
-              meshConfig:
-                meshMTLS:
-                  minProtocolVersion: TLSV1_3
+            patch: |-
+              - op: add
+                path: "/spec/servers/1/tls/tlsProtocol"
+                value: "TLSV1_3"
 
 istiooperator:
   enabled: true
