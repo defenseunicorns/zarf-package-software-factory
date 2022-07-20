@@ -4,75 +4,75 @@ metadata:
   name: bigbang
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 1m
+  timeout: 1m
   path: "./kustomizations/bigbang"
   prune: true
   sourceRef:
     kind: GitRepository
     name: zarf-package-software-factory
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: bigbang
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: istio
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: istio-operator
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: jaeger
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: kiali
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: cluster-auditor
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: gatekeeper
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: ek
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: eck-operator
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: fluent-bit
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: monitoring
-    # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
-    # - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-    #   kind: HelmRelease
-    #   namespace: bigbang
-    #   name: twistlock
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: minio-operator
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: gitlab
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: gitlab-runner
-  timeout: 15m
+  # healthChecks:
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: bigbang
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: istio
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: istio-operator
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: jaeger
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: kiali
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: cluster-auditor
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: gatekeeper
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: ek
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: eck-operator
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: fluent-bit
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     namespace: bigbang
+  #     name: monitoring
+  # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
+  # - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #   kind: HelmRelease
+  #   namespace: bigbang
+  #   name: twistlock
+  # - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #   kind: HelmRelease
+  #   namespace: bigbang
+  #   name: minio-operator
+  # - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #   kind: HelmRelease
+  #   namespace: bigbang
+  #   name: gitlab
+  # - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #   kind: HelmRelease
+  #   namespace: bigbang
+  #   name: gitlab-runner
   decryption:
     provider: sops
     secretRef:
