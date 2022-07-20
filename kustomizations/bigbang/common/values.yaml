@@ -49,6 +49,18 @@ istio:
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
+  postRenderers:
+    - kustomize:
+        patchesStrategicMerge:
+          - kind: IstioOperator
+            apiVersion: install.istio.io/v1alpha1
+            metadata:
+              name: istiocontrolplane
+              namespace: istio-system
+            spec:
+              meshConfig:
+                meshMTLS:
+                  minProtocolVersion: TLSV1_3
 
 istiooperator:
   enabled: true
