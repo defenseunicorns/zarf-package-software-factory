@@ -70,7 +70,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		output, err = platform.RunSSHCommand(`echo 'eval \"$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"' >> ~/.bash_profile && eval \"$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"`)
 		require.NoError(t, err, output)
 
-		// Install sshscan using stupid LinuxBrew, cause it's stupid. Go ahead, try to run `dnf install sshscan`, I dare you. I double dare you. :cry:
+		// Install sshscan using stupid LinuxBrew, cause it's stupid. Go ahead, try to run `apt install sshscan`, I dare you. I double dare you. :cry:
 		output, err = platform.RunSSHCommand(`/home/linuxbrew/.linuxbrew/bin/brew install sslscan`)
 		require.NoError(t, err, output)
 

@@ -17,7 +17,7 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_instance" "public" {
-  ami                    = data.aws_ami.default.id
+  ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.public.id]
   key_name               = var.key_pair_name
@@ -74,12 +74,12 @@ resource "aws_security_group" "public" {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
-# LOOK UP THE AMI
+# LOOK UP THE LATEST UBUNTU AMI
 # ---------------------------------------------------------------------------------------------------------------------
 
-data "aws_ami" "default" {
+data "aws_ami" "ubuntu" {
   most_recent = true
-  owners      = ["099720109477"]
+  owners      = ["099720109477"] # Canonical
 
   filter {
     name   = "virtualization-type"
