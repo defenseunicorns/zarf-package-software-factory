@@ -35,7 +35,7 @@ resource "aws_instance" "public" {
 
   user_data = <<EOF
 #!/bin/bash
-echo "PubkeyAcceptedKeyTypes=+ssh-rsa" >> /etc/ssh/sshd_config
+echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/ssh_config
   EOF
 }
 
