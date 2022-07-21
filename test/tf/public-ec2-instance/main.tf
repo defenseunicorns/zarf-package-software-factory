@@ -79,7 +79,7 @@ resource "aws_security_group" "public" {
 
 data "aws_ami" "default" {
   most_recent = true
-  owners      = ["309956199498"]
+  owners      = ["099720109477"]
 
   filter {
     name   = "virtualization-type"
@@ -98,6 +98,6 @@ data "aws_ami" "default" {
 
   filter {
     name   = "name"
-    values = ["RHEL-8*_HVM-*-x86_64-2-Hourly2-GP2"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
 }
