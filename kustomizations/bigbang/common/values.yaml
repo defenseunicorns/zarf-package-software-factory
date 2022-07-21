@@ -29,8 +29,6 @@ istio:
             cpu: "500m"
             memory: "512Mi"
   values:
-    gateways:
-
     istiod:
       resources:
         requests:
