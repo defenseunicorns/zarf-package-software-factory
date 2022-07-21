@@ -57,8 +57,8 @@ func NewTestPlatform(t *testing.T) *TestPlatform {
 	return testPlatform
 }
 
-// RunSSHCommandAsSudo provides a simple way to run a shell command on the server that is created using Terraform.
-func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error) {
+// RunSSHCommand provides a simple way to run a shell command on the server that is created using Terraform.
+func (platform *TestPlatform) RunSSHCommand(command string) (string, error) {
 	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
 	keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
 	host := ssh.Host{
@@ -76,6 +76,11 @@ func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error
 	logger.Default.Logf(platform.T, output)
 
 	return output, nil
+}
+
+// RunSSHCommandAsSudo provides a simple way to run a shell command on the server that is created using Terraform.
+func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error) {
+	return platform.RunSSHCommand(fmt.Sprintf("sudo %v", command))
 }
 
 // Teardown brings down the Terraform infrastructure that was created.

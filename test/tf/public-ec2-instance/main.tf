@@ -98,6 +98,6 @@ data "aws_ami" "default" {
 
   filter {
     name   = "name"
-    values = ["RHEL-8.*_HVM-*-x86_64-2-Hourly2-GP2"]
+    values = ["RHEL-8*_HVM-*-x86_64-2-Hourly2-GP2"]
   }
 }
