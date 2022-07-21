@@ -14,12 +14,14 @@ jira:
         memory: "2Gi"
       limits:
         cpu: "10"
-        memory: "4Gi"
+        memory: "6Gi"
     jvm:
-      maxHeap: "3g"
+      maxHeap: "4g"
   additionalEnvironmentVariables:
     - name: ATL_DB_TYPE
       value: "postgres72"
+    - name: ATL_DB_DRIVER
+      value: "org.postgresql.Driver"
     - name: ATL_JDBC_URL
       value: "jdbc:postgresql://acid-jira.jira.svc.cluster.local:5432/jira"
     - name: ATL_JDBC_USER
