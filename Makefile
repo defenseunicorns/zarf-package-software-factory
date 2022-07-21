@@ -76,7 +76,7 @@ test: ## Run all automated tests. Requires access to an AWS account. Costs money
 test-ssh: ## Run this if you set SKIP_TEARDOWN=1 and want to SSH into the still-running test server. Don't forget to unset SKIP_TEARDOWN when you're done
 	@cd test/tf/public-ec2-instance && terraform init
 	@cd test/tf/public-ec2-instance/.test-data && cat Ec2KeyPair.json | jq -r .PrivateKey > privatekey.pem && chmod 600 privatekey.pem
-	@cd test/tf/public-ec2-instance && ssh -i .test-data/privatekey.pem ubuntu@$$(terraform output public_instance_ip | tr -d '"')
+	@cd test/tf/public-ec2-instance && ssh -i .test-data/privatekey.pem ec2-user@$$(terraform output public_instance_ip | tr -d '"')
 
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples

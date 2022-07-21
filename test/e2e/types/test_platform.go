@@ -64,7 +64,7 @@ func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error
 	host := ssh.Host{
 		Hostname:    terraform.Output(platform.T, terraformOptions, "public_instance_ip"),
 		SshKeyPair:  keyPair.KeyPair,
-		SshUserName: "ubuntu",
+		SshUserName: "ec2-user",
 	}
 	output, err := ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`sudo bash -c "%v"`, command))
 	if err != nil {

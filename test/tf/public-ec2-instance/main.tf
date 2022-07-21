@@ -17,7 +17,7 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_instance" "public" {
-  ami                    = data.aws_ami.ubuntu.id
+  ami                    = data.aws_ami.default.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.public.id]
   key_name               = var.key_pair_name
@@ -32,11 +32,6 @@ resource "aws_instance" "public" {
   tags = {
     Name = "${local.fullname}-public"
   }
-
-  user_data = <<EOF
-#!/bin/bash
-echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /etc/ssh/ssh_config
-  EOF
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -79,10 +74,10 @@ resource "aws_security_group" "public" {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
-# LOOK UP THE LATEST UBUNTU AMI
+# LOOK UP THE AMI
 # ---------------------------------------------------------------------------------------------------------------------
 
-data "aws_ami" "ubuntu" {
+data "aws_ami" "default" {
   most_recent = true
   owners      = ["309956199498"]
 
