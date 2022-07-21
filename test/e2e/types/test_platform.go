@@ -66,7 +66,7 @@ func (platform *TestPlatform) RunSSHCommand(command string) (string, error) {
 		SshKeyPair:  keyPair.KeyPair,
 		SshUserName: "ec2-user",
 	}
-	output, err := ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`sudo bash -c "%v"`, command))
+	output, err := ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`bash -c "%v"`, command))
 	if err != nil {
 		logger.Default.Logf(platform.T, output)
 
@@ -80,7 +80,23 @@ func (platform *TestPlatform) RunSSHCommand(command string) (string, error) {
 
 // RunSSHCommandAsSudo provides a simple way to run a shell command on the server that is created using Terraform.
 func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error) {
-	return platform.RunSSHCommand(fmt.Sprintf("sudo %v", command))
+	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
+	keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
+	host := ssh.Host{
+		Hostname:    terraform.Output(platform.T, terraformOptions, "public_instance_ip"),
+		SshKeyPair:  keyPair.KeyPair,
+		SshUserName: "ec2-user",
+	}
+	output, err := ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`sudo bash -c "%v"`, command))
+	if err != nil {
+		logger.Default.Logf(platform.T, output)
+
+		return "nil", fmt.Errorf("ssh command failed: %w", err)
+	}
+
+	logger.Default.Logf(platform.T, output)
+
+	return output, nil
 }
 
 // Teardown brings down the Terraform infrastructure that was created.

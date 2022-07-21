@@ -65,11 +65,13 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err, output)
 
 		// Install LinuxBrew for stupid, stupid reasons
-		output, err = platform.RunSSHCommand(`curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bash_profile && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"`)
+		output, err = platform.RunSSHCommand(`curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash`)
+		require.NoError(t, err, output)
+		output, err = platform.RunSSHCommand(`echo 'eval \"$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"' >> ~/.bash_profile && eval \"$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"`)
 		require.NoError(t, err, output)
 
 		// Install sshscan using stupid LinuxBrew, cause it's stupid. Go ahead, try to run `dnf install sshscan`, I dare you. I double dare you. :cry:
-		output, err = platform.RunSSHCommand(`brew install sshscan`)
+		output, err = platform.RunSSHCommand(`/home/linuxbrew/.linuxbrew/bin/brew install sslscan`)
 		require.NoError(t, err, output)
 
 		// Clone the repo idempotently
