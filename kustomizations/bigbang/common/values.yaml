@@ -466,6 +466,9 @@ addons:
     istio:
       injection: disabled
     values:
+      istio:
+        mtls:
+          mode: PERMISSIVE
       global:
         psql:
           host: "acid-gitlab.gitlab.svc.cluster.local"
@@ -475,9 +478,6 @@ addons:
           password:
             secret: "gitlab.acid-gitlab.credentials.postgresql.acid.zalan.do"
             key: "password"
-      istio:
-        mtls:
-          mode: PERMISSIVE
         # ## https://docs.gitlab.com/charts/installation/deployment#outgoing-email
         # ## Example Outgoing email server settings
         # smtp:
