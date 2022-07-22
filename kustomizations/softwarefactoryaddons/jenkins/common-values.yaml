@@ -104,6 +104,8 @@ controller:
 
 agent:
   enabled: true
+  image: "registry1.dso.mil/ironbank/opensource/jenkins/inbound-agent"
+  tag: "4.13"
   resources:
     requests:
       cpu: "512m"
