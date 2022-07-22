@@ -8,3 +8,6 @@ components:
     required: true
     repos:
       - https://github.com/defenseunicorns/zarf-package-software-factory.git
+    images:
+      - registry1.dso.mil/ironbank/opensource/jenkins/inbound-agent:4.13
+      - registry1.dso.mil/ironbank/kiwigrid/k8s-sidecar:1.15.0
