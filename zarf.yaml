@@ -50,7 +50,7 @@ components:
         files:
           - manifests/big-bang.yaml
     repos:
-      - https://repo1.dso.mil/platform-one/big-bang/bigbang.git@1.37.0
+      - https://repo1.dso.mil/platform-one/big-bang/bigbang.git@1.38.0
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git@1.13.4-bb.1
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git@1.13.4-bb.0
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git@2.32.2-bb.0
