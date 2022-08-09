@@ -1,7 +1,8 @@
-# Without enable_lazy_spilo_upgrade set to true the pods will do a rolling upgrade every resync_period, which by
-# default is 30 minutes. We have experienced issues with database corruption when this happens. Deciding instead
-# to do lazy upgrading which means the StatefulSet is modified but a rolling update is not automatically triggered.
-enable_lazy_spilo_upgrade: true
+configGeneral:
+  # Without enable_lazy_spilo_upgrade set to true the pods will do a rolling upgrade every resync_period, which by
+  # default is 30 minutes. We have experienced issues with database corruption when this happens. Deciding instead
+  # to do lazy upgrading which means the StatefulSet is modified but a rolling update is not automatically triggered.
+  enable_lazy_spilo_upgrade: true
 configPostgresPodResources:
   default_cpu_request: "100m"
   default_memory_request: "100Mi"
@@ -9,8 +10,6 @@ configPostgresPodResources:
   default_memory_limit: "500Mi"
   min_cpu_limit: "250m"
   min_memory_limit: "250Mi"
-# configKubernetes:
-#   pod_environment_configmap: "postgres-operator/postgres-pod-config"
 configConnectionPooler:
   connection_pooler_default_cpu_request: "100m"
   connection_pooler_default_cpu_limit: "500m"
