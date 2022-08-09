@@ -1,7 +1,17 @@
 # Helm chart version:
 global:
   artifactoryHaEnabled: false
-
+  database:
+    host: "acid-artifactory.artifactory.svc.cluster.local"
+    port: 5432
+    sslMode: "require"
+    adminUsername: "postgres"
+    secrets:
+      adminPassword:
+        name: "postgres.acid-artifactory.credentials.postgresql.acid.zalan.do"
+        key: "password"
+    initContainerSetupDBImage: releases-docker.jfrog.io/postgres:13.2-alpine
+    initDBCreation: true
 rabbitmq:
   enabled: false
 redis:
@@ -10,6 +20,12 @@ artifactory:
   enabled: true
   nginx:
     enabled: false
+  # Uncomment if you want to specify a particular storage class
+#  artifactory:
+#    persistence:
+#      storageClassName: "your-storage-class-here"
+postgresql:
+  enabled: false
 artifactory-ha:
   enabled: false
 xray:

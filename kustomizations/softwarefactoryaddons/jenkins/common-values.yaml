@@ -116,4 +116,4 @@ agent:
   alwaysPullImage: true
 persistence:
   enabled: true
-  storageClass: "local-path"
+#  storageClass: "your-storage-class-here"
