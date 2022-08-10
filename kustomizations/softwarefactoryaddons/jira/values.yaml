@@ -36,7 +36,7 @@ jira:
           key: "password"
 additionalInitContainers:
   - name: wait-for-database
-    image: "registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.5"
+    image: "registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.6"
     command:
       [
         "sh",
