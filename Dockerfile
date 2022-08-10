@@ -1,6 +1,6 @@
 # This dockerfile builds the build harness for this project. It has everything it needs to build and test this repo.
 
-FROM rockylinux:8
+FROM rockylinux:9
 
 # Make all shells run in a safer way. Ref: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 SHELL [ "/bin/bash", "-euxo", "pipefail", "-c" ]
