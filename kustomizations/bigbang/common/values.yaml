@@ -21,6 +21,12 @@ istio:
     public-ingressgateway:
       type: "LoadBalancer"
       kubernetesResourceSpec:
+        # Uncomment this section if you are on EKS and need to use an Internal Load Balancer instead of the default Classic Load Balancer
+#        serviceAnnotations:
+#          # Use an Internal Load Balancer rather than a public one
+#          service.beta.kubernetes.io/aws-load-balancer-internal: 'true'
+#          # Enable cross zone load balancing
+#          service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
         resources:
           requests:
             cpu: "100m"
@@ -49,6 +55,22 @@ istio:
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
+
+  postRenderers:
+    # This should only be needed until we upgrade to the Istio chart v1.14.2-bb.1 or later, when it is included by default as a meshConfig
+    # Ref: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane/-/merge_requests/119
+    - kustomize:
+        patchesJson6902:
+          - target:
+              group: networking.istio.io
+              version: v1beta1
+              kind: Gateway
+              name: public
+              namespace: istio-system
+            patch:
+              - op: add
+                path: "/spec/servers/1/tls/minProtocolVersion"
+                value: "TLSV1_2"
 
 istiooperator:
   enabled: true
@@ -227,6 +249,9 @@ logging:
     elasticsearch:
       master:
         count: 1
+        # Uncomment this if you want to specify a specific storageclass
+#        persistence:
+#          storageClassName: "your-storage-class-name-here"
         resources:
           limits:
             cpu: "500m"
@@ -236,6 +261,9 @@ logging:
             memory: "3Gi"
       data:
         count: 1
+        # Uncomment this if you want to specify a specific storageclass
+#        persistence:
+#          storageClassName: "your-storage-class-name-here"
         resources:
           limits:
             cpu: "500m"
@@ -438,6 +466,9 @@ addons:
     istio:
       injection: disabled
     values:
+      istio:
+        mtls:
+          mode: PERMISSIVE
       global:
         psql:
           host: "acid-gitlab.gitlab.svc.cluster.local"
@@ -447,9 +478,6 @@ addons:
           password:
             secret: "gitlab.acid-gitlab.credentials.postgresql.acid.zalan.do"
             key: "password"
-      istio:
-        mtls:
-          mode: PERMISSIVE
         # ## https://docs.gitlab.com/charts/installation/deployment#outgoing-email
         # ## Example Outgoing email server settings
         # smtp:
@@ -491,6 +519,9 @@ addons:
               cpu: 250m
               memory: 256Mi
         master:
+          # Uncomment this if you want to specify a particular storage class
+#          persistence:
+#            storageClass: "your-storage-class-name-here"
           resources:
             limits:
               cpu: 250m
@@ -500,6 +531,9 @@ addons:
               memory: 256Mi
         # :face_vomiting: TODO: Upstream merge request to make the naming more inclusive
         slave:
+          # Uncomment this if you want to specify a particular storage class
+#          persistence:
+#            storageClass: "your-storage-class-name-here"
           resources:
             limits:
               cpu: 250m
@@ -671,6 +705,9 @@ addons:
             limits:
               cpu: 400m
               memory: 600Mi
+          # Uncomment this if you want to specify a particular storage class
+#          persistence:
+#            storageClass: "your-storage-class-name-here"
         gitlab-shell:
           init:
             resources:
@@ -712,6 +749,14 @@ addons:
             requests:
               cpu: 200m
               memory: 200Mi
+        # Uncomment if you want to specify a particular storage class.
+        # WARNING: By default The MinIO container runs as uid: 1000, gid: 0.
+        # You may need to configure a storage class with uid: 1000, gid: 0 or you may get "permission denied" errors.
+#        persistence:
+#          enabled: true
+#          accessMode: ReadWriteOnce
+#          storageClass: "your-storage-class-name-here"
+#          size: 1Gi
         resources:
           limits:
             cpu: 200m

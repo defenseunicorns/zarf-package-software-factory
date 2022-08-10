@@ -1,3 +1,4 @@
+# nonk8s
 apiVersion: "acid.zalan.do/v1"
 kind: "postgresql"
 metadata:
@@ -10,6 +11,8 @@ spec:
   numberOfInstances: 3
   volume:
     size: "2Gi"
+    # Uncomment this if you want to specify a particular storage class
+#    storageClass: "your-storage-class-name-here"
   users:
     # role for confluence application
     confluence: []
@@ -37,6 +40,8 @@ spec:
   numberOfInstances: 3
   volume:
     size: "2Gi"
+    # Uncomment this if you want to specify a particular storage class
+#    storageClass: "your-storage-class-name-here"
   users:
     jira: []
   databases:
@@ -50,3 +55,27 @@ spec:
     limits:
       cpu: "1"
       memory: 2000Mi
+---
+apiVersion: "acid.zalan.do/v1"
+kind: "postgresql"
+metadata:
+  name: "acid-artifactory"
+  namespace: "artifactory"
+spec:
+  teamId: "acid"
+  postgresql:
+    version: "13"
+  numberOfInstances: 3
+  volume:
+    size: "2Gi"
+    # Uncomment this if you want to specify a particular storage class
+#    storageClass: "your-storage-class-name-here"
+  # enableLogicalBackup: true
+  # logicalBackupSchedule: "*/2 * * * *"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: "1"
+      memory: "2Gi"

@@ -17,6 +17,6 @@ linters:
     - wsl
 linters-settings:
   funlen:
-    lines: 100
+    lines: 120
 issues:
   exclude-use-default: false
