@@ -4,6 +4,11 @@ istio:
   enabled: true
   gateways:
     - istio-system/public
+
+#Turn off collaborative editing
+synchrony:
+  enabled: false
+
 # The chart won't let us specify a secret that already exists. See https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence/-/issues/10
 # database:
 #   url: "jdbc:postgresql://acid-confluence.confluence.svc.cluster.local:5432/confluence"
@@ -13,6 +18,17 @@ istio:
 #     passwordSecretKey: "password"
 
 confluence:
+  resources:
+    container:
+      requests:
+        cpu: "100m"
+        memory: "1Mi" # demo value
+        # memory: "6Gi" # recommended production value
+      limits:
+        cpu: "10"
+        memory: "6Gi"
+    jvm:
+      maxHeap: "3g"
   # Trying to set the env vars myself instead of using the above commented out section
   additionalEnvironmentVariables:
     - name: ATL_DB_TYPE
