@@ -1,4 +1,4 @@
-golang 1.18.3
+golang 1.19
 golangci-lint 1.46.2
 python 3.10.5
 hadolint 2.10.0
