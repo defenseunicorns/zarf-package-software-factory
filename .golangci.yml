@@ -1,14 +1,12 @@
 run:
   timeout: 5m
-  skip-files:
-    - src/internal/message/logo.go
 linters:
   enable-all: true
   disable:
     - exhaustivestruct
     - exhaustruct
     - goerr113
-    #   - gofumpt
+    - gofumpt
     - lll
     - stylecheck
     #   - testpackage
@@ -19,4 +17,6 @@ linters-settings:
   funlen:
     lines: 120
 issues:
+  exclude:
+    - "G304" # Potential file inclusion via variable
   exclude-use-default: false
