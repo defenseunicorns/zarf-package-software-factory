@@ -34,7 +34,7 @@ components:
         files:
           - manifests/postgres-operator.yaml
     repos:
-      - https://github.com/zalando/postgres-operator.git@v1.8.2
+      - https://github.com/zalando/postgres-operator.git
     images:
       - registry.opensource.zalan.do/acid/postgres-operator:v1.8.2
       - registry.opensource.zalan.do/acid/logical-backup:v1.8.0
@@ -50,110 +50,105 @@ components:
         files:
           - manifests/big-bang.yaml
     repos:
-      - https://repo1.dso.mil/platform-one/big-bang/bigbang.git@1.37.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git@1.13.4-bb.1
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git@1.13.4-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git@2.32.2-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git@1.51.0-bb.1
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git@1.4.0-bb.4
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git@3.8.1-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git@0.7.1-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git@2.2.0-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git@0.20.2-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git@35.5.1-bb.2
+      - https://repo1.dso.mil/platform-one/big-bang/bigbang.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
       # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
-      # - https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git@0.8.0-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git@4.4.16-bb.2
-      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git@4.4.16-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git@6.0.1-bb.2
-      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git@0.41.0-bb.0
+      # - https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git
 
+    # To get the list of all images used in Big Bang:
+    #    - Download "package-images.yml" from the big bang release
+    #    - Run `yq '.package-image-list.*.images' package-images.yml | yq 'unique'`
+    # This will result in more images than are likely needed in any single deployment, but will account for any
+    # configuration of Big Bang without needing to mess with the images list, and also makes updating Big Bang in this
+    # package significantly easier. If users want to slim down the package size they may feel free to delete images in
+    # this list that they know they won't use.
     images:
-      # istio-controlplane
-      - "registry1.dso.mil/ironbank/big-bang/base:1.17.0"
-      - "registry1.dso.mil/ironbank/opensource/istio/pilot:1.13.4"
-      - "registry1.dso.mil/ironbank/opensource/istio/proxyv2:1.13.4"
-      - "registry1.dso.mil/ironbank/opensource/istio/install-cni:1.13.4"
-
-      # istio-operator
-      - "registry1.dso.mil/ironbank/opensource/istio/operator:1.13.4"
-
-      # jaeger
+      - "registry1.dso.mil/ironbank/big-bang/base:2.0.0"
+      - "registry1.dso.mil/ironbank/opensource/istio/pilot:1.13.5"
+      - "registry1.dso.mil/ironbank/opensource/istio/proxyv2:1.13.5"
+      - "registry1.dso.mil/ironbank/opensource/istio/install-cni:1.13.5"
+      - "registry1.dso.mil/ironbank/tetrate/istio/istioctl:1.13.5-tetratefips-v0"
+      - "registry1.dso.mil/ironbank/tetrate/istio/proxyv2:1.13.5-tetratefips-v0"
+      - "registry1.dso.mil/ironbank/tetrate/istio/pilot:1.13.5-tetratefips-v0"
+      - "registry1.dso.mil/ironbank/tetrate/istio/install-cni:1.13.5-tetratefips-v0"
+      - "registry1.dso.mil/ironbank/opensource/istio/operator:1.13.5"
+      - "registry1.dso.mil/ironbank/tetrate/istio/operator:1.13.5-tetratefips-v0"
       - "registry1.dso.mil/ironbank/opensource/ingress-nginx/kube-webhook-certgen:v1.1.1"
-      - "registry1.dso.mil/ironbank/opensource/jaegertracing/all-in-one:1.34.1"
-      - "registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-operator:1.34.1"
-      - "registry1.dso.mil/ironbank/big-bang/base:1.0.0"
-
-      # kiali
+      - "registry1.dso.mil/ironbank/opensource/jaegertracing/all-in-one:1.35.2"
+      - "registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-operator:1.35.0"
       - "registry1.dso.mil/ironbank/opensource/kiali/kiali-operator:v1.51.0"
       - "registry1.dso.mil/ironbank/opensource/kiali/kiali:v1.51.0"
-
-      # cluster-auditor
       - "registry1.dso.mil/ironbank/bigbang/cluster-auditor/opa-exporter:v0.0.4"
-
-      # policy (OPA Gatekeeper)
       - "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.22.2"
       - "registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper:v3.8.1"
-
-      # elasticsearch-kibana
-      - "registry1.dso.mil/ironbank/elastic/elasticsearch/elasticsearch:7.17.1"
-      - "registry1.dso.mil/ironbank/elastic/kibana/kibana:7.17.1"
-      - "registry1.dso.mil/ironbank/big-bang/base:8.4"
-
-      # eck-operator
-      - "registry1.dso.mil/ironbank/elastic/eck-operator/eck-operator:2.2.0"
-
-      # fluentbit
-      - "registry1.dso.mil/ironbank/opensource/fluent/fluent-bit:1.9.4"
-
-      # monitoring
-      - "registry1.dso.mil/ironbank/big-bang/base:1.17.0"
-      - "registry1.dso.mil/ironbank/big-bang/grafana/grafana-plugins:8.6.2"
-      - "registry1.dso.mil/ironbank/kiwigrid/k8s-sidecar:1.18.1"
-      - "registry1.dso.mil/ironbank/opensource/ingress-nginx/kube-webhook-certgen:v1.1.1"
+      - "registry1.dso.mil/ironbank/elastic/elasticsearch/elasticsearch:8.2.3"
+      - "registry1.dso.mil/ironbank/elastic/kibana/kibana:8.2.3"
+      - "registry1.dso.mil/ironbank/elastic/eck-operator/eck-operator:2.3.0"
+      - "registry1.dso.mil/ironbank/opensource/fluent/fluent-bit:1.9.6"
+      - "registry1.dso.mil/ironbank/big-bang/grafana/grafana-plugins:9.0.1"
+      - "registry1.dso.mil/ironbank/kiwigrid/k8s-sidecar:1.19.2"
       - "registry1.dso.mil/ironbank/opensource/kubernetes/kube-state-metrics:v2.5.0"
       - "registry1.dso.mil/ironbank/opensource/prometheus-operator/prometheus-config-reloader:v0.57.0"
       - "registry1.dso.mil/ironbank/opensource/prometheus-operator/prometheus-operator:v0.57.0"
       - "registry1.dso.mil/ironbank/opensource/prometheus/alertmanager:v0.24.0"
       - "registry1.dso.mil/ironbank/opensource/prometheus/node-exporter:v1.3.1"
-      - "registry1.dso.mil/ironbank/opensource/prometheus/prometheus:v2.36.0"
-
-      # twistlock
-      # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
-      # - "registry1.dso.mil/ironbank/big-bang/base:1.1.0"
-      # - "registry1.dso.mil/ironbank/twistlock/console/console:22.01.880"
-      # - "registry1.dso.mil/ironbank/twistlock/defender/defender:22.01.880"
-
-      # minio-operator
-      - "registry1.dso.mil/ironbank/opensource/minio/operator:v4.4.16"
-      - "registry1.dso.mil/ironbank/opensource/minio/console:v0.16.0"
-
-      # minio
+      - "registry1.dso.mil/ironbank/opensource/prometheus/prometheus:v2.36.2"
+      - "registry1.dso.mil/ironbank/twistlock/console/console:22.06.179"
+      - "registry1.dso.mil/ironbank/twistlock/defender/defender:22.06.179"
+      - "registry1.dso.mil/ironbank/big-bang/argocd:v2.4.4"
+      - "registry1.dso.mil/ironbank/bitnami/redis:7.0.0-debian-10-r3"
+      - "registry1.dso.mil/ironbank/opensource/dexidp/dex:v2.30.3"
+      - "registry1.dso.mil/ironbank/istio-ecosystem/authservice:0.5.1"
+      - "registry1.dso.mil/ironbank/opensource/minio/operator:v4.4.25"
+      - "registry1.dso.mil/ironbank/opensource/minio/console:v0.19.0"
       - "registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2022-04-30T22-23-53Z"
-
-      # gitlab
       - "registry1.dso.mil/ironbank/bitnami/analytics/redis-exporter:1.37.0"
-      - "registry1.dso.mil/ironbank/bitnami/redis:6.2.7"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/alpine-certificates:15.0.1"
+      - "registry1.dso.mil/ironbank/gitlab/gitlab/alpine-certificates:15.1.2"
       - "registry1.dso.mil/ironbank/gitlab/gitlab/cfssl-self-sign:1.4.1"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitaly:15.0.1"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-container-registry:15.0.1"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-shell:15.0.1"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-sidekiq:15.0.1"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-toolbox:15.0.1"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-webservice:15.0.1"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-workhorse:15.0.1"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/kubectl:15.0.1"
-      - "registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2022-05-09T04-08-26Z"
-      - "registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2022-06-03T01-40-53Z"
+      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitaly:15.1.2"
+      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-container-registry:15.1.2"
+      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-shell:15.1.2"
+      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-sidekiq:15.1.2"
+      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-toolbox:15.1.2"
+      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-webservice:15.1.2"
+      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-workhorse:15.1.2"
+      - "registry1.dso.mil/ironbank/gitlab/gitlab/kubectl:15.1.2"
+      - "registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2022-07-06T14-54-36Z"
+      - "registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2022-07-08T00-05-23Z"
+      - "registry1.dso.mil/ironbank/opensource/postgres/postgresql12:12.11"
       - "registry1.dso.mil/ironbank/redhat/ubi/ubi8:8.6"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-exporter:15.0.1"
-      - "registry1.dso.mil/ironbank/gitlab/gitlab/kubectl:15.0.1"
-
-      # gitlab-runner
+      - "registry1.dso.mil/ironbank/gitlab/gitlab/gitlab-exporter:15.1.2"
       - "registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner:v15.0.0"
       - "registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner-helper:v15.0.0"
-      - "registry1.dso.mil/ironbank/redhat/ubi/ubi8:8.6"
+      - "registry1.dso.mil/ironbank/sonatype/nexus/nexus:3.40.1-01"
+      - "registry1.dso.mil/ironbank/big-bang/sonarqube:8.9.9-community"
+      - "registry1.dso.mil/ironbank/anchore/engine/engine:1.1.0"
+      - "registry1.dso.mil/ironbank/anchore/enterprise/enterprise:4.0.2"
+      - "registry1.dso.mil/ironbank/anchore/enterpriseui/enterpriseui:4.0.0"
+      - "registry1.dso.mil/ironbank/opensource/mattermost/mattermost-operator:v1.18.1"
+      - "registry1.dso.mil/ironbank/opensource/mattermost/mattermost:7.0.1"
+      - "registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2022-02-26T03-58-31Z"
+      - "registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2022-02-26T02-54-46Z"
+      - "registry1.dso.mil/ironbank/opensource/postgres/postgresql11:11.10"
+      - "registry1.dso.mil/ironbank/opensource/postgres/postgresql12:12.8"
+      - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.5.0"
+      - "registry1.dso.mil/ironbank/opensource/velero/velero:v1.9.0"
+      - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-csi:v0.3.0"
+      - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-microsoft-azure:v1.5.0"
+      - "registry.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/keycloak-ib:18.0.2-1.2.0-1"
 
   - name: softwarefactoryaddons
     required: true
@@ -162,10 +157,10 @@ components:
         files:
           - manifests/softwarefactoryaddons.yaml
     repos:
-      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git@1.4.1-bb.0
-      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git@0.1.0-bb.20
-      - https://github.com/jenkinsci/helm-charts.git@jenkins-4.1.12
-      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git@0.9.2
+      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
+      - https://github.com/jenkinsci/helm-charts.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git
     images:
       # Jira
       - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:9.0.0
