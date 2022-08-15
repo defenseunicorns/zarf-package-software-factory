@@ -459,9 +459,8 @@ addons:
       istio:
         mtls:
           mode: PERMISSIVE
+      # https://github.com/minio/operator/blob/master/docs/crd.adoc
       tenants:
-        users:
-          -
         buckets:
           # git-lfs bucket
           - name: "git-lfs"
@@ -511,7 +510,6 @@ addons:
           - name: "gitlab-pages"
             region: "us-east-1"
             objectLock: true
-
         pools:
           ## Servers specifies the number of MinIO Tenant Pods / Servers in this pool.
           ## For standalone mode, supply 1. For distributed mode, supply 4 or more.
