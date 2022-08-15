@@ -3,14 +3,14 @@
 #    2. Additionally update the following files to use the new version of Big Bang:
 #        - zarf.yaml
 #        - flux/zarf.yaml
-BIGBANG_VERSION := 1.37.0
+BIGBANG_VERSION := 1.39.0
 
 # The version of Zarf to use. To keep this repo as portable as possible the Zarf binary will be downloaded and added to
 # the build folder.
 ZARF_VERSION := v0.19.5
 
 # The version of the build harness container to use
-BUILD_HARNESS_VERSION := 0.0.12
+BUILD_HARNESS_VERSION := 0.0.13
 
 # Figure out which Zarf binary we should use based on the operating system we are on
 ZARF_BIN := zarf
@@ -70,7 +70,7 @@ test: ## Run all automated tests. Requires access to an AWS account. Costs money
 	@mkdir -p .cache/go
 	@mkdir -p .cache/go-build
 	@echo "Running automated tests. This will take several minutes. At times it does not log anything to the console. If you interrupt the test run you will need to log into AWS console and manually delete any orphaned infrastructure."
-	docker run $(TTY_ARG) --rm -v "${PWD}:/app" -v "${PWD}/.cache/go:/root/go" -v "${PWD}/.cache/go-build:/root/.cache/go-build" --workdir "/app/test/e2e" -e GOPATH=/root/go -e GOCACHE=/root/.cache/go-build -e REPO_URL -e GIT_BRANCH -e REGISTRY1_USERNAME -e REGISTRY1_PASSWORD -e AWS_REGION -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e SKIP_SETUP -e SKIP_TEST -e SKIP_TEARDOWN ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) go test -v -timeout 1h -p 1 ./...
+	docker run $(TTY_ARG) --rm -v "${PWD}:/app" -v "${PWD}/.cache/go:/root/go" -v "${PWD}/.cache/go-build:/root/.cache/go-build" --workdir "/app/test/e2e" -e GOPATH=/root/go -e GOCACHE=/root/.cache/go-build -e REPO_URL -e GIT_BRANCH -e REGISTRY1_USERNAME -e REGISTRY1_PASSWORD -e AWS_REGION -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e SKIP_SETUP -e SKIP_TEST -e SKIP_TEARDOWN ghcr.io/defenseunicorns/zarf-package-software-factory/build-harness:$(BUILD_HARNESS_VERSION) go test -v -timeout 2h -p 1 ./...
 
 .PHONY: test-ssh
 test-ssh: ## Run this if you set SKIP_TEARDOWN=1 and want to SSH into the still-running test server. Don't forget to unset SKIP_TEARDOWN when you're done
@@ -129,11 +129,11 @@ build/zarf-init-amd64.tar.zst: | build ## Download the init package
 	@echo "Downloading zarf-init-amd64.tar.zst"
 	@curl -sL https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -o build/zarf-init-amd64.tar.zst
 
-build/zarf-package-k3s-amd64.tar.zst: | build ## Make the K3s package
+build/zarf-package-k3s-amd64.tar.zst: | build/$(ZARF_BIN) ## Make the K3s package
 	@cd k3s && ../build/$(ZARF_BIN) package create --skip-sbom --confirm
 	@mv k3s/zarf-package-k3s-amd64.tar.zst build/zarf-package-k3s-amd64.tar.zst
 
-build/zarf-package-k3s-images-amd64.tar.zst: | build ## Make the k3s-images package
+build/zarf-package-k3s-images-amd64.tar.zst: | build/$(ZARF_BIN) ## Make the k3s-images package
 	@cd k3s-images && ../build/$(ZARF_BIN) package create --skip-sbom --confirm
 	@mv k3s-images/zarf-package-k3s-images-amd64.tar.zst build/zarf-package-k3s-images-amd64.tar.zst
 

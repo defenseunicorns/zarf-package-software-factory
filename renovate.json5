@@ -105,9 +105,9 @@
         ".*\\.yaml",
       ],
       "matchStrings": [
-        "https:\/\/github\\.com\/jenkinsci\/helm-charts\\.git@jenkins-(?<currentValue>\\S+)",
-        "url: https:\/\/github\\.com\/jenkinsci\/helm-charts\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)",
-        "url: http:\/\/zarf-gitea-http\\.zarf\\.svc\\.cluster\\.local:3000\/zarf-git-user\/mirror__github.com__jenkinsci__helm-charts\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+        "github\\.com\/jenkinsci\/helm-charts\\.git@jenkins-(?<currentValue>\\S+)",
+        "github\\.com\/jenkinsci\/helm-charts\\.git\\s+ref:\\s+tag:\\s+jenkins-(?<currentValue>\\S+)",
+        "mirror__github\\.com__jenkinsci__helm-charts\\.git\\s+ref:\\s+tag:\\s+jenkins-(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://github.com/jenkinsci/helm-charts.git",
       "datasourceTemplate": "git-tags",

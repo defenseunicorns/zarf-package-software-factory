@@ -1,9 +1,9 @@
 module github.com/defenseunicorns/zarf-package-software-factory
 
-go 1.18
+go 1.19
 
 require (
-	github.com/gruntwork-io/terratest v0.40.17
+	github.com/gruntwork-io/terratest v0.40.19
 	github.com/stretchr/testify v1.8.0
 )
 

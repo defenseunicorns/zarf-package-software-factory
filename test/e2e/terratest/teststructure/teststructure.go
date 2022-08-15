@@ -5,7 +5,6 @@ package teststructure
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -27,12 +26,11 @@ func SaveEc2KeyPair(t terratesting.TestingT, testFolder string, keyPair *aws.Ec2
 // (e.g., TerraformOptions) during setup and to reuse this data later during validation and teardown.
 // This function is directly copied from https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13
 // due to this issue: https://github.com/gruntwork-io/terratest/issues/1135
-//nolint
 func saveTestData(t terratesting.TestingT, path string, value interface{}) {
-	logger.Logf(t, "Storing test data in %s so it can be reused later", path)
+	logger.Default.Logf(t, "Storing test data in %s so it can be reused later", path)
 
 	if IsTestDataPresent(t, path) {
-		logger.Logf(t, "[WARNING] The named test data at path %s is non-empty. Save operation will overwrite existing value with \"%v\".\n.", path, value)
+		logger.Default.Logf(t, "[WARNING] The named test data at path %s is non-empty. Save operation will overwrite existing value with \"%v\".\n.", path, value)
 	}
 
 	bytes, err := json.Marshal(value)
@@ -44,11 +42,11 @@ func saveTestData(t terratesting.TestingT, path string, value interface{}) {
 	// logger.Logf(t, "Marshalled JSON: %s", string(bytes))
 
 	parentDir := filepath.Dir(path)
-	if err := os.MkdirAll(parentDir, 0777); err != nil {
+	if err := os.MkdirAll(parentDir, 0750); err != nil { //nolint:gomnd
 		t.Fatalf("Failed to create folder %s: %v", parentDir, err)
 	}
 
-	if err := ioutil.WriteFile(path, bytes, 0644); err != nil {
+	if err := os.WriteFile(path, bytes, 0600); err != nil { //nolint:gomnd
 		t.Fatalf("Failed to save value %s: %v", path, err)
 	}
 }
@@ -70,7 +68,6 @@ func formatTestDataPath(testFolder string, filename string) string {
 // IsTestDataPresent returns true if a file exists at $path and the test data there is non-empty.
 // This function is directly copied from https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13
 // due to this issue: https://github.com/gruntwork-io/terratest/issues/1135
-//nolint
 func IsTestDataPresent(t terratesting.TestingT, path string) bool {
 	exists, err := files.FileExistsE(path)
 	if err != nil {
@@ -80,7 +77,7 @@ func IsTestDataPresent(t terratesting.TestingT, path string) bool {
 		return false
 	}
 
-	bytes, err := ioutil.ReadFile(path)
+	bytes, err := os.ReadFile(path)
 
 	if err != nil {
 		t.Fatalf("Failed to load test data from %s due to unexpected error: %v", path, err)
@@ -97,7 +94,8 @@ func IsTestDataPresent(t terratesting.TestingT, path string) bool {
 // The types used are based on the type possibilities listed at https://golang.org/src/encoding/json/decode.go?s=4062:4110#L51
 // This function is directly copied from https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13
 // due to this issue: https://github.com/gruntwork-io/terratest/issues/1135
-//nolint
+//
+//nolint:cyclop
 func isEmptyJSON(t terratesting.TestingT, bytes []byte) bool {
 	var value interface{}
 

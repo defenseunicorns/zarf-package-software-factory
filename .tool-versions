@@ -1,10 +1,10 @@
-golang 1.18.3
-golangci-lint 1.46.2
-python 3.10.5
+golang 1.19
+golangci-lint 1.48.0
+python 3.10.6
 hadolint 2.10.0
 pre-commit 2.19.0
-terraform 1.2.4
-tflint 0.38.1
-tfsec 1.26.0
+terraform 1.2.7
+tflint 0.39.2
+tfsec 1.27.1
 sops 3.7.3
 make 4.3

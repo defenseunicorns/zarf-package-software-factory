@@ -57,6 +57,27 @@ func NewTestPlatform(t *testing.T) *TestPlatform {
 	return testPlatform
 }
 
+// RunSSHCommand provides a simple way to run a shell command on the server that is created using Terraform.
+func (platform *TestPlatform) RunSSHCommand(command string) (string, error) {
+	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
+	keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
+	host := ssh.Host{
+		Hostname:    terraform.Output(platform.T, terraformOptions, "public_instance_ip"),
+		SshKeyPair:  keyPair.KeyPair,
+		SshUserName: "ubuntu",
+	}
+	output, err := ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`bash -c "%v"`, command))
+	if err != nil {
+		logger.Default.Logf(platform.T, output)
+
+		return "nil", fmt.Errorf("ssh command failed: %w", err)
+	}
+
+	logger.Default.Logf(platform.T, output)
+
+	return output, nil
+}
+
 // RunSSHCommandAsSudo provides a simple way to run a shell command on the server that is created using Terraform.
 func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error) {
 	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)

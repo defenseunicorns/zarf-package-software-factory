@@ -4,7 +4,29 @@ metadata:
   name: day-two-update
 
 components:
-  - name: day-two-update
+  - name: setup
     required: true
     repos:
       - https://github.com/defenseunicorns/zarf-package-software-factory.git
+    manifests:
+      - name: setup-config
+        files:
+          - ../manifests/setup.yaml
+  - name: postgres-operator
+    required: true
+    manifests:
+      - name: postgres-operator-config
+        files:
+          - ../manifests/postgres-operator.yaml
+  - name: big-bang
+    required: true
+    manifests:
+      - name: big-bang-config
+        files:
+          - ../manifests/big-bang.yaml
+  - name: softwarefactoryaddons
+    required: true
+    manifests:
+      - name: softwarefactoryaddons-config
+        files:
+          - ../manifests/softwarefactoryaddons.yaml

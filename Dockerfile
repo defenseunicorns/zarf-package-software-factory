@@ -43,19 +43,19 @@ ENV PATH="/root/.asdf/shims:/root/.asdf/bin:${PATH}"
 # ENV PATH="/home/buildharness/.asdf/shims:/home/buildharness/.asdf/bin:${PATH}"
 
 # Install golang. Get versions using 'asdf list all golang'
-ARG GOLANG_VERSION="1.18.3"
+ARG GOLANG_VERSION="1.19"
 ENV GOLANG_VERSION=${GOLANG_VERSION}
 RUN asdf plugin add golang \
   && asdf install golang "${GOLANG_VERSION}"
 
 # Install golangci-lint. Get versions using 'asdf list all golangci-lint'
-ARG GOLANGCILINT_VERSION="1.46.2"
+ARG GOLANGCILINT_VERSION="1.48.0"
 ENV GOLANGCILINT_VERSION=${GOLANGCILINT_VERSION}
 RUN asdf plugin add golangci-lint \
   && asdf install golangci-lint "${GOLANGCILINT_VERSION}"
 
 # Install python. Get versions using 'asdf list all python'
-ARG PYTHON_VERSION="3.10.5"
+ARG PYTHON_VERSION="3.10.6"
 ENV PYTHON_VERSION=${PYTHON_VERSION}
 RUN asdf plugin add python \
   && asdf install python "${PYTHON_VERSION}"
@@ -73,19 +73,19 @@ RUN asdf plugin add pre-commit \
   && asdf install pre-commit "${PRE_COMMIT_VERSION}"
 
 # Install Terraform. Get versions using 'asdf list all terraform'
-ARG TERRAFORM_VERSION="1.2.4"
+ARG TERRAFORM_VERSION="1.2.7"
 ENV TERRAFORM_VERSION=${TERRAFORM_VERSION}
 RUN asdf plugin add terraform \
   && asdf install terraform "${TERRAFORM_VERSION}"
 
 # Install tflint. Get versions using 'asdf list all tflint'
-ARG TFLINT_VERSION="0.38.1"
+ARG TFLINT_VERSION="0.39.2"
 ENV TFLINT_VERSION=${TFLINT_VERSION}
 RUN asdf plugin add tflint \
   && asdf install tflint "${TFLINT_VERSION}"
 
 # Install tfsec. Get versions using 'asdf list all tfsec'
-ARG TFSEC_VERSION="1.26.0"
+ARG TFSEC_VERSION="1.27.1"
 ENV TFSEC_VERSION=${TFSEC_VERSION}
 RUN asdf plugin add tfsec \
   && asdf install tfsec "${TFSEC_VERSION}"
