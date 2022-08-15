@@ -461,6 +461,9 @@ addons:
           mode: PERMISSIVE
       # https://github.com/minio/operator/blob/master/docs/crd.adoc
       tenants:
+        # Required to be here due to a weird quirk in bucket creation. See https://github.com/minio/operator/issues/1002#issuecomment-1028394242
+        users: []
+        # Pre-create buckets that will be needed for various services that will use MinIO
         buckets:
           # git-lfs bucket
           - name: "git-lfs"
