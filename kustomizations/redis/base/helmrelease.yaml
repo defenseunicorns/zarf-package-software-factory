@@ -1,0 +1,43 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: redis
+  namespace: softwarefactoryaddons
+spec:
+  targetNamespace: redis
+  releaseName: redis
+  interval: 2m
+  chart:
+    spec:
+      interval: 1m
+      chart: charts/redis
+      sourceRef:
+        kind: GitRepository
+        name: redis
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 30m
+    cleanupOnFail: false
+  # valuesFrom:
+  #   - kind: Secret
+  #     name: postgres-operator-common-bb
+  #     valuesKey: values.yaml
+  #   - kind: ConfigMap
+  #     name: postgres-operator-common
+  #     valuesKey: values.yaml
+  #   - kind: Secret
+  #     name: postgres-operator-environment-bb
+  #     valuesKey: values.yaml
+  #   - kind: ConfigMap
+  #     name: postgres-operator-environment
+  #     valuesKey: values.yaml
+
