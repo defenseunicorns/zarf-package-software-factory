@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       interval: 1m
-      chart: charts/redis
+      chart: chart
       sourceRef:
         kind: GitRepository
         name: redis
