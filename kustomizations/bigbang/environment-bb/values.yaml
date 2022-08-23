@@ -129,6 +129,7 @@ istio:
           Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
           -----END CERTIFICATE-----
 
+# Set the MinIO access key and password in these 2 places here, as well as in kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml
 addons:
   minio:
     accesskey: "changeme"
