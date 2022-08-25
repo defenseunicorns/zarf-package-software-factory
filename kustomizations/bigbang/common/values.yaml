@@ -589,10 +589,10 @@ addons:
         psql:
           host: "acid-gitlab.gitlab.svc.cluster.local"
           port: 5432
-          database: "gitlabhq_production"
-          username: "gitlab"
+          database: "postgres"
+          username: "postgres"
           password:
-            secret: "gitlab.acid-gitlab.credentials.postgresql.acid.zalan.do"
+            secret: "postgres.acid-gitlab.credentials.postgresql.acid.zalan.do"
             key: "password"
         # ## https://docs.gitlab.com/charts/installation/deployment#outgoing-email
         # ## Example Outgoing email server settings

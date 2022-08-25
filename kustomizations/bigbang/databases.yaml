@@ -50,12 +50,7 @@ spec:
           volume:
             size: "2Gi"
             # Uncomment this if you want to specify a particular storage class
-#            storageClass: "your-storage-class-name-here"
-          users:
-            # role for gitlab application
-            gitlab: []
-          databases:
-            gitlabhq_production: gitlab
+            # storageClass: "your-storage-class-name-here"
           # enableLogicalBackup: true
           # logicalBackupSchedule: "*/2 * * * *"
           resources:
