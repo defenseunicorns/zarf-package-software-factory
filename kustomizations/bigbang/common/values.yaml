@@ -514,8 +514,6 @@ addons:
           - name: "gitlab-pages"
             region: "us-east-1"
             objectLock: true
-        certificate:
-          requestAutoCert: true
         pools:
           ## Servers specifies the number of MinIO Tenant Pods / Servers in this pool.
           ## For standalone mode, supply 1. For distributed mode, supply 4 or more.
