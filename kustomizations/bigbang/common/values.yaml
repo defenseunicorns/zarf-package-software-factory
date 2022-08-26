@@ -56,6 +56,7 @@ istio:
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
         - minio.{{ .Values.domain }}
+        - minio-api.{{ .Values.domain }}
 
   postRenderers:
     # This should only be needed until we upgrade to the Istio chart v1.14.2-bb.1 or later, when it is included by default as a meshConfig
@@ -563,7 +564,7 @@ addons:
       type: "minio" # supported types are "s3" or "minio"
       # -- S3 compatible endpoint to use for connection information.
       # examples: "https://s3.amazonaws.com" "https://s3.us-gov-west-1.amazonaws.com" "http://minio.minio.svc.cluster.local:9000"
-      endpoint: https://minio.bigbang.dev:443
+      endpoint: https://minio-api.bigbang.dev:443
       # -- S3 compatible region to use for connection information.
       region: "us-east-1"
       # -- Access key for connecting to object storage endpoint.
