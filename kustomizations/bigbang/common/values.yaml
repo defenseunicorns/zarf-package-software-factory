@@ -581,6 +581,7 @@ addons:
       # -- If using an AWS IAM profile, the accessKey and accessSecret values must be left as empty strings eg: ""
       iamProfile: ""
     values:
+      relativeurls: true
       istio:
         mtls:
           mode: PERMISSIVE
