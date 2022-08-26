@@ -564,7 +564,7 @@ addons:
       type: "minio" # supported types are "s3" or "minio"
       # -- S3 compatible endpoint to use for connection information.
       # examples: "https://s3.amazonaws.com" "https://s3.us-gov-west-1.amazonaws.com" "http://minio.minio.svc.cluster.local:9000"
-      endpoint: https://minio-api.bigbang.dev:443
+      endpoint: http://minio.minio.svc.cluster.local:80
       # -- S3 compatible region to use for connection information.
       region: "us-east-1"
       # -- Access key for connecting to object storage endpoint.
