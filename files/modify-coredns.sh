@@ -9,7 +9,7 @@
 #######
 # VARS
 #######
-REWRITE_CMD='rewrite name gitlab.bigbang.dev public-ingressgateway.istio-system.svc.cluster.local'
+REWRITE_CMD='rewrite name gitlab.bigbang.dev public-ingressgateway.istio-system.svc.cluster.local\nrewrite name minio.bigbang.dev public-ingressgateway.istio-system.svc.cluster.local'
 TMP_FILE=tmp_cm.yaml
 NAMESPACE=kube-system
 CONFIGMAP=coredns
