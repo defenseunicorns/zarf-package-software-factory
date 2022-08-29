@@ -55,8 +55,6 @@ istio:
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
-        - minio.{{ .Values.domain }}
-        - minio-api.{{ .Values.domain }}
 
   postRenderers:
     # This should only be needed until we upgrade to the Istio chart v1.14.2-bb.1 or later, when it is included by default as a meshConfig
@@ -454,17 +452,6 @@ addons:
 
   minio:
     enabled: true
-    postRenderers:
-      - kustomize:
-          patchesJson6902:
-            - target:
-                kind: Namespace
-                version: v1
-                name: minio
-              patch:
-                - op: replace
-                  path: "/metadata/labels/istio-injection"
-                  value: "disabled"
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio.git
     values:
@@ -478,48 +465,52 @@ addons:
           - name: minio-user-credentials
         # Pre-create buckets that will be needed for various services that will use MinIO
         buckets:
-          # git-lfs bucket
-          - name: "git-lfs"
-            region: "us-east-1"
-            objectLock: true
-          # gitlab-artifacts bucket
-          - name: "gitlab-artifacts"
-            region: "us-east-1"
-            objectLock: true
-          # gitlab-uploads bucket
-          - name: "gitlab-uploads"
-            region: "us-east-1"
-            objectLock: true
-          # gitlab-packages bucket
-          - name: "gitlab-packages"
-            region: "us-east-1"
-            objectLock: true
-          # gitlab-mr-diffs bucket
-          - name: "gitlab-mr-diffs"
-            region: "us-east-1"
-            objectLock: true
-          # gitlab-terraform-state bucket
-          - name: "gitlab-terraform-state"
-            region: "us-east-1"
-            objectLock: true
-          # gitlab-dependency-proxy bucket
-          - name: "gitlab-dependency-proxy"
-            region: "us-east-1"
-            objectLock: true
-          # gitlab-backup bucket
-          - name: "gitlab-backup"
-            region: "us-east-1"
-            objectLock: true
-          # gitlab-backup-tmp bucket
-          - name: "gitlab-backup-tmp"
-            region: "us-east-1"
-            objectLock: true
-          # gitlab-registry bucket
+          # gitlab-registry
           - name: "gitlab-registry"
             region: "us-east-1"
             objectLock: true
-          # gitlab-pseudo bucket
-          - name: "gitlab-pseudo"
+          # gitlab-lfs
+          - name: "gitlab-lfs"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-uploads
+          - name: "gitlab-uploads"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-artifacts
+          - name: "gitlab-artifacts"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-backups
+          - name: "gitlab-backups"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-packages
+          - name: "gitlab-packages"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-backups-tmp
+          - name: "gitlab-backups-tmp"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-mr-diffs
+          - name: "gitlab-mr-diffs"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-terraform-state
+          - name: "gitlab-terraform-state"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-ci-secure-files
+          - name: "gitlab-ci-secure-files"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-dependency-proxy
+          - name: "gitlab-dependency-proxy"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-pages
+          - name: "gitlab-pages"
             region: "us-east-1"
             objectLock: true
         pools:
@@ -592,8 +583,14 @@ addons:
         mtls:
           mode: PERMISSIVE
       global:
+        appConfig:
+          lfs:
+            bucket: gitlab-lfs
+          backups:
+            bucket: gitlab-backups
+            tmpBucket: gitlab-backups-tmp
         registry:
-          bucket: "gitlab-registry"
+          bucket: gitlab-registry
         psql:
           host: "acid-gitlab.gitlab.svc.cluster.local"
           port: 5432
