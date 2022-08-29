@@ -454,6 +454,17 @@ addons:
 
   minio:
     enabled: true
+    postRenderers:
+      - kustomize:
+          patchesJson6902:
+            - target:
+                kind: Namespace
+                version: v1
+                name: minio
+              patch:
+                - op: replace
+                  path: "/metadata/labels/istio-injection"
+                  value: "disabled"
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio.git
     values:
@@ -491,28 +502,24 @@ addons:
           - name: "gitlab-terraform-state"
             region: "us-east-1"
             objectLock: true
-          # gitlab-ci-secure-files bucket
-          - name: "gitlab-ci-secure-files"
-            region: "us-east-1"
-            objectLock: true
           # gitlab-dependency-proxy bucket
           - name: "gitlab-dependency-proxy"
             region: "us-east-1"
             objectLock: true
-          # gitlab-backups bucket
-          - name: "gitlab-backups"
+          # gitlab-backup bucket
+          - name: "gitlab-backup"
             region: "us-east-1"
             objectLock: true
-          # tmp bucket
-          - name: "tmp"
+          # gitlab-backup-tmp bucket
+          - name: "gitlab-backup-tmp"
             region: "us-east-1"
             objectLock: true
           # gitlab-registry bucket
           - name: "gitlab-registry"
             region: "us-east-1"
             objectLock: true
-          # gitlab-pages bucket
-          - name: "gitlab-pages"
+          # gitlab-pseudo bucket
+          - name: "gitlab-pseudo"
             region: "us-east-1"
             objectLock: true
         pools:
@@ -564,7 +571,7 @@ addons:
       type: "minio" # supported types are "s3" or "minio"
       # -- S3 compatible endpoint to use for connection information.
       # examples: "https://s3.amazonaws.com" "https://s3.us-gov-west-1.amazonaws.com" "http://minio.minio.svc.cluster.local:9000"
-      endpoint: http://minio.minio.svc.cluster.local:80
+      endpoint: https://minio.bigbang.dev:443
       # -- S3 compatible region to use for connection information.
       region: "us-east-1"
       # -- Access key for connecting to object storage endpoint.
