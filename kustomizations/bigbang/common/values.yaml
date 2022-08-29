@@ -693,6 +693,9 @@ addons:
         install: false
       registry:
         relativeurls: true
+        storage:
+          redirect:
+            disable: true
         init:
           resources:
             limits:
