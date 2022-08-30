@@ -558,32 +558,18 @@ addons:
     istio:
       injection: disabled
     objectStorage:
-      # -- Type of object storage to use for Gitlab, setting to s3 will assume an external, pre-existing object storage is to be used.
-      # Entering connection info will enable this option and will auto-create any required secrets
-      type: "minio" # supported types are "s3" or "minio"
-      # -- S3 compatible endpoint to use for connection information.
-      # examples: "https://s3.amazonaws.com" "https://s3.us-gov-west-1.amazonaws.com" "http://minio.minio.svc.cluster.local:9000"
+      type: "minio"
       endpoint: http://minio.minio.svc.cluster.local:80
-      # -- S3 compatible region to use for connection information.
       region: "us-east-1"
-      # -- Access key for connecting to object storage endpoint.
-      # -- If using accessKey and accessSecret, the iamProfile must be left as an empty string: ""
       # accessKey: "" -- Added in environment-bb/values.yaml
-      # -- Secret key for connecting to object storage endpoint.
-      # Unencoded string data. This should be placed in the secret values and then encrypted
       # accessSecret: "" -- Added in environment-bb/values.yaml
-      # -- Bucket prefix to use for identifying buckets.
-      # Example: "prod" will produce "prod-gitlab-bucket"
-      bucketPrefix: ""
-      # -- NOTE: Current bug with AWS IAM Profiles and Object Storage where only artifacts are stored. Fixed in Gitlab 14.5
-      # -- Name of AWS IAM profile to use.
-      # -- If using an AWS IAM profile, the accessKey and accessSecret values must be left as empty strings eg: ""
-      iamProfile: ""
     values:
       istio:
         mtls:
           mode: PERMISSIVE
       global:
+        minio:
+          enabled: false
         appConfig:
           lfs:
             bucket: gitlab-lfs
@@ -866,30 +852,6 @@ addons:
             limits:
               cpu: 1
               memory: 1Gi
-      minio:
-        init:
-          resources:
-            limits:
-              cpu: 200m
-              memory: 200Mi
-            requests:
-              cpu: 200m
-              memory: 200Mi
-        # Uncomment if you want to specify a particular storage class.
-        # WARNING: By default The MinIO container runs as uid: 1000, gid: 0.
-        # You may need to configure a storage class with uid: 1000, gid: 0 or you may get "permission denied" errors.
-#        persistence:
-#          enabled: true
-#          accessMode: ReadWriteOnce
-#          storageClass: "your-storage-class-name-here"
-#          size: 1Gi
-        resources:
-          limits:
-            cpu: 200m
-            memory: 300Mi
-          requests:
-            cpu: 200m
-            memory: 300Mi
   gitlabRunner:
     enabled: true
     git:
