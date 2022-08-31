@@ -1,0 +1,10 @@
+# ENCRYPT THIS FILE!!! DON'T COMMIT IT TO THE REPO UNENCRYPTED! IT CONTAINS SECRETS!!!
+resources:
+  - apiVersion: v1
+    kind: Secret
+    type: Opaque
+    metadata:
+      name: minio-user-credentials
+    stringData:
+      CONSOLE_ACCESS_KEY: "changeme"
+      CONSOLE_SECRET_KEY: "changeme"

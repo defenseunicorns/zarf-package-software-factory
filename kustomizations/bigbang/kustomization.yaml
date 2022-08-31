@@ -1,6 +1,7 @@
 resources:
   - vendor/bigbang/base
   - databases.yaml
+  - secrets.yaml
 
 configMapGenerator:
   - name: common
@@ -15,6 +16,10 @@ secretGenerator:
     behavior: replace
     files:
       - values.yaml=environment-bb/values.yaml
+  - name: environment-bb-minio-user-credentials
+    namespace: bigbang
+    files:
+      - values.yaml=environment-bb-minio-user-credentials/values.yaml
 
 patchesStrategicMerge:
   - |-
