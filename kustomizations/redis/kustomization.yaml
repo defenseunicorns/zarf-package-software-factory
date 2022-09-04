@@ -1,3 +1,9 @@
 resources:
   - base
-  - redis/values.yaml
+
+configMapGenerator:
+  - name: redis-common
+    namespace: softwarefactoryaddons
+    behavior: replace
+    files:
+      - values.yaml=redis/values.yaml

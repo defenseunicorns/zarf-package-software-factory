@@ -31,9 +31,9 @@ spec:
   #   - kind: Secret
   #     name: postgres-operator-common-bb
   #     valuesKey: values.yaml
-  #   - kind: ConfigMap
-  #     name: postgres-operator-common
-  #     valuesKey: values.yaml
+    - kind: ConfigMap
+      name: redis-common
+      valuesKey: values.yaml
   #   - kind: Secret
   #     name: postgres-operator-environment-bb
   #     valuesKey: values.yaml
