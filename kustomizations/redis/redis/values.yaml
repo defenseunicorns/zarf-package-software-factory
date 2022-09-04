@@ -1,0 +1,9 @@
+sentinel:
+  enabled: true
+  image:
+    registry: "registry1.dso.mil"
+    repository: "ironbank/opensource/redis/redis-sentinel"
+    tag: "6.2.7"
+    pullPolicy: Always
+    pullSecrets:
+  

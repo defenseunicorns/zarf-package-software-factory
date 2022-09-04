@@ -53,6 +53,7 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git
     images:
       - registry1.dso.mil/ironbank/bitnami/redis:7.0.0-debian-10-r3
+      - registry1.dso.mil/ironbank/opensource/redis/redis-sentinel:6.2.7
 
   - name: big-bang
     required: true
