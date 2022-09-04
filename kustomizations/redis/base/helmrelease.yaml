@@ -27,7 +27,7 @@ spec:
   rollback:
     timeout: 30m
     cleanupOnFail: false
-  # valuesFrom:
+  valuesFrom:
   #   - kind: Secret
   #     name: postgres-operator-common-bb
   #     valuesKey: values.yaml
