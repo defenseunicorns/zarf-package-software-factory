@@ -5,5 +5,4 @@ sentinel:
     repository: "ironbank/opensource/redis/redis-sentinel"
     tag: "6.2.7"
     pullPolicy: Always
-    pullSecrets:
   
