@@ -1,5 +1,5 @@
-# configurations:
-#   - transformer.yaml
+configurations:
+  - transformer.yaml
 
 commonLabels:
   owner: softwarefactoryaddons
