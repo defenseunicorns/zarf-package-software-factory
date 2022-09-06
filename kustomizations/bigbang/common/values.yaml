@@ -613,7 +613,7 @@ addons:
             cpu: 500m
             memory: 500Mi
       redis:
-        enabled: false
+        install: false
 #         metrics:
 #           resources:
 #             limits:
