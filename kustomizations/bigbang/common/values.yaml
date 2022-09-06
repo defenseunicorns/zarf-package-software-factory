@@ -451,13 +451,89 @@ addons:
           mode: PERMISSIVE
 
   minio:
-    enabled: false
+    enabled: true
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio.git
     values:
       istio:
         mtls:
           mode: PERMISSIVE
+      # https://github.com/minio/operator/blob/master/docs/crd.adoc
+      tenants:
+        # Required to be here due to a weird quirk in bucket creation. See https://github.com/minio/operator/issues/1002#issuecomment-1028394242
+        users:
+          - name: minio-user-credentials
+        # Pre-create buckets that will be needed for various services that will use MinIO
+        # NOTE: Region is meaningless in this instantiation of MinIO. It's a required field but the value could be just about anything and it would work fine. "us-east-1" is the idiomatic default.
+        buckets:
+          # gitlab-registry
+          - name: "gitlab-registry"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-lfs
+          - name: "gitlab-lfs"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-uploads
+          - name: "gitlab-uploads"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-artifacts
+          - name: "gitlab-artifacts"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-backups
+          - name: "gitlab-backups"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-packages
+          - name: "gitlab-packages"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-backups-tmp
+          - name: "gitlab-backups-tmp"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-mr-diffs
+          - name: "gitlab-mr-diffs"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-terraform-state
+          - name: "gitlab-terraform-state"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-ci-secure-files
+          - name: "gitlab-ci-secure-files"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-dependency-proxy
+          - name: "gitlab-dependency-proxy"
+            region: "us-east-1"
+            objectLock: true
+          # gitlab-pages
+          - name: "gitlab-pages"
+            region: "us-east-1"
+            objectLock: true
+        pools:
+          - servers: 3
+            volumesPerServer: 2
+            size: 5Gi
+            storageClassName: ""
+            tolerations: {}
+            nodeSelector: {}
+            affinity: {}
+            resources:
+              requests:
+                cpu: 250m
+                memory: 2Gi
+              limits:
+                cpu: 250m
+                memory: 2Gi
+            securityContext:
+              runAsUser: 1001
+              runAsGroup: 1001
+              fsGroup: 1001
+              runAsNonRoot: true
 
   gitlab:
     enabled: true
@@ -465,18 +541,34 @@ addons:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
     istio:
       injection: disabled
+    objectStorage:
+      type: "minio"
+      endpoint: http://minio.minio.svc.cluster.local:80
+      region: "us-east-1"
+      # accessKey: "" -- Added in environment-bb/values.yaml
+      # accessSecret: "" -- Added in environment-bb/values.yaml
     values:
       istio:
         mtls:
           mode: PERMISSIVE
       global:
+        minio:
+          enabled: false
+        appConfig:
+          lfs:
+            bucket: gitlab-lfs
+          backups:
+            bucket: gitlab-backups
+            tmpBucket: gitlab-backups-tmp
+        registry:
+          bucket: gitlab-registry
         psql:
           host: "acid-gitlab.gitlab.svc.cluster.local"
           port: 5432
-          database: "gitlabhq_production"
-          username: "gitlab"
+          database: "postgres"
+          username: "postgres"
           password:
-            secret: "gitlab.acid-gitlab.credentials.postgresql.acid.zalan.do"
+            secret: "postgres.acid-gitlab.credentials.postgresql.acid.zalan.do"
             key: "password"
         # ## https://docs.gitlab.com/charts/installation/deployment#outgoing-email
         # ## Example Outgoing email server settings
@@ -568,6 +660,10 @@ addons:
       postgresql:
         install: false
       registry:
+        relativeurls: true
+        storage:
+          redirect:
+            disable: true
         init:
           resources:
             limits:
@@ -740,30 +836,6 @@ addons:
             limits:
               cpu: 1
               memory: 1Gi
-      minio:
-        init:
-          resources:
-            limits:
-              cpu: 200m
-              memory: 200Mi
-            requests:
-              cpu: 200m
-              memory: 200Mi
-        # Uncomment if you want to specify a particular storage class.
-        # WARNING: By default The MinIO container runs as uid: 1000, gid: 0.
-        # You may need to configure a storage class with uid: 1000, gid: 0 or you may get "permission denied" errors.
-#        persistence:
-#          enabled: true
-#          accessMode: ReadWriteOnce
-#          storageClass: "your-storage-class-name-here"
-#          size: 1Gi
-        resources:
-          limits:
-            cpu: 200m
-            memory: 300Mi
-          requests:
-            cpu: 200m
-            memory: 300Mi
   gitlabRunner:
     enabled: true
     git:
