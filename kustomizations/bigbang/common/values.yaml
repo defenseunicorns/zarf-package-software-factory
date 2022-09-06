@@ -593,6 +593,17 @@ addons:
         #   display_name: "GitLab Admin"
         #   reply_to: "gitlabadmin@example.com"
         #   subject_suffix: "gitlab"
+        redis:
+          host: redis.redis.svc.cluster.local
+          serviceName: redis
+          port: 6379
+          sentinels:
+            - host: redis-node-0.redis-headless.redis.svc.cluster.local
+              port: 26379
+            - host: redis-node-1.redis-headless.redis.svc.cluster.local
+              port: 26379
+            - host: redis-node-2.redis-headless.redis.svc.cluster.local
+              port: 26379
       upgradeCheck:
         resources:
           requests:
@@ -602,61 +613,62 @@ addons:
             cpu: 500m
             memory: 500Mi
       redis:
-        metrics:
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-        master:
-          # Uncomment this if you want to specify a particular storage class
-#          persistence:
-#            storageClass: "your-storage-class-name-here"
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-        # :face_vomiting: TODO: Upstream merge request to make the naming more inclusive
-        slave:
-          # Uncomment this if you want to specify a particular storage class
-#          persistence:
-#            storageClass: "your-storage-class-name-here"
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-        sentinel:
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-        volumePermissions:
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-        sysctlImage:
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
+        enabled: false
+#         metrics:
+#           resources:
+#             limits:
+#               cpu: 250m
+#               memory: 256Mi
+#             requests:
+#               cpu: 250m
+#               memory: 256Mi
+#         master:
+#           # Uncomment this if you want to specify a particular storage class
+# #          persistence:
+# #            storageClass: "your-storage-class-name-here"
+#           resources:
+#             limits:
+#               cpu: 250m
+#               memory: 256Mi
+#             requests:
+#               cpu: 250m
+#               memory: 256Mi
+#         # :face_vomiting: TODO: Upstream merge request to make the naming more inclusive
+#         slave:
+#           # Uncomment this if you want to specify a particular storage class
+# #          persistence:
+# #            storageClass: "your-storage-class-name-here"
+#           resources:
+#             limits:
+#               cpu: 250m
+#               memory: 256Mi
+#             requests:
+#               cpu: 250m
+#               memory: 256Mi
+#         sentinel:
+#           resources:
+#             limits:
+#               cpu: 250m
+#               memory: 256Mi
+#             requests:
+#               cpu: 250m
+#               memory: 256Mi
+#         volumePermissions:
+#           resources:
+#             limits:
+#               cpu: 250m
+#               memory: 256Mi
+#             requests:
+#               cpu: 250m
+#               memory: 256Mi
+#         sysctlImage:
+#           resources:
+#             limits:
+#               cpu: 250m
+#               memory: 256Mi
+#             requests:
+#               cpu: 250m
+#               memory: 256Mi
       postgresql:
         install: false
       registry:
