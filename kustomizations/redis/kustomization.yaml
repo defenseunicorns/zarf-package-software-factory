@@ -6,4 +6,9 @@ configMapGenerator:
     namespace: softwarefactoryaddons
     behavior: replace
     files:
+      - values.yaml=postgres-operator/common-values.yaml
+  - name: postgres-operator-ui-common
+    namespace: softwarefactoryaddons
+    behavior: replace
+    files:
       - values.yaml=redis/values.yaml

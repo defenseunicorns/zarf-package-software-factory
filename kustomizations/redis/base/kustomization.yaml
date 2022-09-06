@@ -8,6 +8,13 @@ resources:
   - gitrepository.yaml
   - helmrelease.yaml
 
+configMapGenerator:
+  - name: redis-common
+    namespace: softwarefactoryaddons
+    behavior: create
+    literals:
+      - values.yaml=
+
 # configMapGenerator:
 #   - name: postgres-operator-common
 #     namespace: softwarefactoryaddons

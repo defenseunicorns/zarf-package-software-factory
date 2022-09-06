@@ -28,9 +28,9 @@ spec:
     timeout: 30m
     cleanupOnFail: false
   valuesFrom:
-    - chartFileRef:
-      path: ../redis/values.yaml
-      optional: false
+    - kind: ConfigMap
+      name: redis-common
+      valuesKey: values.yaml
   #   - kind: Secret
   #     name: postgres-operator-common-bb
   #     valuesKey: values.yaml
