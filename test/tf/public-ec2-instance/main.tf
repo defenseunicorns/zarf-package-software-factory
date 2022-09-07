@@ -12,6 +12,10 @@ provider "aws" {
   region = var.aws_region
 }
 
+data "aws_vpc" "default" {
+  default = true
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # CREATE A PUBLIC EC2 INSTANCE
 # ---------------------------------------------------------------------------------------------------------------------
@@ -40,6 +44,8 @@ resource "aws_instance" "public" {
 
 resource "aws_security_group" "public" {
   name = local.fullname
+
+  vpc_id = data.aws_vpc.default.id
 
   egress {
     from_port   = 0
