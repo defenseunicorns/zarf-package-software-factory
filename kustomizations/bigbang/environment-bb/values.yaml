@@ -142,3 +142,13 @@ addons:
     objectStorage:
       accessKey: "changeme"         # needs to match the value in kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml
       accessSecret: "changeme"      # needs to match the value in kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml
+  velero:
+    values:
+      credentials:
+        useSecret: true
+        secretContents:
+          # Values need to match the values in kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml
+          cloud: |
+            [default]
+            aws_access_key_id=changeme
+            aws_secret_access_key=changeme
