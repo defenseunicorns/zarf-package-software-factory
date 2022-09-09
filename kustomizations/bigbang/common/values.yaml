@@ -851,3 +851,19 @@ addons:
         requests:
           memory: 256Mi
           cpu: 200m
+
+  velero:
+    enabled: true
+    git:
+      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__cluster-utilities__velero.git
+    plugins:
+      - aws
+    values:
+      resources:
+        # Demo/PoC values. Adjust for production
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 10
+          memory: 512Mi

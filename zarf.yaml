@@ -67,6 +67,7 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero.git
 
     # To get the list of all images used in Big Bang:
     #    - Download "package-images.yml" from the big bang release
