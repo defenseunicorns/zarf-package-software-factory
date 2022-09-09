@@ -1,5 +1,6 @@
 sentinel:
   enabled: true
+  auth.existingSecret: gitlab-redis-secret
   image:
     registry: "docker.io"
     repository: "bitnami/redis-sentinel"
@@ -7,4 +8,3 @@ sentinel:
     #repository: "ironbank/opensource/redis/redis-sentinel"
     tag: "6.2.7"
     pullPolicy: Always
-  
