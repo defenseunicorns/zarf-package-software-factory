@@ -1,8 +1,8 @@
+auth:
+  existingSecret: gitlab-redis-secret
+  existingSecretPasswordKey: secret
 sentinel:
   enabled: true
-  auth:
-    existingSecret: gitlab-redis-secret
-    existingSecretPasswordKey: secret
   image:
     registry: "docker.io"
     repository: "bitnami/redis-sentinel"
