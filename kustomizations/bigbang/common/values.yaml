@@ -614,61 +614,6 @@ addons:
             memory: 500Mi
       redis:
         install: false
-#         metrics:
-#           resources:
-#             limits:
-#               cpu: 250m
-#               memory: 256Mi
-#             requests:
-#               cpu: 250m
-#               memory: 256Mi
-#         master:
-#           # Uncomment this if you want to specify a particular storage class
-# #          persistence:
-# #            storageClass: "your-storage-class-name-here"
-#           resources:
-#             limits:
-#               cpu: 250m
-#               memory: 256Mi
-#             requests:
-#               cpu: 250m
-#               memory: 256Mi
-#         # :face_vomiting: TODO: Upstream merge request to make the naming more inclusive
-#         slave:
-#           # Uncomment this if you want to specify a particular storage class
-# #          persistence:
-# #            storageClass: "your-storage-class-name-here"
-#           resources:
-#             limits:
-#               cpu: 250m
-#               memory: 256Mi
-#             requests:
-#               cpu: 250m
-#               memory: 256Mi
-#         sentinel:
-#           resources:
-#             limits:
-#               cpu: 250m
-#               memory: 256Mi
-#             requests:
-#               cpu: 250m
-#               memory: 256Mi
-#         volumePermissions:
-#           resources:
-#             limits:
-#               cpu: 250m
-#               memory: 256Mi
-#             requests:
-#               cpu: 250m
-#               memory: 256Mi
-#         sysctlImage:
-#           resources:
-#             limits:
-#               cpu: 250m
-#               memory: 256Mi
-#             requests:
-#               cpu: 250m
-#               memory: 256Mi
       postgresql:
         install: false
       registry:

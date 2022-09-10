@@ -54,7 +54,6 @@ components:
     images:
       - registry1.dso.mil/ironbank/bitnami/redis:7.0.0-debian-10-r3
       - docker.io/bitnami/redis-sentinel:6.2.7
-        #- registry1.dso.mil/ironbank/opensource/redis/redis-sentinel:6.2.7
 
   - name: big-bang
     required: true
