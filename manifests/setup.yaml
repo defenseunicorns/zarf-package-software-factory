@@ -10,7 +10,7 @@ kind: Namespace
 metadata:
   name: softwarefactoryaddons
   labels:
-    istio-injection: disabled
+    istio-injection: enabled
     owner: softwarefactoryaddons
 ---
 apiVersion: v1
@@ -18,21 +18,21 @@ kind: Namespace
 metadata:
   name: postgres-operator
   labels:
-    istio-injection: disabled
+    istio-injection: enabled
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: jira
   labels:
-    istio-injection: disabled
+    istio-injection: enabled
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: confluence
   labels:
-    istio-injection: disabled
+    istio-injection: enabled
 ---
 apiVersion: v1
 kind: Namespace
