@@ -895,4 +895,4 @@ addons:
           limits:
             cpu: 10
             memory: 1024Mi
-      schedules:
+#      schedules:
