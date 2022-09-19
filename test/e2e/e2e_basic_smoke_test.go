@@ -41,6 +41,18 @@ func TestAllServicesRunning(t *testing.T) {
 		// Wait for the GitLab Webservice Deployment to report that it is ready
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status deployment/gitlab-webservice-default -n gitlab --watch --timeout=1200s`)
 		require.NoError(t, err, output)
+		// Wait for the Velero Deployment to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get deployment velero-velero -n velero; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Wait for the Velero Deployment to report that it is ready
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status deployment/velero-velero -n velero --watch --timeout=1200s`)
+		require.NoError(t, err, output)
+		// Wait for the Restic Daemonset to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get daemonset restic -n velero; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Wait for the Restic Daemonset to report that it is ready
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status daemonset/restic -n velero --watch --timeout=1200s`)
+		require.NoError(t, err, output)
 		// Wait for the Jenkins StatefulSet to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset jenkins -n jenkins; do sleep 5; done\"`)
 		require.NoError(t, err, output)

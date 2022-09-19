@@ -863,6 +863,20 @@ addons:
     plugins:
       - aws
     values:
+      initContainers:
+       - name: velero-plugin-for-aws
+         image: velero/velero-plugin-for-aws:v1.5.0
+         imagePullPolicy: IfNotPresent
+         volumeMounts:
+           - mountPath: /target
+             name: plugins
+         resources:
+           requests:
+             memory: 512Mi
+             cpu: 100m
+           limits:
+             memory: 512Mi
+             cpu: 100m
       resources:
         # Demo/PoC values. Adjust for production
         requests:
