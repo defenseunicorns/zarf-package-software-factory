@@ -61,17 +61,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err)
 
 		// Install dependencies. Doing it here since the instance user-data is being flaky, still saying things like make are not installed
-		output, err := platform.RunSSHCommandAsSudo("apt update && apt upgrade -y && apt dist-upgrade -y && apt install -y jq git make wget gcc && sysctl -w vm.max_map_count=262144")
-		require.NoError(t, err, output)
-
-		// Install LinuxBrew for stupid, stupid reasons
-		output, err = platform.RunSSHCommand(`curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash`)
-		require.NoError(t, err, output)
-		output, err = platform.RunSSHCommand(`echo 'eval \"$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"' >> ~/.bash_profile && eval \"$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"`)
-		require.NoError(t, err, output)
-
-		// Install sshscan using stupid LinuxBrew, cause it's stupid. Go ahead, try to run `apt install sshscan`, I dare you. I double dare you. :cry:
-		output, err = platform.RunSSHCommand(`/home/linuxbrew/.linuxbrew/bin/brew install sslscan`)
+		output, err := platform.RunSSHCommandAsSudo("apt update && apt upgrade -y && apt dist-upgrade -y && apt install -y jq git make wget sslscan && sysctl -w vm.max_map_count=262144")
 		require.NoError(t, err, output)
 
 		// Clone the repo idempotently
