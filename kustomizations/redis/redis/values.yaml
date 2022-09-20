@@ -6,7 +6,12 @@ sentinel:
   image:
     registry: "docker.io"
     repository: "bitnami/redis-sentinel"
-    #registry: "registry1.dso.mil"
-    #repository: "ironbank/opensource/redis/redis-sentinel"
     tag: "6.2.7"
     pullPolicy: Always
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi

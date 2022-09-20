@@ -52,7 +52,6 @@ components:
     repos:
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git
     images:
-      - registry1.dso.mil/ironbank/bitnami/redis:7.0.0-debian-10-r3
       - docker.io/bitnami/redis-sentinel:6.2.7
 
   - name: big-bang
@@ -121,7 +120,6 @@ components:
       - "registry1.dso.mil/ironbank/twistlock/console/console:22.06.179"
       - "registry1.dso.mil/ironbank/twistlock/defender/defender:22.06.179"
       - "registry1.dso.mil/ironbank/big-bang/argocd:v2.4.4"
-      - "registry1.dso.mil/ironbank/bitnami/redis:7.0.0-debian-10-r3"
       - "registry1.dso.mil/ironbank/opensource/dexidp/dex:v2.30.3"
       - "registry1.dso.mil/ironbank/istio-ecosystem/authservice:0.5.1"
       - "registry1.dso.mil/ironbank/opensource/minio/operator:v4.4.25"
