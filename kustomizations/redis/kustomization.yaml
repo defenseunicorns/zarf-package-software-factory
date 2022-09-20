@@ -1,6 +1,5 @@
-resources:
+esources:
   - base
-  - secrets.yaml
 
 configMapGenerator:
   - name: redis-common
@@ -8,9 +7,3 @@ configMapGenerator:
     behavior: replace
     files:
       - values.yaml=redis/values.yaml
-
-# secretGenerator:
-#   - name: redis-secret
-#     namespace: softwarefactoryaddons
-#     files:
-#       - values.yaml=secret/values.yaml

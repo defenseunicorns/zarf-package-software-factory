@@ -14,4 +14,3 @@ configMapGenerator:
     behavior: create
     literals:
       - values.yaml=
-  
