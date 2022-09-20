@@ -9,8 +9,8 @@ configMapGenerator:
     files:
       - values.yaml=redis/values.yaml
 
-secretGenerator:
-  - name: redis-secret
-    namespace: softwarefactoryaddons
-    files:
-      - values.yaml=secret/values.yaml
+# secretGenerator:
+#   - name: redis-secret
+#     namespace: softwarefactoryaddons
+#     files:
+#       - values.yaml=secret/values.yaml
