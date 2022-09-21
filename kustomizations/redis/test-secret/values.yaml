@@ -4,6 +4,6 @@ resources:
     kind: Secret
     type: Opaque
     metadata:
-      name: new-redis-secret
+      name: test-secret
     stringData:
       secret: "changemechangeme"

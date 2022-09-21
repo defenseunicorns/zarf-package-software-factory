@@ -10,7 +10,7 @@ configMapGenerator:
       - values.yaml=redis/values.yaml
 
 secretGenerator:
-  - name: new-redis-secret
+  - name: test-secret
     namespace: redis
     files:
-      - values.yaml=new-redis-secret/values.yaml
+      - values.yaml=test-secret/values.yaml
