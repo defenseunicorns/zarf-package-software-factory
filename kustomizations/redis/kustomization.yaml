@@ -1,5 +1,6 @@
 resources:
   - base
+  - gitlab-secrets.yaml
 
 configMapGenerator:
   - name: redis-common
