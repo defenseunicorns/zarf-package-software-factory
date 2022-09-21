@@ -1,0 +1,8 @@
+resources:
+  - redis-auth.yaml
+
+secretGenerator:
+  - name: redis-auth
+    namespace: redis-auth
+    files:
+      - values.yaml=redis-auth/values.yaml
