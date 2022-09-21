@@ -11,6 +11,6 @@ configMapGenerator:
 
 secretGenerator:
   - name: new-redis-secret
-    namespace: bigbang
+    namespace: redis
     files:
       - values.yaml=new-redis-secret/values.yaml
