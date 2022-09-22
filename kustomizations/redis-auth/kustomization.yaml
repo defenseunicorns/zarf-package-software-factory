@@ -5,4 +5,4 @@ secretGenerator:
   - name: redis-auth
     namespace: redis-auth
     files:
-      - values.yaml=redis-auth/values.yaml
+      - values.yaml=secret/values.yaml
