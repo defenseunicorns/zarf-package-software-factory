@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
     config.vm.boot_timeout = 600
 
     config.vm.disk :disk, size: "100GB", primary: true
-    config.vm.box = "boxomatic/ubuntu-20.04"
+    config.vm.box = "boxomatic/ubuntu-22.04"
 
     config.vm.hostname = "zarf-examples"
     config.vm.synced_folder '.', '/vagrant', disabled: true

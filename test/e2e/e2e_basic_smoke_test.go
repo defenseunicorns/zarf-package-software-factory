@@ -98,19 +98,19 @@ func TestAllServicesRunning(t *testing.T) {
 
 		// Ensure that the services do not accept discontinued TLS versions. If they reject TLSv1.1 it is assumed that they also reject anything below TLSv1.1.
 		// Ensure that GitLab does not accept TLSv1.1
-		output, err = platform.RunSSHCommand(`/home/linuxbrew/.linuxbrew/bin/sslscan gitlab.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		output, err = platform.RunSSHCommand(`sslscan gitlab.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
 		// Ensure that Jenkins does not accept TLSv1.1
-		output, err = platform.RunSSHCommand(`/home/linuxbrew/.linuxbrew/bin/sslscan jenkins.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		output, err = platform.RunSSHCommand(`sslscan jenkins.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
 		// Ensure that Jira does not accept TLSv1.1
-		output, err = platform.RunSSHCommand(`/home/linuxbrew/.linuxbrew/bin/sslscan jira.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		output, err = platform.RunSSHCommand(`sslscan jira.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
 		// Ensure that Confluence does not accept TLSv1.1
-		output, err = platform.RunSSHCommand(`/home/linuxbrew/.linuxbrew/bin/sslscan confluence.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		output, err = platform.RunSSHCommand(`sslscan confluence.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
 		// Ensure that Artifactory does not accept TLSv1.1
-		output, err = platform.RunSSHCommand(`/home/linuxbrew/.linuxbrew/bin/sslscan artifactory.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		output, err = platform.RunSSHCommand(`sslscan artifactory.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
 	})
 }
