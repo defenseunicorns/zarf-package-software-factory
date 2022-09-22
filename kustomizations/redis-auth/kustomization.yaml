@@ -1,5 +1,5 @@
-configurations:
-  - transformer.yaml
+generatorOptions:
+  disableNameSuffixHash: true
 
 resources:
   - redis-auth.yaml
