@@ -7,7 +7,7 @@ configMapGenerator:
     namespace: softwarefactoryaddons
     behavior: replace
     files:
-      - values.yaml=redis/values.yaml
+      - values.yaml=redis-config/values.yaml
 
 secretGenerator:
   - name: redis-auth

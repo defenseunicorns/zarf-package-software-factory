@@ -20,10 +20,6 @@ secretGenerator:
     namespace: bigbang
     files:
       - values.yaml=environment-bb-minio-user-credentials/values.yaml
-  # - name: environment-bb-redis
-  #   namespace: bigbang
-  #   files:
-  #     - values.yaml=environment-bb-redis/values.yaml
 
 patchesStrategicMerge:
   - |-
