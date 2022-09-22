@@ -29,6 +29,9 @@ spec:
   rollback:
     timeout: 10m
     cleanupOnFail: false
+  dependsOn:
+    - name: redis-auth
+      namespace: redis-auth
   valuesFrom:
     - kind: Secret
       name: redis-auth
