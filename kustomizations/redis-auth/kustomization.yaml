@@ -1,3 +1,6 @@
+configurations:
+  - transformer.yaml
+
 resources:
   - redis-auth.yaml
 
