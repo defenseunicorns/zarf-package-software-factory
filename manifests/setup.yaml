@@ -23,13 +23,6 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: redis-auth
-  labels:
-    istio-injection: disabled
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: redis
   labels:
     istio-injection: disabled

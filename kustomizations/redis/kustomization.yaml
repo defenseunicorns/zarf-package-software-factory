@@ -1,6 +1,6 @@
 resources:
   - base
-  # - gitlab-secrets.yaml
+  - gitlab-secrets.yaml
 
 configMapGenerator:
   - name: redis-common
@@ -10,7 +10,10 @@ configMapGenerator:
       - values.yaml=redis/values.yaml
 
 secretGenerator:
-  - name: test-secret
+  - name: redis-auth
     namespace: redis
     files:
-      - values.yaml=test-secret/values.yaml
+      - values.yaml=redis-auth/values.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

@@ -43,13 +43,6 @@ components:
       - registry.opensource.zalan.do/acid/spilo-14:2.1-p6
       - registry.opensource.zalan.do/acid/postgres-operator-ui:v1.8.2
 
-  - name: redis-auth
-    required: true
-    manifests:
-      - name: redis-auth
-        files:
-          - manifests/redis-auth.yaml
-
   - name: redis
     required: true
     manifests:

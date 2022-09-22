@@ -4,6 +4,6 @@ resources:
     kind: Secret
     type: Opaque
     metadata:
-      name: test-secret
+      name: gitlab-redis-secret
     stringData:
       secret: "changemechangeme"
