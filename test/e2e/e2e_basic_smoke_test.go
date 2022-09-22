@@ -96,6 +96,22 @@ func TestAllServicesRunning(t *testing.T) {
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! curl -L -s --fail --show-error https://artifactory.bigbang.dev/artifactory/api/system/ping > /dev/null; do sleep 5; done\"`)
 		require.NoError(t, err, output)
 
+		// Wait for the Loki Statefulset to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset logging-loki -n logging; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+
+		// Wait for the Loki Deployment to report that it is ready
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/logging-loki -n logging --watch --timeout=1200s`)
+		require.NoError(t, err, output)
+
+		// Wait for the Promtail Daemonset to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get daemonset logging-promtail -n logging; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+
+		// Wait for the Promtail Statefulset to report that it is ready
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status daemonset/logging-promtail -n logging --watch --timeout=1200s`)
+		require.NoError(t, err, output)
+
 		// Ensure that the services do not accept discontinued TLS versions. If they reject TLSv1.1 it is assumed that they also reject anything below TLSv1.1.
 		// Ensure that GitLab does not accept TLSv1.1
 		output, err = platform.RunSSHCommand(`sslscan gitlab.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)

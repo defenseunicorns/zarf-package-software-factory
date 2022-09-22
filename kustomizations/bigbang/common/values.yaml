@@ -227,68 +227,36 @@ gatekeeper:
             - "local-path-storage"
 
 logging:
-  enabled: true
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__elasticsearch-kibana.git
-  values:
-    istio:
-      mtls:
-        mode: PERMISSIVE
-    kibana:
-      count: 1
-      resources:
-        requests:
-          memory: "1Gi"
-          cpu: "100m"
-        limits:
-          memory: "1Gi"
-          cpu: "500m"
-    elasticsearch:
-      master:
-        count: 1
-        # Uncomment this if you want to specify a specific storageclass
-#        persistence:
-#          storageClassName: "your-storage-class-name-here"
-        resources:
-          limits:
-            cpu: "500m"
-            memory: "3Gi"
-          requests:
-            cpu: "100m"
-            memory: "3Gi"
-      data:
-        count: 1
-        # Uncomment this if you want to specify a specific storageclass
-#        persistence:
-#          storageClassName: "your-storage-class-name-here"
-        resources:
-          limits:
-            cpu: "500m"
-            memory: "3Gi"
-          requests:
-            cpu: "100m"
-            memory: "3Gi"
+  enabled: false
 
 eckoperator:
+  enabled: false
+
+fluentbit:
+  enabled: false
+
+loki:
   enabled: true
   git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__eck-operator.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__sandbox__loki.git
+  strategy: "monolith"
+  objectStorage:
+    endpoint: minio.minio.svc.cluster.local
+    region: "us-east-1"
+    # accessKey: "" -- Added in environment-bb/values.yaml
+    # accessSecret: "" -- Added in environment-bb/values.yaml
+    bucketNames: "loki-logs"
   values:
+    minio:
+      enabled: false
     istio:
       mtls:
         mode: PERMISSIVE
-    resources:
-      limits:
-        cpu: "200m"
-        memory: "256Mi"
-      requests:
-        cpu: "100m"
-        memory: "256Mi"
 
-fluentbit:
+promtail:
   enabled: true
   git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__fluentbit.git
+    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__sandbox__promtail.git
   values:
     istio:
       mtls:
@@ -509,6 +477,10 @@ addons:
             objectLock: true
           # gitlab-pages
           - name: "gitlab-pages"
+            region: "us-east-1"
+            objectLock: true
+          # loki-logs
+          - name: "loki-logs"
             region: "us-east-1"
             objectLock: true
         pools:
