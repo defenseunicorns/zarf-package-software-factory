@@ -34,6 +34,12 @@ resource "aws_instance" "public" {
 #!/bin/bash
 echo "PubkeyAcceptedKeyTypes=+ssh-rsa" >> /etc/ssh/sshd_config
 service ssh reload
+sudo sysctl -w vm.max_map_count=1524288
+sudo sysctl -w fs.file-max=1000000
+ulimit -n 1000000
+ulimit -u 8192
+sudo sysctl --load
+sudo swapoff -a
 _EOF_
 
   # This EC2 Instance has a public IP and will be accessible directly from the public Internet

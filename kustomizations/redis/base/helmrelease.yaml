@@ -6,7 +6,8 @@ metadata:
 spec:
   targetNamespace: redis
   releaseName: redis
-  interval: 2m
+  interval: 5m
+  timeout: 10m
   chart:
     spec:
       interval: 1m
