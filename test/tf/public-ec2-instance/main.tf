@@ -42,7 +42,8 @@ _EOF_
   associate_public_ip_address = true
 
   tags = {
-    Name = "${local.fullname}-public"
+    Name      = "${local.fullname}-public"
+    CreatedBy = "${data.aws_caller_identity.whoami.arn}"
   }
 }
 
@@ -115,3 +116,9 @@ data "aws_ami" "ubuntu" {
     values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# LOOK UP THE CALLER ID
+# ---------------------------------------------------------------------------------------------------------------------
+
+data "aws_caller_identity" "whoami" {}
