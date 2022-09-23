@@ -594,6 +594,10 @@ addons:
         #   reply_to: "gitlabadmin@example.com"
         #   subject_suffix: "gitlab"
         redis:
+          password:
+            enabled: true
+            secret: "gitlab-redis-secret"
+            key: "secret"
           host: redis.redis.svc.cluster.local
           serviceName: redis
           port: 6379
