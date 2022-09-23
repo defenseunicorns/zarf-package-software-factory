@@ -1,6 +1,6 @@
 resources:
   - base
-  - gitlab-secrets.yaml
+  - secrets.yaml
 
 configMapGenerator:
   - name: redis-common
@@ -11,7 +11,7 @@ configMapGenerator:
 
 secretGenerator:
   - name: redis-auth
-    namespace: redis
+    namespace: softwarefactoryaddons
     files:
       - values.yaml=redis-auth/values.yaml
 
