@@ -61,10 +61,9 @@ jobs:
       - name: "Update GitHub Status for this ref"
         uses: "docker://cloudposse/github-status-updater"
         with:
-          args: "-action update_state -ref ${{ github.event.client_payload.pull_request.head.sha }} -repo ${{ github.event.client_payload.github.payload.repository.name }}"
+          args: "-action update_state -state success -ref ${{ github.event.client_payload.pull_request.head.sha }} -repo ${{ github.event.client_payload.github.payload.repository.name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
-          GITHUB_STATE: success
           GITHUB_CONTEXT: "/test ping"
           GITHUB_DESCRIPTION: "pong"
           GITHUB_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -81,10 +80,9 @@ jobs:
       - name: "Update GitHub Status for pending"
         uses: docker://cloudposse/github-status-updater
         with:
-          args: "-action update_state -ref ${{ github.event.client_payload.pull_request.head.sha }} -repo ${{ github.event.client_payload.github.payload.repository.name }}"
+          args: "-action update_state -state pending -ref ${{ github.event.client_payload.pull_request.head.sha }} -repo ${{ github.event.client_payload.github.payload.repository.name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
-          GITHUB_STATE: pending
           GITHUB_CONTEXT: "/test e2e"
           GITHUB_DESCRIPTION: "started by @${{ github.event.client_payload.github.actor }}"
           GITHUB_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -144,10 +142,9 @@ jobs:
         if: ${{ failure() }}
         uses: docker://cloudposse/github-status-updater
         with:
-          args: "-action update_state -ref ${{ github.event.client_payload.pull_request.head.sha }} -repo ${{ github.event.client_payload.github.payload.repository.name }}"
+          args: "-action update_state -state failure -ref ${{ github.event.client_payload.pull_request.head.sha }} -repo ${{ github.event.client_payload.github.payload.repository.name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
-          GITHUB_STATE: failure
           GITHUB_CONTEXT: "/test e2e"
           GITHUB_DESCRIPTION: "run failed"
           GITHUB_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -158,10 +155,9 @@ jobs:
       - name: "Update GitHub Status for success"
         uses: docker://cloudposse/github-status-updater
         with:
-          args: "-action update_state -ref ${{ github.event.client_payload.pull_request.head.sha }} -repo ${{ github.event.client_payload.github.payload.repository.name }}"
+          args: "-action update_state -state success -ref ${{ github.event.client_payload.pull_request.head.sha }} -repo ${{ github.event.client_payload.github.payload.repository.name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
-          GITHUB_STATE: success
           GITHUB_CONTEXT: "/test e2e"
           GITHUB_DESCRIPTION: "run passed"
           GITHUB_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -173,10 +169,9 @@ jobs:
         if: ${{ cancelled() }}
         uses: docker://cloudposse/github-status-updater
         with:
-          args: "-action update_state -ref ${{ github.event.client_payload.pull_request.head.sha }} -repo ${{ github.event.client_payload.github.payload.repository.name }}"
+          args: "-action update_state -state error -ref ${{ github.event.client_payload.pull_request.head.sha }} -repo ${{ github.event.client_payload.github.payload.repository.name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
-          GITHUB_STATE: error
           GITHUB_CONTEXT: "/test e2e"
           GITHUB_DESCRIPTION: "run cancelled"
           GITHUB_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
