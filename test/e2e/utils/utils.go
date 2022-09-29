@@ -61,7 +61,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err)
 
 		// Install dependencies. Doing it here since the instance user-data is being flaky, still saying things like make are not installed
-		output, err := platform.RunSSHCommandAsSudo("apt update && apt upgrade -y && apt dist-upgrade -y && apt install -y jq git make wget sslscan && sysctl -w vm.max_map_count=262144")
+		output, err := platform.RunSSHCommandAsSudo("apt update && apt install -y jq git make wget sslscan && sysctl -w vm.max_map_count=262144")
 		require.NoError(t, err, output)
 
 		// Clone the repo idempotently
@@ -74,12 +74,6 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		// Log into registry1.dso.mil
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf("~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v", registry1Username, registry1Password))
 		require.NoError(t, err, output)
-		// Build K3s package
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-package-k3s-amd64.tar.zst")
-		require.NoError(t, err, output)
-		// Build k3s-images package
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-package-k3s-images-amd64.tar.zst")
-		require.NoError(t, err, output)
 		// Build init package
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-init-amd64.tar.zst")
 		require.NoError(t, err, output)
@@ -91,14 +85,8 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err, output)
 		// Try to be idempotent
 		_, _ = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf destroy --confirm")
-		// Deploy K3s
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-k3s-amd64.tar.zst --confirm")
-		require.NoError(t, err, output)
 		// Deploy init package
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-init-amd64.tar.zst --components git-server --confirm")
-		require.NoError(t, err, output)
-		// Deploy k3s-images
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-k3s-images-amd64.tar.zst --confirm")
+		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-init-amd64.tar.zst --components k3s,git-server --confirm")
 		require.NoError(t, err, output)
 		// Deploy Flux
 		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm")
