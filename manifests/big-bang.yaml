@@ -42,15 +42,11 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       namespace: bigbang
-      name: ek
+      name: loki
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       namespace: bigbang
-      name: eck-operator
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
-      name: fluent-bit
+      name: promtail
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       namespace: bigbang
