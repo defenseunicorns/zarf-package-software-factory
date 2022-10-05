@@ -10,7 +10,7 @@ import (
 )
 
 // TestAllServicesRunning waits until all services report that they are ready.
-func TestAllServicesRunning(t *testing.T) {
+func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 	// BOILERPLATE, EXPECTED TO BE PRESENT AT THE BEGINNING OF EVERY TEST FUNCTION
 
 	t.Parallel()
@@ -40,6 +40,18 @@ func TestAllServicesRunning(t *testing.T) {
 		require.NoError(t, err, output)
 		// Wait for the GitLab Webservice Deployment to report that it is ready
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status deployment/gitlab-webservice-default -n gitlab --watch --timeout=1200s`)
+		require.NoError(t, err, output)
+		// Wait for the Velero Deployment to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get deployment velero-velero -n velero; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Wait for the Velero Deployment to report that it is ready
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status deployment/velero-velero -n velero --watch --timeout=1200s`)
+		require.NoError(t, err, output)
+		// Wait for the Restic Daemonset to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get daemonset restic -n velero; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Wait for the Restic Daemonset to report that it is ready
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status daemonset/restic -n velero --watch --timeout=1200s`)
 		require.NoError(t, err, output)
 		// Wait for the Jenkins StatefulSet to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset jenkins -n jenkins; do sleep 5; done\"`)
@@ -94,6 +106,22 @@ func TestAllServicesRunning(t *testing.T) {
 		require.NoError(t, err, output)
 		// Ensure that Artifactory is available outside of the cluster.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! curl -L -s --fail --show-error https://artifactory.bigbang.dev/artifactory/api/system/ping > /dev/null; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+
+		// Wait for the Loki Statefulset to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset logging-loki -n logging; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+
+		// Wait for the Loki Deployment to report that it is ready
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/logging-loki -n logging --watch --timeout=1200s`)
+		require.NoError(t, err, output)
+
+		// Wait for the Promtail Daemonset to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get daemonset logging-promtail -n logging; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+
+		// Wait for the Promtail Statefulset to report that it is ready
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status daemonset/logging-promtail -n logging --watch --timeout=1200s`)
 		require.NoError(t, err, output)
 
 		// Ensure that the services do not accept discontinued TLS versions. If they reject TLSv1.1 it is assumed that they also reject anything below TLSv1.1.
