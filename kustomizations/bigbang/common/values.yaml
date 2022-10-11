@@ -45,6 +45,14 @@ istio:
           memory: "1Gi"
       hpaSpec:
         maxReplicas: 1
+    values:
+      global:
+        proxy:
+          resources:
+            requests:
+              memory: "1Gi"
+            limits:
+              memory: "1Gi"
   gateways:
     public:
       ingressGateway: public-ingressgateway
@@ -55,22 +63,6 @@ istio:
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
-
-  postRenderers:
-    # This should only be needed until we upgrade to the Istio chart v1.14.2-bb.1 or later, when it is included by default as a meshConfig
-    # Ref: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane/-/merge_requests/119
-    - kustomize:
-        patchesJson6902:
-          - target:
-              group: networking.istio.io
-              version: v1beta1
-              kind: Gateway
-              name: public
-              namespace: istio-system
-            patch:
-              - op: add
-                path: "/spec/servers/1/tls/minProtocolVersion"
-                value: "TLSV1_2"
 
 istiooperator:
   enabled: true
@@ -94,7 +86,7 @@ jaeger:
   values:
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
     jaeger:
       spec:
         allInOne:
@@ -239,14 +231,21 @@ loki:
   enabled: true
   git:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__sandbox__loki.git
-  strategy: "monolith"
+  strategy: "scalable"
   objectStorage:
     endpoint: minio.minio.svc.cluster.local
     region: "minio"
     # accessKey: "" -- Added in environment-bb/values.yaml
     # accessSecret: "" -- Added in environment-bb/values.yaml
-    bucketNames: "loki-logs"
+    bucketNames:
+      chunks: loki-logs
+      ruler: loki-ruler
+      admin: loki-admin
   values:
+    read:
+      replicas: 1
+    write:
+      replicas: 1
     minio:
       enabled: false
     istio:
@@ -485,6 +484,12 @@ addons:
             objectLock: true
           # loki-logs
           - name: "loki-logs"
+            region: "minio"
+            objectLock: true
+          - name: "loki-ruler"
+            region: "minio"
+            objectLock: true
+          - name: "loki-admin"
             region: "minio"
             objectLock: true
         pools:

@@ -3,7 +3,7 @@
 #    2. Additionally update the following files to use the new version of Big Bang:
 #        - zarf.yaml
 #        - flux/zarf.yaml
-BIGBANG_VERSION := 1.39.0
+BIGBANG_VERSION := 1.43.0
 
 # The version of Zarf to use. To keep this repo as portable as possible the Zarf binary will be downloaded and added to
 # the build folder.
