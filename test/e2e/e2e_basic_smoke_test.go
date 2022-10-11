@@ -35,6 +35,12 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Wait for the "softwarefactoryaddons" kustomization to report "Ready==True".
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/softwarefactoryaddons -n flux-system --for=condition=Ready --timeout=1200s`)
 		require.NoError(t, err, output)
+		// Wait for the MinIO Statefulset 'minio-minio-minio-instance-ss-0' to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset minio-minio-minio-instance-ss-0 -n minio; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Wait for the MinIO Statefulset 'minio-minio-minio-instance-ss-0' to report that it is ready.
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/minio-minio-minio-instance-ss-0 -n minio --watch --timeout=1200s`)
+		require.NoError(t, err, output)
 		// Wait for the GitLab Webservice Deployment to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get deployment gitlab-webservice-default -n gitlab; do sleep 5; done\"`)
 		require.NoError(t, err, output)
