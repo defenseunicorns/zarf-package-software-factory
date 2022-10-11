@@ -423,7 +423,7 @@ addons:
         mtls:
           mode: PERMISSIVE
       # https://github.com/minio/operator/blob/master/docs/crd.adoc
-      tenants:
+      tenant:
         # Required to be here due to a weird quirk in bucket creation. See https://github.com/minio/operator/issues/1002#issuecomment-1028394242
         users:
           - name: minio-user-credentials
@@ -505,7 +505,7 @@ addons:
                 cpu: 250m
                 memory: 2Gi
               limits:
-                cpu: 250m
+                cpu: 10
                 memory: 2Gi
             securityContext:
               runAsUser: 1001
