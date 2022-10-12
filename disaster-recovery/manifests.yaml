@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: minio-creds-secret
+stringData:
+  accesskey: "changeme"
+  secretkey: "changeme"
+---
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: alt-backupstoragelocation
+  namespace: alt-backupstoragelocation
+spec:
+  buckets:
+    - name: velero-backups
+      objectLock: true
+      region: minio
+  credsSecret:
+    name: minio-creds-secret
+  env:
+    - name: MINIO_PROMETHEUS_AUTH_TYPE
+      value: public
+  image: registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2022-08-26T19-53-15Z
+  imagePullPolicy: IfNotPresent
+  imagePullSecret:
+    name: private-registry
+  logging:
+    anonymous: true
+    json: true
+    quiet: true
+  mountPath: /export
+  podManagementPolicy: Parallel
+  pools:
+    - resources:
+        limits:
+          cpu: 10
+          memory: 2Gi
+        requests:
+          cpu: 250m
+          memory: 2Gi
+      securityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      servers: 3
+      volumeClaimTemplate:
+        metadata:
+          name: data
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 5Gi
+      volumesPerServer: 2
+  prometheusOperator: false
+  requestAutoCert: false
+  s3:
+    bucketDNS: false
+  subPath: /data

@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.21.3/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: alt-backupstoragelocation
+  description: "Deploys an additional MinIO to a different namespace for use as an alternate backup storage location for Velero when running a full restore"
+
+components:
+  - name: alt-backupstoragelocation
+    description: "Deploys an additional MinIO to a different namespace for use as an alternate backup storage location for Velero when running a full restore"
+    required: true
+    manifests:
+      - name: alt-backupstoragelocation
+        namespace: alt-backupstoragelocation
+        files:
+          - manifests.yaml
