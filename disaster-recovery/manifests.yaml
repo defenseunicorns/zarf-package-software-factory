@@ -3,6 +3,7 @@ kind: Secret
 type: Opaque
 metadata:
   name: minio-creds-secret
+  namespace: alt-backupstoragelocation
 stringData:
   accesskey: "changeme"
   secretkey: "changeme"
