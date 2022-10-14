@@ -1,3 +1,4 @@
+# This is the root user for the minio instance
 apiVersion: v1
 kind: Secret
 type: Opaque
@@ -5,8 +6,19 @@ metadata:
   name: minio-creds-secret
   namespace: alt-backupstoragelocation
 stringData:
-  accesskey: "changeme"
-  secretkey: "changeme"
+  accesskey: "changemechangemechangeme"
+  secretkey: "changemechangemechangeme"
+---
+# This is the minio user that velero will use. Minio also needs it in order to pre-create the bucket(s)
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: minio-user-credentials
+  namespace: alt-backupstoragelocation
+stringData:
+  CONSOLE_ACCESS_KEY: "changeme"
+  CONSOLE_SECRET_KEY: "changeme"
 ---
 apiVersion: minio.min.io/v2
 kind: Tenant
@@ -37,10 +49,10 @@ spec:
     - resources:
         limits:
           cpu: 10
-          memory: 2Gi
+          memory: 3Gi
         requests:
           cpu: 250m
-          memory: 2Gi
+          memory: 3Gi
       securityContext:
         fsGroup: 1001
         runAsGroup: 1001
@@ -62,3 +74,21 @@ spec:
   s3:
     bucketDNS: false
   subPath: /data
+  users:
+    - name: minio-user-credentials
+---
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  name: alt-backupstoragelocation
+  namespace: velero
+spec:
+  accessMode: ReadOnly
+  config:
+    region: minio
+    s3ForcePathStyle: "true"
+    s3Url: http://alt-backupstoragelocation.alt-backupstoragelocation.svc.cluster.local:80
+  default: false
+  objectStorage:
+    bucket: velero-backups
+  provider: aws
