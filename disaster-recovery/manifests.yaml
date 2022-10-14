@@ -53,6 +53,8 @@ spec:
         requests:
           cpu: 250m
           memory: 3Gi
+      labels:
+        sidecar.istio.io/inject: "true"
       securityContext:
         fsGroup: 1001
         runAsGroup: 1001
