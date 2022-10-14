@@ -89,7 +89,7 @@ spec:
   config:
     region: minio
     s3ForcePathStyle: "true"
-    s3Url: http://alt-backupstoragelocation.alt-backupstoragelocation.svc.cluster.local:80
+    s3Url: http://minio.alt-backupstoragelocation.svc.cluster.local:80
   default: false
   objectStorage:
     bucket: velero-backups
