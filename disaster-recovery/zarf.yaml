@@ -10,6 +10,7 @@ components:
     required: true
     manifests:
       - name: alt-backupstoragelocation
-        namespace: alt-backupstoragelocation
+        # Helm needs a namespace to associate a deployment with, but we are creating the namespace, so we're going to use the zarf namespace as the "middle man"
+        namespace: zarf
         files:
           - manifests.yaml

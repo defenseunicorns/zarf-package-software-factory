@@ -1,3 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: alt-backupstoragelocation
+  labels:
+    istio-injection: enabled
+---
 # This is the root user for the minio instance
 apiVersion: v1
 kind: Secret
