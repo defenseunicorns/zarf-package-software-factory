@@ -19,6 +19,11 @@ endif
 # Idiomatic way to force a target to always run, by having it depend on this dummy target
 FORCE:
 
+# Silent mode by default. Override with 'make VERBOSE=1'
+ifndef VERBOSE
+.SILENT:
+endif
+
 .PHONY: help
 help: ## Show this help.
 	@echo ''
@@ -64,7 +69,3 @@ k9s: ## Pull up K9s
 ../build/kubectl: | ../build ## Download the kubectl binary
 	curl -L "https://dl.k8s.io/release/$$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o ../build/kubectl
 	chmod +x ../build/kubectl
-
-#.PHONY: destroy
-#destroy: | ../build/helm ## Destroy the disaster-recovery package using helm
-#
