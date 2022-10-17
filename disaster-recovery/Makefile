@@ -30,7 +30,7 @@ help: ## Show this help.
 	@echo ''
 	@echo 'Targets:'
 	@awk 'BEGIN {FS = ":.*?## "} { \
-		if (/^[a-zA-Z0-9\_\-\.\/]+:.*?## .*$$/) {printf "    %-20s%s\n", $$1, $$2} \
+		if (/^[a-zA-Z0-9_\-\.\/]+:.*?## .*$$/) {printf "    %-20s%s\n", $$1, $$2} \
 		else if (/^## .*$$/) {printf "  %s\n", substr($$1,4)} \
 		}' $(MAKEFILE_LIST)
 
