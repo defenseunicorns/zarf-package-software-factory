@@ -20,10 +20,19 @@ endif
 FORCE:
 
 .PHONY: help
-help: ## Show a list of all targets
-	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
-	| sed -n 's/^\(.*\): \(.*\)##\(.*\)/\1:\3/p' \
-	| column -t -s ":"
+help: ## Show this help.
+	@echo ''
+	@echo 'zarf-package-software-factory (a.k.a. "DI2-ME")'
+	@echo '======================================'
+	@echo ''
+	@echo 'Usage:'
+	@echo '  make <target>'
+	@echo ''
+	@echo 'Targets:'
+	@awk 'BEGIN {FS = ":.*?## "} { \
+		if (/^[a-zA-Z0-9\_\-\.\/]+:.*?## .*$$/) {printf "    %-20s%s\n", $$1, $$2} \
+		else if (/^## .*$$/) {printf "  %s\n", substr($$1,4)} \
+		}' $(MAKEFILE_LIST)
 
 .PHONY: clean
 clean: ## Clean up the build directory
@@ -34,19 +43,19 @@ build-and-deploy: ## Build the disaster-recovery package and immediately deploy 
 	../build/$(ZARF_BIN) package create --confirm
 	../build/$(ZARF_BIN) package deploy zarf-package-alt-backupstoragelocation-amd64.tar.zst --confirm
 
-#.PHONY: destroy
-#destroy: | ../build/helm ## Destroy the disaster-recovery package using helm
-#
-
 .PHONY: k9s
 k9s: ## Pull up K9s
 	../build/$(ZARF_BIN) tools k9s
 
-build:
+../build:
 	@mkdir -p ../build
 
-../build/helm: | build ## Download the Helm binary
+../build/helm: | ../build ## Download the Helm binary
 	curl -sL https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz -o ../build/helm.tar.gz
 	tar -xzvf ../build/helm.tar.gz -C ../build --strip-components 1 linux-amd64/helm
 	rm ../build/helm.tar.gz
 	chmod +x ../build/helm
+
+#.PHONY: destroy
+#destroy: | ../build/helm ## Destroy the disaster-recovery package using helm
+#
