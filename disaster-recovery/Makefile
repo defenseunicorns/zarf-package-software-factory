@@ -46,7 +46,7 @@ build-and-deploy: ## Build the disaster-recovery package and immediately deploy 
 .PHONY: destroy
 destroy: | ../build/helm ## Destroy the disaster-recovery deployment using Helm
 	../build/helm uninstall zarf-raw-alt-backupstoragelocation -n zarf
-
+	../build/kubectl delete ns alt-backupstoragelocation
 
 .PHONY: k9s
 k9s: ## Pull up K9s
