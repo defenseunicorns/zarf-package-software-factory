@@ -47,6 +47,7 @@ build-and-deploy: ## Build the disaster-recovery package and immediately deploy 
 destroy: | ../build/helm ## Destroy the disaster-recovery deployment using Helm
 	../build/helm uninstall zarf-raw-alt-backupstoragelocation -n zarf
 
+
 .PHONY: k9s
 k9s: ## Pull up K9s
 	../build/$(ZARF_BIN) tools k9s
@@ -59,6 +60,10 @@ k9s: ## Pull up K9s
 	tar -xzvf ../build/helm.tar.gz -C ../build --strip-components 1 linux-amd64/helm
 	rm ../build/helm.tar.gz
 	chmod +x ../build/helm
+
+../build/kubectl: | ../build ## Download the kubectl binary
+	curl -L "https://dl.k8s.io/release/$$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o ../build/kubectl
+	chmod +x ../build/kubectl
 
 #.PHONY: destroy
 #destroy: | ../build/helm ## Destroy the disaster-recovery package using helm
