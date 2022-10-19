@@ -1,6 +1,5 @@
 resources:
   - base
-  - secrets.yaml
 
 configMapGenerator:
   - name: redis-common
@@ -8,12 +7,6 @@ configMapGenerator:
     behavior: replace
     files:
       - values.yaml=redis-config/values.yaml
-
-secretGenerator:
-  - name: redis-auth
-    namespace: softwarefactoryaddons
-    files:
-      - values.yaml=redis-auth/values.yaml
 
 generatorOptions:
   disableNameSuffixHash: true

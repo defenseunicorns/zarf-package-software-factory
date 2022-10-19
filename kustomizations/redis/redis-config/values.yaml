@@ -1,8 +1,5 @@
 auth:
-  enabled: true
-  sentinel: true
-  existingSecret: "gitlab-redis-secret"
-  existingSecretPasswordKey: "secret"
+  enabled: false
 sentinel:
   enabled: true
   image:
