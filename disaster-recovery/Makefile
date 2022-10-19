@@ -69,3 +69,9 @@ k9s: ## Pull up K9s
 ../build/kubectl: | ../build ## Download the kubectl binary
 	curl -L "https://dl.k8s.io/release/$$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o ../build/kubectl
 	chmod +x ../build/kubectl
+
+../build/velero: | ../build ## Download the Velero binary
+	curl -L "https://github.com/vmware-tanzu/velero/releases/download/v1.9.2/velero-v1.9.2-linux-amd64.tar.gz" -o ../build/velero.tar.gz
+	tar -xzvf ../build/velero.tar.gz -C ../build --strip-components 1 velero-v1.9.2-linux-amd64/velero
+	rm ../build/velero.tar.gz
+	chmod +x ../build/velero
