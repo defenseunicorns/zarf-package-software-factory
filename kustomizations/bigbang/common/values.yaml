@@ -503,10 +503,10 @@ addons:
             resources:
               requests:
                 cpu: 250m
-                memory: 2Gi
+                memory: 3Gi
               limits:
                 cpu: 10
-                memory: 2Gi
+                memory: 3Gi
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
