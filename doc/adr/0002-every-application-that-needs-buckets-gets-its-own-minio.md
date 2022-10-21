@@ -12,11 +12,9 @@ Using a single MinIO instance for all applications that need buckets creates a d
 
 ## Decision
 
-Each application that needs buckets will get its own MinIO instance. This will allow us to backup and restore each application individually without affecting other applications by creating a 1:1 relationship between namespaces in the cluster and applications to be backed up. To restore GitLab, all I will have to do is restore the GitLab namespace from a backup.
+Each application that needs buckets will get its own MinIO instance. This will allow us to backup and restore each application individually without affecting other applications by creating a 1:1 relationship between namespaces in the cluster and applications to be backed up. For example, to restore GitLab, all I will have to do is restore the GitLab namespace from a backup.
 
 ## Consequences
-
-What becomes easier or more difficult to do and any risks introduced by the change that will need to be mitigated.
 
 * It will be much easier to backup and restore individual applications without affecting other applications in the cluster.
 * Having 1 MinIO per application will be more resource intensive and create a higher maintenance burden.
