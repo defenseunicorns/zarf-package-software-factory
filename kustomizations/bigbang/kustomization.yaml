@@ -1,7 +1,6 @@
 resources:
   - vendor/bigbang/base
   - databases.yaml
-  - secrets.yaml
 
 configMapGenerator:
   - name: common
