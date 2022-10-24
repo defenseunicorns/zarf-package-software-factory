@@ -1,11 +1,11 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: minio-user-credentials
+  name: gitlab-minio
   namespace: bigbang
 spec:
-  targetNamespace: minio
-  releaseName: minio-user-credentials
+  targetNamespace: gitlab
+  releaseName: gitlab-minio
   interval: 2m
   timeout: 2m
   chart:
@@ -31,7 +31,7 @@ spec:
   dependsOn:
     - name: bigbang
       namespace: bigbang
-  valuesFrom:
-    - kind: Secret
-      name: environment-bb-minio-user-credentials
-      valuesKey: values.yaml
+    - name: minio-operator
+      namespace: softwarefactoryaddons
+    - name: gatekeeper
+      namespace: bigbang
