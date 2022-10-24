@@ -97,7 +97,7 @@ RUN asdf plugin add sops \
   && asdf install sops "${SOPS_VERSION}"
 
 # Install make. Get versions using 'asdf list all make'
-ARG MAKE_VERSION="4.3"
+ARG MAKE_VERSION="4.3.91"
 ENV MAKE_VERSION=${MAKE_VERSION}
 RUN asdf plugin add make \
   && asdf install make "${MAKE_VERSION}"
