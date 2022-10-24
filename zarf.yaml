@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.19.5/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.21.3/zarf.schema.json
 kind: ZarfPackageConfig
 metadata:
   name: software-factory
@@ -7,7 +7,7 @@ metadata:
   architecture: amd64
 
 components:
-  - name: bigbang_dev-dns-modification
+  - name: bigbang-dev-dns-modification
     required: true
     files:
       - source: ./files/modify-coredns.sh
