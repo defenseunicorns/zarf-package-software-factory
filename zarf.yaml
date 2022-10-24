@@ -7,7 +7,7 @@ metadata:
   architecture: amd64
 
 components:
-  - name: bigbang_dev-dns-modification
+  - name: bigbang-dev-dns-modification
     required: true
     files:
       - source: ./files/modify-coredns.sh
