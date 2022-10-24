@@ -1,6 +1,8 @@
 resources:
   - vendor/bigbang/base
   - databases.yaml
+  - tenants.yaml
+  - secrets.yaml
 
 configMapGenerator:
   - name: common
@@ -8,6 +10,10 @@ configMapGenerator:
     behavior: replace
     files:
       - values.yaml=common/values-bigbang.yaml
+  - name: common-gitlab-minio
+    namespace: bigbang
+    files:
+      - values.yaml=common/values-gitlab-minio.yaml
 
 secretGenerator:
   - name: environment-bb
@@ -15,6 +21,14 @@ secretGenerator:
     behavior: replace
     files:
       - values.yaml=environment-bb/values-bigbang.enc.yaml
+  - name: environment-bb-gitlab-minio
+    namespace: bigbang
+    files:
+      - values.yaml=environment-bb/values-gitlab-minio.enc.yaml
+  - name: environment-bb-gitlab-minio-user-creds
+    namespace: bigbang
+    files:
+      - values.yaml=environment-bb/values-gitlab-minio-user-creds.enc.yaml
 
 patchesStrategicMerge:
   - |-
