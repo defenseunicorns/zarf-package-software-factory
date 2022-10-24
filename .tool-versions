@@ -4,7 +4,7 @@ python 3.10.6
 hadolint 2.10.0
 pre-commit 2.19.0
 terraform 1.2.7
-tflint 0.39.2
+tflint 0.42.1
 tfsec 1.27.1
 sops 3.7.3
 make 4.3
