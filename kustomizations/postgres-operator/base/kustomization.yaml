@@ -19,16 +19,6 @@ configMapGenerator:
     behavior: create
     literals:
       - values.yaml=
-  - name: postgres-operator-ui-common
-    namespace: softwarefactoryaddons
-    behavior: create
-    literals:
-      - values.yaml=
-  - name: postgres-operator-ui-environment
-    namespace: softwarefactoryaddons
-    behavior: create
-    literals:
-      - values.yaml=
 
 # Flux combines secrets and configmaps in `valuesFrom`.  Kustomize
 # cannot distinguish between them when applying suffixes.  Therefore,
@@ -42,16 +32,6 @@ secretGenerator:
     literals:
       - values.yaml=
   - name: postgres-operator-environment-bb
-    namespace: softwarefactoryaddons
-    behavior: create
-    literals:
-      - values.yaml=
-  - name: postgres-operator-ui-common-bb
-    namespace: softwarefactoryaddons
-    behavior: create
-    literals:
-      - values.yaml=
-  - name: postgres-operator-ui-environment-bb
     namespace: softwarefactoryaddons
     behavior: create
     literals:

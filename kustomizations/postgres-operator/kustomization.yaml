@@ -7,11 +7,6 @@ configMapGenerator:
     behavior: replace
     files:
       - values.yaml=postgres-operator/common-values.yaml
-  - name: postgres-operator-ui-common
-    namespace: softwarefactoryaddons
-    behavior: replace
-    files:
-      - values.yaml=postgres-operator-ui/common-values.yaml
 
 secretGenerator:
   - name: postgres-operator-environment-bb
@@ -19,8 +14,3 @@ secretGenerator:
     behavior: replace
     files:
       - values.yaml=postgres-operator/environment-bb-values.yaml
-  - name: postgres-operator-ui-environment-bb
-    namespace: softwarefactoryaddons
-    behavior: replace
-    files:
-      - values.yaml=postgres-operator-ui/environment-bb-values.yaml
