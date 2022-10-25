@@ -16,3 +16,7 @@ sentinel:
       memory: 256Mi
 networkPolicy:
   enabled: true
+  ingressNSMatchLabels:
+    kubernetes.io/metadata.name: gitlab
+  ingressNSPodMatchLabels:
+    release: gitlab
