@@ -7,7 +7,6 @@ commonLabels:
 resources:
   - gitrepository.yaml
   - helmrelease.yaml
-  - networkpolicy.yaml
 
 configMapGenerator:
   - name: gitlab-redis-common
