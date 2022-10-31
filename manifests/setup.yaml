@@ -23,7 +23,7 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: redis
+  name: gitlab-redis
   labels:
     istio-injection: enabled
 ---

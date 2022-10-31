@@ -4,8 +4,8 @@ metadata:
   name: redis
   namespace: softwarefactoryaddons
 spec:
-  targetNamespace: redis
-  releaseName: redis
+  targetNamespace: gitlab-redis
+  releaseName: gitlab-redis
   interval: 5m
   timeout: 10m
   chart:
@@ -33,5 +33,5 @@ spec:
     cleanupOnFail: false
   valuesFrom:
     - kind: ConfigMap
-      name: redis-common
+      name: gitlab-redis-common
       valuesKey: values.yaml

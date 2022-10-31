@@ -43,12 +43,12 @@ components:
       - registry.opensource.zalan.do/acid/spilo-14:2.1-p6
       - registry.opensource.zalan.do/acid/postgres-operator-ui:v1.8.2
 
-  - name: redis
+  - name: gitlab-redis
     required: true
     manifests:
-      - name: redis-config
+      - name: gitlab-redis-config
         files:
-          - manifests/redis.yaml
+          - manifests/gitlab-redis.yaml
     repos:
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git
     images:

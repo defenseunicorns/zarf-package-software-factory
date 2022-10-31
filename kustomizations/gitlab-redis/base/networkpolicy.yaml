@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: egress-istiod
-  namespace: redis
+  namespace: gitlab-redis
 spec:
   egress:
   - ports:

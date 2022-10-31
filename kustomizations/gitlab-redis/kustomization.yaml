@@ -2,7 +2,7 @@ resources:
   - base
 
 configMapGenerator:
-  - name: redis-common
+  - name: gitlab-redis-common
     namespace: softwarefactoryaddons
     behavior: replace
     files:

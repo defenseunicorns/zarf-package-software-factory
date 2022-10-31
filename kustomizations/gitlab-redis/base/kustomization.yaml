@@ -10,7 +10,7 @@ resources:
   - networkpolicy.yaml
 
 configMapGenerator:
-  - name: redis-common
+  - name: gitlab-redis-common
     namespace: softwarefactoryaddons
     behavior: create
     literals:
