@@ -1,0 +1,12 @@
+resources:
+  - base
+
+configMapGenerator:
+  - name: redis-common
+    namespace: softwarefactoryaddons
+    behavior: replace
+    files:
+      - values.yaml=redis-config/values.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

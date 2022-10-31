@@ -1,0 +1,17 @@
+configurations:
+  - transformer.yaml
+
+commonLabels:
+  owner: softwarefactoryaddons
+
+resources:
+  - gitrepository.yaml
+  - helmrelease.yaml
+  - networkpolicy.yaml
+
+configMapGenerator:
+  - name: redis-common
+    namespace: softwarefactoryaddons
+    behavior: create
+    literals:
+      - values.yaml=

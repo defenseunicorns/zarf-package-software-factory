@@ -23,6 +23,13 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: redis
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: jira
   labels:
     istio-injection: enabled

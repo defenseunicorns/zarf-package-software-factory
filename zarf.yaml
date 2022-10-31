@@ -43,6 +43,18 @@ components:
       - registry.opensource.zalan.do/acid/spilo-14:2.1-p6
       - registry.opensource.zalan.do/acid/postgres-operator-ui:v1.8.2
 
+  - name: redis
+    required: true
+    manifests:
+      - name: redis-config
+        files:
+          - manifests/redis.yaml
+    repos:
+      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git
+    images:
+      - registry1.dso.mil/ironbank/bitnami/redis:7.0.0-debian-10-r3
+      - docker.io/bitnami/redis-sentinel:6.2.7
+
   - name: big-bang
     required: true
     manifests:
