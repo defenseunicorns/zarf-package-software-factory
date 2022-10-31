@@ -200,6 +200,7 @@ gatekeeper:
           excludedNamespaces:
             - "kube-sytem"
             - "local-path-storage"
+            - "longhorn-system"
       hostNetworking:
         match:
           excludedNamespaces:
@@ -211,12 +212,14 @@ gatekeeper:
           excludedNamespaces:
             - "kube-sytem"
             - "local-path-storage"
+            - "longhorn-system"
       volumeTypes:
         match:
           # Make Kind/K3d happy
           excludedNamespaces:
             - "kube-sytem"
             - "local-path-storage"
+            - "longhorn-system"
 
 logging:
   enabled: false
