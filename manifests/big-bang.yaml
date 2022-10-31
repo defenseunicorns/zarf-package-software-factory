@@ -39,10 +39,6 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       namespace: bigbang
-      name: gatekeeper
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
       name: loki
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease

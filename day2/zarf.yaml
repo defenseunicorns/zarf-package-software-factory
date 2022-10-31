@@ -12,6 +12,12 @@ components:
       - name: setup-config
         files:
           - ../manifests/setup.yaml
+  - name: longhorn
+    required: true
+    manifests:
+      - name: longhorn
+        files:
+          - ../manifests/longhorn.yaml
   - name: postgres-operator
     required: true
     manifests:
