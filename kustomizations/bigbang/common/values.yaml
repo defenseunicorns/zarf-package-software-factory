@@ -578,11 +578,11 @@ addons:
           serviceName: redis
           port: 26379
           sentinels:
-            - host: redis-node-0.redis-headless.gitlab-redis.svc.cluster.local
+            - host: gitlab-redis-node-0.gitlab-redis-headless.gitlab-redis.svc.cluster.local
               port: 26379
-            - host: redis-node-1.redis-headless.gitlab-redis.svc.cluster.local
+            - host: gitlab-redis-node-1.gitlab-redis-headless.gitlab-redis.svc.cluster.local
               port: 26379
-            - host: redis-node-2.redis-headless.gitlab-redis.svc.cluster.local
+            - host: gitlab-redis-node-2.gitlab-redis-headless.gitlab-redis.svc.cluster.local
               port: 26379
       upgradeCheck:
         resources:
