@@ -8,7 +8,7 @@ configMapGenerator:
     namespace: bigbang
     behavior: replace
     files:
-      - values.yaml=common/values.yaml
+      - values.yaml=common/values-bigbang.yaml
 
 secretGenerator:
   - name: environment-bb
