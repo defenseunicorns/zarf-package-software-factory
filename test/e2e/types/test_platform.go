@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/gruntwork-io/terratest/modules/aws"
 	"github.com/gruntwork-io/terratest/modules/logger"
@@ -98,9 +99,10 @@ func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error
 		output, err = ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`sudo bash -c "%v"`, command))
 		if err != nil {
 			if strings.Contains(err.Error(), "i/o timeout") {
-				// There was an error, but it was an i/o timeout, so try again
+				// There was an error, but it was an i/o timeout, so wait a few seconds and try again
 				logger.Default.Logf(platform.T, "i/o timeout error, trying again")
 				logger.Default.Logf(platform.T, output)
+				time.Sleep(3 * time.Second)
 				continue
 			} else {
 				logger.Default.Logf(platform.T, output)
