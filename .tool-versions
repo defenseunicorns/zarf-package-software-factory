@@ -5,6 +5,6 @@ hadolint 2.10.0
 pre-commit 2.19.0
 terraform 1.2.7
 tflint 0.39.2
-tfsec 1.27.1
+tfsec 1.28.1
 sops 3.7.3
 make 4.3
