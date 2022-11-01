@@ -7,7 +7,7 @@ components:
   - name: setup
     required: true
     repos:
-      - https://github.com/defenseunicorns/zarf-package-software-factory.git
+      - https://github.com/defenseunicorns/zarf-package-software-factory.git@feature/minio-per-service-take-three
     manifests:
       - name: setup-config
         files:
