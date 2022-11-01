@@ -19,7 +19,7 @@ secretGenerator:
   - name: environment-bb-minio-user-credentials
     namespace: bigbang
     files:
-      - values.yaml=environment-bb-minio-user-credentials/values.yaml
+      - values.yaml=environment-bb/values-gitlab-minio-user-creds.enc.yaml
 
 patchesStrategicMerge:
   - |-
