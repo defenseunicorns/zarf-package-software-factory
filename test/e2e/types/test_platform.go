@@ -100,14 +100,16 @@ func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error
 			if strings.Contains(err.Error(), "i/o timeout") {
 				// There was an error, but it was an i/o timeout, so try again
 				logger.Default.Logf(platform.T, "i/o timeout error, trying again")
+				logger.Default.Logf(platform.T, output)
 				continue
 			} else {
+				logger.Default.Logf(platform.T, output)
 				return "nil", fmt.Errorf("ssh command failed: %w", err)
 			}
 		}
 		done = true
 	}
-
+	logger.Default.Logf(platform.T, output)
 	return output, nil
 }
 
