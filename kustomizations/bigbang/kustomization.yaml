@@ -9,6 +9,10 @@ configMapGenerator:
     behavior: replace
     files:
       - values.yaml=common/values-bigbang.yaml
+  - name: common-gitlab-minio
+    namespace: bigbang
+    files:
+      - values.yaml=common/values-gitlab-minio.yaml
 
 secretGenerator:
   - name: environment-bb
@@ -20,6 +24,10 @@ secretGenerator:
     namespace: bigbang
     files:
       - values.yaml=environment-bb/values-gitlab-minio-user-creds.enc.yaml
+  - name: environment-bb-gitlab-minio
+    namespace: bigbang
+    files:
+      - values.yaml=environment-bb/values-gitlab-minio.enc.yaml
 
 patchesStrategicMerge:
   - |-
