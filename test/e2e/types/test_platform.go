@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/aws"
@@ -87,14 +88,25 @@ func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error
 		SshKeyPair:  keyPair.KeyPair,
 		SshUserName: "ubuntu",
 	}
-	output, err := ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`sudo bash -c "%v"`, command))
-	if err != nil {
-		logger.Default.Logf(platform.T, output)
-
-		return "nil", fmt.Errorf("ssh command failed: %w", err)
+	var output string
+	var err error
+	count := 0
+	done := false
+	// Try up to 3 times to do the command, to avoid "i/o timeout" errors which are transient
+	for !done && count < 3 {
+		count++
+		output, err = ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`sudo bash -c "%v"`, command))
+		if err != nil {
+			if strings.Contains(err.Error(), "i/o timeout") {
+				// There was an error, but it was an i/o timeout, so try again
+				logger.Default.Logf(platform.T, "i/o timeout error, trying again")
+				continue
+			} else {
+				return "nil", fmt.Errorf("ssh command failed: %w", err)
+			}
+		}
+		done = true
 	}
-
-	logger.Default.Logf(platform.T, output)
 
 	return output, nil
 }

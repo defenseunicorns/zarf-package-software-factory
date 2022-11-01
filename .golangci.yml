@@ -8,6 +8,7 @@ linters:
     - goerr113
     - gofumpt
     - lll
+    - nlreturn
     - stylecheck
     #   - testpackage
     - varnamelen
