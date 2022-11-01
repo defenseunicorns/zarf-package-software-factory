@@ -61,27 +61,19 @@ func NewTestPlatform(t *testing.T) *TestPlatform {
 
 // RunSSHCommand provides a simple way to run a shell command on the server that is created using Terraform.
 func (platform *TestPlatform) RunSSHCommand(command string) (string, error) {
-	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
-	keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
-	host := ssh.Host{
-		Hostname:    terraform.Output(platform.T, terraformOptions, "public_instance_ip"),
-		SshKeyPair:  keyPair.KeyPair,
-		SshUserName: "ubuntu",
-	}
-	output, err := ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`bash -c "%v"`, command))
-	if err != nil {
-		logger.Default.Logf(platform.T, output)
-
-		return "nil", fmt.Errorf("ssh command failed: %w", err)
-	}
-
-	logger.Default.Logf(platform.T, output)
-
-	return output, nil
+	return platform.runSSHCommandWithOptionalSudo(command, false)
 }
 
-// RunSSHCommandAsSudo provides a simple way to run a shell command on the server that is created using Terraform.
+// RunSSHCommandAsSudo provides a simple way to run a shell command with sudo on the server that is created using Terraform.
 func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error) {
+	return platform.runSSHCommandWithOptionalSudo(command, true)
+}
+
+func (platform *TestPlatform) runSSHCommandWithOptionalSudo(command string, asSudo bool) (string, error) {
+	precommand := "bash -c"
+	if asSudo {
+		precommand = fmt.Sprintf(`sudo %v`, precommand)
+	}
 	terraformOptions := teststructure.LoadTerraformOptions(platform.T, platform.TestFolder)
 	keyPair := teststructure.LoadEc2KeyPair(platform.T, platform.TestFolder)
 	host := ssh.Host{
@@ -96,7 +88,7 @@ func (platform *TestPlatform) RunSSHCommandAsSudo(command string) (string, error
 	// Try up to 3 times to do the command, to avoid "i/o timeout" errors which are transient
 	for !done && count < 3 {
 		count++
-		output, err = ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`sudo bash -c "%v"`, command))
+		output, err = ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`%v "%v"`, precommand, command))
 		if err != nil {
 			if strings.Contains(err.Error(), "i/o timeout") {
 				// There was an error, but it was an i/o timeout, so wait a few seconds and try again
