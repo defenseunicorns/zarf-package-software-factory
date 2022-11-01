@@ -20,14 +20,18 @@ secretGenerator:
     behavior: replace
     files:
       - values.yaml=environment-bb/values-bigbang.enc.yaml
-  - name: environment-bb-minio-user-credentials
+  - name: environment-bb-minio-user-creds
     namespace: bigbang
     files:
-      - values.yaml=environment-bb/values-gitlab-minio-user-creds.enc.yaml
+      - values.yaml=environment-bb/values-minio-user-creds.enc.yaml
   - name: environment-bb-gitlab-minio
     namespace: bigbang
     files:
       - values.yaml=environment-bb/values-gitlab-minio.enc.yaml
+  - name: environment-bb-gitlab-minio-user-creds
+    namespace: bigbang
+    files:
+      - values.yaml=environment-bb/values-gitlab-minio-user-creds.enc.yaml
 
 patchesStrategicMerge:
   - |-
