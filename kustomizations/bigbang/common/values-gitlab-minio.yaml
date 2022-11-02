@@ -17,11 +17,7 @@ monitoring:
   enabled: true
 
 networkPolicies:
-  enabled: true
-  controlPlaneCidr: 0.0.0.0/0
-  ingressLabels:
-    app: public-ingressgateway
-    istio: null
+  enabled: false
 
 podAnnotations:
   sidecar.istio.io/inject: "true"

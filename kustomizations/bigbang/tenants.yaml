@@ -13,8 +13,8 @@ spec:
       chart: chart
       sourceRef:
         kind: GitRepository
-        name: minio-tenant-chart
-        namespace: flux-system
+        name: minio
+        namespace: bigbang
   test:
     enable: false
   install:

@@ -2,7 +2,6 @@ resources:
   - vendor/bigbang/base
   - databases.yaml
   - secrets.yaml
-  - gitrepository.yaml
   - tenants.yaml
 
 configMapGenerator:
