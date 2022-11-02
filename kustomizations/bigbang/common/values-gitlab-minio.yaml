@@ -14,7 +14,7 @@ istio:
       - istio-system/public
 
 monitoring:
-  enabled: true
+  enabled: false
 
 networkPolicies:
   enabled: false
