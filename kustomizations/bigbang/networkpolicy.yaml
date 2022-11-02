@@ -32,6 +32,6 @@ spec:
     - name: bigbang
       namespace: bigbang
   valuesFrom:
-    - kind: Secret
+    - kind: ConfigMap
       name: common-gitlab-minio-networkpolicy
       valuesKey: values.yaml
