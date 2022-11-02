@@ -16,6 +16,11 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: longhorn
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: postgres-operator
   labels:
     istio-injection: enabled

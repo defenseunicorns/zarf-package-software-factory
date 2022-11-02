@@ -1,0 +1,12 @@
+resources:
+  - base
+
+configMapGenerator:
+  - name: longhorn-common
+    namespace: softwarefactoryaddons
+    behavior: replace
+    files:
+      - values.yaml=longhorn-config/values.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

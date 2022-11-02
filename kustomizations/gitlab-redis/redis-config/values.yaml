@@ -1,3 +1,5 @@
+global:
+  storageClass: "longhorn"
 auth:
   enabled: false
 sentinel:

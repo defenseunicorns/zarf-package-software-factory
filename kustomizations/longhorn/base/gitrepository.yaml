@@ -1,0 +1,12 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: longhorn
+  namespace: softwarefactoryaddons
+spec:
+  interval: 5m
+  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__longhorn__longhorn.git
+  ref:
+    tag: v1.3.2
+  secretRef:
+    name: private-git-server

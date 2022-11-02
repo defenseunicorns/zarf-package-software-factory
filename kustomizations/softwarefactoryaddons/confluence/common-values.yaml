@@ -49,16 +49,16 @@ volumes:
   localHome:
     persistentVolumeClaim:
       create: true
-      # storageClassName: your-storage-class-here
+      storageClassName: longhorn
       resources:
         requests:
           storage: 1Gi
 
   # # sharedHome requires an RWX storageclass
-  # sharedHome:
-  #   persistentVolumeClaim:
-  #     create: true
-  #     storageClassName: your-storage-class-here
-  #     resources:
-  #       requests:
-  #         storage: 1Gi
+  sharedHome:
+    persistentVolumeClaim:
+      create: true
+      storageClassName: longhorn
+      resources:
+        requests:
+          storage: 1Gi

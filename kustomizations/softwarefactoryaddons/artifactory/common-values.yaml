@@ -20,10 +20,9 @@ artifactory:
   enabled: true
   nginx:
     enabled: false
-  # Uncomment if you want to specify a particular storage class
-#  artifactory:
-#    persistence:
-#      storageClassName: "your-storage-class-here"
+  artifactory:
+    persistence:
+      storageClassName: "longhorn"
 postgresql:
   enabled: false
 artifactory-ha:

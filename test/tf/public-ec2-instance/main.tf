@@ -27,7 +27,7 @@ resource "aws_instance" "public" {
   key_name               = var.key_pair_name
 
   root_block_device {
-    volume_size = 200
+    volume_size = 500
   }
 
   user_data = <<_EOF_
@@ -36,6 +36,8 @@ echo "PubkeyAcceptedKeyTypes=+ssh-rsa" >> /etc/ssh/sshd_config
 service ssh reload
 sysctl fs.inotify.max_user_instances=512
 sysctl -p
+modprobe iscsi_tcp
+echo "iscsi_tcp" >> /etc/modules
 _EOF_
 
   # This EC2 Instance has a public IP and will be accessible directly from the public Internet

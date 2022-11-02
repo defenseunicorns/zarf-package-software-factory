@@ -1,0 +1,6 @@
+csi:
+  kubeletRootDir: /var/lib/kubelet
+persistence:
+  defaultClassReplicaCount: 1
+defaultSettings:
+  replicaSoftAntiAffinity: true

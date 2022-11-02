@@ -1,0 +1,16 @@
+configurations:
+  - transformer.yaml
+
+commonLabels:
+  owner: softwarefactoryaddons
+
+resources:
+  - gitrepository.yaml
+  - helmrelease.yaml
+
+configMapGenerator:
+  - name: longhorn-common
+    namespace: softwarefactoryaddons
+    behavior: create
+    literals:
+      - values.yaml=
