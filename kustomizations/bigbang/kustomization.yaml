@@ -2,6 +2,7 @@ resources:
   - vendor/bigbang/base
   - databases.yaml
   - secrets.yaml
+  - networkpolicy.yaml
   - tenants.yaml
 
 configMapGenerator:
