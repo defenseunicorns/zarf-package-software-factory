@@ -187,6 +187,7 @@ gatekeeper:
             - "kube-sytem"
             - "istio-system"
             - "local-path-storage"
+            - "longhorn"
         parameters:
           repos:
             - "${ZARF_REGISTRY}"
@@ -200,6 +201,7 @@ gatekeeper:
           excludedNamespaces:
             - "kube-sytem"
             - "local-path-storage"
+            - "longhorn"
       hostNetworking:
         match:
           excludedNamespaces:
@@ -211,12 +213,18 @@ gatekeeper:
           excludedNamespaces:
             - "kube-sytem"
             - "local-path-storage"
+            - "longhorn"
       volumeTypes:
         match:
           # Make Kind/K3d happy
           excludedNamespaces:
             - "kube-sytem"
             - "local-path-storage"
+            - "longhorn"
+      noPrivilegedContainers:
+        match:
+          excludedNamespaces:
+            - "longhorn"
 
 logging:
   enabled: false
@@ -244,8 +252,12 @@ loki:
   values:
     read:
       replicas: 1
+      persistence:
+        storageClass: "longhorn"
     write:
       replicas: 1
+      persistence:
+        storageClass: "longhorn"
     minio:
       enabled: false
     istio:
@@ -642,9 +654,8 @@ addons:
             limits:
               cpu: 400m
               memory: 600Mi
-          # Uncomment this if you want to specify a particular storage class
-#          persistence:
-#            storageClass: "your-storage-class-name-here"
+          persistence:
+            storageClass: "longhorn"
         gitlab-shell:
           init:
             resources:

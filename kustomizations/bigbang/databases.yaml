@@ -51,8 +51,7 @@ spec:
           numberOfInstances: 3
           volume:
             size: "2Gi"
-            # Uncomment this if you want to specify a particular storage class
-            # storageClass: "your-storage-class-name-here"
+            storageClass: "longhorn"
           # enableLogicalBackup: true
           # logicalBackupSchedule: "*/2 * * * *"
           resources:
