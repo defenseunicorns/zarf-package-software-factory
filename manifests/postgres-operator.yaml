@@ -4,7 +4,8 @@ metadata:
   name: postgres-operator
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 1m
+  timeout: 5m
   path: "./kustomizations/postgres-operator"
   prune: true
   sourceRef:
@@ -19,7 +20,6 @@ spec:
       kind: HelmRelease
       namespace: softwarefactoryaddons
       name: postgres-operator-ui
-  timeout: 5m
   decryption:
     provider: sops
     secretRef:

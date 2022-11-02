@@ -97,6 +97,8 @@ tenant:
   pools:
     - servers: 3
       volumesPerServer: 2
+      labels:
+        sidecar.istio.io/inject: "true"
       size: 5Gi
       storageClassName: ""
       tolerations: {}
