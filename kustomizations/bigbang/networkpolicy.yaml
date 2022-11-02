@@ -1,17 +1,37 @@
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
 metadata:
-  name: minio-operator-egress
-  namespace: gitlab
+  name: gitlab-minio-networkpolicy
+  namespace: bigbang
 spec:
-  podSelector: {}
-  policyTypes:
-    - Egress
-  egress:
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              app.kubernetes.io/name: minioOperator
-      ports:
-        - port: 4222
-          protocol: TCP
+  targetNamespace: gitlab
+  releaseName: gitlab-minio-networkpolicy
+  interval: 2m
+  timeout: 2m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+  valuesFrom:
+    - kind: Secret
+      name: common-gitlab-minio-networkpolicy
+      valuesKey: values.yaml
