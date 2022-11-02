@@ -518,7 +518,7 @@ addons:
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
     istio:
-      injection: disabled
+      injection: enabled
     objectStorage:
       type: "minio"
       endpoint: http://minio.minio.svc.cluster.local:80
