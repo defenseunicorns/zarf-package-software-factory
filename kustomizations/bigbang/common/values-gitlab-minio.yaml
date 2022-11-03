@@ -107,10 +107,10 @@ tenant:
       resources:
         requests:
           cpu: 250m
-          memory: 3Gi
+          memory: 4Gi
         limits:
           cpu: 10
-          memory: 3Gi
+          memory: 4Gi
       securityContext:
         runAsUser: 1001
         runAsGroup: 1001
