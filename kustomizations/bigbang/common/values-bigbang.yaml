@@ -521,7 +521,7 @@ addons:
       injection: enabled
     objectStorage:
       type: "minio"
-      endpoint: http://minio.gitlab.svc.cluster.local:80
+      endpoint: http://minio.minio.svc.cluster.local:80
       region: "minio"
       # accessKey: "" -- Added in environment-bb/values-bigbang.enc.yaml
       # accessSecret: "" -- Added in environment-bb/values-bigbang.enc.yaml
