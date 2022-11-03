@@ -27,7 +27,7 @@ resource "aws_instance" "public" {
   key_name               = var.key_pair_name
 
   root_block_device {
-    volume_size = 200
+    volume_size = 400
   }
 
   user_data = <<_EOF_
