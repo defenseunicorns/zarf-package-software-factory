@@ -37,8 +37,9 @@ components:
       - https://github.com/zalando/postgres-operator.git
     images:
       - registry1.dso.mil/ironbank/opensource/zalando/postgres-operator:v1.8.2
-      - registry1.dso.mil/ironbank/opensource/zalando/logical-backup:v1.6.3
+      - registry1.dso.mil/ironbank/opensource/zalando/logical-backup:v1.8.2
       - registry1.dso.mil/ironbank/opensource/zalando/pgbouncer:1.15.0
+      - registry.opensource.zalan.do/acid/spilo-14:2.1-p6
 
   - name: big-bang
     required: true
