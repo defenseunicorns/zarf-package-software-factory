@@ -23,6 +23,13 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: gitlab-minio
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: gitlab-redis
   labels:
     istio-injection: enabled

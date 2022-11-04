@@ -4,7 +4,7 @@ metadata:
   name: gitlab-minio
   namespace: bigbang
 spec:
-  targetNamespace: gitlab
+  targetNamespace: gitlab-minio
   releaseName: gitlab-minio
   interval: 2m
   timeout: 2m
@@ -31,9 +31,11 @@ spec:
   dependsOn:
     - name: bigbang
       namespace: bigbang
-    - name: minio-operator
+    - name: istio
       namespace: bigbang
     - name: gatekeeper
+      namespace: bigbang
+    - name: minio-operator
       namespace: bigbang
   valuesFrom:
     - kind: ConfigMap

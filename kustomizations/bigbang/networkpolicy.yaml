@@ -4,7 +4,7 @@ metadata:
   name: gitlab-minio-networkpolicy
   namespace: bigbang
 spec:
-  targetNamespace: gitlab
+  targetNamespace: gitlab-minio
   releaseName: gitlab-minio-networkpolicy
   interval: 2m
   timeout: 2m
