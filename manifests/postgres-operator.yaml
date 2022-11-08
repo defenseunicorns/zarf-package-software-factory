@@ -15,10 +15,6 @@ spec:
       kind: HelmRelease
       namespace: softwarefactoryaddons
       name: postgres-operator
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: softwarefactoryaddons
-      name: postgres-operator-ui
   timeout: 5m
   decryption:
     provider: sops
