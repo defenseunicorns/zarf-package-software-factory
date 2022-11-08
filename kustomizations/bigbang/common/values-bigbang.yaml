@@ -503,10 +503,10 @@ addons:
             resources:
               requests:
                 cpu: 250m
-                memory: 2Gi
+                memory: 3Gi
               limits:
                 cpu: 10
-                memory: 2Gi
+                memory: 3Gi
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
@@ -571,6 +571,19 @@ addons:
         #   display_name: "GitLab Admin"
         #   reply_to: "gitlabadmin@example.com"
         #   subject_suffix: "gitlab"
+        redis:
+          password:
+            enabled: false
+          host: mymaster
+          serviceName: redis
+          port: 26379
+          sentinels:
+            - host: gitlab-redis-node-0.gitlab-redis-headless.gitlab-redis.svc.cluster.local
+              port: 26379
+            - host: gitlab-redis-node-1.gitlab-redis-headless.gitlab-redis.svc.cluster.local
+              port: 26379
+            - host: gitlab-redis-node-2.gitlab-redis-headless.gitlab-redis.svc.cluster.local
+              port: 26379
       upgradeCheck:
         resources:
           requests:
@@ -580,61 +593,7 @@ addons:
             cpu: 500m
             memory: 500Mi
       redis:
-        metrics:
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-        master:
-          # Uncomment this if you want to specify a particular storage class
-#          persistence:
-#            storageClass: "your-storage-class-name-here"
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-        # :face_vomiting: TODO: Upstream merge request to make the naming more inclusive
-        slave:
-          # Uncomment this if you want to specify a particular storage class
-#          persistence:
-#            storageClass: "your-storage-class-name-here"
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-        sentinel:
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-        volumePermissions:
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-        sysctlImage:
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
+        install: false
       postgresql:
         install: false
       registry:

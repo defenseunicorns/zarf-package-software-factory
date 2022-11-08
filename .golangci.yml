@@ -7,7 +7,9 @@ linters:
     - exhaustruct
     - goerr113
     - gofumpt
+    - gomnd
     - lll
+    - nlreturn
     - stylecheck
     #   - testpackage
     - varnamelen

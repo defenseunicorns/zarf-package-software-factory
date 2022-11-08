@@ -114,6 +114,20 @@
       "depTypeTemplate": "zarfcomponents",
       "extractVersionTemplate": "^jenkins-(?<version>.*)$"
     },
+        // Redis version
+    {
+      "fileMatch": [
+        ".*\\.yaml"
+      ],
+      "matchStrings": [
+        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/application-utilities\/redis\\.git@(?<currentValue>\\S+)",
+        "url: http:\/\/zarf-gitea-http\\.zarf\\.svc\\.cluster\\.local:3000\/zarf-git-user\/mirror__repo1\\.dso\\.mil__platform-one__big-bang__apps__application-utilities__redis\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+      ],
+      "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git",
+      "datasourceTemplate": "git-tags",
+      "depTypeTemplate": "zarfcomponents",
+      "versioningTemplate": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-bb.(?<build>\\d+)$"
+    },
     // Zarf version
     {
       "fileMatch": [

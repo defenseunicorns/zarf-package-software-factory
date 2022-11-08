@@ -8,18 +8,18 @@ configMapGenerator:
     namespace: bigbang
     behavior: replace
     files:
-      - values.yaml=common/values.yaml
+      - values.yaml=common/values-bigbang.yaml
 
 secretGenerator:
   - name: environment-bb
     namespace: bigbang
     behavior: replace
     files:
-      - values.yaml=environment-bb/values.yaml
+      - values.yaml=environment-bb/values-bigbang.enc.yaml
   - name: environment-bb-minio-user-credentials
     namespace: bigbang
     files:
-      - values.yaml=environment-bb-minio-user-credentials/values.yaml
+      - values.yaml=environment-bb/values-minio-user-creds.enc.yaml
 
 patchesStrategicMerge:
   - |-

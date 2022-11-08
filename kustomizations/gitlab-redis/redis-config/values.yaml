@@ -1,0 +1,22 @@
+auth:
+  enabled: false
+sentinel:
+  enabled: true
+  image:
+    registry: "docker.io"
+    repository: "bitnami/redis-sentinel"
+    tag: "6.2.7"
+    pullPolicy: Always
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+networkPolicy:
+  enabled: true
+  ingressNSMatchLabels:
+    kubernetes.io/metadata.name: gitlab
+  ingressNSPodMatchLabels:
+    release: gitlab
