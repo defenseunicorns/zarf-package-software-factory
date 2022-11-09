@@ -61,7 +61,7 @@ RUN asdf plugin add python \
   && asdf install python "${PYTHON_VERSION}"
 
 # Install hadolint. Get versions using 'asdf list all hadolint'
-ARG HADOLINT_VERSION="2.10.0"
+ARG HADOLINT_VERSION="2.12.0"
 ENV HADOLINT_VERSION=${HADOLINT_VERSION}
 RUN asdf plugin add hadolint \
   && asdf install hadolint "${HADOLINT_VERSION}"
