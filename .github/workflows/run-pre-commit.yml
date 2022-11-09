@@ -17,7 +17,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: "${{ github.workspace }}/.cache/pre-commit"
-          key: pre-commit|${{ hashFiles('.tool-versions') }}|${{ hashFiles('.pre-commit-config.yaml') }}
+          key: pre-commit
 
       - name: Init docker cache
         id: init-docker-cache
