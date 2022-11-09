@@ -48,51 +48,51 @@ tenant:
   buckets:
     # gitlab-registry
     - name: "gitlab-registry"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-lfs
     - name: "gitlab-lfs"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-uploads
     - name: "gitlab-uploads"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-artifacts
     - name: "gitlab-artifacts"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-backups
     - name: "gitlab-backups"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-packages
     - name: "gitlab-packages"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-backups-tmp
     - name: "gitlab-backups-tmp"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-mr-diffs
     - name: "gitlab-mr-diffs"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-terraform-state
     - name: "gitlab-terraform-state"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-ci-secure-files
     - name: "gitlab-ci-secure-files"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-dependency-proxy
     - name: "gitlab-dependency-proxy"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
     # gitlab-pages
     - name: "gitlab-pages"
-      region: "minio"
+      region: "us-east-1"
       objectLock: true
   pools:
     - servers: 3
