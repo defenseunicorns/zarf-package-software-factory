@@ -17,7 +17,7 @@ monitoring:
   enabled: false
 
 networkPolicies:
-  enabled: false
+  enabled: true
 
 podAnnotations:
   sidecar.istio.io/inject: "true"
