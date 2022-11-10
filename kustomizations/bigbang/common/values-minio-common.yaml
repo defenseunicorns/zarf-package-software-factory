@@ -42,7 +42,7 @@ tenant:
       value: public
   # Required to be here due to a weird quirk in bucket creation. See https://github.com/minio/operator/issues/1002#issuecomment-1028394242
   users:
-    - name: minio-user-credentials
+    - name: minio-user-creds
   pools:
     - servers: 3
       volumesPerServer: 2
