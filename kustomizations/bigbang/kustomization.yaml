@@ -75,7 +75,7 @@ patchesStrategicMerge:
                   kind: HelmRelease
                   name: gitlab
                   namespace: bigbang
-                patch: |-
+                patch:
                   - op: add
                     path: "/spec/dependsOn"
                     value:
