@@ -1,48 +1,4 @@
-hostname: bigbang.dev
-domain: bigbang.dev
-
-istio:
-  enabled: true
-  mtls:
-    # TODO: Change this to strict
-    mode: PERMISSIVE
-  console:
-    gateways:
-      - istio-system/public
-  api:
-    gateways:
-      - istio-system/public
-
-monitoring:
-  enabled: false
-
-networkPolicies:
-  enabled: false
-
-podAnnotations:
-  sidecar.istio.io/inject: "true"
-  traffic.sidecar.istio.io/includeInboundPorts: "*"
-  traffic.sidecar.istio.io/excludeInboundPorts: "9443"
-
-# Secrets are set in ../environment-bb/values-gitlab-minio.enc.yaml
-#secrets:
-#  accessKey: not-the-real-secret
-#  secretKey: not-the-real-secret
-
-# https://github.com/minio/operator/blob/master/docs/crd.adoc
 tenant:
-  image:
-    pullPolicy: IfNotPresent
-  imagePullSecret:
-    name: private-registry
-  metrics:
-    enabled: true
-  env:
-    - name: MINIO_PROMETHEUS_AUTH_TYPE
-      value: public
-  # Required to be here due to a weird quirk in bucket creation. See https://github.com/minio/operator/issues/1002#issuecomment-1028394242
-  users:
-    - name: minio-user-credentials
   # Pre-create buckets that will be needed for various services that will use MinIO
   # NOTE: Region is meaningless in this instantiation of MinIO. It's a required field but the value could be just about anything and it would work fine.
   buckets:
@@ -94,23 +50,3 @@ tenant:
     - name: "gitlab-pages"
       region: "us-east-1"
       objectLock: true
-  pools:
-    - servers: 3
-      volumesPerServer: 2
-      size: 5Gi
-      storageClassName: ""
-      tolerations: {}
-      nodeSelector: {}
-      affinity: {}
-      resources:
-        requests:
-          cpu: 250m
-          memory: 4Gi
-        limits:
-          cpu: 10
-          memory: 4Gi
-      securityContext:
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-        runAsNonRoot: true
