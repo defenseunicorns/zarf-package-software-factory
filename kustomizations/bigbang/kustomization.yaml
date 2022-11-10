@@ -77,7 +77,7 @@ patchesStrategicMerge:
                   namespace: bigbang
                 patch:
                   - op: add
-                    path: "/spec/dependsOn"
+                    path: "/spec/dependsOn/-"
                     value:
-                      - name: gitlab-minio
-                        namespace: bigbang
+                      name: gitlab-minio
+                      namespace: bigbang
