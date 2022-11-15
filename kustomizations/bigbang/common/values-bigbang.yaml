@@ -401,7 +401,7 @@ addons:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio-operator.git
     values:
       networkPolicies:
-        enabled: false
+        enabled: true
       operator:
         resources:
           requests:
