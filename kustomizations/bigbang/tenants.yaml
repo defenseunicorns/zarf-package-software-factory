@@ -37,6 +37,8 @@ spec:
       namespace: bigbang
     - name: minio-operator
       namespace: bigbang
+    - name: bbcore-minio-user-creds
+      namespace: bigbang
   valuesFrom:
     - kind: ConfigMap
       name: common-minio-common
@@ -86,6 +88,8 @@ spec:
       namespace: bigbang
     - name: minio-operator
       namespace: bigbang
+    - name: gitlab-minio-user-creds
+      namespace: bigbang
   valuesFrom:
     - kind: ConfigMap
       name: common-minio-common
@@ -134,6 +138,8 @@ spec:
     - name: gatekeeper
       namespace: bigbang
     - name: minio-operator
+      namespace: bigbang
+    - name: velero-minio-user-creds
       namespace: bigbang
   valuesFrom:
     - kind: ConfigMap

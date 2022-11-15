@@ -35,6 +35,7 @@ tenant:
     pullPolicy: IfNotPresent
   imagePullSecret:
     name: private-registry
+  podManagementPolicy: OrderedReady
   metrics:
     enabled: true
   env:
