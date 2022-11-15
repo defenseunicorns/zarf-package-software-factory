@@ -73,6 +73,18 @@ patchesStrategicMerge:
                   group: helm.toolkit.fluxcd.io
                   version: v2beta1
                   kind: HelmRelease
+                  name: loki
+                  namespace: bigbang
+                patch:
+                  - op: add
+                    path: "/spec/dependsOn/-"
+                    value:
+                      name: bbcore-minio
+                      namespace: bigbang
+              - target:
+                  group: helm.toolkit.fluxcd.io
+                  version: v2beta1
+                  kind: HelmRelease
                   name: gitlab
                   namespace: bigbang
                 patch:
@@ -81,17 +93,6 @@ patchesStrategicMerge:
                     value:
                       name: gitlab-minio
                       namespace: bigbang
-
-  - |-
-    apiVersion: helm.toolkit.fluxcd.io/v2beta1
-    kind: HelmRelease
-    metadata:
-      name: bigbang
-      namespace: bigbang
-    spec:
-      postRenderers:
-        - kustomize:
-            patchesJson6902:
               - target:
                   group: helm.toolkit.fluxcd.io
                   version: v2beta1
@@ -103,27 +104,4 @@ patchesStrategicMerge:
                     path: "/spec/dependsOn/-"
                     value:
                       name: velero-minio
-                      namespace: bigbang
-
-  - |-
-    apiVersion: helm.toolkit.fluxcd.io/v2beta1
-    kind: HelmRelease
-    metadata:
-      name: bigbang
-      namespace: bigbang
-    spec:
-      postRenderers:
-        - kustomize:
-            patchesJson6902:
-              - target:
-                  group: helm.toolkit.fluxcd.io
-                  version: v2beta1
-                  kind: HelmRelease
-                  name: loki
-                  namespace: bigbang
-                patch:
-                  - op: add
-                    path: "/spec/dependsOn/-"
-                    value:
-                      name: bbcore-minio
                       namespace: bigbang
