@@ -4,11 +4,11 @@ tenant:
   buckets:
     # loki-logs
     - name: "loki-logs"
-      region: "us-east-1"
+      region: "minio"
       objectLock: true
     - name: "loki-ruler"
-      region: "us-east-1"
+      region: "minio"
       objectLock: true
     - name: "loki-admin"
-      region: "us-east-1"
+      region: "minio"
       objectLock: true

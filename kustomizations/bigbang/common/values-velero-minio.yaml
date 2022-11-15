@@ -4,5 +4,5 @@ tenant:
   buckets:
     # velero-backups
     - name: "velero-backups"
-      region: "us-east-1"
+      region: "minio"
       objectLock: true
