@@ -36,7 +36,7 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/softwarefactoryaddons -n flux-system --for=condition=Ready --timeout=1200s`)
 		require.NoError(t, err, output)
 		// Wait for the bbcore-minio Statefulset 'bbcore-minio-minio-instance-ss-0' to exist.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset bbcore-minio-minio-instance-ss-0 -n bbcore-minio; do sleep 5; done\"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1500 bash -c \"while ! kubectl get statefulset bbcore-minio-minio-instance-ss-0 -n bbcore-minio; do sleep 5; done\"`)
 		require.NoError(t, err, output)
 		// Wait for the bbcore-minio Statefulset 'bbcore-minio-minio-instance-ss-0' to report that it is ready.
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait statefulset/bbcore-minio-minio-instance-ss-0 -n bbcore-minio --for=condition=Ready --timeout=1200s`)
