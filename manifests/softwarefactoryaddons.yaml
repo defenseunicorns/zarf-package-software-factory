@@ -4,7 +4,8 @@ metadata:
   name: softwarefactoryaddons
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 1m
+  timeout: 10m
   path: "./kustomizations/softwarefactoryaddons"
   prune: true
   sourceRef:
@@ -27,7 +28,6 @@ spec:
       kind: HelmRelease
       namespace: softwarefactoryaddons
       name: artifactory
-  timeout: 10m
   decryption:
     provider: sops
     secretRef:

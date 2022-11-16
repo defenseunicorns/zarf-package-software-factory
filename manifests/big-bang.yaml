@@ -4,7 +4,8 @@ metadata:
   name: bigbang
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 1m
+  timeout: 15m
   path: "./kustomizations/bigbang"
   prune: true
   sourceRef:
@@ -68,7 +69,6 @@ spec:
       kind: HelmRelease
       namespace: bigbang
       name: gitlab-runner
-  timeout: 15m
   decryption:
     provider: sops
     secretRef:

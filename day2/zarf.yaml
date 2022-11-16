@@ -18,6 +18,12 @@ components:
       - name: postgres-operator-config
         files:
           - ../manifests/postgres-operator.yaml
+  - name: gitlab-redis
+    required: true
+    manifests:
+      - name: gitlab-redis-config
+        files:
+          - ../manifests/gitlab-redis.yaml
   - name: big-bang
     required: true
     manifests:

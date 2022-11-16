@@ -1,0 +1,8 @@
+tenant:
+  # Pre-create buckets that will be needed for various services that will use MinIO
+  # NOTE: Region is meaningless in this instantiation of MinIO. It's a required field but the value could be just about anything and it would work fine.
+  buckets:
+    # velero-backups
+    - name: "velero-backups"
+      region: "minio"
+      objectLock: true

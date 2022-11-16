@@ -36,6 +36,8 @@ spec:
       namespace: softwarefactoryaddons
     - name: gatekeeper
       namespace: bigbang
+    - name: istio
+      namespace: bigbang
   values:
     resources:
       - apiVersion: "acid.zalan.do/v1"
