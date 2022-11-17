@@ -4,7 +4,8 @@ metadata:
   name: gitlab-redis
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 1m
+  timeout: 5m
   path: "./kustomizations/gitlab-redis"
   prune: true
   sourceRef:
@@ -15,7 +16,6 @@ spec:
       kind: HelmRelease
       namespace: softwarefactoryaddons
       name: gitlab-redis
-  timeout: 5m
   decryption:
     provider: sops
     secretRef:

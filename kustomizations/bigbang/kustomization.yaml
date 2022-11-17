@@ -1,7 +1,9 @@
 resources:
   - vendor/bigbang/base
+  - gitrepository.yaml
   - databases.yaml
   - secrets.yaml
+  - tenants.yaml
 
 configMapGenerator:
   - name: common
@@ -9,6 +11,26 @@ configMapGenerator:
     behavior: replace
     files:
       - values.yaml=common/values-bigbang.yaml
+  - name: common-minio-git-repo
+    namespace: bigbang
+    files:
+      - values.yaml=common/values-minio-git-repo.yaml
+  - name: common-minio-common
+    namespace: bigbang
+    files:
+      - values.yaml=common/values-minio-common.yaml
+  - name: common-bbcore-minio
+    namespace: bigbang
+    files:
+      - values.yaml=common/values-bbcore-minio.yaml
+  - name: common-gitlab-minio
+    namespace: bigbang
+    files:
+      - values.yaml=common/values-gitlab-minio.yaml
+  - name: common-velero-minio
+    namespace: bigbang
+    files:
+      - values.yaml=common/values-velero-minio.yaml
 
 secretGenerator:
   - name: environment-bb
@@ -16,10 +38,14 @@ secretGenerator:
     behavior: replace
     files:
       - values.yaml=environment-bb/values-bigbang.enc.yaml
-  - name: environment-bb-minio-user-credentials
+  - name: environment-bb-minio-common
     namespace: bigbang
     files:
-      - values.yaml=environment-bb/values-minio-user-creds.enc.yaml
+      - values.yaml=environment-bb/values-minio-common.enc.yaml
+  - name: environment-bb-minio-common-user-creds
+    namespace: bigbang
+    files:
+      - values.yaml=environment-bb/values-minio-common-user-creds.enc.yaml
 
 patchesStrategicMerge:
   - |-
@@ -32,3 +58,50 @@ patchesStrategicMerge:
       url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__bigbang.git
       secretRef:
         name: private-git-server
+
+  - |-
+    apiVersion: helm.toolkit.fluxcd.io/v2beta1
+    kind: HelmRelease
+    metadata:
+      name: bigbang
+      namespace: bigbang
+    spec:
+      postRenderers:
+        - kustomize:
+            patchesJson6902:
+              - target:
+                  group: helm.toolkit.fluxcd.io
+                  version: v2beta1
+                  kind: HelmRelease
+                  name: loki
+                  namespace: bigbang
+                patch:
+                  - op: add
+                    path: "/spec/dependsOn/-"
+                    value:
+                      name: bbcore-minio
+                      namespace: bigbang
+              - target:
+                  group: helm.toolkit.fluxcd.io
+                  version: v2beta1
+                  kind: HelmRelease
+                  name: gitlab
+                  namespace: bigbang
+                patch:
+                  - op: add
+                    path: "/spec/dependsOn/-"
+                    value:
+                      name: gitlab-minio
+                      namespace: bigbang
+              - target:
+                  group: helm.toolkit.fluxcd.io
+                  version: v2beta1
+                  kind: HelmRelease
+                  name: velero
+                  namespace: bigbang
+                patch:
+                  - op: add
+                    path: "/spec/dependsOn/-"
+                    value:
+                      name: velero-minio
+                      namespace: bigbang

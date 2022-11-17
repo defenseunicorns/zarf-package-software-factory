@@ -35,11 +35,23 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Wait for the "softwarefactoryaddons" kustomization to report "Ready==True".
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/softwarefactoryaddons -n flux-system --for=condition=Ready --timeout=1200s`)
 		require.NoError(t, err, output)
-		// Wait for the MinIO Statefulset 'minio-minio-minio-instance-ss-0' to exist.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset minio-minio-minio-instance-ss-0 -n minio; do sleep 5; done\"`)
+		// Wait for the bbcore-minio Statefulset 'bbcore-minio-minio-instance-ss-0' to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset bbcore-minio-minio-instance-ss-0 -n bbcore-minio; do sleep 5; done\"`)
 		require.NoError(t, err, output)
-		// Wait for the MinIO Statefulset 'minio-minio-minio-instance-ss-0' to report that it is ready.
-		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/minio-minio-minio-instance-ss-0 -n minio --watch --timeout=1200s`)
+		// Wait for the bbcore-minio Statefulset 'bbcore-minio-minio-instance-ss-0' to report that it is ready.
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/bbcore-minio-minio-instance-ss-0 -n bbcore-minio --watch --timeout=1200s`)
+		require.NoError(t, err, output)
+		// Wait for the gitlab-minio Statefulset 'gitlab-minio-minio-instance-ss-0' to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset gitlab-minio-minio-instance-ss-0 -n gitlab-minio; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Wait for the gitlab-minio Statefulset 'gitlab-minio-minio-instance-ss-0' to report that it is ready.
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/gitlab-minio-minio-instance-ss-0 -n gitlab-minio --watch --timeout=1200s`)
+		require.NoError(t, err, output)
+		// Wait for the velero-minio Statefulset 'velero-minio-minio-instance-ss-0' to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get statefulset velero-minio-minio-instance-ss-0 -n velero-minio; do sleep 5; done\"`)
+		require.NoError(t, err, output)
+		// Wait for the velero-minio Statefulset 'velero-minio-minio-instance-ss-0' to report that it is ready.
+		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/velero-minio-minio-instance-ss-0 -n velero-minio --watch --timeout=1200s`)
 		require.NoError(t, err, output)
 		// Wait for the GitLab Webservice Deployment to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c \"while ! kubectl get deployment gitlab-webservice-default -n gitlab; do sleep 5; done\"`)

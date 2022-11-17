@@ -53,6 +53,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 			},
 		})
 		teststructure.SaveTerraformOptions(t, platform.TestFolder, terraformOptions)
+		// Use a custom version of this function because the upstream version leaks the private SSH key in the pipeline logs
 		customteststructure.SaveEc2KeyPair(t, platform.TestFolder, keyPair)
 		terraform.InitAndApply(t, terraformOptions)
 

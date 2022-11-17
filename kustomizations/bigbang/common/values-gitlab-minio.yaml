@@ -1,0 +1,52 @@
+tenant:
+  # Pre-create buckets that will be needed for various services that will use MinIO
+  # NOTE: Region is meaningless in this instantiation of MinIO. It's a required field but the value could be just about anything and it would work fine.
+  buckets:
+    # gitlab-registry
+    - name: "gitlab-registry"
+      region: "minio"
+      objectLock: true
+    # gitlab-lfs
+    - name: "gitlab-lfs"
+      region: "minio"
+      objectLock: true
+    # gitlab-uploads
+    - name: "gitlab-uploads"
+      region: "minio"
+      objectLock: true
+    # gitlab-artifacts
+    - name: "gitlab-artifacts"
+      region: "minio"
+      objectLock: true
+    # gitlab-backups
+    - name: "gitlab-backups"
+      region: "minio"
+      objectLock: true
+    # gitlab-packages
+    - name: "gitlab-packages"
+      region: "minio"
+      objectLock: true
+    # gitlab-backups-tmp
+    - name: "gitlab-backups-tmp"
+      region: "minio"
+      objectLock: true
+    # gitlab-mr-diffs
+    - name: "gitlab-mr-diffs"
+      region: "minio"
+      objectLock: true
+    # gitlab-terraform-state
+    - name: "gitlab-terraform-state"
+      region: "minio"
+      objectLock: true
+    # gitlab-ci-secure-files
+    - name: "gitlab-ci-secure-files"
+      region: "minio"
+      objectLock: true
+    # gitlab-dependency-proxy
+    - name: "gitlab-dependency-proxy"
+      region: "minio"
+      objectLock: true
+    # gitlab-pages
+    - name: "gitlab-pages"
+      region: "minio"
+      objectLock: true

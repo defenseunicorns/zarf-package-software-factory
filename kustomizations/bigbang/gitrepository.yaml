@@ -1,0 +1,37 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: minio-git-repo
+  namespace: bigbang
+spec:
+  targetNamespace: bigbang
+  releaseName: minio-git-repo
+  interval: 2m
+  timeout: 2m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+  valuesFrom:
+    - kind: ConfigMap
+      name: common-minio-git-repo
+      valuesKey: values.yaml

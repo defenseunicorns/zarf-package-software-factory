@@ -4,7 +4,7 @@ resources:
     kind: Secret
     type: Opaque
     metadata:
-      name: minio-user-credentials
+      name: minio-user-creds
     stringData:
       CONSOLE_ACCESS_KEY: "changeme"
       CONSOLE_SECRET_KEY: "changeme"
