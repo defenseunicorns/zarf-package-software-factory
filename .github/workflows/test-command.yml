@@ -154,7 +154,7 @@ jobs:
         if: ${{ failure() }}
         uses: docker://cloudposse/github-status-updater
         with:
-          args: "-action update_state -state failure -ref $REPO_SHA -repo $REPO_NAME"
+          args: "-action update_state -state failure -ref ${{ env.REPO_SHA }} -repo ${{ env.REPO_NAME }}"
         env:
           REPO_SHA: ${{ github.event.client_payload.pull_request.head.sha || github.sha }}
           REPO_NAME: ${{ github.event.client_payload.github.payload.repository.name || github.event.repository.name }}
@@ -169,7 +169,7 @@ jobs:
       - name: "Update GitHub Status for success"
         uses: docker://cloudposse/github-status-updater
         with:
-          args: "-action update_state -state success -ref $REPO_SHA -repo $REPO_NAME"
+          args: "-action update_state -state success -ref ${{ env.REPO_SHA }} -repo ${{ env.REPO_NAME }}"
         env:
           REPO_SHA: ${{ github.event.client_payload.pull_request.head.sha || github.sha }}
           REPO_NAME: ${{ github.event.client_payload.github.payload.repository.name || github.event.repository.name }}
@@ -185,7 +185,7 @@ jobs:
         if: ${{ cancelled() }}
         uses: docker://cloudposse/github-status-updater
         with:
-          args: "-action update_state -state error -ref $REPO_SHA -repo $REPO_NAME"
+          args: "-action update_state -state error -ref ${{ env.REPO_SHA }} -repo ${{ env.REPO_NAME }}"
         env:
           REPO_SHA: ${{ github.event.client_payload.pull_request.head.sha || github.sha }}
           REPO_NAME: ${{ github.event.client_payload.github.payload.repository.name || github.event.repository.name }}
