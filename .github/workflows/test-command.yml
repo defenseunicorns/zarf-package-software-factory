@@ -24,7 +24,7 @@ jobs:
       run-build: ${{ steps.parse.outputs.build }}
       run-e2e: ${{ steps.parse.outputs.e2e }}
     steps:
-      - name: Parse Args (repository_dispatch)
+      - name: Parse Args
         id: parse
         env:
           DEBUG: ${{ toJSON(github.event.client_payload.slash_command) }}
@@ -93,13 +93,14 @@ jobs:
           args: "-action update_state -state pending -ref ${{ env.REPO_SHA }} -repo ${{ env.REPO_NAME }}"
         env:
           REPO_SHA: ${{ github.event.client_payload.pull_request.head.sha || github.sha }}
-          REPO_NAME: ${{ github.event.client_payload.github.payload.repository.name || github.repository }}
+          REPO_NAME: ${{ github.repository }}
+#          REPO_NAME: ${{ github.event.client_payload.github.payload.repository.name || github.repository }}
           GITHUB_TOKEN: ${{ secrets.PAT }}
           GITHUB_CONTEXT: "/test e2e"
           GITHUB_DESCRIPTION: "started by @${{ github.event.client_payload.github.actor || github.actor }}"
           GITHUB_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GITHUB_REF: ${{ github.event.client_payload.pull_request.head.ref || github.ref_name }}
-          GITHUB_OWNER: ${{ github.event.client_payload.github.payload.repository.owner.login || github.repository_owner }}
+#          GITHUB_OWNER: ${{ github.event.client_payload.github.payload.repository.owner.login || github.repository_owner }}
 
       # Checkout the code from GitHub Pull Request
       - name: "Checkout the code"
