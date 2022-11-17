@@ -18,14 +18,14 @@ jobs:
   # Parse the command so we can decide which tests to run. Examples: "/test all", "/test validate", "/test e2e"
   # We can do as many of these as we want to get as granular as we want.
   parse:
-    if: github.event_name == 'repository_dispatch'
     runs-on: ubuntu-latest
     outputs:
       run-ping: ${{ steps.parse.outputs.ping }}
       run-build: ${{ steps.parse.outputs.build }}
       run-e2e: ${{ steps.parse.outputs.e2e }}
     steps:
-      - name: Parse Args
+      - name: Parse Args (repository_dispatch)
+        if: github.event_name == 'repository_dispatch'
         id: parse
         env:
           DEBUG: ${{ toJSON(github.event.client_payload.slash_command) }}
@@ -54,6 +54,13 @@ jobs:
             printf "::set-output name=%s::%s\n" "${out,,}" "${!out:-false}"
             printf "%s=%s\n" "${out,,}" "${!out:-false}"
           done
+      - name: Parse Args (push)
+        if: github.event_name == 'push'
+        id: parse
+        outputs:
+          run-ping: false
+          run-build: false
+          run-e2e: true
 
   # Do a simple ping/pong status update to validate things are working
   ping:
@@ -78,7 +85,7 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     needs: parse
-    if: needs.parse.outputs.run-e2e == 'true' || github.event_name == 'push'
+    if: needs.parse.outputs.run-e2e == 'true'
     steps:
       # Update GitHub status for pending pipeline run
       - name: "Update GitHub Status for pending"
