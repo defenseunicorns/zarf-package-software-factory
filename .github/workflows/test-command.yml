@@ -60,7 +60,6 @@ jobs:
             printf "%s=%s\n" "${out,,}" "${!out:-false}"
           done
 
-
   # Do a simple ping/pong status update to validate things are working
   ping:
     runs-on: ubuntu-latest
@@ -148,11 +147,11 @@ jobs:
           REPO_URL: https://github.com/${{ github.repository }}.git
           GIT_BRANCH: ${{ github.event.client_payload.pull_request.head.ref || github.ref_name }}
         run: |
-          make test fix-cache-permissions
+          # make test fix-cache-permissions
 
       # Update GitHub status for failing pipeline run
       - name: "Update GitHub Status for failure"
-        if: ${{ failure() }} && github.event_name == 'repository_dispatch'
+        if: ${{ failure() && github.event_name == 'repository_dispatch' }}
         uses: docker://cloudposse/github-status-updater
         with:
           args: "-action update_state -state failure -ref ${{ env.REPO_SHA }} -repo ${{ env.REPO_NAME }}"
@@ -184,7 +183,7 @@ jobs:
 
       # Update GitHub status for cancelled pipeline run
       - name: "Update GitHub Status for cancelled"
-        if: ${{ cancelled() }} && github.event_name == 'repository_dispatch'
+        if: ${{ cancelled() && github.event_name == 'repository_dispatch' }}
         uses: docker://cloudposse/github-status-updater
         with:
           args: "-action update_state -state error -ref ${{ env.REPO_SHA }} -repo ${{ env.REPO_NAME }}"
