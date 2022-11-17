@@ -1,0 +1,14 @@
+tenant:
+  # Pre-create buckets that will be needed for various services that will use MinIO
+  # NOTE: Region is meaningless in this instantiation of MinIO. It's a required field but the value could be just about anything and it would work fine.
+  buckets:
+    # loki-logs
+    - name: "loki-logs"
+      region: "minio"
+      objectLock: true
+    - name: "loki-ruler"
+      region: "minio"
+      objectLock: true
+    - name: "loki-admin"
+      region: "minio"
+      objectLock: true

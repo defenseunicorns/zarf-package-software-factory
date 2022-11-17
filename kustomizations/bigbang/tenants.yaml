@@ -1,20 +1,20 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: bbcore-minio-user-creds
+  name: bbcore-minio
   namespace: bigbang
 spec:
   targetNamespace: bbcore-minio
-  releaseName: bbcore-minio-user-creds
+  releaseName: bbcore-minio
   interval: 2m
   timeout: 2m
   chart:
     spec:
-      chart: charts/raw
+      chart: chart
       sourceRef:
         kind: GitRepository
-        name: zarf-package-software-factory
-        namespace: flux-system
+        name: minio
+        namespace: bigbang
   test:
     enable: false
   install:
@@ -35,28 +35,37 @@ spec:
       namespace: bigbang
     - name: gatekeeper
       namespace: bigbang
+    - name: minio-operator
+      namespace: bigbang
+    - name: bbcore-minio-user-creds
+      namespace: bigbang
   valuesFrom:
+    - kind: ConfigMap
+      name: common-minio-common
+      valuesKey: values.yaml
+    - kind: ConfigMap
+      name: common-bbcore-minio
     - kind: Secret
-      name: environment-bb-minio-common-user-creds
+      name: environment-bb-minio-common
       valuesKey: values.yaml
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: gitlab-minio-user-creds
+  name: gitlab-minio
   namespace: bigbang
 spec:
   targetNamespace: gitlab-minio
-  releaseName: gitlab-minio-user-creds
+  releaseName: gitlab-minio
   interval: 2m
   timeout: 2m
   chart:
     spec:
-      chart: charts/raw
+      chart: chart
       sourceRef:
         kind: GitRepository
-        name: zarf-package-software-factory
-        namespace: flux-system
+        name: minio
+        namespace: bigbang
   test:
     enable: false
   install:
@@ -77,28 +86,37 @@ spec:
       namespace: bigbang
     - name: gatekeeper
       namespace: bigbang
+    - name: minio-operator
+      namespace: bigbang
+    - name: gitlab-minio-user-creds
+      namespace: bigbang
   valuesFrom:
+    - kind: ConfigMap
+      name: common-minio-common
+      valuesKey: values.yaml
+    - kind: ConfigMap
+      name: common-gitlab-minio
     - kind: Secret
-      name: environment-bb-minio-common-user-creds
+      name: environment-bb-minio-common
       valuesKey: values.yaml
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: velero-minio-user-creds
+  name: velero-minio
   namespace: bigbang
 spec:
   targetNamespace: velero-minio
-  releaseName: velero-minio-user-creds
+  releaseName: velero-minio
   interval: 2m
   timeout: 2m
   chart:
     spec:
-      chart: charts/raw
+      chart: chart
       sourceRef:
         kind: GitRepository
-        name: zarf-package-software-factory
-        namespace: flux-system
+        name: minio
+        namespace: bigbang
   test:
     enable: false
   install:
@@ -119,7 +137,16 @@ spec:
       namespace: bigbang
     - name: gatekeeper
       namespace: bigbang
+    - name: minio-operator
+      namespace: bigbang
+    - name: velero-minio-user-creds
+      namespace: bigbang
   valuesFrom:
+    - kind: ConfigMap
+      name: common-minio-common
+      valuesKey: values.yaml
+    - kind: ConfigMap
+      name: common-velero-minio
     - kind: Secret
-      name: environment-bb-minio-common-user-creds
+      name: environment-bb-minio-common
       valuesKey: values.yaml

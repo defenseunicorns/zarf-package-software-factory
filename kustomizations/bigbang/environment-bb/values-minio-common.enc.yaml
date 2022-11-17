@@ -1,0 +1,4 @@
+# ENCRYPT THIS FILE!!! DON'T COMMIT IT TO THE REPO UNENCRYPTED! IT CONTAINS SECRETS!!!
+secrets:
+  accessKey: changemechangemechangeme
+  secretKey: changemechangemechangeme

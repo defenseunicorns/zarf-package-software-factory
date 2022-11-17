@@ -23,6 +23,27 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: bbcore-minio
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: velero-minio
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gitlab-minio
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: gitlab-redis
   labels:
     istio-injection: enabled

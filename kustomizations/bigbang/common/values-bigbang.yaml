@@ -233,7 +233,7 @@ loki:
     repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__sandbox__loki.git
   strategy: "scalable"
   objectStorage:
-    endpoint: minio.minio.svc.cluster.local
+    endpoint: minio.bbcore-minio.svc.cluster.local
     region: "minio"
     # accessKey: "" -- Added in environment-bb/values.yaml
     # accessSecret: "" -- Added in environment-bb/values.yaml
@@ -415,116 +415,20 @@ addons:
           mode: PERMISSIVE
 
   minio:
-    enabled: true
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio.git
-    values:
-      istio:
-        mtls:
-          mode: PERMISSIVE
-      # https://github.com/minio/operator/blob/master/docs/crd.adoc
-      tenant:
-        # Required to be here due to a weird quirk in bucket creation. See https://github.com/minio/operator/issues/1002#issuecomment-1028394242
-        users:
-          - name: minio-user-credentials
-        # Pre-create buckets that will be needed for various services that will use MinIO
-        # NOTE: Region is meaningless in this instantiation of MinIO. It's a required field but the value could be just about anything and it would work fine.
-        buckets:
-          # gitlab-registry
-          - name: "gitlab-registry"
-            region: "minio"
-            objectLock: true
-          # gitlab-lfs
-          - name: "gitlab-lfs"
-            region: "minio"
-            objectLock: true
-          # gitlab-uploads
-          - name: "gitlab-uploads"
-            region: "minio"
-            objectLock: true
-          # gitlab-artifacts
-          - name: "gitlab-artifacts"
-            region: "minio"
-            objectLock: true
-          # gitlab-backups
-          - name: "gitlab-backups"
-            region: "minio"
-            objectLock: true
-          # gitlab-packages
-          - name: "gitlab-packages"
-            region: "minio"
-            objectLock: true
-          # gitlab-backups-tmp
-          - name: "gitlab-backups-tmp"
-            region: "minio"
-            objectLock: true
-          # gitlab-mr-diffs
-          - name: "gitlab-mr-diffs"
-            region: "minio"
-            objectLock: true
-          # gitlab-terraform-state
-          - name: "gitlab-terraform-state"
-            region: "minio"
-            objectLock: true
-          # gitlab-ci-secure-files
-          - name: "gitlab-ci-secure-files"
-            region: "minio"
-            objectLock: true
-          # gitlab-dependency-proxy
-          - name: "gitlab-dependency-proxy"
-            region: "minio"
-            objectLock: true
-          # gitlab-pages
-          - name: "gitlab-pages"
-            region: "minio"
-            objectLock: true
-          # velero-backups
-          - name: "velero-backups"
-            region: "minio"
-            objectLock: true
-          # loki-logs
-          - name: "loki-logs"
-            region: "minio"
-            objectLock: true
-          - name: "loki-ruler"
-            region: "minio"
-            objectLock: true
-          - name: "loki-admin"
-            region: "minio"
-            objectLock: true
-        pools:
-          - servers: 3
-            volumesPerServer: 2
-            size: 5Gi
-            storageClassName: ""
-            tolerations: {}
-            nodeSelector: {}
-            affinity: {}
-            resources:
-              requests:
-                cpu: 250m
-                memory: 3Gi
-              limits:
-                cpu: 10
-                memory: 3Gi
-            securityContext:
-              runAsUser: 1001
-              runAsGroup: 1001
-              fsGroup: 1001
-              runAsNonRoot: true
+    enabled: false
 
   gitlab:
     enabled: true
     git:
       repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
     istio:
-      injection: disabled
+      injection: enabled
     objectStorage:
       type: "minio"
-      endpoint: http://minio.minio.svc.cluster.local:80
+      endpoint: http://minio.gitlab-minio.svc.cluster.local:80
       region: "minio"
-      # accessKey: "" -- Added in environment-bb/values.yaml
-      # accessSecret: "" -- Added in environment-bb/values.yaml
+      # accessKey: "" -- Added in environment-bb/values-bigbang.enc.yaml
+      # accessSecret: "" -- Added in environment-bb/values-bigbang.enc.yaml
     values:
       istio:
         mtls:
@@ -825,7 +729,7 @@ addons:
           config:
             region: minio
             s3ForcePathStyle: "true"
-            s3Url: http://minio.minio.svc.cluster.local:80
+            s3Url: http://minio.velero-minio.svc.cluster.local:80
         volumeSnapshotLocation:
           name: default
           config:
