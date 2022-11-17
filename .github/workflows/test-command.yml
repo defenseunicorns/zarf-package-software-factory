@@ -25,15 +25,20 @@ jobs:
       run-e2e: ${{ steps.parse.outputs.e2e }}
     steps:
       - name: Parse Args (repository_dispatch)
-        if: github.event_name == 'repository_dispatch'
         id: parse
         env:
           DEBUG: ${{ toJSON(github.event.client_payload.slash_command) }}
           ARGS_V1: ${{ github.event.client_payload.slash_command.arg1 }}
           ARGS_V2: ${{ github.event.client_payload.slash_command.args.unnamed.all }}
+          EVENT_NAME: ${{ github.event_name }}
         shell: bash
         run: |
           ARGS="${ARGS_V1}${ARGS_V2}"
+          # set ARGS to "all" if EVENT_NAME is "push"
+          if [[ "${EVENT_NAME}" == "push" ]]; then
+              ARGS="all"
+          fi
+          printf "Event name is %s\n" "$EVENT_NAME"
           printf "Args are %s\n" "$ARGS"
           printf "\n\nslash_command is %s\n\n" "$DEBUG"
           COMMANDS=(PING E2E)
@@ -54,15 +59,7 @@ jobs:
             printf "::set-output name=%s::%s\n" "${out,,}" "${!out:-false}"
             printf "%s=%s\n" "${out,,}" "${!out:-false}"
           done
-      - name: Parse Args (push)
-        if: github.event_name == 'push'
-        id: parse
-        outputs:
-          run-ping: false
-          run-build: false
-          run-e2e: true
-        shell: bash
-        run: echo "Running e2e tests on push"
+
 
   # Do a simple ping/pong status update to validate things are working
   ping:
