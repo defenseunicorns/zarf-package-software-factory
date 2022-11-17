@@ -61,6 +61,8 @@ jobs:
           run-ping: false
           run-build: false
           run-e2e: true
+        shell: bash
+        run: echo "Running e2e tests on push"
 
   # Do a simple ping/pong status update to validate things are working
   ping:
