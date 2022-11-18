@@ -746,4 +746,16 @@ addons:
           limits:
             cpu: 10
             memory: 1024Mi
-#      schedules:
+      schedules:
+        gitlab:
+          disabled: false
+          schedule: "0 0 * * *"
+          # Specifies whether to use OwnerReferences on backups created by this Schedule.
+          # Notice: if set to true, when schedule is deleted, backups will be deleted too.
+          useOwnerReferencesInBackup: false
+          template:
+            # 336h == 2 weeks
+            ttl: "336h"
+            includedNamespaces:
+              - gitlab
+              - gitlab-minio
