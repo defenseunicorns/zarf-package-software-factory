@@ -147,7 +147,7 @@ jobs:
           REPO_URL: https://github.com/${{ github.repository }}.git
           GIT_BRANCH: ${{ github.event.client_payload.pull_request.head.ref || github.ref_name }}
         run: |
-          # make test fix-cache-permissions
+          make test fix-cache-permissions
 
       # Update GitHub status for failing pipeline run
       - name: "Update GitHub Status for failure"
