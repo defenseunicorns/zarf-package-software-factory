@@ -220,6 +220,7 @@ gatekeeper:
           excludedNamespaces:
             - "kube-sytem"
             - "local-path-storage"
+            - "longhorn-system"
       noPrivilegedContainers:
         match:
           excludedNamespaces:
