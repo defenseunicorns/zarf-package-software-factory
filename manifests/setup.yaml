@@ -16,7 +16,7 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: longhorn
+  name: longhorn-system
 ---
 apiVersion: v1
 kind: Namespace
