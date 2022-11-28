@@ -51,4 +51,6 @@ components:
       retry: false
       after:
         - "tar -xzf flux.tar.gz -C /usr/sbin && chmod +x /usr/sbin/flux && rm flux.tar.gz"
-        - "tar -xzf velero.tar.gz -C /usr/sbin --strip-components=1 'velero-*-linux-amd64/velero' && chmod +x /usr/sbin/velero && rm velero.tar.gz"
+        # GNU `tar` and BSD `tar` work differently when it comes to wildcards. :grumpyface:
+        - |
+          EXITCODE=$(tar --version | grep -q "gnu"); ADDL_FLAGS=$(if [ $? -eq 0 ]; then echo "--wildcards"; else echo ""; fi); tar -xzf velero.tar.gz -C /usr/sbin --strip-components=1 $ADDL_FLAGS 'velero-*-linux-amd64/velero' && chmod +x /usr/sbin/velero && rm velero.tar.gz"
