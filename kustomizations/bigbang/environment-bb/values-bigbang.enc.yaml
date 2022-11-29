@@ -13,7 +13,7 @@ istio:
           PxxrC7qjmb2Kxit/ZphilhOoUF+hRANCAARBXS6lFbqcDFR5VUzihkUshJ7yX2s7
           cXFqUD0ChkmsDnT+igae9xg6hEnz83JaTr4YAqJhEpI2B0ZLcVa4kMkw
           -----END PRIVATE KEY-----
-          cert: |
+        cert: |
           -----BEGIN CERTIFICATE-----
           MIIEUzCCAzugAwIBAgISBHoCz33seokZ+hWF+OfiTMqlMA0GCSqGSIb3DQEBCwUA
           MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD
