@@ -210,4 +210,6 @@ jobs:
           SLACK_USERNAME: "GitHub Actions"
           SLACK_ICON_EMOJI: ":boom:"
           SLACK_COLOR: "${{ job.status }}"
-          SLACK_MESSAGE: "[TEST] CI Pipeline failed for ${{ github.repository }} on branch ${{ github.ref }}"
+          SLACK_MESSAGE: "[TEST] CI Pipeline failed for ${{ github.repository }} on branch ${{ github.ref_name }}. CC @Andy Roth"
+          SLACK_FOOTER: "Team policy is to fix red pipelines in main as soon as possible"
+          SLACK_LINK_NAMES: true
