@@ -8,7 +8,6 @@ on:
   push:
     branches:
       - main
-      - feature/send-slack-msg-if-pipeline-fails-in-main
 
 defaults:
   run:
@@ -148,8 +147,7 @@ jobs:
           REPO_URL: https://github.com/${{ github.repository }}.git
           GIT_BRANCH: ${{ github.event.client_payload.pull_request.head.ref || github.ref_name }}
         run: |
-          # make test fix-cache-permissions
-          exit 1
+          make test fix-cache-permissions
 
       # Update GitHub status for failing pipeline run
       - name: "Update GitHub Status for failure"
@@ -206,10 +204,10 @@ jobs:
         env:
           SLACK_WEBHOOK: "${{ secrets.SLACK_INCOMING_WEBHOOK }}"
           SLACK_CHANNEL: "di2me-dev"
-          SLACK_TITLE: "[TEST] CI pipeline failed"
+          SLACK_TITLE: "CI pipeline failed"
           SLACK_USERNAME: "GitHub Actions"
           SLACK_ICON_EMOJI: ":boom:"
           SLACK_COLOR: "${{ job.status }}"
-          SLACK_MESSAGE: "[TEST] CI pipeline failed for ${{ github.repository }} on branch ${{ github.ref_name }}. CC <@U02B02M4E84> <@U02EBF0AFDE> <@U03MR99Q4BY>"
+          SLACK_MESSAGE: "CI pipeline failed for ${{ github.repository }} on branch ${{ github.ref_name }}. CC <@U02B02M4E84> <@U02EBF0AFDE> <@U03MR99Q4BY>"
           SLACK_FOOTER: "Team policy is to fix red pipelines in main as soon as possible"
           SLACK_LINK_NAMES: true
