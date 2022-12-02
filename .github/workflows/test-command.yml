@@ -196,3 +196,18 @@ jobs:
           GITHUB_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GITHUB_REF: ${{ github.event.client_payload.pull_request.head.ref || github.ref_name }}
           GITHUB_OWNER: ${{ github.event.client_payload.github.payload.repository.owner.login || github.repository_owner }}
+
+      # Send Slack message if pipeline run failed in main
+      - name: Slack Notify
+        if: ${{ failure() && github.event_name == 'push' }}
+        uses: rtCamp/action-slack-notify@v2.2.0
+        env:
+          SLACK_WEBHOOK: "${{ secrets.SLACK_INCOMING_WEBHOOK }}"
+          SLACK_CHANNEL: "di2me-dev"
+          SLACK_TITLE: "CI pipeline failed"
+          SLACK_USERNAME: "GitHub Actions"
+          SLACK_ICON_EMOJI: ":boom:"
+          SLACK_COLOR: "${{ job.status }}"
+          SLACK_MESSAGE: "CI pipeline failed for ${{ github.repository }} on branch ${{ github.ref_name }}. CC <@U02B02M4E84> <@U02EBF0AFDE> <@U03MR99Q4BY>"
+          SLACK_FOOTER: "Team policy is to fix red pipelines in main as soon as possible"
+          SLACK_LINK_NAMES: true
