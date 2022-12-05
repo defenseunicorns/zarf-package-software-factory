@@ -7,7 +7,7 @@ git:
   existingSecret: "private-git-server"
 
 networkPolicies:
-  enabled: true
+  enabled: false
   # When in prod use a real CIDR. Don't do this, it isn't secure.
   controlPlaneCidr: "0.0.0.0/0"
   nodeCidr: "0.0.0.0/0"
