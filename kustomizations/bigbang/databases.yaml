@@ -43,8 +43,16 @@ spec:
       - apiVersion: "networking.k8s.io/v1"
         kind: NetworkPolicy
         metadata:
-          name: postgres-operator-egress
+          name: allow-to-and-from-postgres-operator
         spec:
+          ingress:
+            - ports:
+                - port: 5432
+                  protocol: TCP
+              from:
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: postgres-operator
           egress:
             - ports:
                 - port: 8080
@@ -55,6 +63,7 @@ spec:
                       kubernetes.io/metadata.name: postgres-operator
           podSelector: {}
           policyTypes:
+            - Ingress
             - Egress
       - apiVersion: "acid.zalan.do/v1"
         kind: "postgresql"
