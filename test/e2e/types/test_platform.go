@@ -88,7 +88,7 @@ func (platform *TestPlatform) runSSHCommandWithOptionalSudo(command string, asSu
 	// Try up to 3 times to do the command, to avoid "i/o timeout" errors which are transient
 	for !done && count < 3 {
 		count++
-		output, err = ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`%v "%v"`, precommand, command))
+		output, err = ssh.CheckSshCommandE(platform.T, host, fmt.Sprintf(`%v '%v'`, precommand, command))
 		if err != nil {
 			if strings.Contains(err.Error(), "i/o timeout") {
 				// There was an error, but it was an i/o timeout, so wait a few seconds and try again

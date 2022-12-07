@@ -62,47 +62,47 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err)
 
 		// Install dependencies. Doing it here since the instance user-data is being flaky, still saying things like make are not installed
-		output, err := platform.RunSSHCommandAsSudo("apt update && apt install -y jq git make wget sslscan && sysctl -w vm.max_map_count=262144")
+		output, err := platform.RunSSHCommandAsSudo(`apt update && apt install -y jq git make wget sslscan && sysctl -w vm.max_map_count=262144`)
 		require.NoError(t, err, output)
 
 		// Clone the repo idempotently
-		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf("rm -rf ~/app && git clone --depth 1 %v --branch %v --single-branch ~/app", repoURL, gitBranch))
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`rm -rf ~/app && git clone --depth 1 %v --branch %v --single-branch ~/app`, repoURL, gitBranch))
 		require.NoError(t, err, output)
 
 		// Install Zarf
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf")
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf`)
 		require.NoError(t, err, output)
 		// Log into registry1.dso.mil
-		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf("~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v", registry1Username, registry1Password))
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v`, registry1Username, registry1Password))
 		require.NoError(t, err, output)
 		// Build init package
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-init-amd64.tar.zst")
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-init-amd64.tar.zst`)
 		require.NoError(t, err, output)
 		// Build flux package
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-package-flux-amd64.tar.zst")
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-package-flux-amd64.tar.zst`)
 		require.NoError(t, err, output)
 		// Build software factory package
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app && make build/zarf-package-software-factory-amd64.tar.zst")
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-package-software-factory-amd64.tar.zst`)
 		require.NoError(t, err, output)
 		// Try to be idempotent
-		_, _ = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf destroy --confirm")
+		_, _ = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf destroy --confirm`)
 		// Deploy init package
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-init-amd64.tar.zst --components k3s,git-server --confirm")
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-init-amd64.tar.zst --components k3s,git-server --confirm`)
 		require.NoError(t, err, output)
 		// Deploy Flux
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm")
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm`)
 		require.NoError(t, err, output)
 		// Generate a bogus gpg key so it can be applied to flux since flux complains if one isn't present, even if one isn't needed. Only do it if it doesn't already exist.
-		output, err = platform.RunSSHCommandAsSudo("gpg --list-secret-keys user@example.com || gpg --batch --passphrase '' --quick-gen-key user@example.com default default")
+		output, err = platform.RunSSHCommandAsSudo(`gpg --list-secret-keys user@example.com || gpg --batch --passphrase "" --quick-gen-key user@example.com default default`)
 		require.NoError(t, err, output)
 		// Apply the bogus gpg key so Flux won't complain
-		output, err = platform.RunSSHCommandAsSudo("gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin")
+		output, err = platform.RunSSHCommandAsSudo(`gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin`)
 		require.NoError(t, err, output)
 		// Deploy software factory
-		output, err = platform.RunSSHCommandAsSudo("cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --components flux-cli --confirm")
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --components flux-cli --confirm`)
 		require.NoError(t, err, output)
 		// We have to patch the zarf-package-software-factory GitRepo to point at the right branch
-		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '[{"op": "replace", "path": "/spec/ref/branch", "value": "%v"}]'`, gitBranch))
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '"'"'[{"op": "replace", "path": "/spec/ref/branch", "value": "%v"}]'"'"'`, gitBranch))
 		require.NoError(t, err, output)
 	})
 }
