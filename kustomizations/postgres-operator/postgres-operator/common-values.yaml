@@ -2,10 +2,11 @@ image:
   registry: registry1.dso.mil
   repository: ironbank/opensource/zalando/postgres-operator
 configGeneral:
-  # Without enable_lazy_spilo_upgrade set to true the pods will do a rolling upgrade every resync_period, which by
-  # default is 30 minutes. We have experienced issues with database corruption when this happens. Deciding instead
-  # to do lazy upgrading which means the StatefulSet is modified but a rolling update is not automatically triggered.
+  # Without enable_lazy_spilo_upgrade set to true the pods will do a rolling upgrade every resync_period. We have
+  # experienced issues with database corruption when this happens. Deciding instead to do lazy upgrading which means the
+  # StatefulSet is modified but a rolling update is not automatically triggered.
   enable_lazy_spilo_upgrade: true
+  resync_period: "5m"
 configPostgresPodResources:
   default_cpu_request: "100m"
   default_memory_request: "100Mi"
