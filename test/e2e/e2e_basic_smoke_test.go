@@ -55,7 +55,7 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Wait for the "acid-gitlab" database to report "PostgresClusterStatus==Running", then set the timestamp
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=$(kubectl get postgresql acid-gitlab -n gitlab -o jsonpath="{.status.PostgresClusterStatus}"); while [ $DB_STATUS != "Running" ]; do sleep 5; done"`)
 		require.NoError(t, err, output)
-		timestampGitlabDb := time.Now().Add(time.Minute * 5).Add(time.Second * 10).Add(time.Minute * 30)
+		timestampGitlabDb := time.Now().Add(time.Minute * 5).Add(time.Second * 10).Add(time.Minute * 5)
 		// Wait for the "acid-jira" database to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-jira -n jira; do sleep 5; done"`)
 		require.NoError(t, err, output)
