@@ -32,37 +32,37 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/postgres-operator -n flux-system --for=condition=Ready --timeout=1200s`)
 		require.NoError(t, err, output)
 
-		// Wait for the databases to report "PostgresClusterStatus==Running", then create a timestamp for 5 minutes and
-		// 10 seconds in the future which is when it should be checked again (since the resync_period is 5 minutes and
-		// we want to make sure that nothing is blocking the operator from talking to the databases.
+		// Wait for the databases to report "PostgresClusterStatus==Running", then create a timestamp for 15 minutes and
+		// 10 seconds in the future which is when it should be checked again to make sure that nothing is blocking the
+		// operator from talking to the databases.
 		// Wait for the postgresql object "acid-artifactory" to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-artifactory -n artifactory; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Wait for the "acid-artifactory" database to report "PostgresClusterStatus==Running", then set the timestamp
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath="{.status.PostgresClusterStatus}"); while [ $DB_STATUS != "Running" ]; do sleep 5; done"`)
 		require.NoError(t, err, output)
-		timestampArtifactoryDb := time.Now().Add(time.Minute * 5).Add(time.Second * 10)
+		timestampArtifactoryDb := time.Now().Add(time.Minute * 15).Add(time.Second * 10)
 		// Wait for the "acid-confluence" database to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-confluence -n confluence; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Wait for the "acid-confluence" database to report "PostgresClusterStatus==Running", then set the timestamp
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=$(kubectl get postgresql acid-confluence -n confluence -o jsonpath=:"{.status.PostgresClusterStatus}"); while [ $DB_STATUS != "Running" ]; do sleep 5; done"`)
 		require.NoError(t, err, output)
-		timestampConfluenceDb := time.Now().Add(time.Minute * 5).Add(time.Second * 10)
+		timestampConfluenceDb := time.Now().Add(time.Minute * 15).Add(time.Second * 10)
 		// Wait for the "acid-gitlab" database to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-gitlab -n gitlab; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Wait for the "acid-gitlab" database to report "PostgresClusterStatus==Running", then set the timestamp
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=$(kubectl get postgresql acid-gitlab -n gitlab -o jsonpath="{.status.PostgresClusterStatus}"); while [ $DB_STATUS != "Running" ]; do sleep 5; done"`)
 		require.NoError(t, err, output)
-		timestampGitlabDb := time.Now().Add(time.Minute * 5).Add(time.Second * 10).Add(time.Minute * 10)
+		timestampGitlabDb := time.Now().Add(time.Minute * 15).Add(time.Second * 10)
 		// Wait for the "acid-jira" database to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-jira -n jira; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Wait for the "acid-jira" database to report "PostgresClusterStatus==Running", then set the timestamp
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=$(kubectl get postgresql acid-jira -n jira -o jsonpath="{.status.PostgresClusterStatus}"); while [ $DB_STATUS != "Running" ]; do sleep 5; done"`)
 		require.NoError(t, err, output)
-		timestampJiraDb := time.Now().Add(time.Minute * 5).Add(time.Second * 10)
+		timestampJiraDb := time.Now().Add(time.Minute * 15).Add(time.Second * 10)
 
 		// Wait for the "bigbang" kustomization to report "Ready==True". Our testing shows if everything goes right this should take 11-13 minutes.
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/bigbang -n flux-system --for=condition=Ready --timeout=1200s`)
