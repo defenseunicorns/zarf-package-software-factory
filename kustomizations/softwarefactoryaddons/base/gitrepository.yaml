@@ -7,7 +7,7 @@ spec:
   interval: 5m
   url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__jira.git
   ref:
-    tag: 1.4.1-bb.0
+    tag: 1.6.0-bb.1
   secretRef:
     name: private-git-server
 ---
