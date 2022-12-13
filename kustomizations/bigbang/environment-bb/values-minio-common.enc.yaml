@@ -1,4 +1,35 @@
-# ENCRYPT THIS FILE!!! DON'T COMMIT IT TO THE REPO UNENCRYPTED! IT CONTAINS SECRETS!!!
+#ENC[AES256_GCM,data:Y82wxJXj5zBKQBHDXI8TQkNm6MstTa6HhSEPGIQamFvRcoqB9nRdsfP+F41h/sF2xqtViGcIwqqis99h735ircoj1x5Uaai5TiCw2lFhJoRXWbmHHw==,iv:4L3vw7jNiwIiLiJ3kD2MKsOm1Df8gXZLr11aM0xoH/g=,tag:ueOL6Y4zxo1ZBjRoEL4WpA==,type:comment]
 secrets:
-  accessKey: changemechangemechangeme
-  secretKey: changemechangemechangeme
+    accessKey: ENC[AES256_GCM,data:wjjuOgET29FYtm3uKq3Ncr90UbNZ35PkRbFJ+PyS,iv:HFSsvVhoQkHeHkNAZ8pnkBJUcs0qNG6xVLQS7GXGcGU=,tag:8UfgJUTupbay7tZ1FdtONg==,type:str]
+    secretKey: ENC[AES256_GCM,data:UyQLaz1oJkQv+HAawl0rSk2Zh8cYNoS66xqhDc3j,iv:sCN78Rp95QrW1bAeThb6yu6p3JViGxLBfFOmXz41g2U=,tag:RKHXngnoAqEFaIQFobgYAw==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2022-12-13T21:13:38Z"
+    mac: ENC[AES256_GCM,data:cV9MxAOQDuQwgRs17oFqANSY1HgGBTda0EplLj/OJSRLygGl9Lx00GMys6CLRheCIrzfP7CSfIXrl/EjvhYh+9GnA13l0xGyl6LBvoeunYKDlu1HLB5SfDCGQ3HrI2HlzmABs77Vwpli833btNxwz/uzAdYJpVvtzt36TDVYj88=,iv:80wHs1EyBfPUCk23JBgh/urSoxU+FlEseyN9ySw46Z8=,tag:juczTaJ90UNmWZ6h0bKciw==,type:str]
+    pgp:
+        - created_at: "2022-12-13T21:13:38Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            wcFMA4IMH31oP3+UARAAg7clh+M2rRU4fforl4Ird+7SjpmZNajp3hGO7jaE2q1U
+            iLLJDJKlBWlCgKlMeSaAKRmAAfm0JnnT1vRqA+KF+onKyAegd1YElN6HeLCUP4c4
+            bDPAfP7HWYV7tbL2Brve95fXW1vqF8zq1JjSt1s96Mqj7AchrYx8Ls1QJ+mLqENj
+            QTqUIajKcS4Tz8ICzg8+SlgSJkaPjUvrAeNGntVaaBGKMFSw8GRVvqkxHHGuaKFX
+            5v9/H1UIK+sJOGTJXz/BRH54WMheqhD5KFTVL7OiZQLY7f0rmuRVR5eC5cEf0qb9
+            H8Aa/5gMQWr+YaZzfEgd98z+6hi1kkOAnDEcKP+BcECroy8sleDY0ESmnUcYV1MM
+            CJoOcMTpIVtTqsXnHMqZhp+39BgNJtS66Gh9uPkRGHLVrRDy+pe7IkNa4biy2LoW
+            GDEf6eJRZsSoGIRnVqNjCHOK5pt4gYAo7u8sUucz15QUyTOKtZZnyqXpRYOmeIfp
+            OWjPbgzXvV5QRI6z8Lp4HnRQ/fPj2mwz0v8WxFYJO4ciBwqexYI2IVZdfvBMjscB
+            CsdYYeEsKLyXNzJz4tSj108INIvUjdAsQ5LWAFHpvJpq7M/teHZKZFKzB3APlmzU
+            Bgfuj6zHl3M2W/cbSZrLD7YjR4ZvCY3kqEjEWjY8GA1wrptQCLBiByZT8mzRUBHS
+            UQE2gH+APDg5v11WG3z5I/tN/fEa/dt4WQu6eOv+OlHYysxXmDH+dsM3/KUH1vH/
+            By5fYoGEGkwCS+/dLGWA9URoVzhntl3U89hOiPHyS7YVug==
+            =seyx
+            -----END PGP MESSAGE-----
+          fp: 9FD61D29F9CC53FDAFD8631ECD9E6FDD97561640
+    unencrypted_suffix: _unencrypted
+    version: 3.7.3

@@ -1,7 +1,7 @@
 ingress:
   nginx: false
-proxyName: jira.bigbang.dev
-hostname: bigbang.dev
+proxyName: jira.blue.di2me-dev.com
+hostname: blue.di2me-dev.com
 istio:
   enabled: true
   gateways:
