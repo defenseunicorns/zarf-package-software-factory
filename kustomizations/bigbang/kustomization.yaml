@@ -4,6 +4,7 @@ resources:
   - databases.yaml
   - secrets.yaml
   - tenants.yaml
+  - networkpolicies.yaml
 
 configMapGenerator:
   - name: common
