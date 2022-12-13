@@ -2,12 +2,12 @@ package test_test
 
 import (
 	"testing"
-	"time"
+	// "time"
 
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/types"
 	"github.com/defenseunicorns/zarf-package-software-factory/test/e2e/utils"
 	teststructure "github.com/gruntwork-io/terratest/modules/test-structure"
-	"github.com/stretchr/testify/require"
+	// "github.com/stretchr/testify/require"
 )
 
 // TestAllServicesRunning waits until all services report that they are ready.
