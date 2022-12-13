@@ -1,4 +1,7 @@
 # ENCRYPT THIS FILE!!! DON'T COMMIT IT TO THE REPO UNENCRYPTED! IT CONTAINS SECRETS!!!
+# This is the "root" access key and secret key. It needs to be DIFFERENT from the access key and secret key that
+# the service uses and that is set in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
+# This key will likely never be used, but needs to be set to a secure value.
 secrets:
   accessKey: changemechangemechangeme
   secretKey: changemechangemechangeme
