@@ -92,17 +92,14 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		// Deploy Flux
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm`)
 		require.NoError(t, err, output)
-		// Generate a bogus gpg key so it can be applied to flux since flux complains if one isn't present, even if one isn't needed. Only do it if it doesn't already exist.
-		output, err = platform.RunSSHCommandAsSudo(`gpg --list-secret-keys user@example.com || gpg --batch --passphrase "" --quick-gen-key user@example.com default default`)
+		// Wait until the secret key exists (it has to be imported manually by sshing into the instance)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 30m bash -c 'while true; do if gpg --list-secret-keys andrew.roth@defenseunicorns.com > /dev/null 2>&1; then break; fi; sleep 10; done'`)
 		require.NoError(t, err, output)
-		// Apply the bogus gpg key so Flux won't complain
-		output, err = platform.RunSSHCommandAsSudo(`gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin`)
+		// Apply the gpg key
+		output, err = platform.RunSSHCommandAsSudo(`gpg --export-secret-keys --armor andrew.roth@defenseunicorns.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin`)
 		require.NoError(t, err, output)
 		// Deploy software factory
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --components flux-cli --confirm`)
-		require.NoError(t, err, output)
-		// We have to patch the zarf-package-software-factory GitRepo to point at the right branch
-		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '"'"'[{"op": "replace", "path": "/spec/ref/branch", "value": "%v"}]'"'"'`, gitBranch))
 		require.NoError(t, err, output)
 	})
 }
