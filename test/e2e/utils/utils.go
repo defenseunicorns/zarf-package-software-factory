@@ -93,7 +93,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm`)
 		require.NoError(t, err, output)
 		// Wait until the secret key exists (it has to be imported manually by sshing into the instance)
-		output, err = platform.RunSSHCommandAsSudo(`timeout 30m bash -c 'while true; do if gpg --list-secret-keys andrew.roth@defenseunicorns.com > /dev/null 2>&1; then break; fi; sleep 10; done'`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 30m bash -c '"'"'while true; do if gpg --list-secret-keys andrew.roth@defenseunicorns.com > /dev/null 2>&1; then break; fi; sleep 10; done'"'"'`)
 		require.NoError(t, err, output)
 		// Apply the gpg key
 		output, err = platform.RunSSHCommandAsSudo(`gpg --export-secret-keys --armor andrew.roth@defenseunicorns.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin`)
