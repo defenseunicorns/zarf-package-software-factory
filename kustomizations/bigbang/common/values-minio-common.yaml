@@ -1,5 +1,5 @@
-hostname: blue.di2me-dev.com
-domain: blue.di2me-dev.com
+hostname: devops.di2me-dev.com
+domain: devops.di2me-dev.com
 
 istio:
   enabled: true

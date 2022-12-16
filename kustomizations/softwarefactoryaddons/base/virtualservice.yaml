@@ -7,7 +7,7 @@ spec:
   gateways:
     - istio-system/public
   hosts:
-    - jenkins.blue.di2me-dev.com
+    - jenkins.devops.di2me-dev.com
   http:
     - route:
         - destination:
@@ -24,7 +24,7 @@ spec:
   gateways:
     - istio-system/public
   hosts:
-    - artifactory.blue.di2me-dev.com
+    - artifactory.devops.di2me-dev.com
   http:
     - route:
         - destination:

@@ -1,7 +1,7 @@
 ingress:
   nginx: false
-proxyName: jira.blue.di2me-dev.com
-hostname: blue.di2me-dev.com
+proxyName: jira.devops.di2me-dev.com
+hostname: devops.di2me-dev.com
 istio:
   enabled: true
   gateways:
