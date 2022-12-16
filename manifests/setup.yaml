@@ -85,7 +85,7 @@ spec:
   interval: 1m
   url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__defenseunicorns__zarf-package-software-factory.git
   ref:
-    branch: blue.di2me-dev.com
+    branch: green.di2me-dev.com
   #    tag: X.Y.Z
   secretRef:
     name: private-git-server
