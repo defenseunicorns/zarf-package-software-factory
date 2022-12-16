@@ -7,7 +7,7 @@ spec:
   gateways:
     - istio-system/public
   hosts:
-    - jenkins.devops.di2me-dev.com
+    - jenkins.devops-rollback.di2me-dev.com
   http:
     - route:
         - destination:
@@ -24,7 +24,7 @@ spec:
   gateways:
     - istio-system/public
   hosts:
-    - artifactory.devops.di2me-dev.com
+    - artifactory.devops-rollback.di2me-dev.com
   http:
     - route:
         - destination:

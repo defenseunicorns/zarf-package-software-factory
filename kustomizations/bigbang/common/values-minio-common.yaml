@@ -1,5 +1,5 @@
-hostname: devops.di2me-dev.com
-domain: devops.di2me-dev.com
+hostname: devops-rollback.di2me-dev.com
+domain: devops-rollback.di2me-dev.com
 
 istio:
   enabled: true
