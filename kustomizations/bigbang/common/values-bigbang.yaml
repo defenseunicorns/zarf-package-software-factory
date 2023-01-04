@@ -573,6 +573,11 @@ addons:
               # "*/30 * * * *" is every 30 minutes. Good for demo/testing. Bad for production.
               schedule: "*/30 * * * *"
               extraArgs: "--skip artifacts,registry"
+            objectStorage:
+              backend: s3
+              config:
+                secret: minio-user-creds
+                key: ".s3cfg"
           # persistence settings for restore
           persistence:
             enabled: true
