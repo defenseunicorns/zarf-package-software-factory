@@ -102,30 +102,22 @@ istio:
           Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
           -----END CERTIFICATE-----
 
-# Set the MinIO access key and password in these 2 places here, as well as in
-# kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml
 addons:
-  minio:
-    # This is the "root" access key and secret key. It needs to be DIFFERENT from the access key and secret key that
-    # GitLab uses and that is set in kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml]
-    # This key will likely never be used, but needs to be set to a secure value.
-    accesskey: "changemechangemechangeme"
-    secretkey: "changemechangemechangeme"
   gitlab:
     objectStorage:
-      accessKey: "changeme"         # needs to match the value in kustomizations/bigbang/environment-bb/values-gitlab-minio-user-creds.end.yaml
-      accessSecret: "changeme"      # needs to match the value in kustomizations/bigbang/environment-bb/values-gitlab-minio-user-creds.end.yaml
+      accessKey: "changeme"         # needs to match the value in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
+      accessSecret: "changeme"      # needs to match the value in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
   velero:
     values:
       credentials:
         useSecret: true
         secretContents:
-          # Values need to match the values in kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml
+          # Values need to match the values in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
           cloud: |
             [default]
             aws_access_key_id=changeme
             aws_secret_access_key=changeme
   loki:
     objectStorage:
-      accessKey: "changeme"         # needs to match the value in kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml
-      accessSecret: "changeme"      # needs to match the value in kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml
+      accessKey: "changeme"         # needs to match the value in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
+      accessSecret: "changeme"      # needs to match the value in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml

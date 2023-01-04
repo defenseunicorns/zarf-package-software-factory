@@ -40,8 +40,6 @@ All versions of this package will not be compatible with all versions of Zarf. F
 
 - If you are using Vagrant, inside the Vagrant VM the services are available on the standard port 443. Outside the VM if you want to pull something up in your browser that traffic is being routed to port **8443** to avoid needing to be root when running the Vagrant box.
 
-- The version of K3s that Zarf comes with is not compatible, due to issues with creating a Service of type LoadBalancer for Istio. Instead, a custom K3s and "k3s-images" package are used.
-
 - The current deployment of HA Redis with Sentinel is deployed with no authentication. Please reference [ADR-002](doc/adr/0002-switch-to-authless-ha-redis.md) for additional details.
 
 ## Prerequisites
