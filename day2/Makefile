@@ -33,7 +33,7 @@ help: ## Show a list of all targets
 .PHONY: build-and-deploy
 build-and-deploy: ## Build the day2 package and immediately deploy it
 	../build/$(ZARF_BIN) package create --confirm
-	../build/$(ZARF_BIN) package deploy zarf-package-day-two-update-amd64.tar.zst --confirm
+	../build/$(ZARF_BIN) package deploy zarf-package-day-two-update-amd64.tar.zst --confirm -l debug
 
 .PHONY: k9s
 k9s: ## Pull up K9s
