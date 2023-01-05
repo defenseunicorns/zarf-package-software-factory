@@ -10,7 +10,8 @@ resources:
         [default]
         access_key = changeme
         secret_key = changeme
-        host_base = minio.gitlab-minio.svc.cluster.local
-        host_bucket = %(bucket)s.minio.gitlab-minio.svc.cluster.local
+        host_base = http://minio.gitlab-minio.svc.cluster.local:80
+        host_bucket = http://minio.gitlab-minio.svc.cluster.local:80
         use_https = False
-        signature_v2 = True
+        signature_v2 = False
+        bucket_location = minio
