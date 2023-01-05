@@ -576,7 +576,7 @@ addons:
             objectStorage:
               backend: s3
               config:
-                secret: minio-user-creds
+                secret: "gitlab-minio-s3cfg"
                 key: ".s3cfg"
           # persistence settings for restore
           persistence:
