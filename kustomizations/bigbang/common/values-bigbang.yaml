@@ -572,7 +572,6 @@ addons:
                   memory: 2Gi
               # "*/30 * * * *" is every 30 minutes. Good for demo/testing. Bad for production.
               schedule: "*/30 * * * *"
-              extraArgs: "--skip artifacts,registry"
             objectStorage:
               backend: s3
               config:
