@@ -39,10 +39,10 @@ istio:
       resources:
         requests:
           cpu: "100m"
-          memory: "2Gi"
+          memory: "1Gi"
         limits:
           cpu: "500m"
-          memory: "2Gi"
+          memory: "1Gi"
       hpaSpec:
         maxReplicas: 1
     values:
