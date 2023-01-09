@@ -127,7 +127,7 @@ build/zarf-mac-intel: | build ## Download the Mac (Intel) flavor of Zarf to the 
 
 build/zarf-init-amd64.tar.zst: | build ## Download the init package
 	@echo "Downloading zarf-init-amd64.tar.zst"
-	@curl -sL https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64.tar.zst -o build/zarf-init-amd64.tar.zst
+	@curl -sL https://github.com/defenseunicorns/zarf/releases/download/$(ZARF_VERSION)/zarf-init-amd64-$(ZARF_VERSION).tar.zst -o build/zarf-init-amd64.tar.zst
 
 build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux package
 	@cd flux && ../build/$(ZARF_BIN) package create --skip-sbom --confirm
