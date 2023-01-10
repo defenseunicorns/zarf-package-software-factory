@@ -41,7 +41,7 @@ k9s: ## Pull up K9s
 
 .PHONY: nuke-and-rebuild
 nuke-and-rebuild: ## Nuke the cluster and rebuild it
-	cd ~/app/build && ./zarf destroy --confirm
+	cd ~/app/build && ./zarf destroy --confirm || true
 	cd ~/app && make build/zarf-package-software-factory-amd64.tar.zst
 	cd ~/app/build && ./zarf init --components k3s,git-server --confirm
 	cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm
