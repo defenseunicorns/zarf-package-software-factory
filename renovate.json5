@@ -51,7 +51,7 @@
       ],
       "matchStrings": [
         "https:\/\/github\\.com\/zalando\/postgres-operator\\.git@(?<currentValue>\\S+)",
-        "url: http:\/\/zarf-gitea-http\\.zarf\\.svc\\.cluster\\.local:3000\/zarf-git-user\/mirror__github\\.com__zalando__postgres-operator\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+        "url: https:\/\/github\\.com\/zalando\/postgres-operator\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://github.com/zalando/postgres-operator.git",
       "datasourceTemplate": "git-tags",
@@ -64,7 +64,7 @@
       ],
       "matchStrings": [
         "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/jira\\.git@(?<currentValue>\\S+)",
-        "url: http:\/\/zarf-gitea-http\\.zarf\\.svc\\.cluster\\.local:3000\/zarf-git-user\/mirror__repo1\\.dso\\.mil__platform-one__big-bang__apps__third-party__jira\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+        "url: https://repo1\\.dso\\.mil/platform-one/big-bang/apps/third-party/jira\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git",
       "datasourceTemplate": "git-tags",
@@ -78,7 +78,7 @@
       ],
       "matchStrings": [
         "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/confluence\\.git@(?<currentValue>\\S+)",
-        "url: http:\/\/zarf-gitea-http\\.zarf\\.svc\\.cluster\\.local:3000\/zarf-git-user\/mirror__repo1\\.dso\\.mil__platform-one__big-bang__apps__third-party__confluence\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+        "url: https://repo1\\.dso\\.mil/platform-one/big-bang/apps/third-party/confluence\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git",
       "datasourceTemplate": "git-tags",
@@ -92,7 +92,7 @@
       ],
       "matchStrings": [
         "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/artifactory\\.git@(?<currentValue>\\S+)",
-        "url: http:\/\/zarf-gitea-http\\.zarf\\.svc\\.cluster\\.local:3000\/zarf-git-user\/mirror__repo1\\.dso\\.mil__platform-one__big-bang__apps__third-party__artifactory\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+        "https://repo1\\.dso\\.mil/platform-one/big-bang/apps/third-party/artifactory\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git",
       "datasourceTemplate": "git-tags",
@@ -121,7 +121,7 @@
       ],
       "matchStrings": [
         "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/application-utilities\/redis\\.git@(?<currentValue>\\S+)",
-        "url: http:\/\/zarf-gitea-http\\.zarf\\.svc\\.cluster\\.local:3000\/zarf-git-user\/mirror__repo1\\.dso\\.mil__platform-one__big-bang__apps__application-utilities__redis\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+        "https://repo1\\.dso\\.mil/platform-one/big-bang/apps/application-utilities/redis\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git",
       "datasourceTemplate": "git-tags",

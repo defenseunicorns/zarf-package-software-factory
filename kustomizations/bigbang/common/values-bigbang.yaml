@@ -15,8 +15,6 @@ networkPolicies:
 
 istio:
   enabled: true
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__istio-controlplane.git
   ingressGateways:
     public-ingressgateway:
       type: "LoadBalancer"
@@ -66,8 +64,6 @@ istio:
 
 istiooperator:
   enabled: true
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__istio-operator.git
   values:
     hub: "${ZARF_REGISTRY}/ironbank/opensource/istio"
     operator:
@@ -81,8 +77,6 @@ istiooperator:
 
 jaeger:
   enabled: true
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__jaeger.git
   values:
     istio:
       mtls:
@@ -115,8 +109,6 @@ jaeger:
 
 kiali:
   enabled: true
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__kiali.git
   values:
     istio:
       mtls:
@@ -141,8 +133,6 @@ kiali:
 
 clusterAuditor:
   enabled: true
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__cluster-auditor.git
   values:
     istio:
       mtls:
@@ -157,8 +147,6 @@ clusterAuditor:
 
 gatekeeper:
   enabled: true
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__policy.git
   values:
     istio:
       mtls:
@@ -229,8 +217,6 @@ fluentbit:
 
 loki:
   enabled: true
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__sandbox__loki.git
   strategy: "scalable"
   objectStorage:
     endpoint: minio.bbcore-minio.svc.cluster.local
@@ -254,8 +240,6 @@ loki:
 
 promtail:
   enabled: true
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__sandbox__promtail.git
   values:
     istio:
       mtls:
@@ -270,8 +254,6 @@ promtail:
 
 monitoring:
   enabled: true
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__core__monitoring.git
   values:
     istio:
       mtls:
@@ -379,8 +361,6 @@ monitoring:
 twistlock:
   # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
   enabled: false
-  git:
-    repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__security-tools__twistlock.git
   values:
     istio:
       mtls:
@@ -397,8 +377,6 @@ twistlock:
 addons:
   minioOperator:
     enabled: true
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio-operator.git
     values:
       operator:
         resources:
@@ -419,8 +397,6 @@ addons:
 
   gitlab:
     enabled: true
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab.git
     istio:
       injection: enabled
     objectStorage:
@@ -679,8 +655,6 @@ addons:
               memory: 1Gi
   gitlabRunner:
     enabled: true
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__developer-tools__gitlab-runner.git
     values:
       istio:
         mtls:
@@ -695,8 +669,6 @@ addons:
 
   velero:
     enabled: true
-    git:
-      repo: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__cluster-utilities__velero.git
     plugins:
       - aws
     values:

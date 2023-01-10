@@ -5,7 +5,7 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__redis.git
+  url: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git
   ref:
     tag: 16.12.3-bb.2
   secretRef:

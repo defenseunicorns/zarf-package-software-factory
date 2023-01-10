@@ -5,7 +5,7 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__jira.git
+  url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
   ref:
     tag: 1.4.1-bb.0
   secretRef:
@@ -18,7 +18,7 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__confluence.git
+  url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
   ref:
     tag: 0.1.0-bb.20
   secretRef:
@@ -31,7 +31,7 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__jenkinsci__helm-charts.git
+  url: https://github.com/jenkinsci/helm-charts.git
   ref:
     tag: jenkins-4.1.12
   secretRef:
@@ -44,7 +44,7 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__third-party__artifactory.git
+  url: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git
   ref:
     tag: 0.9.2
   secretRef:
