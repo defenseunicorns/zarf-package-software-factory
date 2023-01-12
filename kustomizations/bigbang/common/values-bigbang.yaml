@@ -65,7 +65,6 @@ istio:
 istiooperator:
   enabled: true
   values:
-    hub: "${ZARF_REGISTRY}/ironbank/opensource/istio"
     operator:
       resources:
         limits:
