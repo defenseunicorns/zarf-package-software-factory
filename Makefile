@@ -96,7 +96,7 @@ clean: ## Clean up build files
 	@rm -rf ./build
 
 .PHONY: all
-all: | build/zarf build/zarf-mac-intel build/zarf-init-amd64.tar.zst build/zarf-package-k3s-amd64.tar.zst build/zarf-package-k3s-images-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst ## Make everything. Will skip downloading/generating dependencies if they already exist.
+all: | build/zarf build/zarf-mac-intel build/zarf-init-amd64.tar.zst build/zarf-package-k3s-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst ## Make everything. Will skip downloading/generating dependencies if they already exist.
 
 .PHONY: vendor-big-bang-base
 vendor-big-bang-base: ## Vendor the BigBang base kustomization, since Flux doesn't support private bases. This only needs to be run if you change the version of Big Bang used. Don't forget to commit the changes to the repo.
