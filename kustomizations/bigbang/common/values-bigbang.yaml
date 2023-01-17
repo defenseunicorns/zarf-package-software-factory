@@ -230,21 +230,21 @@ loki:
     read:
       replicas: 2
       resources:
-        limits:
-          cpu: 300m
-          memory: 3Gi
         requests:
-          cpu: 10
+          cpu: 300m
           memory: 2Gi
+        limits:
+          cpu: 10
+          memory: 3Gi
     write:
       replicas: 2
       resources:
-        limits:
-          cpu: 300m
-          memory: 3Gi
         requests:
-          cpu: 10
+          cpu: 300m
           memory: 2Gi
+        limits:
+          cpu: 10
+          memory: 3Gi
     minio:
       enabled: false
     istio:
