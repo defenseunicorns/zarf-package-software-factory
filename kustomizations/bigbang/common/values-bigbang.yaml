@@ -228,7 +228,7 @@ loki:
       admin: loki-admin
   values:
     read:
-      replicas: 2
+      replicas: 1
       resources:
         requests:
           cpu: 300m
@@ -237,7 +237,7 @@ loki:
           cpu: 10
           memory: 3Gi
     write:
-      replicas: 2
+      replicas: 1
       resources:
         requests:
           cpu: 300m
