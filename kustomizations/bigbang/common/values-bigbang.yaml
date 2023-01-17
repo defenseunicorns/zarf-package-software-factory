@@ -228,9 +228,23 @@ loki:
       admin: loki-admin
   values:
     read:
-      replicas: 1
+      replicas: 2
+      resources:
+        limits:
+          cpu: 300m
+          memory: 2Gi
+        requests:
+          cpu: 10
+          memory: 3Gi
     write:
-      replicas: 1
+      replicas: 2
+      resources:
+        limits:
+          cpu: 300m
+          memory: 2Gi
+        requests:
+          cpu: 10
+          memory: 3Gi
     minio:
       enabled: false
     istio:
