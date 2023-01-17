@@ -232,19 +232,19 @@ loki:
       resources:
         limits:
           cpu: 300m
-          memory: 2Gi
+          memory: 3Gi
         requests:
           cpu: 10
-          memory: 3Gi
+          memory: 2Gi
     write:
       replicas: 2
       resources:
         limits:
           cpu: 300m
-          memory: 2Gi
+          memory: 3Gi
         requests:
           cpu: 10
-          memory: 3Gi
+          memory: 2Gi
     minio:
       enabled: false
     istio:
