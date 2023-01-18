@@ -33,7 +33,7 @@ spec:
   interval: 5m
   url: https://github.com/jenkinsci/helm-charts.git
   ref:
-    tag: jenkins-4.1.12
+    tag: jenkins-4.2.21
   secretRef:
     name: private-git-server
 ---
