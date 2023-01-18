@@ -5,7 +5,7 @@ sentinel:
   image:
     registry: "docker.io"
     repository: "bitnami/redis-sentinel"
-    tag: "6.2.7"
+    tag: "6.2.10"
     pullPolicy: Always
   resources:
     limits:
