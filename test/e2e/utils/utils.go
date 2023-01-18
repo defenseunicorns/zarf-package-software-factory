@@ -72,32 +72,46 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		// Install Zarf
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf`)
 		require.NoError(t, err, output)
+
+		// Add config file to ~/app/build
+		output, err = platform.RunSSHCommandAsSudo(`echo 'no_progress = true' > ~/app/build/zarf-config.toml`)
+		require.NoError(t, err, output)
+
 		// Log into registry1.dso.mil
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v`, registry1Username, registry1Password))
 		require.NoError(t, err, output)
+
 		// Build init package
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-init.sha256`)
 		require.NoError(t, err, output)
+
 		// Build flux package
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-package-flux-amd64.tar.zst`)
 		require.NoError(t, err, output)
+
 		// Build software factory package
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-package-software-factory-amd64.tar.zst`)
 		require.NoError(t, err, output)
+
 		// Try to be idempotent
-		_, _ = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf destroy --confirm`)
+		_, _ = platform.RunSSHCommandAsSudo(`echo 'Idempotently destroying the old cluster. This should fail most of the time. That's okay, it just means there's no cluster to destroy.' && cd ~/app/build && ./zarf destroy --confirm`)
+
 		// Deploy init package
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf init --components k3s,git-server --confirm`)
 		require.NoError(t, err, output)
+
 		// Deploy Flux
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm`)
 		require.NoError(t, err, output)
+
 		// Generate a bogus gpg key so it can be applied to flux since flux complains if one isn't present, even if one isn't needed. Only do it if it doesn't already exist.
 		output, err = platform.RunSSHCommandAsSudo(`gpg --list-secret-keys user@example.com || gpg --batch --passphrase "" --quick-gen-key user@example.com default default`)
 		require.NoError(t, err, output)
+
 		// Apply the bogus gpg key so Flux won't complain
 		output, err = platform.RunSSHCommandAsSudo(`gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin`)
 		require.NoError(t, err, output)
+
 		// Deploy software factory
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --components flux-cli --confirm`)
 		require.NoError(t, err, output)
