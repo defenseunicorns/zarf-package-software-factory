@@ -166,7 +166,8 @@ components:
       - "registry1.dso.mil/ironbank/opensource/velero/velero:v1.9.1"
       - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-csi:v0.3.0"
       - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-microsoft-azure:v1.5.0"
-      - "registry.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/keycloak-ib:18.0.2-1.2.0-1"
+      # They moved this image to a different spot so this one won't pull anymore. Will add it back in later. This image isn't currently used in the default configuration of DI2-ME.
+      # - "registry.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/keycloak-ib:18.0.2-1.2.0-1"
 
   - name: softwarefactoryaddons
     required: true
