@@ -78,6 +78,15 @@ test-ssh: ## Run this if you set SKIP_TEARDOWN=1 and want to SSH into the still-
 	@cd test/tf/public-ec2-instance/.test-data && cat Ec2KeyPair.json | jq -r .PrivateKey > privatekey.pem && chmod 600 privatekey.pem
 	@cd test/tf/public-ec2-instance && ssh -i .test-data/privatekey.pem ubuntu@$$(terraform output public_instance_ip | tr -d '"')
 
+.PHONY: deploy-local
+deploy-local: ## Deploy created zarf package to local cluster
+	cd build && ./zarf init --components git-server --confirm
+	cd build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm
+	gpg --list-secret-keys user@example.com || gpg --batch --passphrase '' --quick-gen-key user@example.com default default
+	gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin
+	cd build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm
+	kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '[{"op": "replace", "path": "/spec/ref/branch", "value": "$(shell git rev-parse --abbrev-ref HEAD)"}]'
+
 .PHONY: vm-init
 vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
 	@VAGRANT_EXPERIMENTAL="disks" vagrant up --no-color
@@ -96,7 +105,7 @@ clean: ## Clean up build files
 	@rm -rf ./build
 
 .PHONY: all
-all: | build/zarf build/zarf-mac-intel build/zarf-init-amd64.tar.zst build/zarf-package-flux-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst ## Make everything. Will skip downloading/generating dependencies if they already exist.
+all: | build/zarf build/zarf-mac-intel build/zarf-init.sha256 build/zarf-package-flux-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst ## Make everything. Will skip downloading/generating dependencies if they already exist.
 
 .PHONY: vendor-big-bang-base
 vendor-big-bang-base: ## Vendor the BigBang base kustomization, since Flux doesn't support private bases. This only needs to be run if you change the version of Big Bang used. Don't forget to commit the changes to the repo.

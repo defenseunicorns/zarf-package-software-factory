@@ -74,7 +74,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err, output)
 
 		// Add config file to ~/app/build
-		output, err = platform.RunSSHCommandAsSudo(`echo 'no_progress = true' > ~/app/build/zarf-config.toml`)
+		output, err = platform.RunSSHCommandAsSudo(`echo '"'"'no_progress = true'"'"' > ~/app/build/zarf-config.toml`)
 		require.NoError(t, err, output)
 
 		// Log into registry1.dso.mil
