@@ -91,10 +91,10 @@
         ".*\\.yaml"
       ],
       "matchStrings": [
-        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/artifactory\\.git@(?<currentValue>\\S+)",
-        "https://repo1\\.dso\\.mil/platform-one/big-bang/apps/third-party/artifactory\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+        "https:\/\/repo1\\.dso\\.mil\/big-bang\/apps\/third-party\/jfrog-platform\\.git@(?<currentValue>\\S+)",
+        "https:\/\/repo1\\.dso\\.mil\/big-bang\/apps\/third-party\/jfrog-platform\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
-      "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git",
+      "depNameTemplate": "https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfcomponents",
       "versioningTemplate": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-bb.(?<build>\\d+)$"

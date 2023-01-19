@@ -179,7 +179,7 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
       - https://github.com/jenkinsci/helm-charts.git
-      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git
+      - https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git
     images:
       # Jira
       - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:9.0.0

@@ -94,7 +94,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err, output)
 
 		// Try to be idempotent
-		_, _ = platform.RunSSHCommandAsSudo(`echo 'Idempotently destroying the old cluster. This should fail most of the time. That's okay, it just means there's no cluster to destroy.' && cd ~/app/build && ./zarf destroy --confirm`)
+		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. That's okay, it just means there's no cluster to destroy." && cd ~/app/build && ./zarf destroy --confirm`)
 
 		// Deploy init package
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf init --components k3s,git-server --confirm`)
