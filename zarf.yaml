@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.21.3/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.23.5/zarf.schema.json
 kind: ZarfPackageConfig
 metadata:
   name: software-factory
@@ -166,7 +166,8 @@ components:
       - "registry1.dso.mil/ironbank/opensource/velero/velero:v1.9.1"
       - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-csi:v0.3.0"
       - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-microsoft-azure:v1.5.0"
-      - "registry.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/keycloak-ib:18.0.2-1.2.0-1"
+      # They moved this image to a different spot so this one won't pull anymore. Will add it back in later. This image isn't currently used in the default configuration of DI2-ME.
+      # - "registry.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/keycloak-ib:18.0.2-1.2.0-1"
 
   - name: softwarefactoryaddons
     required: true
@@ -178,7 +179,7 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
       - https://github.com/jenkinsci/helm-charts.git
-      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/artifactory.git
+      - https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git
     images:
       # Jira
       - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:9.0.0

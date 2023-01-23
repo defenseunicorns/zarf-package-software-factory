@@ -6,7 +6,7 @@ resources:
     spec:
       interval: 2m
       timeout: 60s
-      url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__repo1.dso.mil__platform-one__big-bang__apps__application-utilities__minio.git
+      url: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git
       ref:
         tag: 4.4.28-bb.1
       secretRef:

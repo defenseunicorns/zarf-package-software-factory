@@ -5,7 +5,7 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__zalando__postgres-operator.git
+  url: https://github.com/zalando/postgres-operator.git
   ref:
     tag: v1.8.2
   secretRef:

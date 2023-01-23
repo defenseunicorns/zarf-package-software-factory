@@ -83,7 +83,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  url: http://zarf-gitea-http.zarf.svc.cluster.local:3000/zarf-git-user/mirror__github.com__defenseunicorns__zarf-package-software-factory.git
+  url: https://github.com/defenseunicorns/zarf-package-software-factory.git
   ref:
     branch: not-the-real-branch-name
   #    tag: X.Y.Z
