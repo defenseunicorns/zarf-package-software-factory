@@ -33,7 +33,7 @@ spec:
       namespace: bigbang
     - name: istio
       namespace: bigbang
-    - name: gatekeeper
+    - name: kyvernopolicies
       namespace: bigbang
     - name: minio-operator
       namespace: bigbang
@@ -84,7 +84,7 @@ spec:
       namespace: bigbang
     - name: istio
       namespace: bigbang
-    - name: gatekeeper
+    - name: kyvernopolicies
       namespace: bigbang
     - name: minio-operator
       namespace: bigbang
@@ -135,7 +135,7 @@ spec:
       namespace: bigbang
     - name: istio
       namespace: bigbang
-    - name: gatekeeper
+    - name: kyvernopolicies
       namespace: bigbang
     - name: minio-operator
       namespace: bigbang

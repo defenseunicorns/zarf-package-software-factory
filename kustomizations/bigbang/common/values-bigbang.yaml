@@ -3,6 +3,9 @@ registryCredentials:
   username: "zarf-pull"
   password: "${ZARF_REGISTRY_AUTH_PULL}"
 
+# Openshift Container Platform Feature Toggle
+openshift: false
+
 git:
   existingSecret: "private-git-server"
 
@@ -43,17 +46,9 @@ istio:
           memory: "1Gi"
       hpaSpec:
         maxReplicas: 1
-    values:
-      global:
-        proxy:
-          resources:
-            requests:
-              memory: "1Gi"
-            limits:
-              memory: "1Gi"
   gateways:
     public:
-      ingressGateway: public-ingressgateway
+      ingressGateway: "public-ingressgateway"
       hosts:
         - gitlab.{{ .Values.domain }}
         - jenkins.{{ .Values.domain }}
@@ -131,79 +126,59 @@ kiali:
               memory: "512Mi"
 
 clusterAuditor:
-  enabled: true
-  values:
-    istio:
-      mtls:
-        mode: PERMISSIVE
-    resources:
-      requests:
-        cpu: "100m"
-        memory: "512Mi"
-      limits:
-        cpu: "500m"
-        memory: "512Mi"
+  enabled: false
 
 gatekeeper:
+  enabled: false
+  # values:
+  #   violations:
+  #     allowedDockerRegistries:
+  #       match:
+  #         # Make Kind/K3d happy
+  #         excludedNamespaces:
+  #           - "kube-sytem"
+  #           - "istio-system"
+  #           - "local-path-storage"
+  #       parameters:
+  #         repos:
+  #           - "${ZARF_REGISTRY}"
+  #         excludedResources:
+  #           # K3s needs this if you are doing K3s-specific "HelmRelease"-type CRDs
+  #           - ".*/helm-install-.*"
+  #           - ".*/helm"
+  #     allowedHostFilesystem:
+  #       match:
+  #         # Make Kind/K3d happy
+  #         excludedNamespaces:
+  #           - "kube-sytem"
+  #           - "local-path-storage"
+  #     hostNetworking:
+  #       match:
+  #         excludedNamespaces:
+  #           - "kube-system"
+  #           - "istio-system"
+  #     restrictedTaint:
+  #       match:
+  #         # Make Kind/K3d happy
+  #         excludedNamespaces:
+  #           - "kube-sytem"
+  #           - "local-path-storage"
+  #     volumeTypes:
+  #       match:
+  #         # Make Kind/K3d happy
+  #         excludedNamespaces:
+  #           - "kube-sytem"
+  #           - "local-path-storage"
+
+kyverno:
+  # -- Toggle deployment of Kyverno.
   enabled: true
-  values:
-    istio:
-      mtls:
-        mode: PERMISSIVE
-    controllerManager:
-      resources:
-        limits:
-          cpu: "2"
-          memory: "4Gi"
-        requests:
-          cpu: "250m"
-          memory: "1Gi"
-    audit:
-      resources:
-        limits:
-          cpu: "2"
-          memory: "4Gi"
-        requests:
-          cpu: "250m"
-          memory: "1Gi"
-    violations:
-      allowedDockerRegistries:
-        match:
-          # Make Kind/K3d happy
-          excludedNamespaces:
-            - "kube-sytem"
-            - "istio-system"
-            - "local-path-storage"
-        parameters:
-          repos:
-            - "${ZARF_REGISTRY}"
-          excludedResources:
-            # K3s needs this if you are doing K3s-specific "HelmRelease"-type CRDs
-            - ".*/helm-install-.*"
-            - ".*/helm"
-      allowedHostFilesystem:
-        match:
-          # Make Kind/K3d happy
-          excludedNamespaces:
-            - "kube-sytem"
-            - "local-path-storage"
-      hostNetworking:
-        match:
-          excludedNamespaces:
-            - "kube-system"
-            - "istio-system"
-      restrictedTaint:
-        match:
-          # Make Kind/K3d happy
-          excludedNamespaces:
-            - "kube-sytem"
-            - "local-path-storage"
-      volumeTypes:
-        match:
-          # Make Kind/K3d happy
-          excludedNamespaces:
-            - "kube-sytem"
-            - "local-path-storage"
+
+kyvernopolicies:
+  enabled: true
+
+kyvernoreporter:
+  enabled: true
 
 logging:
   enabled: false
@@ -264,6 +239,10 @@ promtail:
       requests:
         cpu: "100m"
         memory: "256Mi"
+
+# TODO!
+neuvector:
+  enabled: false
 
 monitoring:
   enabled: true

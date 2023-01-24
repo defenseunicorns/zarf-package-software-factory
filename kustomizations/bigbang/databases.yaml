@@ -34,7 +34,7 @@ spec:
       namespace: bigbang
     - name: postgres-operator
       namespace: softwarefactoryaddons
-    - name: gatekeeper
+    - name: kyvernopolicies
       namespace: bigbang
     - name: istio
       namespace: bigbang
