@@ -177,6 +177,9 @@ kyverno:
 kyvernopolicies:
   enabled: true
   values:
+    resources:
+      limits:
+        cpu: "1500m"
     policies:
       restrict-image-registries:
         exclude:
