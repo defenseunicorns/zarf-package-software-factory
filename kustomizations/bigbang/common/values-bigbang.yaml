@@ -150,7 +150,7 @@ gatekeeper:
   #       match:
   #         # Make Kind/K3d happy
   #         excludedNamespaces:
-  #           - "kube-sytem"
+  #           - "kube-system"
   #           - "local-path-storage"
   #     hostNetworking:
   #       match:
@@ -173,21 +173,53 @@ gatekeeper:
 kyverno:
   # -- Toggle deployment of Kyverno.
   enabled: true
-
-kyvernopolicies:
-  enabled: true
   values:
     resources:
       limits:
         cpu: "1500m"
+
+kyvernopolicies:
+  enabled: true
+  values:
     policies:
+      restrict-host-path-mount:
+        exclude:
+          any:
+          - resources:
+            namespaces:
+            - "kube-system"
+            - "local-path-storage"
+        parameters:
+          allow:
+          - "/var/lib/rancher/k3s/storage/*"
+      restrict-host-path-write:
+        exclude:
+          any:
+          - resources:
+            namespaces:
+            - "kube-system"
+            - "local-path-storage"
+        parameters:
+          allow:
+          - "/var/lib/rancher/k3s/storage/*"
+      restrict-host-path-mount-pv:
+        exclude:
+          any:
+          - resources:
+            names:
+            - "local-home-confluence*"
+            - "local-home-jira*"
+            - "repo-data-gitlab-gitaly*"
+            - "data-logging-loki-read*"
+            - "data-logging-loki-write*"
+            - "data-zarf-gitea*"
+            - "data-docker-registry"
       restrict-image-registries:
         exclude:
           any:
           - resources:
             namespaces:
-            - "kube-sytem"
-            - "istio-system"
+            - "kube-system"
             - "local-path-storage"
         parameters:
           allow:
