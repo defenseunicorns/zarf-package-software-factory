@@ -350,21 +350,21 @@ monitoring:
             cpu: "100m"
             memory: "2Gi"
 
-twistlock:
-  # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
-  enabled: false
-  values:
-    istio:
-      mtls:
-        mode: PERMISSIVE
-    console:
-    resources:
-      limits:
-        memory: "1Gi"
-        cpu: "500m"
-      requests:
-        memory: "1Gi"
-        cpu: "100m"
+# Removing twistlock config since kyverno seems upset by it
+# twistlock:
+#   # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
+#   enabled: false
+#   values:
+#     istio:
+#       mtls:
+#         mode: PERMISSIVE
+#     resources:
+#       limits:
+#         memory: "1Gi"
+#         cpu: "500m"
+#       requests:
+#         memory: "1Gi"
+#         cpu: "100m"
 
 addons:
   minioOperator:
