@@ -176,25 +176,26 @@ kyverno:
 
 kyvernopolicies:
   enabled: true
-  policies:
-    restrict-image-registries:
-      exclude:
-        any:
-        - resources:
-          namespaces:
-          - "kube-sytem"
-          - "istio-system"
-          - "local-path-storage"
-      parameters:
-        allow:
-          - "${ZARF_REGISTRY}"
-    restrict-volume-types:
-      exclude:
-        any:
-        - resources:
-          namespaces:
-          - "kube-sytem"
-          - "local-path-storage"
+  values:
+    policies:
+      restrict-image-registries:
+        exclude:
+          any:
+          - resources:
+            namespaces:
+            - "kube-sytem"
+            - "istio-system"
+            - "local-path-storage"
+        parameters:
+          allow:
+            - "${ZARF_REGISTRY}"
+      restrict-volume-types:
+        exclude:
+          any:
+          - resources:
+            namespaces:
+            - "kube-sytem"
+            - "local-path-storage"
 
       
 
