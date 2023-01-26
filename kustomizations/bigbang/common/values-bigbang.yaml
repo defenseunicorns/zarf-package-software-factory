@@ -186,9 +186,9 @@ kyvernopolicies:
         exclude:
           any:
           - resources:
-            namespaces:
-            - "kube-system"
-            - "local-path-storage"
+              namespaces:
+              - "kube-system"
+              - "local-path-storage"
         parameters:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
@@ -196,9 +196,9 @@ kyvernopolicies:
         exclude:
           any:
           - resources:
-            namespaces:
-            - "kube-system"
-            - "local-path-storage"
+              namespaces:
+              - "kube-system"
+              - "local-path-storage"
         parameters:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
@@ -206,21 +206,21 @@ kyvernopolicies:
         exclude:
           any:
           - resources:
-            names:
-            - "local-home-confluence*"
-            - "local-home-jira*"
-            - "repo-data-gitlab-gitaly*"
-            - "data-logging-loki-read*"
-            - "data-logging-loki-write*"
-            - "data-zarf-gitea*"
-            - "data-docker-registry"
+              names:
+              - "local-home-confluence*"
+              - "local-home-jira*"
+              - "repo-data-gitlab-gitaly*"
+              - "data-logging-loki-read*"
+              - "data-logging-loki-write*"
+              - "data-zarf-gitea*"
+              - "data-docker-registry"
       restrict-image-registries:
         exclude:
           any:
           - resources:
-            namespaces:
-            - "kube-system"
-            - "local-path-storage"
+              namespaces:
+              - "kube-system"
+              - "local-path-storage"
         parameters:
           allow:
             - "${ZARF_REGISTRY}"
@@ -228,9 +228,9 @@ kyvernopolicies:
         exclude:
           any:
           - resources:
-            namespaces:
-            - "kube-sytem"
-            - "local-path-storage"
+              namespaces:
+              - "kube-sytem"
+              - "local-path-storage"
 
       
 
