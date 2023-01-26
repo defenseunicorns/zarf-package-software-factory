@@ -6,9 +6,16 @@ metadata:
   url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
   version: "###ZARF_PKG_VAR_BACKUP_FILENAME###"
 
+# Run the following command to get a listing of existing backups
+# kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd ls s3://gitlab-backups
 components:
-  # Run the following command to get a listing of existing backups
-  # kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd ls s3://gitlab-backups
+  - name: preflight-checks
+    description: "Run preflight checks"
+    required: true
+    scripts:
+      retry: false
+      prepare:
+        - "if [ \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" != \"yes\" ] && [ \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" != \"no\" ]; then echo \"The value of DELETE_REMOTE_BACKUP_FILE must be either 'yes' or 'no'\"; exit 1; fi"
   - name: gitlab-backup-artifacts
     description: "On package create, grabs the backup from the cluster and adds it to the package. On deploy, pushes the backup back into the cluster"
     required: true
@@ -39,11 +46,4 @@ components:
         - "rm -f ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
         - "rm -f ./gitlab-gitlab-initial-root-password.yaml"
         - "rm -f ./gitlab-rails-secret.yaml"
-
-  - name: delete-remote-gitlab-backup-artifact
-    description: "Delete the backup from the cluster after it is downloaded"
-    required: false
-    scripts:
-      retry: false
-      prepare:
-        - "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd del s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME###"
+        - "test \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" = \"yes\" && kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd del s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME### || true"
