@@ -65,12 +65,15 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
-      - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno.git
-      - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-policies.git
-      - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-reporter.git
+      # Disabling kyverno for now
+      # - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno.git
+      # - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-policies.git
+      # - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-reporter.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/neuvector.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail.git
@@ -107,9 +110,10 @@ components:
       - "registry1.dso.mil/ironbank/opensource/kiali/kiali-operator:v1.60.0"
       - "registry1.dso.mil/ironbank/opensource/kiali/kiali:v1.60.0"
       - "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.25.3"
-      - "registry1.dso.mil/ironbank/nirmata/kyverno:v1.8.5"
-      - "registry1.dso.mil/ironbank/nirmata/kyvernopre:v1.8.5"
+      # - "registry1.dso.mil/ironbank/nirmata/kyverno:v1.8.5"
+      # - "registry1.dso.mil/ironbank/nirmata/kyvernopre:v1.8.5"
       - "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.25.5"
+      - "registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper:v3.10.0"
       - "registry1.dso.mil/ironbank/nirmata/policy-reporter/policy-reporter:2.10.3"
       - "registry1.dso.mil/ironbank/elastic/elasticsearch/elasticsearch:8.5.2"
       - "registry1.dso.mil/ironbank/elastic/kibana/kibana:8.5.2"

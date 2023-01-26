@@ -126,128 +126,130 @@ kiali:
               memory: "512Mi"
 
 clusterAuditor:
-  enabled: false
+  enabled: true
 
 gatekeeper:
-  enabled: false
-  # values:
-  #   violations:
-  #     allowedDockerRegistries:
-  #       match:
-  #         # Make Kind/K3d happy
-  #         excludedNamespaces:
-  #           - "kube-sytem"
-  #           - "istio-system"
-  #           - "local-path-storage"
-  #       parameters:
-  #         repos:
-  #           - "${ZARF_REGISTRY}"
-  #         excludedResources:
-  #           # K3s needs this if you are doing K3s-specific "HelmRelease"-type CRDs
-  #           - ".*/helm-install-.*"
-  #           - ".*/helm"
-  #     allowedHostFilesystem:
-  #       match:
-  #         # Make Kind/K3d happy
-  #         excludedNamespaces:
-  #           - "kube-system"
-  #           - "local-path-storage"
-  #     hostNetworking:
-  #       match:
-  #         excludedNamespaces:
-  #           - "kube-system"
-  #           - "istio-system"
-  #     restrictedTaint:
-  #       match:
-  #         # Make Kind/K3d happy
-  #         excludedNamespaces:
-  #           - "kube-sytem"
-  #           - "local-path-storage"
-  #     volumeTypes:
-  #       match:
-  #         # Make Kind/K3d happy
-  #         excludedNamespaces:
-  #           - "kube-sytem"
-  #           - "local-path-storage"
-
-kyverno:
-  # -- Toggle deployment of Kyverno.
   enabled: true
   values:
-    resources:
-      limits:
-        cpu: "1500m"
-
-kyvernopolicies:
-  enabled: true
-  values:
-    policies:
-      disallow-nodeport-services:
-        exclude:
-          any:
-          - resources:
-              namespaces:
-              - "zarf"
-      disallow-privilege-escalation:
-        exclude:
-          any:
-          - resources:
-              names:
-              - "acid*"
-      restrict-host-path-mount:
-        exclude:
-          any:
-          - resources:
-              namespaces:
-              - "kube-system"
-              - "local-path-storage"
+    violations:
+      allowedDockerRegistries:
+        match:
+          # Make Kind/K3d happy
+          excludedNamespaces:
+            - "kube-sytem"
+            - "istio-system"
+            - "local-path-storage"
         parameters:
-          allow:
-          - "/var/lib/rancher/k3s/storage/*"
-      restrict-host-path-write:
-        exclude:
-          any:
-          - resources:
-              namespaces:
-              - "kube-system"
-              - "local-path-storage"
-              - "zarf"
-        parameters:
-          allow:
-          - "/var/lib/rancher/k3s/storage/*"
-      restrict-host-path-mount-pv:
-        exclude:
-          any:
-          - resources:
-              namespaces:
-              - "kube-system"
-              - "local-path-storage"
-        parameters:
-          allow:
-          - "/var/lib/rancher/k3s/storage/*"
-      restrict-image-registries:
-        exclude:
-          any:
-          - resources:
-              namespaces:
-              - "kube-system"
-              - "local-path-storage"
-              - "zarf"
-        parameters:
-          allow:
+          repos:
             - "${ZARF_REGISTRY}"
-      restrict-volume-types:
-        exclude:
-          any:
-          - resources:
-              namespaces:
-              - "kube-sytem"
-              - "local-path-storage"
+          excludedResources:
+            # K3s needs this if you are doing K3s-specific "HelmRelease"-type CRDs
+            - ".*/helm-install-.*"
+            - ".*/helm"
+      allowedHostFilesystem:
+        match:
+          # Make Kind/K3d happy
+          excludedNamespaces:
+            - "kube-system"
+            - "local-path-storage"
+      hostNetworking:
+        match:
+          excludedNamespaces:
+            - "kube-system"
+            - "istio-system"
+      restrictedTaint:
+        match:
+          # Make Kind/K3d happy
+          excludedNamespaces:
+            - "kube-sytem"
+            - "local-path-storage"
+      volumeTypes:
+        match:
+          # Make Kind/K3d happy
+          excludedNamespaces:
+            - "kube-sytem"
+            - "local-path-storage"
+
+# WIP Kyverno support - mutating webhook aren't executed in correct order so
+# kyverno doesn't always see the changes made by zarf.
+# kyverno:
+#   # -- Toggle deployment of Kyverno.
+#   enabled: true
+#   values:
+#     resources:
+#       limits:
+#         cpu: "1500m"
+
+# kyvernopolicies:
+#   enabled: true
+#   values:
+#     policies:
+#       disallow-nodeport-services:
+#         exclude:
+#           any:
+#           - resources:
+#               namespaces:
+#               - "zarf"
+#       disallow-privilege-escalation:
+#         exclude:
+#           any:
+#           - resources:
+#               names:
+#               - "acid*"
+#       restrict-host-path-mount:
+#         exclude:
+#           any:
+#           - resources:
+#               namespaces:
+#               - "kube-system"
+#               - "local-path-storage"
+#         parameters:
+#           allow:
+#           - "/var/lib/rancher/k3s/storage/*"
+#       restrict-host-path-write:
+#         exclude:
+#           any:
+#           - resources:
+#               namespaces:
+#               - "kube-system"
+#               - "local-path-storage"
+#               - "zarf"
+#         parameters:
+#           allow:
+#           - "/var/lib/rancher/k3s/storage/*"
+#       restrict-host-path-mount-pv:
+#         exclude:
+#           any:
+#           - resources:
+#               namespaces:
+#               - "kube-system"
+#               - "local-path-storage"
+#         parameters:
+#           allow:
+#           - "/var/lib/rancher/k3s/storage/*"
+#       restrict-image-registries:
+#         exclude:
+#           any:
+#           - resources:
+#               namespaces:
+#               - "kube-system"
+#               - "local-path-storage"
+#               - "zarf"
+#         parameters:
+#           allow:
+#             - "${ZARF_REGISTRY}"
+#       restrict-volume-types:
+#         exclude:
+#           any:
+#           - resources:
+#               namespaces:
+#               - "kube-sytem"
+#               - "local-path-storage"
 
       
 
-kyvernoreporter:
-  enabled: true
+# kyvernoreporter:
+#   enabled: true
 
 logging:
   enabled: false
@@ -735,7 +737,7 @@ addons:
     values:
       initContainers:
        - name: velero-plugin-for-aws
-         image: registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.5.0
+         image: registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.6.0
          imagePullPolicy: IfNotPresent
          volumeMounts:
            - mountPath: /target
