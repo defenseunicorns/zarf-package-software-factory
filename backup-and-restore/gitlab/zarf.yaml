@@ -7,14 +7,17 @@ metadata:
   version: "###ZARF_PKG_VAR_BACKUP_FILENAME###"
 
 components:
+  # Run the following command to get a listing of existing backups
+  # kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd ls s3://gitlab-backups
   - name: gitlab-backup-artifacts
     description: "On package create, grabs the backup from the cluster and adds it to the package. On deploy, pushes the backup back into the cluster"
     required: true
     scripts:
       retry: false
       prepare:
-        - "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd get s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME### /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
+        - "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd get --skip-existing s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME### /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
         - "kubectl cp -c toolbox gitlab/$(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}'):home/git/###ZARF_PKG_VAR_BACKUP_FILENAME### ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+        - "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- rm -f /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
 #      after:
 #        - "Push the package into the cluster"
     files:
