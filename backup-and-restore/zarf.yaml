@@ -1,8 +1,0 @@
-kind: ZarfPackageConfig
-metadata:
-  name: di2me-backup-and-restore
-  description: Zarf package for backing up and restoring a DI2-ME environment. On package create, the backups will be pulled out of the cluster and added to the package. On deploy, the backups will be pushed into the cluster from the package and a restore will be initiated.
-  url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore
-
-components:
-  -
