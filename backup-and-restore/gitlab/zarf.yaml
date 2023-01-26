@@ -23,3 +23,11 @@ components:
     files:
       - source: "./###ZARF_PKG_VAR_BACKUP_FILENAME###"
         target: "./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+
+  - name: cleanup-after-gitlab-backup-artifacts
+    description: "Clean up the backup file after it was added to the package"
+    required: true
+    scripts:
+      retry: false
+      prepare:
+        - "rm -f ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
