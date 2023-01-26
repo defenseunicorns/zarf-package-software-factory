@@ -206,14 +206,9 @@ kyvernopolicies:
         exclude:
           any:
           - resources:
-              names:
-              - "local-home-confluence*"
-              - "local-home-jira*"
-              - "repo-data-gitlab-gitaly*"
-              - "data-logging-loki-read*"
-              - "data-logging-loki-write*"
-              - "data-zarf-gitea*"
-              - "data-docker-registry"
+              namespaces:
+              - "kube-system"
+              - "local-path-storage"
       restrict-image-registries:
         exclude:
           any:
