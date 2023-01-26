@@ -182,6 +182,18 @@ kyvernopolicies:
   enabled: true
   values:
     policies:
+      disallow-nodeport-services:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - "zarf"
+      disallow-privilege-escalation:
+        exclude:
+          any:
+          - resources:
+              names:
+              - "acid*"
       restrict-host-path-mount:
         exclude:
           any:
@@ -199,6 +211,7 @@ kyvernopolicies:
               namespaces:
               - "kube-system"
               - "local-path-storage"
+              - "zarf"
         parameters:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
@@ -219,6 +232,7 @@ kyvernopolicies:
               namespaces:
               - "kube-system"
               - "local-path-storage"
+              - "zarf"
         parameters:
           allow:
             - "${ZARF_REGISTRY}"
