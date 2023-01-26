@@ -209,6 +209,9 @@ kyvernopolicies:
               namespaces:
               - "kube-system"
               - "local-path-storage"
+        parameters:
+          allow:
+          - "/var/lib/rancher/k3s/storage/*"
       restrict-image-registries:
         exclude:
           any:
