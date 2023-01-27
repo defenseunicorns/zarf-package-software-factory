@@ -769,10 +769,9 @@ addons:
           name: default
           config:
             region: minio
-        defaultVolumesToRestic: true
-        defaultResticPruneFrequency: 168h
-      deployRestic: true
-      restic:
+        defaultVolumesToFsBackup: true
+      deployNodeAgent: true
+      nodeAgent:
         # Demo/PoC values. Adjust for production
         resources:
           requests:
