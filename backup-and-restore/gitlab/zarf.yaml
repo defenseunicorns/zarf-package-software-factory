@@ -16,6 +16,7 @@ components:
       retry: false
       prepare:
         - "if [ \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" != \"yes\" ] && [ \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" != \"no\" ]; then echo \"The value of DELETE_REMOTE_BACKUP_FILE must be either 'yes' or 'no'\"; exit 1; fi"
+
   - name: gitlab-backup-artifacts
     description: "On package create, grabs the backup from the cluster and adds it to the package. On deploy, pushes the backup back into the cluster"
     required: true
