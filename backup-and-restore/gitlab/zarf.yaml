@@ -15,6 +15,7 @@ components:
     scripts:
       retry: false
       prepare:
+        - "echo 'test' && exit 1"
         - "if [ \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" != \"yes\" ] && [ \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" != \"no\" ]; then echo \"The value of DELETE_REMOTE_BACKUP_FILE must be either 'yes' or 'no'\"; exit 1; fi"
 
 #  - name: gitlab-backup-artifacts
