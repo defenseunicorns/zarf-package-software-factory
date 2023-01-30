@@ -227,15 +227,16 @@ kyvernopolicies:
   # upstream controllers (statefulset, daemonset, deployment, etc). Adding this
   # annotation disables the autogen rule so we're only checking pods.
   postRenderers:
-    patchesJson6902:
-    - target:
-        version: v1
-        kind: ClusterPolicy
-        name: restrict-image-registries
-        patch:
-        - op: add
-          path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
-          value: none
+    - kustomize:
+      patchesJson6902:
+      - target:
+          version: v1
+          kind: ClusterPolicy
+          name: restrict-image-registries
+          patch:
+          - op: add
+            path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
+            value: none
 
 
 kyvernoreporter:
