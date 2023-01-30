@@ -156,6 +156,8 @@ fluentbit:
 kyverno:
   enabled: true
   values:
+    extraArgs:
+      - -v=4
     resources:
       limits:
         cpu: "1500m"
