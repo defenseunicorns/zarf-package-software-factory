@@ -127,10 +127,34 @@ kiali:
 
 clusterAuditor:
   enabled: true
+  values:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "512Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
 
 gatekeeper:
   enabled: true
   values:
+    controllerManager:
+      resources:
+        limits:
+          cpu: "2"
+          memory: "4Gi"
+        requests:
+          cpu: "250m"
+          memory: "1Gi"
+    audit:
+      resources:
+        limits:
+          cpu: "2"
+          memory: "4Gi"
+        requests:
+          cpu: "250m"
+          memory: "1Gi"
     violations:
       allowedDockerRegistries:
         match:
@@ -420,10 +444,9 @@ monitoring:
             cpu: "100m"
             memory: "2Gi"
 
-# Removing twistlock config since kyverno seems upset by it
-# twistlock:
+twistlock:
 #   # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
-#   enabled: false
+  enabled: false
 #   values:
 #     istio:
 #       mtls:
