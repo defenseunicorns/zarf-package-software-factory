@@ -46,6 +46,17 @@ istio:
           memory: "1Gi"
       hpaSpec:
         maxReplicas: 1
+    values:
+      global: 
+        proxy:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 100m
+              memory: 256Mi
+
   gateways:
     public:
       ingressGateway: "public-ingressgateway"
