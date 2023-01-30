@@ -47,7 +47,7 @@ istio:
       hpaSpec:
         maxReplicas: 1
     values:
-      global: 
+      global:
         proxy:
           resources:
             requests:
