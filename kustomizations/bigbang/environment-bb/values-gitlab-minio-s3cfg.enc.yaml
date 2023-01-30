@@ -1,0 +1,17 @@
+# ENCRYPT THIS FILE!!! DON'T COMMIT IT TO THE REPO UNENCRYPTED! IT CONTAINS SECRETS!!!
+resources:
+  - apiVersion: v1
+    kind: Secret
+    type: Opaque
+    metadata:
+      name: gitlab-minio-s3cfg
+    stringData:
+      .s3cfg: |
+        [default]
+        access_key = changeme
+        secret_key = changeme
+        host_base = http://minio.gitlab-minio.svc.cluster.local:80
+        host_bucket = http://minio.gitlab-minio.svc.cluster.local:80
+        use_https = False
+        signature_v2 = False
+        bucket_location = minio

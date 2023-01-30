@@ -237,15 +237,20 @@ components:
       # - releases-docker.jfrog.io/jfrog/xray-server:3.31.1
       # - releases-docker.jfrog.io/vault:1.3.4
 
-  - name: flux-cli
+  - name: optional-tools-linux-amd64
     required: false
-    scripts:
-      after:
-        - "tar -xzf flux.tar.gz -C /usr/sbin"
-        - "chmod +x /usr/sbin/flux"
-        - "rm flux.tar.gz"
     files:
       - source: https://github.com/fluxcd/flux2/releases/download/v0.31.1/flux_0.31.1_linux_amd64.tar.gz
         shasum: 640d2f9b403f446fbb7ee7b99bf58341aa1a98d64688b9f47e533b78dd212166
         target: flux.tar.gz
         executable: false
+      - source: https://github.com/vmware-tanzu/velero/releases/download/v1.9.3/velero-v1.9.3-linux-amd64.tar.gz
+        shasum: 13e498c1ebec1e7c5bd633cbd39775e2b60cc55c29333abf019abaf29f19cc0e
+        target: velero.tar.gz
+        executable: false
+    scripts:
+      retry: false
+      after:
+        - tar -xzf flux.tar.gz -C /usr/sbin && chmod +x /usr/sbin/flux && rm flux.tar.gz
+        # If GNU tar, need to add --wildcards flag. If BSD tar, adding --wildcards flag makes it barf. :grumpyface:
+        - EXITCODE=$(tar --version | grep -q "gnu"); ADDL_FLAGS=$(if [ $? -eq 0 ]; then echo "--wildcards"; else echo ""; fi); tar -xzf velero.tar.gz -C /usr/sbin --strip-components=1 $ADDL_FLAGS 'velero-*-linux-amd64/velero' && chmod +x /usr/sbin/velero && rm velero.tar.gz

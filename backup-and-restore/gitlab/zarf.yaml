@@ -1,0 +1,52 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.23.5/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: di2me-gitlab-restorable-backup
+  description: Zarf package for backing up and restoring GitLab in a DI2-ME environment. On package create, the backup will be pulled out of the cluster and added to the package. On deploy, the backup will be pushed into the cluster from the package and the restore process may optionally be initiated.
+  url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
+  version: "###ZARF_PKG_VAR_BACKUP_FILENAME###"
+
+# Run the following command to get a listing of existing backups
+# kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd ls s3://gitlab-backups
+components:
+  - name: preflight-checks
+    description: "Run preflight checks"
+    required: true
+    scripts:
+      retry: false
+      showOutput: true
+      prepare:
+        - "echo 'test' && exit 1"
+        - "if [ \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" != \"yes\" ] && [ \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" != \"no\" ]; then echo \"The value of DELETE_REMOTE_BACKUP_FILE must be either 'yes' or 'no'\"; exit 1; fi"
+
+#  - name: gitlab-backup-artifacts
+#    description: "On package create, grabs the backup from the cluster and adds it to the package. On deploy, pushes the backup back into the cluster"
+#    required: true
+#    scripts:
+#      retry: false
+#      prepare:
+#        - "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd get --skip-existing s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME### /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
+#        - "kubectl cp -c toolbox gitlab/$(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}'):home/git/###ZARF_PKG_VAR_BACKUP_FILENAME### ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+#        - "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- rm -f /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
+#        - "kubectl get secret gitlab-gitlab-initial-root-password -n gitlab -o yaml > gitlab-gitlab-initial-root-password.yaml"
+#        - "kubectl get secret gitlab-rails-secret -n gitlab -o yaml > gitlab-rails-secret.yaml"
+##      after:
+##        - "Push the package into the cluster"
+#    files:
+#      - source: "./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+#        target: "./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+#      - source: "./gitlab-gitlab-initial-root-password.yaml"
+#        target: "./gitlab-gitlab-initial-root-password.yaml"
+#      - source: "./gitlab-rails-secret.yaml"
+#        target: "./gitlab-rails-secret.yaml"
+#
+#  - name: cleanup-after-gitlab-backup-artifacts
+#    description: "Clean up the backup files after they were added to the package"
+#    required: true
+#    scripts:
+#      retry: false
+#      prepare:
+#        - "rm -f ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+#        - "rm -f ./gitlab-gitlab-initial-root-password.yaml"
+#        - "rm -f ./gitlab-rails-secret.yaml"
+#        - "test \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" = \"yes\" && kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd del s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME### || true"
