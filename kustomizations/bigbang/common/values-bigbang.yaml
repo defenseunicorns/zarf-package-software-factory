@@ -137,73 +137,10 @@ kiali:
               memory: "512Mi"
 
 clusterAuditor:
-  enabled: true
-  values:
-    resources:
-      requests:
-        cpu: "100m"
-        memory: "512Mi"
-      limits:
-        cpu: "500m"
-        memory: "512Mi"
+  enabled: false
 
 gatekeeper:
-  enabled: true
-  values:
-    controllerManager:
-      resources:
-        limits:
-          cpu: "2"
-          memory: "4Gi"
-        requests:
-          cpu: "250m"
-          memory: "1Gi"
-    audit:
-      resources:
-        limits:
-          cpu: "2"
-          memory: "4Gi"
-        requests:
-          cpu: "250m"
-          memory: "1Gi"
-    violations:
-      allowedDockerRegistries:
-        match:
-          # Make Kind/K3d happy
-          excludedNamespaces:
-            - "kube-sytem"
-            - "istio-system"
-            - "local-path-storage"
-        parameters:
-          repos:
-            - "${ZARF_REGISTRY}"
-          excludedResources:
-            # K3s needs this if you are doing K3s-specific "HelmRelease"-type CRDs
-            - ".*/helm-install-.*"
-            - ".*/helm"
-      allowedHostFilesystem:
-        match:
-          # Make Kind/K3d happy
-          excludedNamespaces:
-            - "kube-system"
-            - "local-path-storage"
-      hostNetworking:
-        match:
-          excludedNamespaces:
-            - "kube-system"
-            - "istio-system"
-      restrictedTaint:
-        match:
-          # Make Kind/K3d happy
-          excludedNamespaces:
-            - "kube-sytem"
-            - "local-path-storage"
-      volumeTypes:
-        match:
-          # Make Kind/K3d happy
-          excludedNamespaces:
-            - "kube-sytem"
-            - "local-path-storage"
+  enabled: false
 
 logging:
   enabled: false
@@ -213,6 +150,85 @@ eckoperator:
 
 fluentbit:
   enabled: false
+
+# WIP Kyverno support - mutating webhook aren't executed in correct order so
+# kyverno doesn't always see the changes made by zarf.
+kyverno:
+  enabled: true
+  values:
+    resources:
+      limits:
+        cpu: "1500m"
+
+kyvernopolicies:
+  enabled: true
+  values:
+    policies:
+      disallow-nodeport-services:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - "zarf"
+      disallow-privilege-escalation:
+        exclude:
+          any:
+          - resources:
+              names:
+              - "acid*"
+      restrict-host-path-mount:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - "kube-system"
+              - "local-path-storage"
+        parameters:
+          allow:
+          - "/var/lib/rancher/k3s/storage/*"
+      restrict-host-path-write:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - "kube-system"
+              - "local-path-storage"
+              - "zarf"
+        parameters:
+          allow:
+          - "/var/lib/rancher/k3s/storage/*"
+      restrict-host-path-mount-pv:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - "kube-system"
+              - "local-path-storage"
+        parameters:
+          allow:
+          - "/var/lib/rancher/k3s/storage/*"
+      restrict-image-registries:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - "kube-system"
+              - "local-path-storage"
+              - "zarf"
+        parameters:
+          allow:
+            - "${ZARF_REGISTRY}"
+      restrict-volume-types:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - "kube-sytem"
+              - "local-path-storage"
+
+
+kyvernoreporter:
+  enabled: true
 
 loki:
   enabled: true

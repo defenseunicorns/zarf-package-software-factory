@@ -67,8 +67,9 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
-      - https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-policies.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-reporter.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
@@ -101,8 +102,9 @@ components:
       - "registry1.dso.mil/ironbank/opensource/kiali/kiali-operator:v1.60.0"
       - "registry1.dso.mil/ironbank/opensource/kiali/kiali:v1.60.0"
       - "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.25.3"
-      - "registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper:v3.10.0"
-      - "registry1.dso.mil/ironbank/bigbang/cluster-auditor/opa-exporter:v0.0.7"
+      - "registry1.dso.mil/ironbank/nirmata/kyverno:v1.8.5"
+      - "registry1.dso.mil/ironbank/nirmata/kyvernopre:v1.8.5"
+      - "registry1.dso.mil/ironbank/nirmata/policy-reporter/policy-reporter:2.10.3"
       - "registry1.dso.mil/ironbank/opensource/grafana/promtail:v2.7.0"
       - "registry1.dso.mil/ironbank/opensource/grafana/loki:2.7.0"
       - "registry1.dso.mil/ironbank/big-bang/grafana/grafana-plugins:9.3.2"
@@ -140,14 +142,13 @@ components:
       # They moved this image to a different spot so this one won't pull anymore. Will add it back in later. This image isn't currently used in the default configuration of DI2-ME.
       # - "registry.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/keycloak-ib:18.0.2-1.2.0-1"
       # Images from BB that aren't currently used:
-      # - "registry1.dso.mil/ironbank/nirmata/kyverno:v1.8.5"
-      # - "registry1.dso.mil/ironbank/nirmata/kyvernopre:v1.8.5"
+      # - "registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper:v3.10.0"
+      # - "registry1.dso.mil/ironbank/bigbang/cluster-auditor/opa-exporter:v0.0.7"
       # - "registry1.dso.mil/ironbank/tetrate/istio/istioctl:1.15.1-tetratefips-v1"
       # - "registry1.dso.mil/ironbank/tetrate/istio/proxyv2:1.15.1-tetratefips-v1"
       # - "registry1.dso.mil/ironbank/tetrate/istio/pilot:1.15.1-tetratefips-v1"
       # - "registry1.dso.mil/ironbank/tetrate/istio/install-cni:1.15.1-tetratefips-v1"
       # - "registry1.dso.mil/ironbank/tetrate/istio/operator:1.15.1-tetratefips-v1"
-      # - "registry1.dso.mil/ironbank/nirmata/policy-reporter/policy-reporter:2.10.3"
       # - "registry1.dso.mil/ironbank/elastic/elasticsearch/elasticsearch:8.5.2"
       # - "registry1.dso.mil/ironbank/elastic/kibana/kibana:8.5.2"
       # - "registry1.dso.mil/ironbank/elastic/eck-operator/eck-operator:2.5.0"
