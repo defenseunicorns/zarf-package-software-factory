@@ -144,7 +144,6 @@ components:
       - "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.25.5"
       # They moved this image to a different spot so this one won't pull anymore. Will add it back in later. This image isn't currently used in the default configuration of DI2-ME.
       # - "registry.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/keycloak-ib:18.0.2-1.2.0-1"
-      # 
       # Images from BB that aren't currently used:
       # - "registry1.dso.mil/ironbank/nirmata/kyverno:v1.8.5"
       # - "registry1.dso.mil/ironbank/nirmata/kyvernopre:v1.8.5"

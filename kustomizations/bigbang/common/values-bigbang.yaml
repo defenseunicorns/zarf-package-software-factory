@@ -246,7 +246,6 @@ gatekeeper:
 #               - "kube-sytem"
 #               - "local-path-storage"
 
-      
 
 # kyvernoreporter:
 #   enabled: true
