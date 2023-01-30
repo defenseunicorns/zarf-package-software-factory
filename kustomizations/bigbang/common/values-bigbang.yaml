@@ -723,6 +723,7 @@ addons:
           config:
             region: minio
         defaultVolumesToFsBackup: true
+        default-repo-maintain-frequency: 168h
       deployNodeAgent: true
       nodeAgent:
         # Demo/PoC values. Adjust for production
