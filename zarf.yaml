@@ -72,12 +72,7 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
-      # Disabling kyverno for now
-      # - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno.git
-      # - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-policies.git
-      # - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-reporter.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git
-      - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/neuvector.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
       # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
