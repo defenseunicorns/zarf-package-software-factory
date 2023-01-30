@@ -225,7 +225,7 @@ kyvernopolicies:
           any:
           - resources:
               namespaces:
-              - "kube-sytem"
+              - "kube-system"
               - "local-path-storage"
 
 
