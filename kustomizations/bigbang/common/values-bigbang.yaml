@@ -228,15 +228,15 @@ kyvernopolicies:
   # annotation disables the autogen rule so we're only checking pods.
   postRenderers:
     - kustomize:
-      patchesJson6902:
-      - target:
-          version: v1
-          kind: ClusterPolicy
-          name: restrict-image-registries
-          patch:
-          - op: add
-            path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
-            value: none
+        patchesJson6902:
+        - target:
+            version: v1
+            kind: ClusterPolicy
+            name: restrict-image-registries
+            patch:
+            - op: add
+              path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
+              value: none
 
 
 kyvernoreporter:
