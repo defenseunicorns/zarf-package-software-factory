@@ -1,6 +1,10 @@
 image:
   registry: registry1.dso.mil
   repository: ironbank/opensource/zalando/postgres-operator
+  # If deploying to a 1.25+ cluster, use the following image:
+  # registry: registry.opensource.zalan.do
+  # repository: acid/postgres-operator
+  # tag: v1.8.2-43-g3e148ea5
 configGeneral:
   # Without enable_lazy_spilo_upgrade set to true the pods will do a rolling upgrade every resync_period. We have
   # experienced issues with database corruption when this happens. Deciding instead to do lazy upgrading which means the

@@ -3,6 +3,9 @@ registryCredentials:
   username: "zarf-pull"
   password: "${ZARF_REGISTRY_AUTH_PULL}"
 
+# Openshift Container Platform Feature Toggle
+openshift: false
+
 git:
   existingSecret: "private-git-server"
 
@@ -48,12 +51,15 @@ istio:
         proxy:
           resources:
             requests:
-              memory: "1Gi"
+              cpu: 100m
+              memory: 256Mi
             limits:
-              memory: "1Gi"
+              cpu: 100m
+              memory: 256Mi
+
   gateways:
     public:
-      ingressGateway: public-ingressgateway
+      ingressGateway: "public-ingressgateway"
       hosts:
         - gitlab.{{ .Values.domain }}
         - jenkins.{{ .Values.domain }}
@@ -133,9 +139,6 @@ kiali:
 clusterAuditor:
   enabled: true
   values:
-    istio:
-      mtls:
-        mode: PERMISSIVE
     resources:
       requests:
         cpu: "100m"
@@ -147,9 +150,6 @@ clusterAuditor:
 gatekeeper:
   enabled: true
   values:
-    istio:
-      mtls:
-        mode: PERMISSIVE
     controllerManager:
       resources:
         limits:
@@ -185,7 +185,7 @@ gatekeeper:
         match:
           # Make Kind/K3d happy
           excludedNamespaces:
-            - "kube-sytem"
+            - "kube-system"
             - "local-path-storage"
       hostNetworking:
         match:
@@ -264,6 +264,10 @@ promtail:
       requests:
         cpu: "100m"
         memory: "256Mi"
+
+# TODO!
+neuvector:
+  enabled: false
 
 monitoring:
   enabled: true
@@ -372,20 +376,19 @@ monitoring:
             memory: "2Gi"
 
 twistlock:
-  # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
+#   # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
   enabled: false
-  values:
-    istio:
-      mtls:
-        mode: PERMISSIVE
-    console:
-    resources:
-      limits:
-        memory: "1Gi"
-        cpu: "500m"
-      requests:
-        memory: "1Gi"
-        cpu: "100m"
+#   values:
+#     istio:
+#       mtls:
+#         mode: PERMISSIVE
+#     resources:
+#       limits:
+#         memory: "1Gi"
+#         cpu: "500m"
+#       requests:
+#         memory: "1Gi"
+#         cpu: "100m"
 
 addons:
   minioOperator:
@@ -716,7 +719,7 @@ addons:
     values:
       initContainers:
        - name: velero-plugin-for-aws
-         image: registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.5.0
+         image: registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.6.0
          imagePullPolicy: IfNotPresent
          volumeMounts:
            - mountPath: /target
@@ -748,10 +751,10 @@ addons:
           name: default
           config:
             region: minio
-        defaultVolumesToRestic: true
-        defaultResticPruneFrequency: 168h
-      deployRestic: true
-      restic:
+        defaultVolumesToFsBackup: true
+        default-repo-maintain-frequency: 168h
+      deployNodeAgent: true
+      nodeAgent:
         # Demo/PoC values. Adjust for production
         resources:
           requests:
