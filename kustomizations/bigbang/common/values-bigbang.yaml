@@ -233,10 +233,10 @@ kyvernopolicies:
             version: v1
             kind: ClusterPolicy
             name: restrict-image-registries
-            patch:
-            - op: add
-              path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
-              value: none
+          patch:
+          - op: add
+            path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
+            value: none
 
 
 kyvernoreporter:
