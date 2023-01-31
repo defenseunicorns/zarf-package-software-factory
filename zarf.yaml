@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.23.5/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.24.0-rc3/zarf.schema.json
 kind: ZarfPackageConfig
 metadata:
   name: software-factory
