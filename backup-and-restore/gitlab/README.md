@@ -59,13 +59,14 @@ This will create a file called `zarf-package-di2me-gitlab-restorable-backup-amd6
     kubectl cp -c toolbox ./1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar gitlab/$(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}'):home/git/1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
     ```
 
-1. Perform the backup
+1. Perform the restore
 
     ```shell
     # First log into the toolbox pod
     kubectl exec -it -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- bash
     # Now that you are inside the toolbox pod, run:
     backup-utility --restore -f file:///home/git/1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
+    rm -rf /home/git/1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
     # Now exit out of the pod
     exit
     ```
@@ -91,3 +92,11 @@ This will create a file called `zarf-package-di2me-gitlab-restorable-backup-amd6
     ```
 
     > NOTE: The restore process may have already re-enabled these extensions. If it says they already exist, you can ignore the errors.
+
+1. Clean up
+
+    ```shell
+    rm -rf ./1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
+    rm -rf ./gitlab-gitlab-initial-root-password.yaml
+    rm -rf ./gitlab-rails-secret.yaml
+    ```
