@@ -20,7 +20,7 @@ GitLab is configured to automatically take backups, but since DI2-ME is designed
     ```
 
 1. Take note of the backup filename that you want to extract. In the above example it is `1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar`.
-1. Download the `zarf.yaml` file that is in is directory. Put it in a new empty directory on your host, and `cd` to that directory.
+1. Download the `zarf.yaml` file that is in this directory. Put it in a new empty directory on your host, and `cd` to that directory.
 1. Ensure you have the `zarf` CLI installed. Use the same version that is listed at the top of the Makefile in the root of this repository.
 1. Create the backup package by running:
 
@@ -55,31 +55,39 @@ This will create a file called `zarf-package-di2me-gitlab-restorable-backup-amd6
 
 1. Copy the database file to the toolbox pod
 
-```shell
-kubectl cp -c toolbox ./1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar gitlab/$(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}'):home/git/1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
-```
+    ```shell
+    kubectl cp -c toolbox ./1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar gitlab/$(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}'):home/git/1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
+    ```
 
 1. Perform the backup
 
-```shell
-# First log into the toolbox pod
-kubectl exec -it -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- bash
-# Now that you are inside the toolbox pod, run:
-backup-utility --restore -f file:///home/git/1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
-# Now exit out of the pod
-exit
-```
+    ```shell
+    # First log into the toolbox pod
+    kubectl exec -it -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- bash
+    # Now that you are inside the toolbox pod, run:
+    backup-utility --restore -f file:///home/git/1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
+    # Now exit out of the pod
+    exit
+    ```
 
 1. Apply the 2 yaml files
 
-```shell
-kubectl apply -f gitlab-gitlab-initial-root-password.yaml
-kubectl apply -f gitlab-rails-secret.yaml
-```
+    ```shell
+    kubectl apply -f gitlab-gitlab-initial-root-password.yaml
+    kubectl apply -f gitlab-rails-secret.yaml
+    ```
 
 1. Restart the gitlab pods that are affected by the new data
 
-```shell
-kubectl delete pods -n gitlab -lapp=sidekiq,release=gitlab
-kubectl delete pods -n gitlab -lapp=webservice,release=gitlab
-```
+    ```shell
+    kubectl delete pods -n gitlab -lapp=sidekiq,release=gitlab
+    kubectl delete pods -n gitlab -lapp=webservice,release=gitlab
+    ```
+
+1. Re-enable database extensions that were previously disabled (they stop the restore from working if they are enabled)
+
+    ```shell
+    kubectl exec -it -n gitlab acid-gitlab-0 -- psql -c "CREATE EXTENSION IF NOT EXISTS pg_auth_mon; CREATE EXTENSION IF NOT EXISTS pg_stat_kcache; CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"
+    ```
+
+    > NOTE: The restore process may have already re-enabled these extensions. If it says they already exist, you can ignore the errors.
