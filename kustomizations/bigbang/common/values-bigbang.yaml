@@ -154,9 +154,12 @@ fluentbit:
 kyverno:
   enabled: true
   values:
+    replicaCount: 8
     resources:
       limits:
-        cpu: "1500m"
+        cpu: "2"
+      requests:
+        cpu: "1"
 
 kyvernopolicies:
   enabled: true
