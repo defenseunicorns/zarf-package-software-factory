@@ -206,6 +206,7 @@ kyvernopolicies:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
       restrict-image-registries:
+        skipOverlayMerge: true
         exclude:
           any:
           - resources:
