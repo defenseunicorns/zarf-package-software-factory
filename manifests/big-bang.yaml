@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  timeout: 15m
+  timeout: 20m
   path: "./kustomizations/bigbang"
   prune: true
   sourceRef:
