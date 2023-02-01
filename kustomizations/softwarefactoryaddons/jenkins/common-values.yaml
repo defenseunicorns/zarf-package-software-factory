@@ -5,17 +5,17 @@ controller:
   resources:
     requests:
       cpu: "50m"
-      memory: "256Mi"
+      memory: "512Mi"
     limits:
       cpu: "2000m"
-      memory: "4096Mi"
+      memory: "8192Mi"
   initContainerResources:
     requests:
       cpu: "50m"
-      memory: "256Mi"
+      memory: "512Mi"
     limits:
       cpu: "2000m"
-      memory: "4096Mi"
+      memory: "8192Mi"
   installPlugins:
     # Top level plugins
     - kubernetes:3651.v908e7db_10d06
