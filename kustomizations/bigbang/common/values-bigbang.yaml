@@ -184,6 +184,7 @@ kyvernopolicies:
               namespaces:
               - "kube-system"
               - "local-path-storage"
+              - "zarf"
         parameters:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
@@ -205,6 +206,7 @@ kyvernopolicies:
               namespaces:
               - "kube-system"
               - "local-path-storage"
+              - "zarf"
         parameters:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
@@ -227,6 +229,7 @@ kyvernopolicies:
               namespaces:
               - "kube-system"
               - "local-path-storage"
+              - "zarf"
   # The restrict-image-registries policy has an autogen rule that also checks
   # upstream controllers (statefulset, daemonset, deployment, etc). Adding this
   # annotation disables the autogen rule so we're only checking pods.
@@ -237,6 +240,14 @@ kyvernopolicies:
             version: v1
             kind: ClusterPolicy
             name: restrict-image-registries
+          patch:
+          - op: add
+            path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
+            value: none
+        - target:
+            version: v1
+            kind: ClusterPolicy
+            name: restrict-host-path-write
           patch:
           - op: add
             path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
