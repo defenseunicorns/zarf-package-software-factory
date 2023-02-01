@@ -188,6 +188,7 @@ kyvernopolicies:
         parameters:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
+          - "/var/local-path-provisioner/*"
       restrict-host-path-write:
         exclude:
           any:
@@ -199,6 +200,7 @@ kyvernopolicies:
         parameters:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
+          - "/var/local-path-provisioner/*"
       restrict-host-path-mount-pv:
         exclude:
           any:
@@ -210,6 +212,7 @@ kyvernopolicies:
         parameters:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
+          - "/var/local-path-provisioner/*"
       restrict-image-registries:
         skipOverlayMerge: true
         exclude:
