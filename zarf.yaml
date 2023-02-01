@@ -80,6 +80,7 @@ components:
       # - https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git
+      - https://repo1.dso.mil/big-bang/apps/sandbox/metrics-server.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero.git
