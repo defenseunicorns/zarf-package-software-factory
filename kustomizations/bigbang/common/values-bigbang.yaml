@@ -780,4 +780,10 @@ addons:
           limits:
             cpu: 10
             memory: 1024Mi
-#      schedules:
+
+  # Allow the metrics server (if deployed) to accept insecure connections to the
+  # kubelet. This allows the metrics server to work with KinD.
+  metricsServer:
+    values:
+      args:
+        - --kubelet-insecure-tls
