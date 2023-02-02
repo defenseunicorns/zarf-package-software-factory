@@ -49,6 +49,6 @@ repos:
       - id: go-fmt
       - id: golangci-lint
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 34.106.0
+    rev: 34.120.0
     hooks:
       - id: renovate-config-validator
