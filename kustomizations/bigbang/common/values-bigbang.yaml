@@ -197,6 +197,12 @@ kyvernopolicies:
               - "kube-system"
               - "local-path-storage"
               - "zarf"
+          - resources:
+              kinds:
+              - Pod
+              selector:
+                matchLabels:
+                  name: node-agent
         parameters:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
