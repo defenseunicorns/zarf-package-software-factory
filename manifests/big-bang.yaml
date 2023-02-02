@@ -39,10 +39,6 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       namespace: bigbang
-      name: cluster-auditor
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      namespace: bigbang
       name: kyvernopolicies
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
