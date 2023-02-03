@@ -198,6 +198,8 @@ kyvernopolicies:
               - "local-path-storage"
               - "zarf"
           - resources:
+              namespaces:
+              - velero
               kinds:
               - Pod
               selector:
@@ -228,6 +230,15 @@ kyvernopolicies:
               - "kube-system"
               - "local-path-storage"
               - "zarf"
+          # Allow the k3s loadbalancer to work
+          - resources:
+              namespaces:
+              - istio-system
+              kinds:
+              - Pod
+              selector:
+                matchLabels:
+                  svccontroller.k3s.cattle.io/svcname: public-ingressgateway
         parameters:
           allow:
             - "${ZARF_REGISTRY}"
@@ -239,12 +250,25 @@ kyvernopolicies:
               - "kube-system"
               - "local-path-storage"
               - "zarf"
-  # The restrict-image-registries policy has an autogen rule that also checks
-  # upstream controllers (statefulset, daemonset, deployment, etc). Adding this
-  # annotation disables the autogen rule so we're only checking pods.
+      # Allow the k3s loadbalancer to work
+      restrict-host-ports:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - istio-system
+              kinds:
+              - Pod
+              selector:
+                matchLabels:
+                  svccontroller.k3s.cattle.io/svcname: public-ingressgateway
+  # Some policies have an autogen rule that also checks upstream controllers
+  # (statefulset, daemonset, deployment, etc). Adding this annotation disables
+  # these autogen rules so we're only checking pods.
   postRenderers:
     - kustomize:
         patchesJson6902:
+        # Required for Zarf
         - target:
             version: v1
             kind: ClusterPolicy
@@ -253,10 +277,20 @@ kyvernopolicies:
           - op: add
             path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
             value: none
+        # Required for velero when using hostPath backed storage
         - target:
             version: v1
             kind: ClusterPolicy
             name: restrict-host-path-write
+          patch:
+          - op: add
+            path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
+            value: none
+        # Required for the builtin k3s loadbalancer
+        - target:
+            version: v1
+            kind: ClusterPolicy
+            name: restrict-host-ports
           patch:
           - op: add
             path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
