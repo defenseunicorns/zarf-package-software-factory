@@ -64,7 +64,3 @@ components:
           - cmd: "rm -f ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
           - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd put --skip-existing /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME### s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME###"
           - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- rm -f /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
-#          - cmd: "kubectl apply -f gitlab-gitlab-initial-root-password.yaml"
-#          - cmd: "rm -f gitlab-gitlab-initial-root-password.yaml"
-#          - cmd: "kubectl apply -f gitlab-rails-secret.yaml"
-#          - cmd: "rm -f gitlab-rails-secret.yaml"
