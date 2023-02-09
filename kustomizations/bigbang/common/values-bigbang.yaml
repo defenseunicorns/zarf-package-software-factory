@@ -414,7 +414,7 @@ addons:
   gitlab:
     enabled: true
     istio:
-      injection: disabled
+      injection: enabled
     objectStorage:
       type: "minio"
       endpoint: http://minio.gitlab-minio.svc.cluster.local:80
