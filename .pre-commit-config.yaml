@@ -31,7 +31,7 @@ repos:
     hooks:
       - id: fix-smartquotes
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.20.0
+    rev: 0.21.0
     hooks:
       - id: check-jsonschema
         name: "Validate Zarf Configs Against Schema"
@@ -40,7 +40,7 @@ repos:
         args:
           [
             "--schemafile",
-            "https://raw.githubusercontent.com/defenseunicorns/zarf/v0.24.0-rc3/zarf.schema.json",
+            "https://raw.githubusercontent.com/defenseunicorns/zarf/v0.24.0-rc5/zarf.schema.json",
             "--no-cache"
           ]
   - repo: https://github.com/dnephin/pre-commit-golang
@@ -49,6 +49,6 @@ repos:
       - id: go-fmt
       - id: golangci-lint
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 34.106.0
+    rev: 34.125.1
     hooks:
       - id: renovate-config-validator
