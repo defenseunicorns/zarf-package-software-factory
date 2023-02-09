@@ -42,7 +42,7 @@ This will create a file called `zarf-package-di2me-gitlab-restorable-backup-amd6
 1. Extract the backup files by running:
 
     ```shell
-    zarf package deploy --confirm
+    zarf package deploy <ThePackageFilename> --confirm
     ```
 
     A backup tarball and 2 kubernetes yaml files will be extracted to the current directory.
@@ -66,7 +66,7 @@ This will create a file called `zarf-package-di2me-gitlab-restorable-backup-amd6
     kubectl exec -it -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- bash
     # Now that you are inside the toolbox pod, run:
     backup-utility --restore -f file:///home/git/1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
-    rm -rf /home/git/1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
+    rm /home/git/1675119631_2023_01_30_15.7.0-ee_gitlab_backup.tar
     # Now exit out of the pod
     exit
     ```
@@ -74,8 +74,10 @@ This will create a file called `zarf-package-di2me-gitlab-restorable-backup-amd6
 1. Apply the 2 yaml files
 
     ```shell
-    kubectl apply -f gitlab-gitlab-initial-root-password.yaml
-    kubectl apply -f gitlab-rails-secret.yaml
+    kubectl delete -f gitlab-gitlab-initial-root-password.yaml
+    kubectl create -f gitlab-gitlab-initial-root-password.yaml
+    kubectl delete -f gitlab-rails-secret.yaml
+    kubectl create -f gitlab-rails-secret.yaml
     ```
 
 1. Restart the gitlab pods that are affected by the new data
