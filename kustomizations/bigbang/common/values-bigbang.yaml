@@ -158,8 +158,10 @@ kyverno:
     resources:
       limits:
         cpu: "2"
+        memory: 512Mi
       requests:
         cpu: "1"
+        memory: 512Mi
 
 kyvernopolicies:
   enabled: true
@@ -171,12 +173,12 @@ kyvernopolicies:
           - resources:
               namespaces:
               - "zarf"
-      disallow-privilege-escalation:
-        exclude:
-          any:
-          - resources:
-              names:
-              - "acid*"
+      # disallow-privilege-escalation:
+      #   exclude:
+      #     any:
+      #     - resources:
+      #         names:
+      #         - "acid*"
       restrict-host-path-mount:
         exclude:
           any:
