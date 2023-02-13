@@ -415,8 +415,6 @@ addons:
     enabled: true
     istio:
       injection: enabled
-#    flux:
-#      timeout: 13m
     objectStorage:
       type: "minio"
       endpoint: http://minio.gitlab-minio.svc.cluster.local:80
