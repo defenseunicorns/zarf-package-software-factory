@@ -11,6 +11,8 @@ configGeneral:
   # StatefulSet is modified but a rolling update is not automatically triggered.
   enable_lazy_spilo_upgrade: true
   resync_period: "5m"
+inherited_labels:
+  - "sidecar.istio.io/inject"
 configPostgresPodResources:
   default_cpu_request: "100m"
   default_memory_request: "100Mi"
