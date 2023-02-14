@@ -539,13 +539,42 @@ addons:
               memory: 3.5Gi
           backups:
             cron:
+              enabled: true
+              # persistence settings for backups
+              persistence:
+                enabled: true
+                accessMode: ReadWriteOnce
+                # toolbox.persistence.size should be the same values as this
+                # It needs to be sized appropriately for the user's needs. A large deployment with lots of users will
+                # need enough space to temporarily store everything in GitLab including LFS, artifacts, and registry.
+                # If the size of this volume is too small, the backup will fail. If the size of the restore persistence
+                # below is too small, any restore attempt will fail. The space is not used for anything else, and is not
+                # used unless a backup/restore is actively happening. That's wasted space that needs to be provisioned in
+                # disconnected environments, but it is a benefit if EFS is being used since EFS is dynamically sized.
+                # 10Gi is a demo value. Expected production values are 100Gi to 1000Gi or more depending on use case.
+                # If you're over that upper value, you should consider using a different backup solution as 1+ TB backup
+                # artifacts will be extremely unwieldy.
+                size: 10Gi
+                # storageClass: your-storage-class-here
               resources:
                 requests:
-                  cpu: 350m
-                  memory: 350Mi
+                  cpu: 1
+                  memory: 1Gi
                 limits:
-                  cpu: 350m
-                  memory: 350Mi
+                  cpu: 10
+                  memory: 2Gi
+              schedule: "0 1 * * *"
+            objectStorage:
+              backend: s3
+              config:
+                secret: "gitlab-minio-s3cfg"
+                key: ".s3cfg"
+          # persistence settings for restore
+          persistence:
+            enabled: true
+            accessMode: ReadWriteOnce
+            size: 10Gi
+            # storageClass: your-storage-class-here
         gitlab-exporter:
           init:
             resources:
@@ -734,4 +763,4 @@ addons:
           limits:
             cpu: 10
             memory: 1024Mi
-#      schedules:
+      #schedules:

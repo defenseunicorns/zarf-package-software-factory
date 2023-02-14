@@ -24,6 +24,8 @@ configConnectionPooler:
   connection_pooler_default_memory_request: "100Mi"
   connection_pooler_default_memory_limit: "100Mi"
 configKubernetes:
+  inherited_labels:
+    - "sidecar.istio.io/inject"
   # If you are specifying a storage class backed by EFS, ensure it is configured with uid: 101, gid: 103
   spilo_runasuser: 101
   spilo_runasgroup: 103

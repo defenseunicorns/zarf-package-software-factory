@@ -64,6 +64,14 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		require.NoError(t, err, output)
 		timestampJiraDb := time.Now().Add(time.Minute * 15).Add(time.Second * 10)
 
+		// In order for the GitLab HelmRelease to fully reconcile, we need to manually trigger a backup, so that 2 remaining PVCs will bind.
+		// Wait for the "gitlab-toolbox-backup" CronJob to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get cronjob gitlab-toolbox-backup -n gitlab; do sleep 5; done"`)
+		require.NoError(t, err, output)
+		// Trigger the backup
+		output, err = platform.RunSSHCommandAsSudo(`kubectl create job -n gitlab --from=cronjob/gitlab-toolbox-backup gitlab-toolbox-backup-manual`)
+		require.NoError(t, err, output)
+
 		// Wait for the "bigbang" kustomization to report "Ready==True". Our testing shows if everything goes right this should take 11-13 minutes.
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/bigbang -n flux-system --for=condition=Ready --timeout=1200s`)
 		require.NoError(t, err, output)

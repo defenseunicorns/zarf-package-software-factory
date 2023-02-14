@@ -28,6 +28,12 @@ All versions of this package will not be compatible with all versions of Zarf. F
 
 ## Known Issues
 
+- If the StorageClass being used is set to `WaitForFirstConsumer` GitLab's HelmRelease will not reconcile until a backup is triggered. Run the following command to manually trigger a backup:
+
+    ```bash
+    kubectl create job -n gitlab --from=cronjob/gitlab-toolbox-backup gitlab-toolbox-backup-manual
+    ```
+
 - :warning: We do not currently test compatibility from one version to the next. The user of this package is expected to first deploy to a test environment when doing upgrades. We will start testing upgrade paths as we get closer to a v1.0 release.
 
 - Twistlock is disabled for now while we determine how we'll automatically enable it and test it when it requires a license key to be present in the values yaml.

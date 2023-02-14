@@ -4,6 +4,7 @@ resources:
   - databases.yaml
   - secrets.yaml
   - tenants.yaml
+  - networkpolicies.yaml
 
 configMapGenerator:
   - name: common
@@ -46,6 +47,10 @@ secretGenerator:
     namespace: bigbang
     files:
       - values.yaml=environment-bb/values-minio-common-user-creds.enc.yaml
+  - name: environment-bb-gitlab-minio-s3cfg
+    namespace: bigbang
+    files:
+      - values.yaml=environment-bb/values-gitlab-minio-s3cfg.enc.yaml
 
 patchesStrategicMerge:
   - |-

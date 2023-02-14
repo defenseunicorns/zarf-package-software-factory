@@ -1,0 +1,66 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.24.0-rc3/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: di2me-gitlab-restorable-backup
+  description: Zarf package for backing up and restoring GitLab in a DI2-ME environment. On package create, the backup will be pulled out of the cluster and added to the package. On deploy, All backup files will be placed in the local directory. Perform the restore by deploying the optional component.
+  url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
+  version: "###ZARF_PKG_VAR_BACKUP_FILENAME###"
+
+# Run the following command to get a listing of existing backups
+# kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd ls s3://gitlab-backups
+components:
+  - name: preflight-checks
+    description: "Run preflight checks"
+    required: true
+    actions:
+      onCreate:
+        defaults:
+          maxRetries: 0
+        before:
+          - cmd: "if [ \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" != \"yes\" ] && [ \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" != \"no\" ]; then echo \"The value of DELETE_REMOTE_BACKUP_FILE must be either 'yes' or 'no'\"; exit 1; fi"
+          - cmd: "which kubectl || (echo \"Required tool kubectl is not installed\"; exit 1)"
+
+  - name: gitlab-backup-artifacts
+    description: "On package create, grabs the backup from the cluster and adds it to the package. On deploy, adds the files to the current directory."
+    required: true
+    actions:
+      onCreate:
+        defaults:
+          maxRetries: 0
+        before:
+          # Tell the toolbox container to download a backup
+          - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd get --skip-existing s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME### /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
+          # Copy the backup from the toolbox container to the host
+          - cmd: "kubectl cp -c toolbox gitlab/$(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}'):home/git/###ZARF_PKG_VAR_BACKUP_FILENAME### ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+          # Delete the backup from the toolbox container (it's still in minio though)
+          - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- rm -f /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
+          # Copy the secrets from the cluster to the host
+          - cmd: "kubectl get secret gitlab-gitlab-initial-root-password -n gitlab -o yaml > gitlab-gitlab-initial-root-password.yaml"
+          - cmd: "kubectl get secret gitlab-rails-secret -n gitlab -o yaml > gitlab-rails-secret.yaml"
+        after:
+          # Delete the local files, and optionally delete the backup from minio if DELETE_REMOTE_BACKUP_FILE is set to "yes"
+          - cmd: "rm -f ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+          - cmd: "rm -f ./gitlab-gitlab-initial-root-password.yaml"
+          - cmd: "rm -f ./gitlab-rails-secret.yaml"
+          - cmd: "test \"###ZARF_PKG_VAR_DELETE_REMOTE_BACKUP_FILE###\" = \"yes\" && kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd del s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME### || true"
+    files:
+      - source: "./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+        target: "./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+      - source: "./gitlab-gitlab-initial-root-password.yaml"
+        target: "./gitlab-gitlab-initial-root-password.yaml"
+      - source: "./gitlab-rails-secret.yaml"
+        target: "./gitlab-rails-secret.yaml"
+
+  - name: warning-downtime-perform-restore
+    required: false
+    description: "WARNING: This will cause downtime -- Perform the restore. This action cannot be cancelled."
+    actions:
+      onDeploy:
+        defaults:
+          maxRetries: 0
+        after:
+          # Push the files into the cluster, cleaning up as we go
+          - cmd: "kubectl cp -c toolbox ./###ZARF_PKG_VAR_BACKUP_FILENAME### gitlab/$(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}'):home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
+          - cmd: "rm -f ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+          - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd put --skip-existing /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME### s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME###"
+          - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- rm -f /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
