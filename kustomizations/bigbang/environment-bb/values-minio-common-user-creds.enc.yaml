@@ -6,5 +6,6 @@ resources:
     metadata:
       name: minio-user-creds
     stringData:
+      # keys that minio expects
       CONSOLE_ACCESS_KEY: "changeme"
       CONSOLE_SECRET_KEY: "changeme"

@@ -47,5 +47,5 @@ nuke-and-rebuild: ## Nuke the cluster and rebuild it
 	cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm
 	gpg --list-secret-keys user@example.com || gpg --batch --passphrase '' --quick-gen-key user@example.com default default
 	gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin
-	cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --components flux-cli --confirm
+	cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --components optional-tools-linux-amd64 --confirm
 	kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '[{"op": "replace", "path": "/spec/ref/branch", "value": "$(shell git rev-parse --abbrev-ref HEAD)"}]'

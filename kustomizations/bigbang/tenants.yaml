@@ -147,6 +147,7 @@ spec:
       valuesKey: values.yaml
     - kind: ConfigMap
       name: common-velero-minio
+      valuesKey: values.yaml
     - kind: Secret
       name: environment-bb-minio-common
       valuesKey: values.yaml

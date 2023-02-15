@@ -18,7 +18,10 @@ kind: Namespace
 metadata:
   name: postgres-operator
   labels:
-    istio-injection: enabled
+    # Postgres Operator comes up before Istio does, so even if it set to inject sidecars it won't get one unless you
+    # restart the pod, which the tests aren't doing. To avoid ambiguity, we'll disable istio injection for the postgres
+    # operator namespace. End-users can decide to enable it when deploying.
+    istio-injection: disabled
 ---
 apiVersion: v1
 kind: Namespace

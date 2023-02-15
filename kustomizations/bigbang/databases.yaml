@@ -69,6 +69,11 @@ spec:
         kind: "postgresql"
         metadata:
           name: "acid-gitlab"
+          labels:
+            # Not sure why yet, but GitLab's database has a lot of problems if it has sidecar injection turned on.
+            # acid-gitlab-1 throws "ERROR: failed to bootstrap from leader 'acid-gitlab-0'
+            # TODO: Figure out why GitLab's database has problems with sidecar injections and fix it.
+            sidecar.istio.io/inject: "false"
         spec:
           teamId: "acid"
           postgresql:
