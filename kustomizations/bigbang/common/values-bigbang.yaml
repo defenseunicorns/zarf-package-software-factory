@@ -173,12 +173,22 @@ kyvernopolicies:
           - resources:
               namespaces:
               - "zarf"
-      # disallow-privilege-escalation:
-      #   exclude:
-      #     any:
-      #     - resources:
-      #         names:
-      #         - "acid*"
+      disallow-privilege-escalation:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - artifactory
+              - confluence
+              - gitlab
+              - jira
+              kinds:
+              - Pod
+              selector:
+                matchLabels:
+                  application: spilo
+              names:
+              - "acid*"
       restrict-host-path-mount:
         exclude:
           any:
