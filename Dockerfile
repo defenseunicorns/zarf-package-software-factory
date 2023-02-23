@@ -55,7 +55,7 @@ RUN asdf plugin add golangci-lint \
   && asdf install golangci-lint "${GOLANGCILINT_VERSION}"
 
 # Install python. Get versions using 'asdf list all python'
-ARG PYTHON_VERSION="3.10.6"
+ARG PYTHON_VERSION="3.11.2"
 ENV PYTHON_VERSION=${PYTHON_VERSION}
 RUN asdf plugin add python \
   && asdf install python "${PYTHON_VERSION}"
