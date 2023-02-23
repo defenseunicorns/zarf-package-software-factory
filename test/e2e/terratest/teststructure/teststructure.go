@@ -1,6 +1,4 @@
-// Customized test-structure code based on https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13
-// that fixes the issue identified in https://github.com/gruntwork-io/terratest/issues/1135
-
+// Package teststructure is customized test-structure code based on https://github.com/gruntwork-io/terratest/tree/5913a2925623d3998841cb25de7b26731af9ab13 that fixes the issue identified in https://github.com/gruntwork-io/terratest/issues/1135
 package teststructure
 
 import (
