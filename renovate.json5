@@ -147,7 +147,7 @@
         "^Makefile$"
       ],
       "matchStrings": [
-        "BUILD_HARNESS_REPO := (?<depName>)\nBUILD_HARNESS_VERSION := (?<currentValue>\\S+)"
+        "BUILD_HARNESS_REPO := (?<depName>\\S+)\\nBUILD_HARNESS_VERSION := (?<currentValue>\\S+)"
       ],
       "datasourceTemplate": "docker",
       "depTypeTemplate": "buildharness"
