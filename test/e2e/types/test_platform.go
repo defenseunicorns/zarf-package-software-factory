@@ -1,3 +1,4 @@
+// Package types contains the types that are used in the e2e tests
 package types
 
 import (

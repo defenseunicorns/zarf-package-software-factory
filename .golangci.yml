@@ -3,6 +3,7 @@ run:
 linters:
   enable-all: true
   disable:
+    - dupword
     - exhaustivestruct
     - exhaustruct
     - goerr113
