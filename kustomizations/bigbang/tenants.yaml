@@ -151,3 +151,55 @@ spec:
     - kind: Secret
       name: environment-bb-minio-common
       valuesKey: values.yaml
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: postgres-minio
+  namespace: bigbang
+spec:
+  targetNamespace: postgres-minio
+  releaseName: postgres-minio
+  interval: 2m
+  timeout: 2m
+  chart:
+    spec:
+      chart: chart
+      sourceRef:
+        kind: GitRepository
+        name: minio
+        namespace: bigbang
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+    - name: istio
+      namespace: bigbang
+    - name: kyvernopolicies
+      namespace: bigbang
+    - name: minio-operator
+      namespace: bigbang
+    - name: postgres-minio-user-creds
+      namespace: bigbang
+  valuesFrom:
+    - kind: ConfigMap
+      name: common-minio-common
+      valuesKey: values.yaml
+    - kind: ConfigMap
+      name: common-postgres-minio
+      valuesKey: values.yaml
+    - kind: Secret
+      name: environment-bb-minio-common
+      valuesKey: values.yaml

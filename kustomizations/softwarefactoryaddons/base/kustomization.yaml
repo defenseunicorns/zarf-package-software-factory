@@ -10,6 +10,7 @@ resources:
   - helmrelease.yaml
   - postgresql.yaml
   - virtualservice.yaml
+  - networkpolicy.yaml
 
 configMapGenerator:
   - name: jira-common

@@ -32,6 +32,10 @@ configMapGenerator:
     namespace: bigbang
     files:
       - values.yaml=common/values-velero-minio.yaml
+  - name: common-postgres-minio
+    namespace: bigbang
+    files:
+      - values.yaml=common/values-postgres-minio.yaml
 
 secretGenerator:
   - name: environment-bb
