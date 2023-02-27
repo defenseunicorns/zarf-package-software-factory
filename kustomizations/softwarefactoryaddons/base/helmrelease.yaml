@@ -43,6 +43,8 @@ spec:
   dependsOn:
     - name: istio
       namespace: bigbang
+    - name: jira-database
+      namespace: softwarefactoryaddons
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -89,6 +91,8 @@ spec:
   dependsOn:
     - name: istio
       namespace: bigbang
+    - name: confluence-database
+      namespace: softwarefactoryaddons
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -181,3 +185,218 @@ spec:
   dependsOn:
     - name: istio
       namespace: bigbang
+    - name: artifactory-database
+      namespace: softwarefactoryaddons
+---
+# nonk8s
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: artifactory-database
+  namespace: softwarefactoryaddons
+spec:
+  targetNamespace: artifactory
+  releaseName: artifactory-database
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+    - name: postgres-operator
+      namespace: softwarefactoryaddons
+    - name: kyvernopolicies
+      namespace: bigbang
+    - name: istio
+      namespace: bigbang
+    - name: postgres-minio
+      namespace: bigbang
+  values:
+    resources:
+    - apiVersion: "acid.zalan.do/v1"
+      kind: "postgresql"
+      metadata:
+        name: "acid-artifactory"
+        namespace: "artifactory"
+      spec:
+        teamId: "acid"
+        postgresql:
+          version: "13"
+        numberOfInstances: 3
+        volume:
+          size: "2Gi"
+          # Uncomment this if you want to specify a particular storage class
+      #    storageClass: "your-storage-class-name-here"
+        # enableLogicalBackup: true
+        # logicalBackupSchedule: "*/2 * * * *"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+---
+# nonk8s
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: confluence-database
+  namespace: softwarefactoryaddons
+spec:
+  targetNamespace: confluence
+  releaseName: confluence-database
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+    - name: postgres-operator
+      namespace: softwarefactoryaddons
+    - name: kyvernopolicies
+      namespace: bigbang
+    - name: istio
+      namespace: bigbang
+    - name: postgres-minio
+      namespace: bigbang
+  values:
+    resources:
+    - apiVersion: "acid.zalan.do/v1"
+      kind: "postgresql"
+      metadata:
+        name: "acid-confluence"
+        namespace: "confluence"
+      spec:
+        teamId: "acid"
+        postgresql:
+          version: "13"
+        numberOfInstances: 3
+        volume:
+          size: "2Gi"
+          # Uncomment this if you want to specify a particular storage class
+      #    storageClass: "your-storage-class-name-here"
+        users:
+          # role for confluence application
+          confluence: []
+        databases:
+          confluence: confluence
+        # enableLogicalBackup: true
+        # logicalBackupSchedule: "*/2 * * * *"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: "1"
+            memory: 2000Mi
+---
+# nonk8s
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: jira-database
+  namespace: softwarefactoryaddons
+spec:
+  targetNamespace: jira
+  releaseName: jira-database
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+    - name: postgres-operator
+      namespace: softwarefactoryaddons
+    - name: kyvernopolicies
+      namespace: bigbang
+    - name: istio
+      namespace: bigbang
+    - name: postgres-minio
+      namespace: bigbang
+  values:
+    resources:
+    - apiVersion: "acid.zalan.do/v1"
+      kind: "postgresql"
+      metadata:
+        name: "acid-jira"
+        namespace: "jira"
+      spec:
+        teamId: "acid"
+        postgresql:
+          version: "11"
+        numberOfInstances: 3
+        volume:
+          size: "2Gi"
+          # Uncomment this if you want to specify a particular storage class
+      #    storageClass: "your-storage-class-name-here"
+        users:
+          jira: []
+        databases:
+          jira: jira
+        # enableLogicalBackup: true
+        # logicalBackupSchedule: "*/2 * * * *"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: "1"
+            memory: 2000Mi
