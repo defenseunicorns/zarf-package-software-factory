@@ -400,8 +400,6 @@ spec:
           value: "true" # needed for MinIO
         - name: AWS_ENDPOINT
           value: http://minio.postgres-minio.svc.cluster.local:80
-        - name: AWS_REGION
-          value: minio
         - name: BACKUP_NUM_TO_RETAIN
           value: "7"
         resources:
