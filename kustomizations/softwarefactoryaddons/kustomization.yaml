@@ -42,13 +42,19 @@ secretGenerator:
   # To reference secrets for postgres pod env they have to be in same namespace as postgres pod :/
   - name: postgres-minio-creds-env
     namespace: artifactory
+    options:
+      disableNameSuffixHash: true
     files:
       - values.yaml=postgres-db/postgres-db-minio-creds.enc.yaml
   - name: postgres-minio-creds-env
     namespace: confluence
+    options:
+      disableNameSuffixHash: true
     files:
       - values.yaml=postgres-db/postgres-db-minio-creds.enc.yaml
   - name: postgres-minio-creds-env
     namespace: jira
+    options:
+      disableNameSuffixHash: true
     files:
       - values.yaml=postgres-db/postgres-db-minio-creds.enc.yaml
