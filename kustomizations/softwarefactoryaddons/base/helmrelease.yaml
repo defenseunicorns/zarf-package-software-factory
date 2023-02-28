@@ -402,6 +402,12 @@ spec:
           value: http://minio.postgres-minio.svc.cluster.local:80
         - name: BACKUP_NUM_TO_RETAIN
           value: "7"
+        - name: USE_WALG_BACKUP
+          value: "true"
+        - name: USE_WALG_RESTORE
+          value: "true"
+        - name: CLONE_USE_WALG_RESTORE
+          value: "true"
         resources:
           requests:
             cpu: 100m
