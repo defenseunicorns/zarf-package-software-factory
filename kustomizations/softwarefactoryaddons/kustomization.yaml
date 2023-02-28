@@ -44,17 +44,17 @@ secretGenerator:
     namespace: artifactory
     options:
       disableNameSuffixHash: true
-    files:
-      - values.yaml=postgres-db/postgres-db-minio-creds.enc.yaml
+    envs:
+      - postgres-db/postgres-db-minio-creds.env.enc
   - name: postgres-minio-creds-env
     namespace: confluence
     options:
       disableNameSuffixHash: true
-    files:
-      - values.yaml=postgres-db/postgres-db-minio-creds.enc.yaml
+    envs:
+      - postgres-db/postgres-db-minio-creds.env.enc
   - name: postgres-minio-creds-env
     namespace: jira
     options:
       disableNameSuffixHash: true
-    files:
-      - values.yaml=postgres-db/postgres-db-minio-creds.enc.yaml
+    envs:
+      - postgres-db/postgres-db-minio-creds.env.enc
