@@ -8,7 +8,6 @@ resources:
   - serviceaccount.yaml
   - gitrepository.yaml
   - helmrelease.yaml
-  # - postgresql.yaml
   - virtualservice.yaml
   - networkpolicy.yaml
 

@@ -39,3 +39,19 @@ secretGenerator:
     behavior: replace
     files:
       - values.yaml=artifactory/environment-bb-values.yaml
+  # To reference secrets for postgres pod env they have to be in same namespace as postgres pod :/
+  - name: postgres-minio-creds-env
+    namespace: artifactory
+    behavior: replace
+    files:
+      - values.yaml=postgres-db/postgres-db-minio-creds.enc.yaml
+  - name: postgres-minio-creds-env
+    namespace: confluence
+    behavior: replace
+    files:
+      - values.yaml=postgres-db/postgres-db-minio-creds.enc.yaml
+  - name: postgres-minio-creds-env
+    namespace: jira
+    behavior: replace
+    files:
+      - values.yaml=postgres-db/postgres-db-minio-creds.enc.yaml

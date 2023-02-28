@@ -92,3 +92,9 @@ spec:
             limits:
               cpu: "1"
               memory: 2000Mi
+      # Create empty secret so that other postgres clusters can use secrets for env
+      - apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres-minio-creds-env
+        type: Opaque
