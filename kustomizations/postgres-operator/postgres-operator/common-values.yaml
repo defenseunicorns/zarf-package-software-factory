@@ -33,6 +33,8 @@ configKubernetes:
   pod_environment_secret: "postgres-minio-creds-env"
   # Uncomment this if you are using PVCs backed by EFS, since EFS has infinite size we never need to resize the PVC
 #  storage_resize_mode: "off"
+configAwsOrGcp:
+  wal_s3_bucket: "postgres-backups"
 resources:
   requests:
     cpu: "100m"

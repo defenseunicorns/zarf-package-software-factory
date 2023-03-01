@@ -1,0 +1,98 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.24.0-rc5/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: di2me-jira-restorable-backup
+  description: Zarf package for backing up and restoring Jira in a DI2-ME environment. On package create, the backup will be pulled out of the cluster and added to the package. On deploy, All backup files will be placed in the local directory. Perform the restore by deploying the optional component.
+  url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
+  version: "###ZARF_PKG_VAR_BACKUP_FILENAME###"
+
+variables:
+  - name: REPO_URL
+    description: The URL of the repository that you host DI2ME out of
+    default: https://github.com/defenseunicorns/zarf-package-software-factory.git
+    prompt: true
+
+components:
+  - name: preflight-checks
+    description: "Run preflight checks"
+    required: true
+    actions:
+      onCreate:
+        defaults:
+          maxRetries: 0
+        before:
+          - cmd: if ! command -v kubectl; then echo "kubectl is required for this package" >&2; exit 1; fi
+
+  - name: variable-collection
+    description: "Collect information from cluster to be used later"
+    required: true
+    actions:
+      onCreate:
+        defaults:
+          maxRetries: 0
+        before:
+          # Get postgresql cluster uid
+          - cmd: kubectl get postgresql -n jira acid-jira -o jsonpath='{.metadata.uid}'
+            setVariable: POSTGRES_CLUSTER_UID
+
+          # Get timestamp of backup creation
+          - cmd: date --iso-8601=seconds
+            setVariable: BACKUP_TIMESTAMP
+
+  - name: jira-backup-database
+    description: "On package create, grabs the backup from the cluster and adds it to the package. On deploy, adds the files to the current directory."
+    required: true
+    actions:
+      onCreate:
+        defaults:
+          maxRetries: 0
+        before:
+          # Force a backup to be ran from the postgres pod to get the latest data
+          - cmd: kubectl exec -i -n jira acid-jira-0 -c postgres -- envdir "/run/etc/wal-e.d/env" /scripts/postgres_backup.sh "/home/postgres/pgdata/pgroot/data"
+
+          # Create a pod that can run binaries and temporarily store files
+          - cmd: kubectl run mc-tool -n jira --image=registry1.dso.mil/ironbank/big-bang/base:2.0.0 --command -- sleep infinity
+
+          # Wait for mc-tool pod to be ready
+          - cmd: kubectl wait --for=jsonpath='{.status.phase}'=Running -n jira pod/mc-tool
+
+          # Copy the minio client binary to the mc-tool pod
+          - cmd: kubectl cp files/mc jira/mc-tool:/home/base/mc
+
+          # Set credentials and url for the minio client
+          - cmd: kubectl exec -i -n jira mc-tool -c mc-tool -- /home/base/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)
+
+          # Copy the backup folder from the bucket to the mc-tool pod TODO add logic around only downloading the latest backup if wanted
+          - cmd: kubectl exec -i -n jira mc-tool -c mc-tool -- /home/base/mc cp postgres/postgres-backups/spilo/jira-acid-jira/ /home/base/backup --recursive
+
+          # Tar the backup folder in the mc-tool pod
+          - cmd: kubectl exec -i -n jira mc-tool -c mc-tool -- bash -c 'cd /home/base/backup; tar -cvf ../backup.tar wal'
+
+          # Copy the backup.tar file from the mc-tool pod to the local machine
+          - cmd: kubectl cp jira/mc-tool:/home/base/backup.tar ./backup.tar
+
+          # Delete the mc-tool pod
+          - cmd: kubectl delete pod -n jira --wait=true mc-tool
+        after:
+          # Delete the backup tar so it doesn't confuse anyone
+          - cmd: rm -f backup.tar
+    files:
+      - source: backup.tar
+        target: backup.tar
+      - source: files/restore.sh
+        target: restore.sh
+        executable: true
+      - source: files/mc
+        target: mc
+        executable: true
+      - source: files/repo.zarf.yaml
+        target: repo/zarf.yaml
+
+  - name: warning-downtime-perform-restore
+    required: false
+    description: "WARNING: This will cause downtime -- Start perform actions. This action cannot be cancelled."
+    actions:
+      onDeploy:
+        defaults:
+          maxRetries: 0
+        after:
