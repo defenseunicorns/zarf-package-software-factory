@@ -10,6 +10,9 @@ resources:
   - helmrelease.yaml
   - virtualservice.yaml
   - networkpolicy.yaml
+  - databases/artifactory.yaml
+  - databases/confluence.yaml
+  - databases/jira.yaml
 
 configMapGenerator:
   - name: jira-common
