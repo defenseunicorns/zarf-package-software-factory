@@ -1,8 +1,0 @@
-kind: ZarfPackageConfig
-metadata:
-  name: repo-update
-
-components:
-  - name: repo-update
-    repos:
-      - ###ZARF_VAR_REPO_URL###

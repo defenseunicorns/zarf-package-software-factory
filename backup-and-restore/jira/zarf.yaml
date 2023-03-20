@@ -4,7 +4,7 @@ metadata:
   name: di2me-jira-restorable-backup
   description: Zarf package for backing up and restoring Jira in a DI2-ME environment. On package create, the backup will be pulled out of the cluster and added to the package. On deploy, All backup files will be placed in the local directory. Perform the restore by deploying the optional component.
   url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
-  # version: "###ZARF_PKG_VAR_BACKUP_FILENAME###"
+  version: "###ZARF_PKG_VAR_BACKUP_FILENAME###"
 
 variables:
   - name: REPO_URL
@@ -57,28 +57,28 @@ components:
           - cmd: kubectl exec -i -n jira acid-jira-0 -c postgres -- bash -c 'envdir "/run/etc/wal-e.d/env" wal-g backup-list | tail -n 1 | cut -d " " -f1' > tmp/latest-backup-name
 
           # Create a pod that can run binaries and temporarily store files
-          - cmd: kubectl run restore-tools -n jira --image=registry1.dso.mil/ironbank/big-bang/base:2.0.0 --command -- sleep infinity
+          - cmd: kubectl run backup-tools -n jira --image=registry1.dso.mil/ironbank/big-bang/base:2.0.0 --command -- sleep infinity
 
-          # Wait for restore-tools pod to be ready
-          - cmd: kubectl wait --for=jsonpath='{.status.phase}'=Running -n jira pod/restore-tools
+          # Wait for backup-tools pod to be ready
+          - cmd: kubectl wait --for=jsonpath='{.status.phase}'=Running -n jira pod/backup-tools
 
-          # Copy the minio client binary to the restore-tools pod
-          - cmd: kubectl cp files/mc jira/restore-tools:/home/base/mc
+          # Copy the minio client binary to the backup-tools pod
+          - cmd: kubectl cp files/mc jira/backup-tools:/home/base/mc
 
           # Set credentials and url for the minio client
-          - cmd: kubectl exec -i -n jira restore-tools -c restore-tools -- /home/base/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)
+          - cmd: kubectl exec -i -n jira backup-tools -c backup-tools -- /home/base/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)
 
-          # Copy the backup folder from the bucket to the restore-tools pod TODO add logic around only downloading the latest backup if wanted
-          - cmd: kubectl exec -i -n jira restore-tools -c restore-tools -- /home/base/mc cp postgres/postgres-backups/spilo/acid-jira/$(cat tmp/postgres-cluster-uid)/ /home/base/backup --recursive
+          # Copy the backup folder from the bucket to the backup-tools pod TODO add logic around only downloading the latest backup if wanted
+          - cmd: kubectl exec -i -n jira backup-tools -c backup-tools -- /home/base/mc cp postgres/postgres-backups/spilo/acid-jira/$(cat tmp/postgres-cluster-uid)/ /home/base/backup --recursive
 
-          # Tar the backup folder in the restore-tools pod
-          - cmd: kubectl exec -i -n jira restore-tools -c restore-tools -- bash -c 'cd /home/base/backup; tar -cvf ../backup.tar wal'
+          # Tar the backup folder in the backup-tools pod
+          - cmd: kubectl exec -i -n jira backup-tools -c backup-tools -- bash -c 'cd /home/base/backup; tar -cvf ../backup.tar wal'
 
-          # Copy the backup.tar file from the restore-tools pod to the local machine
-          - cmd: kubectl cp jira/restore-tools:/home/base/backup.tar tmp/backup.tar
+          # Copy the backup.tar file from the backup-tools pod to the local machine
+          - cmd: kubectl cp jira/backup-tools:/home/base/backup.tar tmp/backup.tar
 
-          # Delete the restore-tools pod
-          - cmd: kubectl delete pod -n jira --wait=true restore-tools
+          # Delete the backup-tools pod
+          - cmd: kubectl delete pod -n jira --wait=true backup-tools
     files:
       - source: tmp/backup.tar
         target: backup.tar
@@ -112,9 +112,6 @@ components:
         after:
           # Suspend top level kustomization that controls helmreleases
           - cmd: flux suspend kustomization softwarefactoryaddons
-
-          # Suspend jira helmrelease
-          - cmd: flux suspend helmrelease -n softwarefactoryaddons jira
 
           # Scale jira to 0 to allow for restore
           - cmd: kubectl scale --replicas=0 -n jira statefulset/jira
