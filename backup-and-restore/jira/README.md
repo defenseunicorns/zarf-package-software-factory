@@ -10,7 +10,7 @@ Jira is configured to automatically take backups, but since DI2-ME is designed t
 1. Create the backup package by running:
 
     ```shell
-    zarf package create --set BACKUP_TIMESTAMP=$(date --iso-8601=seconds) --confirm
+    zarf package create --set BACKUP_TIMESTAMP="$(date --iso-8601=seconds)" --confirm
     ```
 
 This will create a file with a similar name to `zarf-package-di2me-jira-restorable-backup-amd64-1970-01-01T00:00:00+00:00.tar.zst` that contains all necessary items to perform a full restore of Jira. Save it to somewhere safe.
@@ -21,13 +21,13 @@ This will create a file with a similar name to `zarf-package-di2me-jira-restorab
 1. Copy the zarf package you wish to restore from to an empty directory on the host. The name of the package file will be similar to `zarf-package-di2me-jira-restorable-backup-amd64-1970-01-01T00:00:00+00:00.tar.zst` except with the timestamp being when the backup package was created.
 1. Ensure you have the `zarf` CLI installed. Use the same version that is listed at the top of the Makefile in the root of this repository.
 1. **Warning!** The next step will cause downtime until this guide is finished for restoring Jira!
-1. Begin the restore operation using zarf:
+1. Begin the restore operation using zarf, replacing `<ThePackageFilename>` with the filename of the package you want to restore from:
 
     ```shell
     zarf package deploy <ThePackageFilename> --components=warning-downtime-begin-restore --confirm
     ```
 
-    This has temporarily stopped Jira, removed the jira-database pods, and uploaded the backup data into the internal minio bucket for them.
+    This has temporarily stopped Jira, removed the jira-database pods, and uploaded the backup data into the internal minio bucket for postgresql.
 
 1. You will now need to make modifications to the di2me repo and push those changes. 
 
@@ -45,7 +45,7 @@ This will create a file with a similar name to `zarf-package-di2me-jira-restorab
         Notice the indentation, it is crucial that it is correct when deploying.
 
     1. Inside the quotes after `timestamp` paste in the output of running `date --iso-8601=seconds` in the terminal.
-    1. Inside the quotes after `uid` paste in the contents of the `postgres-cluster-uid` file.
+    1. Inside the quotes after `uid` paste in the contents of the `postgres-cluster-uid` file. This file is created when deploying the backup package for restore like you did on step 5.
     1. On each line with a `#` delete the `#` and the following space, an example of the section being valid:
 
         ```yaml
@@ -77,7 +77,7 @@ This will create a file with a similar name to `zarf-package-di2me-jira-restorab
 
 1. If pushing changes to your di2me repository required a different environment, transfer the package that the previous command created to a machine with access to your cluster. 
 
-    **Attention!** All commands for the rest of this guide must be run from a machine with access to the di2me cluster.
+    **Attention!** All commands for the remainder of this guide must be run from a machine with access to the di2me cluster.
 
 1. Place the day2 package into an empty folder and deploy it using the following command.
 
@@ -94,12 +94,12 @@ This will create a file with a similar name to `zarf-package-di2me-jira-restorab
     Alternatively if you are able to easily copy and paste the value from step 9 you can run the following command, replacing `<revision>` with the value from step 9. This will let you know when the value has changed instead of checking manually.
 
     ```shell
-    kubectl wait --for=jsonpath='{.status.artifact.revision}'="<revision>" -n flux-system gitrepo/zarf-package-software-factory --timeout=300s
+    kubectl wait --for=jsonpath='{.status.artifact.revision}'="<revision>" -n flux-system gitrepo/zarf-package-software-factory --timeout=120s
     ```
 
     If this step has taken more than 2 minutes go back to step 6 and try again.
 
-1. Now we will unsuspend the flux kustomization to allow the new changes to propogate through the cluster, run the following command.
+1. Now we will resume the flux kustomization to allow the changes made to propogate through the cluster. Run the following command.
 
     ```shell
     flux resume kustomization softwarefactoryaddons
@@ -113,7 +113,7 @@ This will create a file with a similar name to `zarf-package-di2me-jira-restorab
 
     If you get an error like `Error from server (NotFound): postgresqls.acid.zalan.do "acid-jira" not found` just run the command again.
 
-1. Now that the databases are up we will reenable jira. Run the following commands.
+1. Now that the database pods are up, we will reenable jira. Run the following commands.
 
     ```shell
     kubectl scale --replicas=1 -n jira statefulset/jira
