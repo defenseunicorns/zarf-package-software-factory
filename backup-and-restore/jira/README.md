@@ -29,7 +29,7 @@ This will create a file with a similar name to `zarf-package-di2me-jira-restorab
 
     This has temporarily stopped Jira, removed the jira-database pods, and uploaded the backup data into the internal minio bucket for postgresql.
 
-1. You will now need to make modifications to the di2me repo and push those changes. 
+1. You will now need to make modifications to the di2me repo and push those changes.
 
     **Attention!** The following steps, until noted otherwise, require an environment with access to the repository that you host di2me out of, this may or may not be different to the environment that has access to your cluster depending on how you've decided to deploy di2me.
 
@@ -75,7 +75,7 @@ This will create a file with a similar name to `zarf-package-di2me-jira-restorab
 
     This will have created a file called `zarf-package-day-two-update-amd64.tar.zst`
 
-1. If pushing changes to your di2me repository required a different environment, transfer the package that the previous command created to a machine with access to your cluster. 
+1. If pushing changes to your di2me repository required a different environment, transfer the package that the previous command created to a machine with access to your cluster.
 
     **Attention!** All commands for the remainder of this guide must be run from a machine with access to the di2me cluster.
 
