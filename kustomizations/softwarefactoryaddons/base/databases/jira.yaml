@@ -88,5 +88,5 @@ spec:
             memory: 2000Mi
         # clone:
         #   cluster: "acid-jira"
-        #   timestamp: "2023-03-17T18:02:37+00:00"
-        #   uid: "63c0eab6-4b0c-41b4-8ab7-54d05a457c70"
+        #   timestamp: ""
+        #   uid: ""

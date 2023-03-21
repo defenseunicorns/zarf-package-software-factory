@@ -1,10 +1,10 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.24.0-rc5/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.25.0-rc2/zarf.schema.json
 kind: ZarfPackageConfig
 metadata:
   name: di2me-jira-restorable-backup
   description: Zarf package for backing up and restoring Jira in a DI2-ME environment. On package create, the backup will be pulled out of the cluster and added to the package. On deploy, All backup files will be placed in the local directory. Perform the restore by deploying the optional component.
   url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
-  version: "###ZARF_PKG_VAR_BACKUP_FILENAME###"
+  version: "###ZARF_PKG_VAR_BACKUP_TIMESTAMP###"
 
 variables:
   - name: REPO_URL
@@ -78,7 +78,7 @@ components:
           - cmd: kubectl cp jira/backup-tools:/home/base/backup.tar tmp/backup.tar
 
           # Delete the backup-tools pod
-          - cmd: kubectl delete pod -n jira --wait=true backup-tools
+          - cmd: kubectl delete pod -n jira --wait=true --force=true --grace-period=0 backup-tools
     files:
       - source: tmp/backup.tar
         target: backup.tar
@@ -86,10 +86,6 @@ components:
         target: postgres-cluster-uid
       - source: tmp/latest-backup-name
         target: latest-backup-name
-      - source: files/repo.zarf.yaml
-        target: repo/zarf.yaml
-      - source: files/restore.sh
-        target: restore.sh
         executable: true
       - source: files/mc
         target: mc
@@ -115,7 +111,7 @@ components:
 
           # Scale jira to 0 to allow for restore
           - cmd: kubectl scale --replicas=0 -n jira statefulset/jira
-          - cmd: kubectl wait --for=jsonpath='{.status.availableReplicas}'=0 -n jira statefulset/jira
+          - cmd: kubectl wait --for=jsonpath='{.status.availableReplicas}'=0 -n jira statefulset/jira --timeout=300s
 
           # Delete the postgresql helmrelease therefore deleting the postgresql cluster
           - cmd: kubectl delete -n softwarefactoryaddons hr jira-database
@@ -124,7 +120,7 @@ components:
           - cmd: kubectl run restore-tools -n jira --image=registry1.dso.mil/ironbank/big-bang/base:2.0.0 --command -- sleep infinity
 
           # Wait for restore-tools pod to be ready
-          - cmd: kubectl wait --for=jsonpath='{.status.phase}'=Running -n jira pod/restore-tools
+          - cmd: kubectl wait --for=jsonpath='{.status.phase}'=Running -n jira pod/restore-tools --timeout=300s
 
           # Copy the minio client binary to the restore-tools pod
           - cmd: kubectl cp mc jira/restore-tools:/home/base/mc
@@ -145,4 +141,4 @@ components:
           - cmd: kubectl exec -i -n jira restore-tools -c restore-tools -- /home/base/mc cp /home/base/wal postgres/postgres-backups/spilo/acid-jira/$(cat postgres-cluster-uid)/ --recursive
 
           # Delete the restore-tools pod
-          - cmd: kubectl delete pod -n jira --wait=true restore-tools
+          - cmd: kubectl delete pod -n jira --wait=true --force=true --grace-period=0 restore-tools
