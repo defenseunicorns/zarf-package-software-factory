@@ -79,7 +79,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err, output)
 
 		// Install Docker
-		output, err = platform.RunSSHCommandAsSudo(`apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin`)
+		output, err = platform.RunSSHCommandAsSudo(`apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin`)
 		require.NoError(t, err, output)
 
 		// Download and install kind
