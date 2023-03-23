@@ -1,6 +1,7 @@
 package test_test
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -144,19 +145,20 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Make sure flux is present.
 		output, err = platform.RunSSHCommandAsSudo("flux --help")
 		require.NoError(t, err, output)
-		// Port forward the istio ingress gateway to localhost.
-		output, err = platform.RunSSHCommandAsSudo("kubectl port-forward -n istio-system $(kubectl get pods -n istio-system -o name | grep ingressgateway) 443:8443 &")
+		// Create portforward bash-job string and kill-job string.
+		portforward := "kubectl port-forward -n istio-system $(kubectl get pods -n istio-system -o name | grep ingressgateway) 443:8443 &"
+		jobKill := "kill %1"
 		// Ensure that Jenkins is available outside of the cluster.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://jenkins.bigbang.dev/login > /dev/null; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`%s timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://jenkins.bigbang.dev/login > /dev/null; do sleep 5; done" && %s`, portforward, jobKill))
 		require.NoError(t, err, output)
 		// Ensure that Confluence is available outside of the cluster.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://confluence.bigbang.dev/status > /dev/null; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`%s timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://confluence.bigbang.dev/status > /dev/null; do sleep 5; done" && %s`, portforward, jobKill))
 		require.NoError(t, err, output)
 		// Ensure that Jira is available outside of the cluster.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://jira.bigbang.dev/status > /dev/null; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`%s timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://jira.bigbang.dev/status > /dev/null; do sleep 5; done" && %s`, portforward, jobKill))
 		require.NoError(t, err, output)
 		// Ensure that GitLab is available outside of the cluster.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`%s timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done" && %s`, portforward, jobKill))
 		require.NoError(t, err, output)
 		// Wait for the Artifactory StatefulSet to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get statefulset artifactory -n artifactory; do sleep 5; done"`)
@@ -168,7 +170,7 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl exec statefulset/artifactory -n artifactory -c artifactory -- curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Ensure that Artifactory is available outside of the cluster.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://artifactory.bigbang.dev/artifactory/api/system/ping > /dev/null; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`%s timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://artifactory.bigbang.dev/artifactory/api/system/ping > /dev/null; do sleep 5; done" && %s`, portforward, jobKill))
 		require.NoError(t, err, output)
 
 		// Wait for the Loki write Statefulset to exist.
