@@ -144,6 +144,8 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Make sure flux is present.
 		output, err = platform.RunSSHCommandAsSudo("flux --help")
 		require.NoError(t, err, output)
+		// Port forward the istio ingress gateway to localhost.
+		output, err = platform.RunSSHCommandAsSudo("kubectl port-forward -n istio-system $(kubectl get pods -n istio-system -o name | grep ingressgateway) 443:8443 &")
 		// Ensure that Jenkins is available outside of the cluster.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://jenkins.bigbang.dev/login > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)

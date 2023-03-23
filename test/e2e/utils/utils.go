@@ -62,6 +62,30 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		err = waitForInstanceReady(t, platform, 5*time.Second, 15) //nolint:gomnd
 		require.NoError(t, err)
 
+		// Install Docker Dependencies
+		output, err := platform.RunSSHCommandAsSudo(`apt install -y ca-certificates curl gnupg lsb-release`)
+		require.NoError(t, err, output)
+
+		// Add Docker GPG Key
+		output, err := platform.RunSSHCommandAsSudo(`mkdir -m 0755 -p /etc/apt/keyrings && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg`)
+		require.NoError(t, err, output)
+
+		// Setup Docker APT Repo
+		output, err := platform.RunSSHCommandAsSudo(`echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null`)
+		require.NoError(t, err, output)
+
+		// Update APT repos including new docker repo
+		output, err := platform.RunSSHCommandAsSudo(`apt update -y`)
+		require.NoError(t, err, output)
+
+		// Install Docker
+		output, err := platform.RunSSHCommandAsSudo(`apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin`)
+		require.NoError(t, err, output)
+
+		// Download and install kind
+		output, err := platform.RunSSHCommandAsSudo(`curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64 && chmod +x ./kind && mv ./kind /usr/local/bin/kind`)
+		require.NoError(t, err, output)
+
 		// Install dependencies. Doing it here since the instance user-data is being flaky, still saying things like make are not installed
 		output, err := platform.RunSSHCommandAsSudo(`apt update && apt install -y jq git make wget sslscan && sysctl -w vm.max_map_count=262144`)
 		require.NoError(t, err, output)
@@ -95,10 +119,14 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		require.NoError(t, err, output)
 
 		// Try to be idempotent
-		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && cd ~/app/build && ./zarf destroy --confirm`)
+		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && kind delete cluster`)
+
+		// Create kind cluster using 1.24 node image
+		output, err := platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.24.7`)
+		require.NoError(t, err, output)
 
 		// Deploy init package
-		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf init --components k3s,git-server --confirm`)
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf init --components git-server --confirm`)
 		require.NoError(t, err, output)
 
 		// Deploy Flux
