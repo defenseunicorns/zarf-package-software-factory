@@ -86,6 +86,14 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		output, err = platform.RunSSHCommandAsSudo(`curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64 && chmod +x ./kind && mv ./kind /usr/local/bin/kind`)
 		require.NoError(t, err, output)
 
+		// Download kubectl binary
+		output, err = platform.RunSSHCommandAsSudo(`curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"`)
+		require.NoError(t, err, output)
+
+		// Install kubectl
+		output, err = platform.RunSSHCommandAsSudo(`install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl`)
+		require.NoError(t, err, output)
+
 		// Install dependencies. Doing it here since the instance user-data is being flaky, still saying things like make are not installed
 		output, err = platform.RunSSHCommandAsSudo(`apt update && apt install -y jq git make wget sslscan && sysctl -w vm.max_map_count=262144`)
 		require.NoError(t, err, output)
