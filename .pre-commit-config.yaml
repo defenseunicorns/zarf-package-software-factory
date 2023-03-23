@@ -40,7 +40,7 @@ repos:
         args:
           [
             "--schemafile",
-            "https://raw.githubusercontent.com/defenseunicorns/zarf/v0.25.0-rc2/zarf.schema.json",
+            "https://raw.githubusercontent.com/defenseunicorns/zarf/v0.25.0/zarf.schema.json",
             "--no-cache"
           ]
   - repo: https://github.com/dnephin/pre-commit-golang
