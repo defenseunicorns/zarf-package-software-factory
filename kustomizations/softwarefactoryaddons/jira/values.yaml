@@ -41,7 +41,7 @@ additionalInitContainers:
       [
         "sh",
         "-c",
-        "echo 'Waiting for the postgresql db cluster to report ready'; kubectl wait --for=jsonpath='{.status.PostgresClusterStatus}'='Running' -n jira postgresql/acid-jira",
+        "echo 'Waiting for the postgresql db cluster to report ready'; kubectl wait --for=jsonpath='{.status.PostgresClusterStatus}'='Running' -n jira postgresql/acid-jira --timeout=600s",
       ]
 volumes:
   localHome:
