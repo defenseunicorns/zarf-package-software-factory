@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jira-init
+  namespace: jira
+rules:
+  - apiGroups:
+      - acid.zalan.do
+    resources:
+      - postgresqls
+      - postgresqls/status
+    verbs:
+      - get
+      - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jira-init
+  namespace: jira
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: jira-init
+subjects:
+  - kind: ServiceAccount
+    name: jira
+    namespace: jira
