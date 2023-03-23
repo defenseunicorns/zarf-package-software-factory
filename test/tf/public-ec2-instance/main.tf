@@ -12,8 +12,49 @@ provider "aws" {
   region = var.aws_region
 }
 
-data "aws_vpc" "default" {
-  default = true
+# Create a VPC
+resource "aws_vpc" "terratest_vpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "terratest-vpc"
+  }
+}
+
+# Create an Internet Gateway for the VPC
+resource "aws_internet_gateway" "terratest_igw" {
+  vpc_id = aws_vpc.terratest_vpc.id
+}
+
+# Create a public subnet in the VPC
+resource "aws_subnet" "terratest_public_subnet" {
+  vpc_id                  = aws_vpc.terratest_vpc.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "us-east-2a"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "terratest-public-subnet"
+  }
+}
+
+# Create a route table associated with the public subnet
+resource "aws_route_table" "terratest_public_rt" {
+  vpc_id = aws_vpc.terratest_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.terratest_igw.id
+  }
+
+  tags = {
+    Name = "terratest-public-route-table"
+  }
+}
+
+# Associate the route table with the public subnet
+resource "aws_route_table_association" "terratest_public_rt_assoc" {
+  subnet_id      = aws_subnet.terratest_public_subnet.id
+  route_table_id = aws_route_table.terratest_public_rt.id
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -25,6 +66,7 @@ resource "aws_instance" "public" {
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.public.id]
   key_name               = var.key_pair_name
+  subnet_id              = aws_subnet.terratest_public_subnet.id
 
   root_block_device {
     volume_size = 400
@@ -54,7 +96,7 @@ _EOF_
 resource "aws_security_group" "public" {
   name = local.fullname
 
-  vpc_id = data.aws_vpc.default.id
+  vpc_id = aws_vpc.terratest_vpc.id
 
   egress {
     from_port   = 0
