@@ -114,6 +114,13 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v`, registry1Username, registry1Password))
 		require.NoError(t, err, output)
 
+		// Try to be idempotent
+		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && kind delete cluster`)
+
+		// Create kind cluster using 1.24 node image
+		output, err = platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.24.7`)
+		require.NoError(t, err, output)
+
 		// Build init package
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-init.sha256`)
 		require.NoError(t, err, output)
@@ -124,13 +131,6 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 
 		// Build software factory package
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-package-software-factory-amd64.tar.zst`)
-		require.NoError(t, err, output)
-
-		// Try to be idempotent
-		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && kind delete cluster`)
-
-		// Create kind cluster using 1.24 node image
-		output, err = platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.24.7`)
 		require.NoError(t, err, output)
 
 		// Deploy init package
