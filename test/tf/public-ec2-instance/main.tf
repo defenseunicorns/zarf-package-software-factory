@@ -12,7 +12,9 @@ provider "aws" {
   region = var.aws_region
 }
 
-# Create a VPC
+# ---------------------------------------------------------------------------------------------------------------------
+# CREATE VPC
+# ---------------------------------------------------------------------------------------------------------------------
 resource "aws_vpc" "terratest_vpc" {
   cidr_block = "10.0.0.0/16"
   tags = {
@@ -29,7 +31,7 @@ resource "aws_internet_gateway" "terratest_igw" {
 resource "aws_subnet" "terratest_public_subnet" {
   vpc_id                  = aws_vpc.terratest_vpc.id
   cidr_block              = "10.0.1.0/24"
-  availability_zone       = "us-east-2a"
+  availability_zone       = var.subnet_availability_zone
   map_public_ip_on_launch = true
 
   tags = {
