@@ -42,13 +42,6 @@ Since you will need to make environment-specific changes to the system's configu
     sops -e -i kustomizations/bigbang/environment-bb/values-bigbang.enc.yaml
     ```
 
-
-1. Customize `kustomizations/redis/secret/values.yaml` -- Set a secure password for Redis, then SOPS encrypte the file.
-
-    ```shell
-    sops -e -i kustomizaitons/redis/secret/values.yaml
-    ```
-
 1. Customize `kustomizations/softwarefactoryaddons/jenkins/environment-bb-values.yaml` -- Replace `bigbang.dev` with your real domain. Do a find and replace on the whole file, it appears in multiple places. Later on in the [SSO](sso.md) step you'll also update the `clientID` and `clientSecret` parameters but we can't do that until after GitLab is deployed. Encrypt the file with SOPS if you want at this point, though the only things in the file that are likely to be considered secrets are the client ID and client secret, which won't have been added yet.
 
     ```shell
