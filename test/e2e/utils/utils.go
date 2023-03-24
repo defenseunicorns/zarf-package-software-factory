@@ -23,7 +23,7 @@ import (
 // the packages, and deploys the init package, the flux package, and the software factory package.
 // It is finished when the zarf command returns from deploying the software factory package. It is
 // the responsibility of the test being run to do the appropriate waiting for services to come up.
-func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
+func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:funlen
 	t.Helper()
 	repoURL, err := getEnvVar("REPO_URL")
 	require.NoError(t, err)
