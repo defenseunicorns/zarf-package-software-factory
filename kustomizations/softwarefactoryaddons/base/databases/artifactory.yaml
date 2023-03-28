@@ -1,0 +1,68 @@
+# nonk8s
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: artifactory-database
+  namespace: softwarefactoryaddons
+spec:
+  targetNamespace: artifactory
+  releaseName: artifactory-database
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+    - name: postgres-operator
+      namespace: softwarefactoryaddons
+    - name: kyvernopolicies
+      namespace: bigbang
+    - name: istio
+      namespace: bigbang
+    - name: postgres-minio
+      namespace: bigbang
+  values:
+    resources:
+    - apiVersion: "acid.zalan.do/v1"
+      kind: "postgresql"
+      metadata:
+        name: "acid-artifactory"
+        namespace: "artifactory"
+      spec:
+        teamId: "acid"
+        postgresql:
+          version: "13"
+        numberOfInstances: 3
+        volume:
+          size: "2Gi"
+          # Uncomment this if you want to specify a particular storage class
+      #    storageClass: "your-storage-class-name-here"
+        env:
+        - name: WAL_S3_BUCKET
+          value: ""
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: "1"
+            memory: "2Gi"

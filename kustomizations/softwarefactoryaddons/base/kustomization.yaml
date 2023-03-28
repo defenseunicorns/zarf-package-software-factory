@@ -8,8 +8,12 @@ resources:
   - serviceaccount.yaml
   - gitrepository.yaml
   - helmrelease.yaml
-  - postgresql.yaml
   - virtualservice.yaml
+  - networkpolicy.yaml
+  - databases/artifactory.yaml
+  - databases/confluence.yaml
+  - databases/jira.yaml
+  - jira-init-rbac.yaml
 
 configMapGenerator:
   - name: jira-common

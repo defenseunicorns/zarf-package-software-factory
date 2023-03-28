@@ -142,3 +142,65 @@ spec:
           podSelector: {}
           policyTypes:
             - Egress
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: postgres-minio-networkpolicies
+  namespace: bigbang
+spec:
+  targetNamespace: postgres-minio
+  releaseName: postgres-minio-networkpolicies
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+  values:
+    resources:
+      - apiVersion: "networking.k8s.io/v1"
+        kind: NetworkPolicy
+        metadata:
+          name: allow-from-databases
+        spec:
+          ingress:
+            - ports:
+                - port: 80
+                  protocol: TCP
+                - port: 9000
+                  protocol: TCP
+                - port: 9090
+                  protocol: TCP
+              from:
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: artifactory
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: confluence
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: jira
+          podSelector: {}
+          policyTypes:
+            - Ingress

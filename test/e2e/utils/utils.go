@@ -23,7 +23,7 @@ import (
 // the packages, and deploys the init package, the flux package, and the software factory package.
 // It is finished when the zarf command returns from deploying the software factory package. It is
 // the responsibility of the test being run to do the appropriate waiting for services to come up.
-func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
+func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:funlen
 	t.Helper()
 	repoURL, err := getEnvVar("REPO_URL")
 	require.NoError(t, err)
@@ -64,8 +64,40 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		err = waitForInstanceReady(t, platform, 5*time.Second, 15) //nolint:gomnd
 		require.NoError(t, err)
 
+		// Install Docker Dependencies
+		output, err := platform.RunSSHCommandAsSudo(`apt install -y ca-certificates curl gnupg lsb-release`)
+		require.NoError(t, err, output)
+
+		// Add Docker GPG Key
+		output, err = platform.RunSSHCommandAsSudo(`mkdir -m 0755 -p /etc/apt/keyrings && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg`)
+		require.NoError(t, err, output)
+
+		// Setup Docker APT Repo
+		output, err = platform.RunSSHCommandAsSudo(`echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null`)
+		require.NoError(t, err, output)
+
+		// Update APT repos including new docker repo
+		output, err = platform.RunSSHCommandAsSudo(`apt update -y`)
+		require.NoError(t, err, output)
+
+		// Install Docker
+		output, err = platform.RunSSHCommandAsSudo(`apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin`)
+		require.NoError(t, err, output)
+
+		// Download and install kind
+		output, err = platform.RunSSHCommandAsSudo(`curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64 && chmod +x ./kind && mv ./kind /usr/local/bin/kind`)
+		require.NoError(t, err, output)
+
+		// Download kubectl binary
+		output, err = platform.RunSSHCommandAsSudo(`curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"`)
+		require.NoError(t, err, output)
+
+		// Install kubectl
+		output, err = platform.RunSSHCommandAsSudo(`install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl`)
+		require.NoError(t, err, output)
+
 		// Install dependencies. Doing it here since the instance user-data is being flaky, still saying things like make are not installed
-		output, err := platform.RunSSHCommandAsSudo(`apt update && apt install -y jq git make wget sslscan && sysctl -w vm.max_map_count=262144`)
+		output, err = platform.RunSSHCommandAsSudo(`apt update && apt install -y jq git make wget sslscan && sysctl -w vm.max_map_count=262144`)
 		require.NoError(t, err, output)
 
 		// Clone the repo idempotently
@@ -84,6 +116,13 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v`, registry1Username, registry1Password))
 		require.NoError(t, err, output)
 
+		// Try to be idempotent
+		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && kind delete cluster`)
+
+		// Create kind cluster using 1.24 node image
+		output, err = platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.24.7`)
+		require.NoError(t, err, output)
+
 		// Build init package
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-init.sha256`)
 		require.NoError(t, err, output)
@@ -96,11 +135,8 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) {
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-package-software-factory-amd64.tar.zst`)
 		require.NoError(t, err, output)
 
-		// Try to be idempotent
-		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && cd ~/app/build && ./zarf destroy --confirm`)
-
 		// Deploy init package
-		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf init --components k3s,git-server --confirm`)
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf init --components git-server --confirm`)
 		require.NoError(t, err, output)
 
 		// Deploy Flux
