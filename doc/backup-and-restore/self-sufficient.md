@@ -1,7 +1,3 @@
 # Backup and Restore of a "Self Sufficient" Cluster
 
-:construction: **This document is under construction**. Please check back later.
-
-Use this document to perform backup and restore of a cluster that is self sufficient, meaning that it uses MinIO for S3-compatible object storage and Postgres Operator for databases. This is the default functionality.
-
-TODO: Write velero stuff
+Backup and restore is handled on a per-service basis. This is done via zarf packages and step by step instructions located in the `backup-and-restore` folder. Each service will have it's own folder that has it's pertinent instructions for backing up and restoring. 

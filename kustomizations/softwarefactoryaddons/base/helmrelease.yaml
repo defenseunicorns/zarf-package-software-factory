@@ -43,6 +43,8 @@ spec:
   dependsOn:
     - name: istio
       namespace: bigbang
+    - name: jira-database
+      namespace: softwarefactoryaddons
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -89,6 +91,8 @@ spec:
   dependsOn:
     - name: istio
       namespace: bigbang
+    - name: confluence-database
+      namespace: softwarefactoryaddons
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -181,3 +185,5 @@ spec:
   dependsOn:
     - name: istio
       namespace: bigbang
+    - name: artifactory-database
+      namespace: softwarefactoryaddons

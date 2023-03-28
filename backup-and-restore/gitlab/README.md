@@ -1,6 +1,6 @@
 # Backup and Restore Process for GitLab
 
-GitLab is configured to automatically take backups, but since DI2-ME is designed to be deployable to air gaps, the backup artifacts still reside inside the cluster. They need to be extracted and kept somewhere safe.
+GitLab is configured to automatically take backups, but since DI2-ME is designed to be deployable to air gaps, the backup artifacts still reside inside the cluster. They need to be extracted and kept somewhere safe. Please read through this guide in it's entirety before attempting any operations.
 
 ## Backup Procedure
 

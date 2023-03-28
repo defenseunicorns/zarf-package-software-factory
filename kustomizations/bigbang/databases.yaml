@@ -85,6 +85,9 @@ spec:
             # storageClass: "your-storage-class-name-here"
           # enableLogicalBackup: true
           # logicalBackupSchedule: "*/2 * * * *"
+          env:
+          - name: WAL_S3_BUCKET
+            value: ""
           resources:
             requests:
               cpu: 100m
@@ -92,3 +95,9 @@ spec:
             limits:
               cpu: "1"
               memory: 2000Mi
+      # Create empty secret so that other postgres clusters can use secrets for env
+      - apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres-minio-creds-env
+        type: Opaque
