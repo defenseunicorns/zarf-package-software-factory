@@ -30,23 +30,16 @@ Since you will need to make environment-specific changes to the system's configu
 
 1. Customize `manifests/setup.yaml` -- Change the repo URL `https://github.com/defenseunicorns/zarf-package-software-factory.git` to the repo URL of your config repo that you created by forking the upstream. Also change the branch name specified from `not-the-real-branch-name` to a real branch name. Our recommendation is to create a new branch off of `main` called `main_airgap` and use that. That gives you the ability to easily pull in upstream changes to `main` and then do pull requests from `main` to `main_airgap` as you are able to.
 
-1. Customize `kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml` -- Set secure secret values for the MinIO user credentials, then SOPS encrypt the file. Click [HERE](sops.md) for instructions on how to set up SOPS encryption.
+1. Customize `kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml` -- Set secure secret values for the MinIO user credentials, then SOPS encrypt the file. Click [HERE](sops.md) for instructions on how to set up SOPS encryption.
 
     ```shell
-    sops -e -i kustomizations/bigbang/environment-bb-minio-user-credentials/values.yaml
+    sops -e -i kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
     ```
 
-1. Customize `kustomizations/bigbang/environment-bb/values.yaml` -- Replace `bigbang.dev` with your real domain, change all secrets to ones appropriate to your environment, then SOPS encrypt the file. Note that the MinIO credentials need to be the same in this file as they are in the previous step.
+1. Customize `kustomizations/bigbang/environment-bb/values-bigbang.enc.yaml` -- Replace `bigbang.dev` with your real domain, change all secrets to ones appropriate to your environment, then SOPS encrypt the file. Note that the MinIO credentials need to be the same in this file as they are in the previous step.
 
     ```shell
-    sops -e -i kustomizations/bigbang/environment-bb/values.yaml
-    ```
-
-
-1. Customize `kustomizations/redis/secret/values.yaml` -- Set a secure password for Redis, then SOPS encrypte the file.
-
-    ```shell
-    sops -e -i kustomizaitons/redis/secret/values.yaml
+    sops -e -i kustomizations/bigbang/environment-bb/values-bigbang.enc.yaml
     ```
 
 1. Customize `kustomizations/softwarefactoryaddons/jenkins/environment-bb-values.yaml` -- Replace `bigbang.dev` with your real domain. Do a find and replace on the whole file, it appears in multiple places. Later on in the [SSO](sso.md) step you'll also update the `clientID` and `clientSecret` parameters but we can't do that until after GitLab is deployed. Encrypt the file with SOPS if you want at this point, though the only things in the file that are likely to be considered secrets are the client ID and client secret, which won't have been added yet.
