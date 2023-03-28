@@ -11,7 +11,7 @@ ZARF_VERSION := v0.25.0
 
 # The version of the build harness container to use
 BUILD_HARNESS_REPO := ghcr.io/defenseunicorns/not-a-build-harness/not-a-build-harness
-BUILD_HARNESS_VERSION := 0.0.4
+BUILD_HARNESS_VERSION := 0.0.12
 
 # Figure out which Zarf binary we should use based on the operating system we are on
 ZARF_BIN := zarf
