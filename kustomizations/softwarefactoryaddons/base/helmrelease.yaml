@@ -45,6 +45,8 @@ spec:
       namespace: bigbang
     - name: jira-database
       namespace: softwarefactoryaddons
+    - name: confluence
+      namespace: softwarefactoryaddons
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease

@@ -62,8 +62,24 @@ spec:
         databases:
           confluence: confluence
         env:
-        - name: WAL_S3_BUCKET
-          value: ""
+        - name: BACKUP_SCHEDULE
+          value: '00 00 * * *'
+        - name: AWS_S3_FORCE_PATH_STYLE
+          value: "true" # needed for MinIO
+        - name: AWS_ENDPOINT
+          value: http://minio.postgres-minio.svc.cluster.local:80
+        - name: BACKUP_NUM_TO_RETAIN
+          value: "7"
+        - name: USE_WALG_BACKUP
+          value: "true"
+        - name: USE_WALG_RESTORE
+          value: "true"
+        - name: CLONE_USE_WALG_RESTORE
+          value: "true"
+        - name: WALG_DISABLE_S3_SSE
+          value: "true"
+        - name: AWS_REGION
+          value: minio
         resources:
           requests:
             cpu: 100m
@@ -71,3 +87,7 @@ spec:
           limits:
             cpu: "1"
             memory: 2000Mi
+        # clone:
+        #   cluster: "acid-confluence"
+        #   timestamp: ""
+        #   uid: ""
