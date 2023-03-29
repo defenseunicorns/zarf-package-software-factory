@@ -348,6 +348,12 @@ loki:
     istio:
       mtls:
         mode: PERMISSIVE
+    loki:
+      storage:
+        s3:
+          s3ForcePathStyle: true
+          insecure: true
+
 
 promtail:
   enabled: true

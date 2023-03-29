@@ -129,6 +129,11 @@ istio:
           Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
           -----END CERTIFICATE-----
 
+loki:
+  objectStorage:
+    accessKey: "changeme"         # needs to match the value in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
+    accessSecret: "changeme"      # needs to match the value in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
+
 addons:
   gitlab:
     objectStorage:
@@ -144,7 +149,3 @@ addons:
             [default]
             aws_access_key_id=changeme
             aws_secret_access_key=changeme
-  loki:
-    objectStorage:
-      accessKey: "changeme"         # needs to match the value in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
-      accessSecret: "changeme"      # needs to match the value in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
