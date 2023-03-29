@@ -350,8 +350,9 @@ loki:
         mode: PERMISSIVE
     loki:
       storage:
-        s3ForcePathStyle: true
-        insecure: true
+        s3:
+          s3ForcePathStyle: true
+          insecure: true
 
 
 promtail:
