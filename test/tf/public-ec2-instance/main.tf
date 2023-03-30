@@ -12,8 +12,15 @@ provider "aws" {
   region = var.aws_region
 }
 
+# Get available availability zones
 data "aws_availability_zones" "available" {
   state = "available"
+}
+
+# Get a random available availability zone
+resource "random_shuffle" "az" {
+  input = data.aws_availability_zones.available.names
+  result_count = 1
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -35,7 +42,7 @@ resource "aws_internet_gateway" "terratest_igw" {
 resource "aws_subnet" "terratest_public_subnet" {
   vpc_id                  = aws_vpc.terratest_vpc.id
   cidr_block              = "10.0.1.0/24"
-  availability_zone       = data.aws_availability_zones.available.names[0]
+  availability_zone       = random_shuffle.az.result[0]
   map_public_ip_on_launch = true
 
   tags = {
