@@ -17,6 +17,11 @@ variable "aws_region" {
   type        = string
 }
 
+variable "aws_availability_zone" {
+  description = "The AWS availability zone to use"
+  type        = string
+}
+
 variable "namespace" {
   type        = string
   description = "Namespace, which could be your organization name or abbreviation, e.g. 'eg' or 'cp'"
