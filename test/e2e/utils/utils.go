@@ -35,7 +35,6 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 	require.NoError(t, err)
 	registry1Password, err := getEnvVar("REGISTRY1_PASSWORD")
 	require.NoError(t, err)
-	subnetAvailabilityZone := fmt.Sprintf("%s%s", awsRegion, "b")
 	namespace := "di2me"
 	stage := "terratest"
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
@@ -46,13 +45,12 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 			TerraformDir: platform.TestFolder,
 			Vars: map[string]interface{}{
-				"aws_region":               awsRegion,
-				"subnet_availability_zone": subnetAvailabilityZone,
-				"namespace":                namespace,
-				"stage":                    stage,
-				"name":                     name,
-				"key_pair_name":            keyPairName,
-				"instance_type":            instanceType,
+				"aws_region":    awsRegion,
+				"namespace":     namespace,
+				"stage":         stage,
+				"name":          name,
+				"key_pair_name": keyPairName,
+				"instance_type": instanceType,
 			},
 		})
 		teststructure.SaveTerraformOptions(t, platform.TestFolder, terraformOptions)
