@@ -37,8 +37,6 @@ components:
       - https://github.com/zalando/postgres-operator.git
     images:
       - registry1.dso.mil/ironbank/opensource/zalando/postgres-operator:v1.9.0
-      # If deploying to a 1.25+ cluster, use the following image:
-      # - registry.opensource.zalan.do/acid/postgres-operator:v1.8.2-43-g3e148ea5
       - registry1.dso.mil/ironbank/opensource/zalando/logical-backup:v1.8.2
       - registry1.dso.mil/ironbank/opensource/zalando/pgbouncer:1.15.0
       - ghcr.io/zalando/spilo-15:2.1-p9
