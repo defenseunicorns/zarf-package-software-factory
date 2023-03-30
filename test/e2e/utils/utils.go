@@ -35,7 +35,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 	require.NoError(t, err)
 	registry1Password, err := getEnvVar("REGISTRY1_PASSWORD")
 	require.NoError(t, err)
-	subnetAvailabilityZone := fmt.Sprintf("%s%s", awsRegion, "a")
+	subnetAvailabilityZone := fmt.Sprintf("%s%s", awsRegion, "b")
 	namespace := "di2me"
 	stage := "terratest"
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
