@@ -89,7 +89,7 @@ default-build: ## All in one make target for the default di2me repo (only x86) -
 	make build/zarf
 	make build/zarf-init.sha256
 	make build/zarf-package-flux-amd64.tar.zst
-	make build/zarf-package-software-factory-amd64.tar.zst DI2ME_REPO="https://github.com/defenseunicorns/zarf-package-software-factory.git/$$(git show-ref --heads --tags | grep /$$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)$$ | cut -d ' ' -f2)"
+	make build/zarf-package-software-factory-amd64.tar.zst DI2ME_REPO="https://github.com/defenseunicorns/zarf-package-software-factory.git@$$(git show-ref --heads --tags | grep /$$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)$$ | cut -d ' ' -f2)"
 
 .PHONY: deploy-local
 deploy-local: ## Deploy created zarf package to local cluster
