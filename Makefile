@@ -85,6 +85,7 @@ test-ssh: ## Run this if you set SKIP_TEARDOWN=1 and want to SSH into the still-
 	cd test/tf/public-ec2-instance && ssh -i .test-data/privatekey.pem ubuntu@$$(terraform output public_instance_ip | tr -d '"')
 
 default-build: ## All in one make target for the default di2me repo (only x86) - uses the current branch/tag of the repo
+	make build
 	make build/zarf
 	make build/zarf-init.sha256
 	make build/zarf-package-flux-amd64.tar.zst
