@@ -14,6 +14,7 @@ resources:
   - databases/confluence.yaml
   - databases/jira.yaml
   - jira-init-rbac.yaml
+  - pvcs/jira-shared-home.yaml
 
 configMapGenerator:
   - name: jira-common
