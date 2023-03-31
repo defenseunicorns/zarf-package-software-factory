@@ -104,6 +104,10 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`rm -rf ~/app && git clone --depth 1 %v --branch %v --single-branch ~/app`, repoURL, gitBranch))
 		require.NoError(t, err, output)
 
+		// Install Zarf
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf`)
+		require.NoError(t, err, output)
+
 		// Create Zarf config and put in proper folder
 		output, err = platform.RunSSHCommandAsSudo(`mkdir -p ~/.zarf && echo "no_progress = true" | tee ~/.zarf/zarf-config.toml`)
 		require.NoError(t, err, output)
