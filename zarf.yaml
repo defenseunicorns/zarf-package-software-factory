@@ -25,7 +25,7 @@ components:
         files:
           - manifests/setup.yaml
     repos:
-      - https://github.com/defenseunicorns/zarf-package-software-factory.git
+      - "###ZARF_PKG_VAR_DI2ME_REPO###"
 
   - name: postgres-operator
     required: true
