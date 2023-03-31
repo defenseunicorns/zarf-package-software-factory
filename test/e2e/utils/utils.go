@@ -35,7 +35,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 	require.NoError(t, err)
 	registry1Password, err := getEnvVar("REGISTRY1_PASSWORD")
 	require.NoError(t, err)
-	subnetAvailabilityZone := fmt.Sprintf("%s%s", awsRegion, "b")
+	awsAvailabilityZone := getAwsAvailabilityZone(awsRegion)
 	namespace := "di2me"
 	stage := "terratest"
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
@@ -46,13 +46,13 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 			TerraformDir: platform.TestFolder,
 			Vars: map[string]interface{}{
-				"aws_region":               awsRegion,
-				"subnet_availability_zone": subnetAvailabilityZone,
-				"namespace":                namespace,
-				"stage":                    stage,
-				"name":                     name,
-				"key_pair_name":            keyPairName,
-				"instance_type":            instanceType,
+				"aws_region":            awsRegion,
+				"aws_availability_zone": awsAvailabilityZone,
+				"namespace":             namespace,
+				"stage":                 stage,
+				"name":                  name,
+				"key_pair_name":         keyPairName,
+				"instance_type":         instanceType,
 			},
 		})
 		teststructure.SaveTerraformOptions(t, platform.TestFolder, terraformOptions)
@@ -172,6 +172,17 @@ func getAwsRegion() (string, error) {
 	}
 
 	return val, nil
+}
+
+// getAwsAvailabilityZone returns the desired AWS Availability Zone to use by first checking the env var AWS_AVAILABILITY_ZONE,
+// We default to {awsRegion}b if env var is not specified.
+func getAwsAvailabilityZone(awsRegion string) string {
+	val, present := os.LookupEnv("AWS_AVAILABILITY_ZONE")
+	if !present {
+		val = fmt.Sprintf("%s%s", awsRegion, "b")
+	}
+
+	return val
 }
 
 // getEnvVar gets an environment variable, returning an error if it isn't found.
