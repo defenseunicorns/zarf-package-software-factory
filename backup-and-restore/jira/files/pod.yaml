@@ -28,4 +28,4 @@ spec:
       claimName: local-home-jira-0
   - name: jira-shared-home
     persistentVolumeClaim:
-      claimName: jira-shared-home
+      claimName: jira-shared-home-single-node

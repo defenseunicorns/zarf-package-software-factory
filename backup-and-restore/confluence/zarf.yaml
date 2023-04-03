@@ -1,0 +1,202 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.25.0/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: di2me-confluence-restorable-backup
+  description: Zarf package for backing up and restoring Confluence in a DI2-ME environment. On package create, the backup will be pulled out of the cluster and added to the package. On deploy, All backup files will be placed in the local directory. Perform the restore by deploying the optional component.
+  url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
+  version: "###ZARF_PKG_VAR_BACKUP_TIMESTAMP###"
+
+variables:
+  - name: REPO_URL
+    description: The URL of the repository that you host DI2ME out of
+    default: https://github.com/defenseunicorns/zarf-package-software-factory.git
+    prompt: true
+
+components:
+  - name: preflight-checks
+    description: "Run preflight checks"
+    required: true
+    actions:
+      onCreate:
+        defaults:
+          maxRetries: 0
+        before:
+          - cmd: if ! command -v kubectl; then echo "kubectl is required for this package" >&2; exit 1; fi
+      onDeploy:
+        defaults:
+          maxRetries: 0
+        before:
+          - cmd: if ! command -v flux; then echo "flux cli is required for this package" >&2; exit 1; fi
+
+  - name: variable-collection
+    description: "Collect information from cluster to be used later"
+    required: true
+    actions:
+      onCreate:
+        defaults:
+          maxRetries: 0
+        before:
+          # Create tmp folder for writing files during create
+          - cmd: mkdir -p tmp
+
+          # Get postgresql cluster uid and store in a file since variables don't work during package create
+          - cmd: kubectl get postgresql -n confluence acid-confluence -o jsonpath='{.metadata.uid}' > tmp/postgres-cluster-uid
+
+  - name: confluence-backup-database
+    description: "On package create, grabs the backup from the cluster and adds it to the package. On deploy, adds the files to the current directory."
+    required: true
+    actions:
+      onCreate:
+        defaults:
+          maxRetries: 0
+        before:
+          # Force a backup to be ran from the postgres pod to get the latest data
+          - cmd: kubectl exec -i -n confluence acid-confluence-0 -c postgres -- envdir "/run/etc/wal-e.d/env" /scripts/postgres_backup.sh "/home/postgres/pgdata/pgroot/data"
+
+          # Get the name of the latest backup
+          - cmd: kubectl exec -i -n confluence acid-confluence-0 -c postgres -- bash -c 'envdir "/run/etc/wal-e.d/env" wal-g backup-list | tail -n 1 | cut -d " " -f1' > tmp/latest-backup-name
+
+
+          # Create a pod that can run binaries and temporarily store files
+          - cmd: kubectl apply -f files/pod.yaml
+
+          # Wait for backup-restore-tools pod to be ready
+          - cmd: kubectl wait --for=jsonpath='{.status.phase}'=Running -n confluence pod/backup-restore-tools
+
+
+          # Copy the minio client binary to the backup-restore-tools pod
+          - cmd: kubectl cp files/mc confluence/backup-restore-tools:/tmp/mc
+
+          # Set credentials and url for the minio client
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
+
+
+          # Copy the backup folder from the bucket to the backup-restore-tools pod TODO add logic around only downloading the latest backup if wanted
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc cp postgres/postgres-backups/spilo/acid-confluence/$(cat tmp/postgres-cluster-uid)/ /tmp/backup --recursive"
+
+          # Tar the backup folder in the backup-restore-tools pod
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /tmp/backup; tar -cvf ../db-backup.tar wal'
+
+          # Copy the db-backup.tar file from the backup-restore-tools pod to the local machine
+          - cmd: kubectl cp confluence/backup-restore-tools:/tmp/db-backup.tar tmp/db-backup.tar
+
+
+          #  Tar the local-home folder in the backup-restore-tools pod
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -cvf local-home-backup.tar confluence-local-home'
+
+          # Copy the local-home-backup.tar file from the backup-restore-tools pod to the local machine
+          - cmd: kubectl cp confluence/backup-restore-tools:/tmp/local-home-backup.tar tmp/local-home-backup.tar
+
+
+          #  Tar the shared-home folder in the backup-restore-tools pod
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -cvf shared-home-backup.tar confluence-shared-home'
+
+          # Copy the shared-home-backup.tar file from the backup-restore-tools pod to the local machine
+          - cmd: kubectl cp confluence/backup-restore-tools:/tmp/shared-home-backup.tar tmp/shared-home-backup.tar
+
+
+          # Delete the backup-restore-tools pod
+          - cmd: kubectl delete pod -n confluence --wait=true --force=true --grace-period=0 backup-restore-tools
+        onFailure:
+          - cmd: kubectl delete pod -n confluence --wait=true --force=true --grace-period=0 backup-restore-tools
+    files:
+      - source: tmp/db-backup.tar
+        target: db-backup.tar
+      - source: tmp/local-home-backup.tar
+        target: local-home-backup.tar
+      - source: tmp/shared-home-backup.tar
+        target: shared-home-backup.tar
+      - source: tmp/postgres-cluster-uid
+        target: postgres-cluster-uid
+      - source: tmp/latest-backup-name
+        target: latest-backup-name
+        executable: true
+      - source: files/mc
+        target: mc
+        executable: true
+      - source: files/pod.yaml
+        target: pod.yaml
+
+  - name: package-create-cleanup
+    required: true
+    actions:
+      onCreate:
+        after:
+          - cmd: rm -rf tmp
+
+
+  - name: warning-downtime-begin-restore
+    required: false
+    description: "WARNING: This will cause downtime -- Start restore actions. This action cannot be cancelled."
+    actions:
+      onDeploy:
+        defaults:
+          maxRetries: 0
+        after:
+          # Suspend top level kustomization that controls helmreleases
+          - cmd: flux suspend kustomization softwarefactoryaddons
+
+          # Scale confluence to 0 to allow for restore
+          - cmd: kubectl scale --replicas=0 -n confluence statefulset/confluence
+          - cmd: kubectl wait --for=jsonpath='{.status.availableReplicas}'=0 -n confluence statefulset/confluence --timeout=300s
+
+          # Delete the postgresql helmrelease therefore deleting the postgresql cluster
+          - cmd: kubectl delete -n softwarefactoryaddons hr confluence-database
+
+          # Create a pod that can run binaries and temporarily store files
+          - cmd: kubectl apply -f pod.yaml
+
+          # Wait for backup-restore-tools pod to be ready
+          - cmd: kubectl wait --for=jsonpath='{.status.phase}'=Running -n confluence pod/backup-restore-tools --timeout=300s
+
+
+          # Copy the minio client binary to the backup-restore-tools pod
+          - cmd: kubectl cp mc confluence/backup-restore-tools:/tmp/mc
+
+          # Set credentials and url for the minio client
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
+
+
+          # Copy the db-backup.tar file from the local machine to the backup-restore-tools pod
+          - cmd: kubectl cp db-backup.tar confluence/backup-restore-tools:/tmp/db-backup.tar
+
+          # Untar the db-backup inside the pod
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -xf db-backup.tar'
+
+          # Write backup timestamp to file
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "jq '.start_time' /tmp/wal/11/basebackups_005/$(cat latest-backup-name)/metadata.json | tr -d '\"'" > latest-backup-timestamp
+
+          # Copy the copy the backup data into the minio bucket
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc cp /tmp/wal postgres/postgres-backups/spilo/acid-confluence/$(cat postgres-cluster-uid)/ --recursive"
+
+
+          # Create temp local-home folder to untar the backup into
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- mkdir /tmp/local-tmp
+
+          # Copy the local-home-backup.tar file from the local machine to the backup-restore-tools pod
+          - cmd: kubectl cp local-home-backup.tar confluence/backup-restore-tools:/tmp/local-home-backup.tar
+
+          # Untar the local-home-backup inside the pod to the temp folder
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -xf local-home-backup.tar -C /tmp/local-tmp'
+
+          # Copy the contents of the backup from the temp folder over the existing local-home folder
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cp -R /tmp/local-tmp/confluence-local-home /tmp/confluence-local-home'
+
+
+          # Create temp shared-home folder to untar the backup into
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- mkdir /tmp/shared-tmp
+
+          # Copy the shared-home-backup.tar file from the local machine to the backup-restore-tools pod
+          - cmd: kubectl cp shared-home-backup.tar confluence/backup-restore-tools:/tmp/shared-home-backup.tar
+
+          # Untar the shared-home-backup inside the pod
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -xf db-backup.tar -C /tmp/shared-tmp'
+
+          # Copy the contents of the backup from the temp folder over the existing shared-home folder
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'if [ -d "/tmp/shared-tmp/confluence-shared-home" ]; then cp -R /tmp/shared-tmp/confluence-shared-home /tmp/confluence-shared-home; fi'
+
+
+          # Delete the backup-restore-tools pod
+          - cmd: kubectl delete pod -n confluence --wait=true --force=true --grace-period=0 backup-restore-tools
+        onFailure:
+          - cmd: kubectl delete pod -n confluence --wait=true --force=true --grace-period=0 backup-restore-tools
