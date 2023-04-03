@@ -52,11 +52,7 @@ volumes:
         requests:
           storage: 1Gi
 
-  # sharedHome requires an RWX storageclass when deploying a HA cluster
   sharedHome:
-    persistentVolumeClaim:
-      create: false
-  #     storageClassName: your-storage-class-here
-      resources:
-        requests:
-          storage: 1Gi
+    customVolume:
+      persistentVolumeClaim:
+        claimName: jira-shared-home

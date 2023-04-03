@@ -17,8 +17,8 @@ variable "aws_region" {
   type        = string
 }
 
-variable "subnet_availability_zone" {
-  description = "The AWS availability zone to deploy the subnet to"
+variable "aws_availability_zone" {
+  description = "The AWS availability zone to use"
   type        = string
 }
 
