@@ -123,16 +123,8 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		output, err = platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.24.7`)
 		require.NoError(t, err, output)
 
-		// Build init package
-		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-init.sha256`)
-		require.NoError(t, err, output)
-
-		// Build flux package
-		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-package-flux-amd64.tar.zst`)
-		require.NoError(t, err, output)
-
-		// Build software factory package
-		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf-package-software-factory-amd64.tar.zst`)
+		// Get zarf/zarf init package and build flux package/di2me package
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make default-build`)
 		require.NoError(t, err, output)
 
 		// Deploy init package

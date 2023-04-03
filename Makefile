@@ -84,6 +84,13 @@ test-ssh: ## Run this if you set SKIP_TEARDOWN=1 and want to SSH into the still-
 	cd test/tf/public-ec2-instance/.test-data && cat Ec2KeyPair.json | jq -r .PrivateKey > privatekey.pem && chmod 600 privatekey.pem
 	cd test/tf/public-ec2-instance && ssh -i .test-data/privatekey.pem ubuntu@$$(terraform output public_instance_ip | tr -d '"')
 
+default-build: ## All in one make target for the default di2me repo (only x86) - uses the current branch/tag of the repo
+	make build
+	make build/zarf
+	make build/zarf-init.sha256
+	make build/zarf-package-flux-amd64.tar.zst
+	make build/zarf-package-software-factory-amd64.tar.zst DI2ME_REPO="https://github.com/defenseunicorns/zarf-package-software-factory.git@$$(git show-ref --heads --tags | grep /$$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)$$ | cut -d ' ' -f2)"
+
 .PHONY: deploy-local
 deploy-local: ## Deploy created zarf package to local cluster
 	cd build && ./zarf init --components git-server --confirm
@@ -154,5 +161,5 @@ build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux pac
 
 build/zarf-package-software-factory-amd64.tar.zst: FORCE | build/$(ZARF_BIN) ## Build the Software Factory package
 	echo "Creating the deploy package"
-	build/$(ZARF_BIN) package create --skip-sbom --confirm
+	build/$(ZARF_BIN) package create --skip-sbom --confirm --set DI2ME_REPO=$(DI2ME_REPO)
 	mv zarf-package-software-factory-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst
