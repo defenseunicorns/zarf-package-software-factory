@@ -67,7 +67,7 @@ This will create a file with a similar name to `zarf-package-di2me-jira-restorab
     ```
 
 1. In the day2 folder of the repository there is a zarf.yaml, the package this creates is what will be used to push the changes that have been made into the cluster.
-1. While your terminal is in the day2 folder run the following command, replacing `<repo>` with the url to your di2me repository (e.g. `https://github.com/defenseunicorns/zarf-package-software-factory.git`)
+1. While your terminal is in the day2 folder run the following command, replacing `<repo>` with the url to your di2me repository (e.g. `https://github.com/defenseunicorns/zarf-package-software-factory.git`).
 
     ```shell
     zarf package create --confirm --set DI2ME_REPO="<repo>"
