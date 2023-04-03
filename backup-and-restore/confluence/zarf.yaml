@@ -99,6 +99,7 @@ components:
           - cmd: kubectl delete pod -n confluence --wait=true --force=true --grace-period=0 backup-restore-tools
         onFailure:
           - cmd: kubectl delete pod -n confluence --wait=true --force=true --grace-period=0 backup-restore-tools
+          - cmd: rm -rf tmp
     files:
       - source: tmp/db-backup.tar
         target: db-backup.tar

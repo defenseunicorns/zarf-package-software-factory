@@ -21,7 +21,7 @@ spec:
     - name: confluence-shared-home
       mountPath: /tmp/confluence-shared-home
     securityContext:
-      runAsUser: 2001
+      runAsUser: 2002
   volumes:
   - name: confluence-local-home
     persistentVolumeClaim:
