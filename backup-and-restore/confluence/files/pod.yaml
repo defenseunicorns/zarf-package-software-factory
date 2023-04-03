@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backup-restore-tools
+  namespace: confluence
+spec:
+  containers:
+  - name: toolbox
+    image: registry1.dso.mil/ironbank/big-bang/base:2.0.0
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 2000m
+        memory: 2048Mi
+    command: ["sleep", "infinity"]
+    volumeMounts:
+    - name: confluence-local-home
+      mountPath: /tmp/confluence-local-home
+    - name: confluence-shared-home
+      mountPath: /tmp/confluence-shared-home
+    securityContext:
+      runAsUser: 2002
+  volumes:
+  - name: confluence-local-home
+    persistentVolumeClaim:
+      claimName: local-home-confluence-0
+  - name: confluence-shared-home
+    persistentVolumeClaim:
+      claimName: confluence-shared-home-single-node

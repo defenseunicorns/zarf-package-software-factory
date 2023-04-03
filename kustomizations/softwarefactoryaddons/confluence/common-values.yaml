@@ -54,11 +54,8 @@ volumes:
         requests:
           storage: 1Gi
 
-  # # sharedHome requires an RWX storageclass
-  # sharedHome:
-  #   persistentVolumeClaim:
-  #     create: true
-  #     storageClassName: your-storage-class-here
-  #     resources:
-  #       requests:
-  #         storage: 1Gi
+  # sharedHome requires an RWX storageclass when deploying a HA cluster
+  sharedHome:
+    customVolume:
+      persistentVolumeClaim:
+        claimName: confluence-shared-home-single-node
