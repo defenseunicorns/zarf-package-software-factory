@@ -87,7 +87,7 @@ spec:
           limits:
             cpu: "1"
             memory: 2000Mi
-        # clone:
-        #   cluster: "acid-confluence"
-        #   timestamp: ""
-        #   uid: ""
+        clone:
+          cluster: "acid-confluence"
+          timestamp: "2023-04-03T14:36:12-05:00"
+          uid: "f70f33e3-b6a6-4dd3-a66d-5a6aca9890ed"
