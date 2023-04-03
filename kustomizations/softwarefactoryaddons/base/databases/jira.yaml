@@ -73,11 +73,20 @@ spec:
           value: "true"
         - name: USE_WALG_RESTORE
           value: "true"
-        - name: CLONE_USE_WALG_RESTORE
-          value: "true"
         - name: WALG_DISABLE_S3_SSE
           value: "true"
         - name: AWS_REGION
+          value: minio
+        # Clone Section
+        - name: CLONE_AWS_S3_FORCE_PATH_STYLE
+          value: "true" # needed for MinIO
+        - name: CLONE_AWS_ENDPOINT
+          value: http://minio.postgres-minio.svc.cluster.local:80
+        - name: CLONE_USE_WALG_RESTORE
+          value: "true"
+        - name: CLONE_WALG_DISABLE_S3_SSE
+          value: "true"
+        - name: CLONE_AWS_REGION
           value: minio
         resources:
           requests:
