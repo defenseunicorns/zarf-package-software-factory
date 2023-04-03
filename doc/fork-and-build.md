@@ -24,10 +24,6 @@ Since you will need to make environment-specific changes to the system's configu
     git remote add upstream https://github.com/defenseunicorns/zarf-package-software-factory.git
     ```
 
-1. Customize `zarf.yaml` -- Change the repo URL in the "setup" component from `https://github.com/defenseunicorns/zarf-package-software-factory.git` to the repo URL of your config repo that you created by forking the upstream
-
-1. Customize `day2/zarf.yaml` -- Change the repo URL from `https://github.com/defenseunicorns/zarf-package-software-factory.git` to the repo URL of your config repo that you created by forking the upstream
-
 1. Customize `manifests/setup.yaml` -- Change the repo URL `https://github.com/defenseunicorns/zarf-package-software-factory.git` to the repo URL of your config repo that you created by forking the upstream. Also change the branch name specified from `not-the-real-branch-name` to a real branch name. Our recommendation is to create a new branch off of `main` called `main_airgap` and use that. That gives you the ability to easily pull in upstream changes to `main` and then do pull requests from `main` to `main_airgap` as you are able to.
 
 1. Customize `kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml` -- Set secure secret values for the MinIO user credentials, then SOPS encrypt the file. Click [HERE](sops.md) for instructions on how to set up SOPS encryption.
@@ -64,10 +60,10 @@ Since you will need to make environment-specific changes to the system's configu
     git push
     ```
 
-1. Build the packages
+1. Build the packages. Replace `<repo url>` with the url to the repository you host di2me out of (e.g. `https://github.com/defenseunicorns/zarf-package-software-factory.git`). You can also utilize git refs to only grab a specific branch/tag, see https://docs.zarf.dev/examples/git-data/#git-reference-based-git-repository-clone.
 
     ```shell
-    make all
+    make all DI2ME_REPO="<repo url>"
     ```
 
 Now that the necessary packages are created, it is time to [Deploy](deploy.md).
