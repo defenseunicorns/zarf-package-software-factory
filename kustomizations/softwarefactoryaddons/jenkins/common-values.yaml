@@ -1,5 +1,4 @@
 controller:
-  jenkinsUrl: https://jenkins.bigbang.dev
   image: "registry1.dso.mil/ironbank/opensource/jenkins/jenkins"
   tag: "2.357"
   disableRememberMe: true

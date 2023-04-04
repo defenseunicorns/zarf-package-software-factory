@@ -1,6 +1,7 @@
 # ENCRYPT THIS FILE!!! DON'T COMMIT IT TO THE REPO UNENCRYPTED! IT CONTAINS SECRETS!!!
 
 controller:
+  jenkinsUrl: https://jenkins.bigbang.dev
   adminUser: admin
   adminPassword: admin
   JCasC:
