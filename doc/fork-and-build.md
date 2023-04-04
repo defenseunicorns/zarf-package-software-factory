@@ -35,7 +35,7 @@ Since you will need to make environment-specific changes to the system's configu
 1. Customize `kustomizations/bigbang/common/values-bigbang.yaml` -- Replace `bigbang.dev` with your real domain, change all secrets to ones appropriate to your environment, then SOPS encrypt the file. Note that the MinIO credentials need to be the same in this file as they are in the previous step.
 
     ```shell
-    sops -e -i kustomizations/bigbang/common/values-bigbang.yaml
+    sops -e -i kustomizations/bigbang/environment-bb/values-bigbang.enc.yaml
     ```
 
 1. Customize `kustomizations/softwarefactoryaddons/jenkins/environment-bb-values.yaml` -- Replace `bigbang.dev` with your real domain. Do a find and replace on the whole file, it appears in multiple places. Later on in the [SSO](sso.md) step you'll also update the `clientID` and `clientSecret` parameters but we can't do that until after GitLab is deployed. Encrypt the file with SOPS if you want at this point, though the only things in the file that are likely to be considered secrets are the client ID and client secret, which won't have been added yet.
