@@ -73,7 +73,7 @@ This will create a file with a similar name to `zarf-package-di2me-jira-restorab
     zarf package create --confirm --set DI2ME_REPO="<repo>"
     ```
 
-    This will have created a file called `zarf-package-day-two-update-amd64.tar.zst`
+    This will have created a file called `zarf-package-software-factory-amd64.tar.zst`
 
 1. If pushing changes to your di2me repository required a different environment, transfer the package that the previous command created to a machine with access to your cluster.
 
@@ -82,7 +82,7 @@ This will create a file with a similar name to `zarf-package-di2me-jira-restorab
 1. Place the day2 package into an empty folder and deploy it using the following command.
 
     ```shell
-    zarf package deploy zarf-package-day-two-update-amd64.tar.zst --confirm
+    zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm
     ```
 
 1. Once it has deployed run the following command until the output matches the string you noted from step 9. This should take less than a minute.
