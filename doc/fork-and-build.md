@@ -26,13 +26,15 @@ Since you will need to make environment-specific changes to the system's configu
 
 1. Customize `manifests/setup.yaml` -- Change the repo URL `https://github.com/defenseunicorns/zarf-package-software-factory.git` to the repo URL of your config repo that you created by forking the upstream. Also change the branch name specified from `not-the-real-branch-name` to a real branch name. Our recommendation is to create a new branch off of `main` called `main_airgap` and use that. That gives you the ability to easily pull in upstream changes to `main` and then do pull requests from `main` to `main_airgap` as you are able to.
 
+1. Customize `kustomizations/bigbang/common/values-bigbang.yaml` -- Replace `bigbang.dev` with your real domain.
+
 1. Customize `kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml` -- Set secure secret values for the MinIO user credentials, then SOPS encrypt the file. Click [HERE](sops.md) for instructions on how to set up SOPS encryption.
 
     ```shell
     sops -e -i kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
     ```
 
-1. Customize `kustomizations/bigbang/environment-bb/values-bigbang.enc.yaml` -- Replace `bigbang.dev` with your real domain, change all secrets to ones appropriate to your environment, then SOPS encrypt the file. Note that the MinIO credentials need to be the same in this file as they are in the previous step.
+1. Customize `kustomizations/bigbang/environment-bb/values-bigbang.enc.yaml` -- Change all secrets to ones appropriate to your environment, then SOPS encrypt the file. Note that the MinIO credentials need to be the same in this file as they are in the previous step.
 
     ```shell
     sops -e -i kustomizations/bigbang/environment-bb/values-bigbang.enc.yaml
