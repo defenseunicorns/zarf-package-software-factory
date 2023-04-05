@@ -12,6 +12,7 @@ global:
         name: "postgres.acid-artifactory.credentials.postgresql.acid.zalan.do"
         key: "password"
     initContainerSetupDBImage: registry1.dso.mil/ironbank/opensource/postgres/postgresql:13.10
+    initContainerSetupDBUser: 0
     initDBCreation: true
 rabbitmq:
   enabled: false
