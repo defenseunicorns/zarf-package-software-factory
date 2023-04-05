@@ -213,7 +213,7 @@ components:
       # Artifactory
       - registry1.dso.mil/ironbank/jfrog/artifactory/artifactory:7.55.9
       - registry1.dso.mil/ironbank/opensource/postgres/postgresql:13.10
-      - registry1.dso.mil/ironbank/opensource/alpinelinux/alpine:3.17.3
+      - registry1.dso.mil/ironbank/redhat/ubi/ubi9-minimal:9.1.0
       # - releases-docker.jfrog.io/jfrog/artifactory-pro:7.24.3
       # - releases-docker.jfrog.io/postgres:13.2-alpine
       # - releases-docker.jfrog.io/alpine:3.14.0
