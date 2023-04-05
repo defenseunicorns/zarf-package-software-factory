@@ -13,10 +13,12 @@ components:
       - source: ./files/modify-coredns.sh
         target: ./modify-coredns.sh
         executable: true
-    scripts:
-      retry: false
-      after:
-        - ./modify-coredns.sh
+    actions:
+      onDeploy:
+        defaults:
+          maxRetries: 0
+        after:
+          - cmd: ./modify-coredns.sh
 
   - name: setup
     required: true
@@ -248,9 +250,11 @@ components:
         shasum: 13e498c1ebec1e7c5bd633cbd39775e2b60cc55c29333abf019abaf29f19cc0e
         target: velero.tar.gz
         executable: false
-    scripts:
-      retry: false
-      after:
-        - tar -xzf flux.tar.gz -C /usr/sbin && chmod +x /usr/sbin/flux && rm flux.tar.gz
-        # If GNU tar, need to add --wildcards flag. If BSD tar, adding --wildcards flag makes it barf. :grumpyface:
-        - EXITCODE=$(tar --version | grep -q "gnu"); ADDL_FLAGS=$(if [ $? -eq 0 ]; then echo "--wildcards"; else echo ""; fi); tar -xzf velero.tar.gz -C /usr/sbin --strip-components=1 $ADDL_FLAGS 'velero-*-linux-amd64/velero' && chmod +x /usr/sbin/velero && rm velero.tar.gz
+    actions:
+      onDeploy:
+        defaults:
+          maxRetries: 0
+        after:
+          - cmd: tar -xzf flux.tar.gz -C /usr/sbin && chmod +x /usr/sbin/flux && rm flux.tar.gz
+          # If GNU tar, need to add --wildcards flag. If BSD tar, adding --wildcards flag makes it barf. :grumpyface:
+          - cmd: EXITCODE=$(tar --version | grep -q "gnu"); ADDL_FLAGS=$(if [ $? -eq 0 ]; then echo "--wildcards"; else echo ""; fi); tar -xzf velero.tar.gz -C /usr/sbin --strip-components=1 $ADDL_FLAGS 'velero-*-linux-amd64/velero' && chmod +x /usr/sbin/velero && rm velero.tar.gz
