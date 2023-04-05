@@ -34,7 +34,9 @@ xray:
   enabled: false
 distribution:
   enabled: false
-mission-control:
+insight:
   enabled: false
 pipelines:
+  enabled: false
+pdnServer:
   enabled: false
