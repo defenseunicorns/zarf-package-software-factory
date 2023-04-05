@@ -1,5 +1,6 @@
 # Helm chart version:
 global:
+  imageRegistry: registry1.dso.mil
   artifactoryHaEnabled: false
   database:
     host: "acid-artifactory.artifactory.svc.cluster.local"
@@ -10,7 +11,7 @@ global:
       adminPassword:
         name: "postgres.acid-artifactory.credentials.postgresql.acid.zalan.do"
         key: "password"
-    initContainerSetupDBImage: releases-docker.jfrog.io/postgres:13.2-alpine
+    initContainerSetupDBImage: registry1.dso.mil/ironbank/opensource/postgres/postgresql:13.10
     initDBCreation: true
 rabbitmq:
   enabled: false
