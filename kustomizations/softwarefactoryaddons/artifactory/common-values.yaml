@@ -14,17 +14,18 @@ global:
     initContainerSetupDBImage: registry1.dso.mil/ironbank/opensource/postgres/postgresql:13.10
     initContainerSetupDBUser: 0
     initDBCreation: true
-initContainerImage: registry1.dso.mil/ironbank/redhat/ubi/ubi9-minimal:9.1.0
 rabbitmq:
   enabled: false
 redis:
   enabled: false
 artifactory:
   enabled: true
-  image:
-    registry: registry1.dso.mil
-    repository: ironbank/jfrog/artifactory/artifactory
-    tag: 7.55.9
+  initContainerImage: registry1.dso.mil/ironbank/redhat/ubi/ubi9-minimal:9.1.0
+  artifactory:
+    image:
+      registry: registry1.dso.mil
+      repository: ironbank/jfrog/artifactory/artifactory
+      tag: 7.55.9
   nginx:
     enabled: false
   # Uncomment if you want to specify a particular storage class
