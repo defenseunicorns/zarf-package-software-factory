@@ -6,12 +6,6 @@ metadata:
   url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
   version: "###ZARF_PKG_VAR_BACKUP_TIMESTAMP###"
 
-variables:
-  - name: REPO_URL
-    description: The URL of the repository that you host DI2ME out of
-    default: https://github.com/defenseunicorns/zarf-package-software-factory.git
-    prompt: true
-
 components:
   - name: preflight-checks
     description: "Run preflight checks"
@@ -180,8 +174,11 @@ components:
           # Untar the local-home-backup inside the pod to the temp folder
           - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -xf local-home-backup.tar -C /tmp/local-tmp'
 
+          # Delete everything in the existing local-home folder
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'rm -rf /tmp/confluence-local-home/*'
+
           # Copy the contents of the backup from the temp folder over the existing local-home folder
-          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cp -R /tmp/local-tmp/confluence-local-home /tmp/confluence-local-home'
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cp -R /tmp/local-tmp/confluence-local-home/* /tmp/confluence-local-home'
 
 
           # Create temp shared-home folder to untar the backup into
@@ -193,8 +190,11 @@ components:
           # Untar the shared-home-backup inside the pod
           - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -xf db-backup.tar -C /tmp/shared-tmp'
 
+          # Delete everything in the existing shared-home folder
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'rm -rf /tmp/confluence-shared-home/*'
+
           # Copy the contents of the backup from the temp folder over the existing shared-home folder
-          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'if [ -d "/tmp/shared-tmp/confluence-shared-home" ]; then cp -R /tmp/shared-tmp/confluence-shared-home /tmp/confluence-shared-home; fi'
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'if [ -d "/tmp/shared-tmp/confluence-shared-home" ]; then cp -R /tmp/shared-tmp/confluence-shared-home/* /tmp/confluence-shared-home; fi'
 
 
           # Delete the backup-restore-tools pod
