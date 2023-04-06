@@ -1,5 +1,6 @@
 # Helm chart version:
 global:
+  imageRegistry: registry1.dso.mil
   artifactoryHaEnabled: false
   database:
     host: "acid-artifactory.artifactory.svc.cluster.local"
@@ -10,7 +11,8 @@ global:
       adminPassword:
         name: "postgres.acid-artifactory.credentials.postgresql.acid.zalan.do"
         key: "password"
-    initContainerSetupDBImage: releases-docker.jfrog.io/postgres:13.2-alpine
+    initContainerSetupDBImage: registry1.dso.mil/ironbank/opensource/postgres/postgresql:13.10
+    initContainerSetupDBUser: 0
     initDBCreation: true
 rabbitmq:
   enabled: false
@@ -18,6 +20,12 @@ redis:
   enabled: false
 artifactory:
   enabled: true
+  initContainerImage: registry1.dso.mil/ironbank/redhat/ubi/ubi9-minimal:9.1.0
+  artifactory:
+    image:
+      registry: registry1.dso.mil
+      repository: ironbank/jfrog/artifactory/artifactory
+      tag: 7.55.9
   nginx:
     enabled: false
   # Uncomment if you want to specify a particular storage class
@@ -32,7 +40,9 @@ xray:
   enabled: false
 distribution:
   enabled: false
-mission-control:
+insight:
   enabled: false
 pipelines:
+  enabled: false
+pdnServer:
   enabled: false

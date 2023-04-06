@@ -46,6 +46,6 @@ spec:
   interval: 5m
   url: https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git
   ref:
-    tag: 0.9.2
+    tag: 10.12.1
   secretRef:
     name: private-git-server

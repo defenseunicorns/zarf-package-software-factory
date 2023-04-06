@@ -152,7 +152,7 @@ spec:
   timeout: 10m
   chart:
     spec:
-      chart: "."
+      chart: "chart"
       sourceRef:
         kind: GitRepository
         name: artifactory
