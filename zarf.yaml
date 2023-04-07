@@ -50,7 +50,7 @@ components:
         files:
           - manifests/gitlab-redis.yaml
     repos:
-      - https://repo1.dso.mil/big-bang/apps/application-utilities/redis.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git
     images:
       - registry1.dso.mil/ironbank/bitnami/redis:7.0.0-debian-10-r3
       - docker.io/bitnami/redis-sentinel:6.2.7
@@ -375,10 +375,10 @@ components:
         files:
           - manifests/softwarefactoryaddons.yaml
     repos:
-      - https://repo1.dso.mil/big-bang/apps/third-party/jira.git
-      - https://repo1.dso.mil/big-bang/apps/third-party/confluence.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
       - https://github.com/jenkinsci/helm-charts.git
-      - https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jfrog-platform.git
     images:
       # Jira
       - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:9.0.0
