@@ -1,0 +1,100 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.25.0/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: di2me-jenkins-restorable-backup
+  description: Zarf package for backing up and restoring jenkins in a DI2-ME environment. On package create, the backup will be pulled out of the cluster and added to the package. On deploy, All backup files will be placed in the local directory. Perform the restore by deploying the optional component.
+  url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
+  version: "###ZARF_PKG_VAR_BACKUP_TIMESTAMP###"
+
+components:
+  - name: preflight-checks
+    description: "Run preflight checks"
+    required: true
+    actions:
+      onCreate:
+        defaults:
+          maxRetries: 0
+        before:
+          - cmd: if ! command -v kubectl; then echo "kubectl is required for this package" >&2; exit 1; fi
+
+  - name: jenkins-backup
+    description: "On package create, grabs the jenkins state/files from the cluster. On deploy, adds the files to the current directory."
+    required: true
+    actions:
+      onCreate:
+        defaults:
+          maxRetries: 0
+        before:
+          # Create a pod that can run binaries and temporarily store files
+          - cmd: kubectl apply -f files/pod.yaml
+
+          # Wait for backup-restore-tools pod to be ready
+          - cmd: kubectl wait --for=jsonpath='{.status.phase}'=Running -n jenkins pod/backup-restore-tools
+
+
+          #  Tar the jenkins-home folder in the backup-restore-tools pod
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -cvf jenkins-home-backup.tar jenkins-home'
+
+          # Copy the jenkins-home-backup.tar file from the backup-restore-tools pod to the local machine
+          - cmd: kubectl cp jenkins/backup-restore-tools:/tmp/jenkins-home-backup.tar tmp/jenkins-home-backup.tar
+
+
+          # Delete the backup-restore-tools pod
+          - cmd: kubectl delete pod -n jenkins --wait=true --force=true --grace-period=0 backup-restore-tools
+        onFailure:
+          - cmd: kubectl delete pod -n jenkins --wait=true --force=true --grace-period=0 backup-restore-tools
+          - cmd: rm -rf tmp
+        after:
+          - cmd: rm -rf tmp
+    files:
+      - source: tmp/jenkins-home-backup.tar
+        target: jenkins-home-backup.tar
+      - source: files/pod.yaml
+        target: pod.yaml
+
+
+  - name: warning-downtime-begin-restore
+    required: false
+    description: "WARNING: This will cause downtime -- Start restore actions. This action cannot be cancelled."
+    actions:
+      onDeploy:
+        defaults:
+          maxRetries: 0
+        after:
+          # Scale jenkins to 0 to allow for restore
+          - cmd: kubectl scale --replicas=0 -n jenkins statefulset/jenkins
+          - cmd: kubectl wait --for=jsonpath='{.status.availableReplicas}'=0 -n jenkins statefulset/jenkins --timeout=300s
+
+
+          # Create a pod that can run binaries and temporarily store files
+          - cmd: kubectl apply -f pod.yaml
+
+          # Wait for backup-restore-tools pod to be ready
+          - cmd: kubectl wait --for=jsonpath='{.status.phase}'=Running -n jenkins pod/backup-restore-tools --timeout=300s
+
+
+          # Create temp jenkins-home folder to untar the backup into
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- mkdir /tmp/jenkins-tmp
+
+          # Copy the jenkins-home-backup.tar file from the local machine to the backup-restore-tools pod
+          - cmd: kubectl cp jenkins-home-backup.tar jenkins/backup-restore-tools:/tmp/jenkins-home-backup.tar
+
+          # Untar the jenkins-home-backup inside the pod to the temp folder
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -xf jenkins-home-backup.tar -C /tmp/jenkins-tmp'
+
+          # Delete everything in the existing jenkins-home folder
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'rm -rf /tmp/jenkins-home/*'
+
+          # Copy the contents of the backup from the temp folder over the existing jenkins-home folder
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cp -R /tmp/jenkins-tmp/jenkins-home/* /tmp/jenkins-home'
+
+
+          # Delete the backup-restore-tools pod
+          - cmd: kubectl delete pod -n jenkins --wait=true --force=true --grace-period=0 backup-restore-tools
+
+
+          # Scale jenkins back to 1
+          - cmd: kubectl scale --replicas=1 -n jenkins statefulset/jenkins
+          - cmd: kubectl wait --for=jsonpath='{.status.availableReplicas}'=1 -n jenkins statefulset/jenkins --timeout=300s
+        onFailure:
+          - cmd: kubectl delete pod -n jenkins --wait=true --force=true --grace-period=0 backup-restore-tools
