@@ -62,26 +62,26 @@ components:
         files:
           - manifests/big-bang.yaml
     repos:
-      - https://repo1.dso.mil/big-bang/bigbang.git@refs/heads/1.57.0
-      - https://repo1.dso.mil/big-bang/apps/core/istio-controlplane.git@refs/heads/1.17.1-bb.0
-      - https://repo1.dso.mil/big-bang/apps/core/istio-operator.git@refs/heads/1.17.1-bb.0
-      - https://repo1.dso.mil/big-bang/apps/core/jaeger.git@refs/heads/2.41.0-bb.0
-      - https://repo1.dso.mil/big-bang/apps/core/kiali.git@refs/heads/1.65.0-bb.0
-      - https://repo1.dso.mil/big-bang/apps/sandbox/kyverno.git@refs/heads/2.6.5-bb.3
-      - https://repo1.dso.mil/big-bang/apps/sandbox/kyverno-policies.git@refs/heads/1.1.0-bb.4
-      - https://repo1.dso.mil/big-bang/apps/sandbox/kyverno-reporter.git@refs/heads/2.16.0-bb.1
-      - https://repo1.dso.mil/big-bang/apps/core/elasticsearch-kibana.git@refs/heads/1.1.0-bb.1
-      - https://repo1.dso.mil/big-bang/apps/core/eck-operator.git@refs/heads/2.6.1-bb.0
-      - https://repo1.dso.mil/big-bang/apps/core/fluentbit.git@refs/heads/0.25.0-bb.0
-      - https://repo1.dso.mil/big-bang/apps/sandbox/promtail.git@refs/heads/6.8.1-bb.1
-      - https://repo1.dso.mil/big-bang/apps/sandbox/loki.git@refs/heads/4.8.0-bb.1
-      - https://repo1.dso.mil/big-bang/apps/core/monitoring.git@refs/heads/43.1.2-bb.4
-      - https://repo1.dso.mil/big-bang/apps/application-utilities/minio-operator.git@refs/heads/4.5.8-bb.1
-      - https://repo1.dso.mil/big-bang/apps/application-utilities/minio.git@refs/heads/4.5.8-bb.0
-      - https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab.git@refs/heads/6.9.2-bb.1
-      - https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab-runner.git@refs/heads/0.49.1-bb.3
-      - https://repo1.dso.mil/big-bang/apps/cluster-utilities/velero.git@refs/heads/3.1.5-bb.0
-      - https://repo1.dso.mil/big-bang/apps/sandbox/metrics-server.git@refs/heads/3.8.4-bb.0
+      - https://repo1.dso.mil/big-bang/bigbang.git
+      - https://repo1.dso.mil/big-bang/apps/core/istio-controlplane.git
+      - https://repo1.dso.mil/big-bang/apps/core/istio-operator.git
+      - https://repo1.dso.mil/big-bang/apps/core/jaeger.git
+      - https://repo1.dso.mil/big-bang/apps/core/kiali.git
+      - https://repo1.dso.mil/big-bang/apps/sandbox/kyverno.git
+      - https://repo1.dso.mil/big-bang/apps/sandbox/kyverno-policies.git
+      - https://repo1.dso.mil/big-bang/apps/sandbox/kyverno-reporter.git
+      - https://repo1.dso.mil/big-bang/apps/core/elasticsearch-kibana.git
+      - https://repo1.dso.mil/big-bang/apps/core/eck-operator.git
+      - https://repo1.dso.mil/big-bang/apps/core/fluentbit.git
+      - https://repo1.dso.mil/big-bang/apps/sandbox/promtail.git
+      - https://repo1.dso.mil/big-bang/apps/sandbox/loki.git
+      - https://repo1.dso.mil/big-bang/apps/core/monitoring.git
+      - https://repo1.dso.mil/big-bang/apps/application-utilities/minio-operator.git
+      - https://repo1.dso.mil/big-bang/apps/application-utilities/minio.git
+      - https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab.git
+      - https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab-runner.git
+      - https://repo1.dso.mil/big-bang/apps/cluster-utilities/velero.git
+      - https://repo1.dso.mil/big-bang/apps/sandbox/metrics-server.git
 
     # To get the list of all images used in Big Bang:
     #    - Download "package-images.yml" from the big bang release
