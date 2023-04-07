@@ -2,7 +2,7 @@
 kind: ZarfPackageConfig
 metadata:
   name: di2me-artifactory-restorable-backup
-  description: Zarf package for backing up and restoring Jira in a DI2-ME environment. On package create, the backup will be pulled out of the cluster and added to the package. On deploy, All backup files will be placed in the local directory. Perform the restore by deploying the optional component.
+  description: Zarf package for backing up and restoring Artifactory in a DI2-ME environment. On package create, the backup will be pulled out of the cluster and added to the package. On deploy, All backup files will be placed in the local directory. Perform the restore by deploying the optional component.
   url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
   version: "###ZARF_PKG_VAR_BACKUP_TIMESTAMP###"
 
@@ -45,7 +45,7 @@ components:
           maxRetries: 0
         before:
           # Force a backup to be ran from the postgres pod to get the latest data
-          - cmd: kubectl exec -i -n artifactory acid-artifactory-0 -c postgres -- envdir "/run/etc/wal-e.d/env" /scripts/postgres_backup.sh "/home/postgres/pgdata/pgroot/data"
+          - cmd: bash -c 'for (( c=0; c<$(kubectl get Postgresql -n artifactory acid-artifactory -o jsonpath="{.spec.numberOfInstances}"); c++ )); do kubectl exec -i -n artifactory acid-artifactory-$c -c postgres -- envdir "/run/etc/wal-e.d/env" /scripts/postgres_backup.sh "/home/postgres/pgdata/pgroot/data"; done'
 
           # Get the name of the latest backup
           - cmd: kubectl exec -i -n artifactory acid-artifactory-0 -c postgres -- bash -c 'envdir "/run/etc/wal-e.d/env" wal-g backup-list | tail -n 1 | cut -d " " -f1' > tmp/latest-backup-name
@@ -62,11 +62,13 @@ components:
           - cmd: kubectl cp files/mc artifactory/backup-restore-tools:/tmp/mc
 
           # Set credentials and url for the minio client
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
+          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
+            maxRetries: 10
 
 
           # Copy the backup folder from the bucket to the backup-restore-tools pod TODO add logic around only downloading the latest backup if wanted
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc cp postgres/postgres-backups/spilo/acid-artifactory/$(cat tmp/postgres-cluster-uid)/ /tmp/backup --recursive"
+          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc cp postgres/postgres-backups/spilo/acid-artifactory/$(cat tmp/postgres-cluster-uid)/ /tmp/backup --recursive"
+            maxRetries: 10
 
           # Tar the backup folder in the backup-restore-tools pod
           - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /tmp/backup; tar -cvf ../db-backup.tar wal'
@@ -80,13 +82,12 @@ components:
 
           # Copy the artifactory-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp artifactory/backup-restore-tools:/tmp/artifactory-backup.tar tmp/artifactory-backup.tar
-
-
-          # Delete the backup-restore-tools pod
-          - cmd: kubectl delete pod -n artifactory --wait=true --force=true --grace-period=0 backup-restore-tools
         onFailure:
           - cmd: kubectl delete pod -n artifactory --wait=true --force=true --grace-period=0 backup-restore-tools
           - cmd: rm -rf tmp
+        after:
+          - cmd: rm -rf tmp
+          - cmd: kubectl delete pod -n artifactory --wait=true --force=true --grace-period=0 backup-restore-tools
     files:
       - source: tmp/db-backup.tar
         target: db-backup.tar
@@ -102,14 +103,6 @@ components:
         executable: true
       - source: files/pod.yaml
         target: pod.yaml
-
-  - name: package-create-cleanup
-    required: true
-    actions:
-      onCreate:
-        after:
-          - cmd: rm -rf tmp
-
 
   - name: warning-downtime-begin-restore
     required: false
@@ -127,7 +120,7 @@ components:
           - cmd: kubectl wait --for=jsonpath='{.status.availableReplicas}'=0 -n artifactory statefulset/artifactory --timeout=300s
 
           # Delete the postgresql helmrelease therefore deleting the postgresql cluster
-          - cmd: kubectl delete -n softwarefactoryaddons hr artifactory-database
+          - cmd: if kubectl get -n softwarefactoryaddons hr artifactory-database; then kubectl delete -n softwarefactoryaddons hr artifactory-database; fi
 
           # Create a pod that can run binaries and temporarily store files
           - cmd: kubectl apply -f pod.yaml
@@ -140,7 +133,8 @@ components:
           - cmd: kubectl cp mc artifactory/backup-restore-tools:/tmp/mc
 
           # Set credentials and url for the minio client
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
+          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
+            maxRetries: 10
 
 
           # Copy the db-backup.tar file from the local machine to the backup-restore-tools pod
@@ -153,7 +147,8 @@ components:
           - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "jq '.start_time' /tmp/wal/11/basebackups_005/$(cat latest-backup-name)/metadata.json | tr -d '\"'" > latest-backup-timestamp
 
           # Copy the copy the backup data into the minio bucket
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc cp /tmp/wal postgres/postgres-backups/spilo/acid-artifactory/$(cat postgres-cluster-uid)/ --recursive"
+          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc cp /tmp/wal postgres/postgres-backups/spilo/acid-artifactory/$(cat postgres-cluster-uid)/ --recursive"
+            maxRetries: 10
 
 
           # Create temp artifactory folder to untar the backup into
