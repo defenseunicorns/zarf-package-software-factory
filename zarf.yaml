@@ -88,7 +88,7 @@ components:
     #    - Run `yq '.package-image-list.*.images' package-images.yml | yq 'unique'`
     # This will produce the entire unique list of images needed for the a full configuration of bigbang.
     # We configure a subset of images needed for this configuration of bigbang.
-    # The full list for the full configuration will be commented out bellow for reference.
+    # The full list for the full configuration will be commented out below for reference.
     images:
       # The subset of unique images needed for this configuration of bigbang
       - "registry1.dso.mil/ironbank/big-bang/base:2.0.0"
