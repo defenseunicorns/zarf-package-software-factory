@@ -95,7 +95,7 @@ spec:
   interval: 1m
   url: https://github.com/defenseunicorns/zarf-package-software-factory.git
   ref:
-    branch: not-the-real-branch-name
+    branch: dev/anthony/bb-upgrade
   #    tag: X.Y.Z
   secretRef:
     name: private-git-server
