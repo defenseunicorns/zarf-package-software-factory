@@ -1,6 +1,6 @@
-golang 1.20.2
+golang 1.20.3
 golangci-lint 1.50.1
-python 3.11.2
+python 3.11.3
 pre-commit 3.0.1
 terraform 1.4.4
 tflint 0.44.1
