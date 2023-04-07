@@ -1,6 +1,6 @@
-# Backup and Restore Process for Jira
+# Backup and Restore Process for Artifactory
 
-Jira is configured to automatically take backups, but since DI2-ME is designed to be deployable to air gaps, the backup artifacts still reside inside the cluster. They need to be extracted and kept somewhere safe. Please read through this guide in it's entirety before attempting any operations.
+Artifactory is configured to automatically take backups, but since DI2-ME is designed to be deployable to air gaps, the backup artifacts still reside inside the cluster. They need to be extracted and kept somewhere safe. Please read through this guide in it's entirety before attempting any operations.
 
 ## Backup Procedure
 
@@ -13,21 +13,21 @@ Jira is configured to automatically take backups, but since DI2-ME is designed t
     zarf package create --set BACKUP_TIMESTAMP="$(date --iso-8601=seconds)" --confirm
     ```
 
-This will create a file with a similar name to `zarf-package-di2me-artifactory-restorable-backup-amd64-1970-01-01T00:00:00+00:00.tar.zst` that contains all necessary items to perform a full restore of Jira. Save it to somewhere safe.
+This will create a file with a similar name to `zarf-package-di2me-artifactory-restorable-backup-amd64-1970-01-01T00:00:00+00:00.tar.zst` that contains all necessary items to perform a full restore of Artifactory. Save it to somewhere safe.
 
 ## Restore Procedure
 
 1. Get a terminal session on a Linux host that has direct `kubectl` access to the cluster.
 1. Copy the zarf package you wish to restore from to an empty directory on the host. The name of the package file will be similar to `zarf-package-di2me-artifactory-restorable-backup-amd64-1970-01-01T00:00:00+00:00.tar.zst` except with the timestamp being when the backup package was created.
 1. Ensure you have the `zarf` CLI installed. Use the same version that is listed at the top of the Makefile in the root of this repository.
-1. **Warning!** The next step will cause downtime until this guide is finished for restoring Jira!
+1. **Warning!** The next step will cause downtime until this guide is finished for restoring Artifactory!
 1. Begin the restore operation using zarf, replacing `<ThePackageFilename>` with the filename of the package you want to restore from:
 
     ```shell
     zarf package deploy <ThePackageFilename> --components=warning-downtime-begin-restore --confirm
     ```
 
-    This has temporarily stopped Jira, removed the artifactory-database pods, and uploaded the backup data into the internal minio bucket for postgresql.
+    This has temporarily stopped Artifactory, removed the artifactory-database pods, and uploaded the backup data into the internal minio bucket for postgresql.
 
 1. You will now need to make modifications to the di2me repo and push those changes.
 
@@ -120,4 +120,4 @@ This will create a file with a similar name to `zarf-package-di2me-artifactory-r
     kubectl wait --for=jsonpath='{.status.availableReplicas}'=1 -n artifactory statefulset/artifactory --timeout=300s
     ```
 
-1. As long as Jira comes up healthy you have now restored it! You may now delete any files you do not wish to keep from the restore operations.
+1. As long as Artifactory comes up healthy you have now restored it! You may now delete any files you do not wish to keep from the restore operations.
