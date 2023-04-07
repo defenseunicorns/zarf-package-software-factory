@@ -36,7 +36,7 @@ jira:
           key: "password"
 additionalInitContainers:
   - name: wait-for-database
-    image: "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.25.3"
+    image: "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.26.3"
     command:
       [
         "sh",
