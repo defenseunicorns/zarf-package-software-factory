@@ -72,6 +72,10 @@ spec:
       kind: HelmRelease
       namespace: bigbang
       name: gitlab-runner
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      namespace: bigbang
+      name: sonarqube
   decryption:
     provider: sops
     secretRef:

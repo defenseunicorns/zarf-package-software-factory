@@ -560,6 +560,23 @@ twistlock:
   enabled: false
 
 addons:
+  sonarqube:
+    enabled: true
+    values:
+      sonarProperties:
+        sonar.forceAuthentication: true
+        sonar.search.javaAdditionalOpts: "-Dlog4j2.formatMsgNoLookups=true -Dcom.redhat.fips=false"
+        sonar.ce.javaAdditionalOpts: "-Dcom.redhat.fips=false"
+        sonar.web.javaAdditionalOpts: "-Dcom.redhat.fips=false"
+      istio:
+        enabled: true
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "1.5Gi"
+        limits:
+          cpu: "1"
+          memory: "4Gi"
   minioOperator:
     enabled: true
     values:
