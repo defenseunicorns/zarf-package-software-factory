@@ -824,7 +824,7 @@ addons:
     values:
       initContainers:
        - name: velero-plugin-for-aws
-         image: registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.6.0
+         image: registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.6.1
          imagePullPolicy: IfNotPresent
          volumeMounts:
            - mountPath: /target
