@@ -123,6 +123,10 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		output, err = platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.24.7`)
 		require.NoError(t, err, output)
 
+		// Install metallb into cluster and configure
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && test/metallb/install.sh`)
+		require.NoError(t, err, output)
+
 		// Get zarf/zarf init package and build flux package/di2me package
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make default-build`)
 		require.NoError(t, err, output)
