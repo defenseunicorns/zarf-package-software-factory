@@ -2,6 +2,8 @@
 
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-native.yaml
 
+sleep 5s
+
 kubectl wait --namespace metallb-system \
                 --for=condition=ready pod \
                 --selector=app=metallb \
