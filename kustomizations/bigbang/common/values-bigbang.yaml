@@ -68,6 +68,7 @@ istio:
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
+        - neuvector.{{ .Values.domain }}
 
 istiooperator:
   enabled: true
