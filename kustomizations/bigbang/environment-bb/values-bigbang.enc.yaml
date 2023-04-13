@@ -273,3 +273,12 @@ addons:
             [default]
             aws_access_key_id=changeme
             aws_secret_access_key=changeme
+  sonarqube:
+    values:
+      postgresql:
+        postgresqlServer: "jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:5432"
+        postgresqlDatabase: "sonarqube"
+        postgresqlUsername: "sonarqube"
+        existingSecret: "sonarqube.acid-sonarqube.credentials.postgresql.acid.zalan.do"
+        existingSecretPasswordKey: "password"
+
