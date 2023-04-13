@@ -36,3 +36,7 @@ components:
       - name: softwarefactoryaddons-config
         files:
           - ../manifests/softwarefactoryaddons.yaml
+  - name: neuvector-cve-update
+    required: false
+    images:
+      - "registry1.dso.mil/ironbank/neuvector/neuvector/scanner:5"
