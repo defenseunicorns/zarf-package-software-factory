@@ -81,6 +81,7 @@ istio:
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
+        - sonarqube.{{ .Values.domain }}
     private:
       ingressGateway: "private-ingressgateway"
       hosts:
