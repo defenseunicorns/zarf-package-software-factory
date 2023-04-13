@@ -375,6 +375,8 @@ neuvector:
   sso:
     enabled: false
   values:
+    containerd:
+      enabled: true
     istio:
       mtls:
         mode: PERMISSIVE
