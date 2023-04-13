@@ -370,9 +370,14 @@ promtail:
         cpu: "100m"
         memory: "256Mi"
 
-# TODO!
 neuvector:
-  enabled: false
+  enabled: true
+  sso:
+    enabled: false
+  values:
+    istio:
+      mtls:
+        mode: PERMISSIVE
 
 monitoring:
   enabled: true
