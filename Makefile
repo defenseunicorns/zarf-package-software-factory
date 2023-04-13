@@ -7,11 +7,11 @@ BIGBANG_VERSION := 1.57.1
 
 # The version of Zarf to use. To keep this repo as portable as possible the Zarf binary will be downloaded and added to
 # the build folder.
-ZARF_VERSION := v0.25.0
+ZARF_VERSION := v0.25.2
 
 # The version of the build harness container to use
 BUILD_HARNESS_REPO := ghcr.io/defenseunicorns/not-a-build-harness/not-a-build-harness
-BUILD_HARNESS_VERSION := 0.0.12
+BUILD_HARNESS_VERSION := 0.0.13
 
 # Figure out which Zarf binary we should use based on the operating system we are on
 ZARF_BIN := zarf
