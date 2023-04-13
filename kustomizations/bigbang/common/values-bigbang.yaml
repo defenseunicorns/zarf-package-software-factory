@@ -376,6 +376,39 @@ neuvector:
   sso:
     enabled: false
   values:
+    controller:
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "1Gi"
+        limits:
+          cpu: "500m"
+          memory: "1Gi"
+    enforcer:
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "2Gi"
+        limits:
+          cpu: "500m"
+          memory: "2Gi"
+    manager:
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "2Gi"
+        limits:
+          cpu: "500m"
+          memory: "2Gi"
+    cve:
+      scanner:
+        resources:
+          requests:
+            cpu: "1500m"
+            memory: "2Gi"
+          limits:
+            cpu: "1500m"
+            memory: "2Gi"
     containerd:
       enabled: true
     istio:
