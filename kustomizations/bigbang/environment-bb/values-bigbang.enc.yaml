@@ -273,13 +273,3 @@ addons:
             [default]
             aws_access_key_id=changeme
             aws_secret_access_key=changeme
-  sonarqube:
-    values:
-      postgresql:
-        enabled: false
-      jdbcOverwrite:
-        enabled: true
-        jdbcUrl: "jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:5432"
-        jdbcUsername: "postgres"
-        jdbcSecretName: postgres.acid-sonarqube.credentials.postgresql.acid.zalan.do
-        jdbcSecretPasswordKey: "password"
