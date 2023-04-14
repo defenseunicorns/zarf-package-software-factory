@@ -277,9 +277,9 @@ addons:
     values:
       postgresql:
         enabled: false
-        postgresqlServer: "jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:5432"
-        postgresqlDatabase: "sonarqube"
-        postgresqlUsername: "sonarqube"
-        existingSecret: "sonarqube.acid-sonarqube.credentials.postgresql.acid.zalan.do"
-        existingSecretPasswordKey: "password"
-
+      jdbcOverwrite:
+        enabled: true
+        jdbcUrl: "jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:5432"
+        jdbcUsername: "postgres"
+        jdbcSecretName: postgres.acid-sonarqube.credentials.postgresql.acid.zalan.do
+        jdbcSecretPasswordKey: "password"
