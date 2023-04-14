@@ -23,12 +23,25 @@ istio:
     public-ingressgateway:
       type: "LoadBalancer"
       kubernetesResourceSpec:
-        # Uncomment this section if you are on EKS and need to use an Internal Load Balancer instead of the default Classic Load Balancer
-#        serviceAnnotations:
-#          # Use an Internal Load Balancer rather than a public one
-#          service.beta.kubernetes.io/aws-load-balancer-internal: 'true'
-#          # Enable cross zone load balancing
-#          service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+      # Uncomment this section if you are on EKS and need to use an Internal Load Balancer instead of the default Classic Load Balancer
+      #  serviceAnnotations:
+      #    # Use an Internal Load Balancer rather than a public one
+      #    service.beta.kubernetes.io/aws-load-balancer-internal: 'true'
+      #    # Enable cross zone load balancing
+      #    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+    private-ingressgateway:
+      type: "LoadBalancer"
+      kubernetesResourceSpec:
+        serviceAnnotations: # Example for AWS internal load balancer
+          service.beta.kubernetes.io/aws-load-balancer-type: nlb
+          service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         resources:
           requests:
             cpu: "100m"
@@ -68,7 +81,21 @@ istio:
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
+    private:
+      ingressGateway: "private-ingressgateway"
+      hosts:
         - neuvector.{{ .Values.domain }}
+        # Commented out until minio virtualservices are fixed (currently broken as there are multiple entries for each of the domains)
+        # - minio.{{ .Values.domain }}
+        # - minio-api.{{ .Values.domain }}
+        - tracing.{{ .Values.domain }}
+        - kiali.{{ .Values.domain }}
+        - alertmanager.{{ .Values.domain }}
+        - grafana.{{ .Values.domain }}
+        - prometheus.{{ .Values.domain }}
+      autoHttpRedirect:
+        enabled: true
+
 
 istiooperator:
   enabled: true
@@ -84,6 +111,8 @@ istiooperator:
 
 jaeger:
   enabled: true
+  ingress:
+    gateway: "private"
   values:
     istio:
       mtls:
@@ -116,6 +145,8 @@ jaeger:
 
 kiali:
   enabled: true
+  ingress:
+    gateway: "private"
   values:
     istio:
       mtls:
@@ -375,6 +406,8 @@ neuvector:
   enabled: true
   sso:
     enabled: false
+  ingress:
+    gateway: "private"
   values:
     controller:
       resources:
@@ -417,6 +450,8 @@ neuvector:
 
 monitoring:
   enabled: true
+  ingress:
+    gateway: "private"
   values:
     istio:
       mtls:
@@ -522,19 +557,7 @@ monitoring:
             memory: "2Gi"
 
 twistlock:
-#   # Disabling Twistlock for now since Big Bang now needs a license to be specified for Twistlock to initialize successfully. Will re-evaluate turning it back on later, or possibly swap it out for Neuvector once that becomes available.
   enabled: false
-#   values:
-#     istio:
-#       mtls:
-#         mode: PERMISSIVE
-#     resources:
-#       limits:
-#         memory: "1Gi"
-#         cpu: "500m"
-#       requests:
-#         memory: "1Gi"
-#         cpu: "100m"
 
 addons:
   minioOperator:
