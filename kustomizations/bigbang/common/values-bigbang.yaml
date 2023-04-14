@@ -216,6 +216,7 @@ kyvernopolicies:
               - confluence
               - gitlab
               - jira
+              - sonarqube
               kinds:
               - Pod
               selector:
