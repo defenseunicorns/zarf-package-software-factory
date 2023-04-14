@@ -3,7 +3,7 @@ module github.com/defenseunicorns/zarf-package-software-factory
 go 1.19
 
 require (
-	github.com/gruntwork-io/terratest v0.41.17
+	github.com/gruntwork-io/terratest v0.41.18
 	github.com/stretchr/testify v1.8.2
 )
 
