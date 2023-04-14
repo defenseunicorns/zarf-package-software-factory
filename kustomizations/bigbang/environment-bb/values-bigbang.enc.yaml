@@ -276,6 +276,7 @@ addons:
   sonarqube:
     values:
       postgresql:
+        enabled: false
         postgresqlServer: "jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:5432"
         postgresqlDatabase: "sonarqube"
         postgresqlUsername: "sonarqube"
