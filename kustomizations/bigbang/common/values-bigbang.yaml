@@ -572,10 +572,10 @@ addons:
         enabled: false
       jdbcOverwrite:
         enabled: true
-        jdbcUrl: "jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:543/sonar"
-        jdbcUsername: "postgres"
-        jdbcSecretName: "postgres.acid-sonarqube.credentials.postgresql.acid.zalan.do"
-        jdbcSecretPasswordKey: "password"
+        jdbcUrl: jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:543/sonar
+        jdbcUsername: postgres
+        jdbcSecretName: postgres.acid-sonarqube.credentials.postgresql.acid.zalan.do
+        jdbcSecretPasswordKey: password
       sonarProperties:
         sonar.forceAuthentication: true
         sonar.search.javaAdditionalOpts: "-Dlog4j2.formatMsgNoLookups=true -Dcom.redhat.fips=false"
