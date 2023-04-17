@@ -564,6 +564,8 @@ twistlock:
 addons:
   sonarqube:
     enabled: true
+    ingress:
+      gateway: public
     values:
       postgresql:
         enabled: false
