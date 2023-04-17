@@ -565,9 +565,9 @@ addons:
   sonarqube:
     enabled: true
     values:
-      extraConfig:
-        configmaps:
-          - external-sonarqube-opts
+      # extraConfig:
+      #   configmaps:
+      #     - external-sonarqube-opts
       postgresql:
         enabled: false
       jdbcOverwrite:
