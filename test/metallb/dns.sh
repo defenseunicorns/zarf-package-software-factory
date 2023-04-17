@@ -15,13 +15,13 @@ echo "# Following entries are from metallb dns.sh" >> /etc/hosts
 echo "# Public hostnames" >> /etc/hosts
 
 for host in $PUBLIC_HOSTS; do
-    echo "${LB_IP} ${host}" >> /etc/hosts
+    echo "${PUBLIC_LB_IP} ${host}" >> /etc/hosts
 done
 
 echo "# Private hostnames" >> /etc/hosts
 
 for host in $PRIVATE_HOSTS; do
-    echo "${LB_IP} ${host}" >> /etc/hosts
+    echo "${PRIVATE_LB_IP} ${host}" >> /etc/hosts
 done
 
 echo "# End of metallb dns.sh" >> /etc/hosts
