@@ -571,8 +571,8 @@ addons:
       postgresql:
         enabled: false
       jdbcOverwrite:
-        enabled: true
-        jdbcUrl: jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:543/sonar
+        enable: true
+        jdbcUrl: jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:5432/sonar
         jdbcUsername: postgres
         jdbcSecretName: postgres.acid-sonarqube.credentials.postgresql.acid.zalan.do
         jdbcSecretPasswordKey: password
