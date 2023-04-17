@@ -68,6 +68,7 @@ spec:
         kind: "postgresql"
         metadata:
           name: "acid-sonarqube"
+          namespace: "sonarqube"
           labels:
             # Not sure why yet, but sonarqube's database has a lot of problems if it has sidecar injection turned on.
             # acid-sonarqube-1 throws "ERROR: failed to bootstrap from leader 'acid-sonarqube-0'
