@@ -39,7 +39,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 	namespace := "di2me"
 	stage := "terratest"
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
-	instanceType := "i4i.8xlarge"
+	instanceType := "i4i.16xlarge"
 	teststructure.RunTestStage(t, "SETUP", func() {
 		keyPairName := fmt.Sprintf("%s-%s-%s", namespace, stage, name)
 		keyPair := aws.CreateAndImportEC2KeyPair(t, awsRegion, keyPairName)
