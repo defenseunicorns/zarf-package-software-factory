@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: external-sonarqube-opts
+  namespace: sonarqube
 data:
   SONARQUBE_JDBC_USERNAME: postgres
   SONARQUBE_JDBC_URL: jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:5432/sonar
