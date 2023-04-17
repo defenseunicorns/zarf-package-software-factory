@@ -85,6 +85,10 @@ spec:
             # storageClass: "your-storage-class-name-here"
           # enableLogicalBackup: true
           # logicalBackupSchedule: "*/2 * * * *"
+          users:
+            sonarqube: []
+          databases:
+            sonarqube: sonarqube
           env:
           - name: WAL_S3_BUCKET
             value: ""

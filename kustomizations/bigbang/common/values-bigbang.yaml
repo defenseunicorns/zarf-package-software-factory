@@ -565,16 +565,13 @@ addons:
   sonarqube:
     enabled: true
     values:
-      # extraConfig:
-      #   configmaps:
-      #     - external-sonarqube-opts
       postgresql:
         enabled: false
       jdbcOverwrite:
         enable: true
-        jdbcUrl: jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:5432/sonar
-        jdbcUsername: postgres
-        jdbcSecretName: postgres.acid-sonarqube.credentials.postgresql.acid.zalan.do
+        jdbcUrl: jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:5432/sonarqube
+        jdbcUsername: sonarqube
+        jdbcSecretName: sonarqube.acid-sonarqube.credentials.postgresql.acid.zalan.do
         jdbcSecretPasswordKey: password
       sonarProperties:
         sonar.forceAuthentication: true
