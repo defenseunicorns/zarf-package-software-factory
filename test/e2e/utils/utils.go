@@ -39,7 +39,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 	namespace := "di2me"
 	stage := "terratest"
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
-	instanceType := "m6i.8xlarge"
+	instanceType := "i4i.8xlarge"
 	teststructure.RunTestStage(t, "SETUP", func() {
 		keyPairName := fmt.Sprintf("%s-%s-%s", namespace, stage, name)
 		keyPair := aws.CreateAndImportEC2KeyPair(t, awsRegion, keyPairName)
@@ -120,7 +120,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && kind delete cluster`)
 
 		// Create kind cluster using 1.24 node image
-		output, err = platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.24.7`)
+		output, err = platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.24.12`)
 		require.NoError(t, err, output)
 
 		// Install metallb into cluster and configure
