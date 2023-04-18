@@ -167,18 +167,23 @@ func getAwsRegion() (string, error) {
 		return "", fmt.Errorf("expected either AWS_REGION or AWS_DEFAULT_REGION env var to be set, but they were not")
 	}
 
+	fmt.Printf("Using AWS region: %v", val)
+
 	return val, nil
 }
 
 // getAwsAvailabilityZone returns the desired AWS Availability Zone to use by first checking the env var AWS_AVAILABILITY_ZONE,
 // We default to {awsRegion}b if env var is not specified.
 func getAwsAvailabilityZone(awsRegion string) string {
-	val, present := os.LookupEnv("AWS_AVAILABILITY_ZONE")
+	zoneLetter, present := os.LookupEnv("AWS_AVAILABILITY_ZONE")
+	var zone string
 	if !present {
-		val = fmt.Sprintf("%s%s", awsRegion, "b")
+		zone = fmt.Sprintf("%s%s", awsRegion, "a")
+	} else {
+		zone = fmt.Sprintf("%s%s", awsRegion, zoneLetter)
 	}
 
-	return val
+	return zone
 }
 
 // getEnvVar gets an environment variable, returning an error if it isn't found.
