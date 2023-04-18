@@ -142,8 +142,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_AVAILABILITY_ZONE: ${{ vars.AWS_AVAILABILITY_ZONE }}
-          AWS_DEFAULT_REGION: us-east-2
-          AWS_REGION: ${{ vars.AWS_REGION }}
+          DI2ME_AWS_DEFAULT_REGION: us-east-2
+          DI2ME_AWS_REGION: ${{ vars.DI2ME_AWS_REGION }}
           REGISTRY1_USERNAME: ${{ secrets.REGISTRY1_USERNAME }}
           REGISTRY1_PASSWORD: ${{ secrets.REGISTRY1_PASSWORD }}
           REPO_URL: https://github.com/${{ github.repository }}.git

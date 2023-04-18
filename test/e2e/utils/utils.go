@@ -159,12 +159,12 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 // getAwsRegion returns the desired AWS region to use by first checking the env var AWS_REGION, then checking
 // AWS_DEFAULT_REGION if AWS_REGION isn't set. If neither is set it returns an error.
 func getAwsRegion() (string, error) {
-	val, present := os.LookupEnv("AWS_REGION")
+	val, present := os.LookupEnv("DI2ME_AWS_REGION")
 	if !present {
-		val, present = os.LookupEnv("AWS_DEFAULT_REGION")
+		val, present = os.LookupEnv("DI2ME_AWS_DEFAULT_REGION")
 	}
 	if !present {
-		return "", fmt.Errorf("expected either AWS_REGION or AWS_DEFAULT_REGION env var to be set, but they were not")
+		return "", fmt.Errorf("expected either DI2ME_AWS_REGION or DI2ME_AWS_DEFAULT_REGION env var to be set, but they were not")
 	}
 
 	fmt.Printf("Using AWS region: %v", val)
