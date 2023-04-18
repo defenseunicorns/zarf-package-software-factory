@@ -66,14 +66,14 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 
 		// In order for the GitLab HelmRelease to fully reconcile, we need to manually trigger a backup, so that 2 remaining PVCs will bind.
 		// Wait for the "gitlab-toolbox-backup" CronJob to exist.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get cronjob gitlab-toolbox-backup -n gitlab; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 2400 bash -c "while ! kubectl get cronjob gitlab-toolbox-backup -n gitlab; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Trigger the backup
 		output, err = platform.RunSSHCommandAsSudo(`kubectl create job -n gitlab --from=cronjob/gitlab-toolbox-backup gitlab-toolbox-backup-manual`)
 		require.NoError(t, err, output)
 
-		// Wait for the "bigbang" kustomization to report "Ready==True". Our testing shows if everything goes right this should take 11-13 minutes.
-		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/bigbang -n flux-system --for=condition=Ready --timeout=1200s`)
+		// Wait for the "bigbang" kustomization to report "Ready==True". Our testing shows if everything goes right this should take 15-25 minutes.
+		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/bigbang -n flux-system --for=condition=Ready --timeout=2400s`)
 		require.NoError(t, err, output)
 		// Wait for the "softwarefactoryaddons" kustomization to report "Ready==True".
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/softwarefactoryaddons -n flux-system --for=condition=Ready --timeout=1200s`)
@@ -159,6 +159,26 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Ensure that GitLab is available outside of the cluster.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)
+
+		// Ensure that Neuvector is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://neuvector.bigbang.dev/#/login > /dev/null; do sleep 5; done"`)
+		require.NoError(t, err, output)
+		// Ensure that Jaeger is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://tracing.bigbang.dev/search > /dev/null; do sleep 5; done"`)
+		require.NoError(t, err, output)
+		// Ensure that AlertManager is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://alertmanager.bigbang.dev/#/alerts > /dev/null; do sleep 5; done"`)
+		require.NoError(t, err, output)
+		// Ensure that Grafana is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://grafana.bigbang.dev/login > /dev/null; do sleep 5; done"`)
+		require.NoError(t, err, output)
+		// Ensure that Kiali is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://kiali.bigbang.dev/kiali/ > /dev/null; do sleep 5; done"`)
+		require.NoError(t, err, output)
+		// Ensure that Prometheus is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://prometheus.bigbang.dev/graph > /dev/null; do sleep 5; done"`)
+		require.NoError(t, err, output)
+
 		// Wait for the Artifactory StatefulSet to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get statefulset artifactory -n artifactory; do sleep 5; done"`)
 		require.NoError(t, err, output)
@@ -211,6 +231,24 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		require.NoError(t, err, output)
 		// Ensure that Artifactory does not accept TLSv1.1
 		output, err = platform.RunSSHCommandAsSudo(`sslscan artifactory.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		require.NoError(t, err, output)
+		// Ensure that Neuvector does not accept TLSv1.1
+		output, err = platform.RunSSHCommandAsSudo(`sslscan neuvector.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		require.NoError(t, err, output)
+		// Ensure that Jaeger does not accept TLSv1.1
+		output, err = platform.RunSSHCommandAsSudo(`sslscan tracing.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		require.NoError(t, err, output)
+		// Ensure that Kiali does not accept TLSv1.1
+		output, err = platform.RunSSHCommandAsSudo(`sslscan kiali.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		require.NoError(t, err, output)
+		// Ensure that AlertManager does not accept TLSv1.1
+		output, err = platform.RunSSHCommandAsSudo(`sslscan alertmanager.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		require.NoError(t, err, output)
+		// Ensure that Grafana does not accept TLSv1.1
+		output, err = platform.RunSSHCommandAsSudo(`sslscan grafana.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		require.NoError(t, err, output)
+		// Ensure that Prometheus does not accept TLSv1.1
+		output, err = platform.RunSSHCommandAsSudo(`sslscan prometheus.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
 
 		// Ensure that the databases are still reporting "PostgresClusterStatus==Running"

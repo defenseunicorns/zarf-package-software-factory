@@ -82,6 +82,7 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/metrics-server.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/neuvector.git
 
     # To get the list of all images used in Big Bang:
     #    - Download "package-images.yml" from the big bang release
@@ -151,6 +152,11 @@ components:
       - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-csi:v0.4.2"
       - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-microsoft-azure:v1.6.1"
       - "registry1.dso.mil/ironbank/opensource/kubernetes-sigs/metrics-server:v0.6.2"
+      - "registry1.dso.mil/ironbank/neuvector/neuvector/controller:5.1.1"
+      - "registry1.dso.mil/ironbank/neuvector/neuvector/enforcer:5.1.1"
+      - "registry1.dso.mil/ironbank/neuvector/neuvector/manager:5.1.1"
+      - "registry1.dso.mil/ironbank/neuvector/neuvector/scanner:5"
+      - "registry1.dso.mil/ironbank/neuvector/neuvector/prometheus-exporter:5.1.0"
 
       # The detailed list of images needed for all the packages in this version of bigbang.
       # Use this is reference when bringing in new packages to your bigbang configuration.

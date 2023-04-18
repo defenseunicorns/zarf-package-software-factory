@@ -39,7 +39,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 	namespace := "di2me"
 	stage := "terratest"
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
-	instanceType := "m6i.8xlarge"
+	instanceType := "m6id.12xlarge"
 	teststructure.RunTestStage(t, "SETUP", func() {
 		keyPairName := fmt.Sprintf("%s-%s-%s", namespace, stage, name)
 		keyPair := aws.CreateAndImportEC2KeyPair(t, awsRegion, keyPairName)
@@ -120,7 +120,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && kind delete cluster`)
 
 		// Create kind cluster using 1.24 node image
-		output, err = platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.24.7`)
+		output, err = platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.24.12`)
 		require.NoError(t, err, output)
 
 		// Install metallb into cluster and configure
@@ -159,13 +159,15 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 // getAwsRegion returns the desired AWS region to use by first checking the env var AWS_REGION, then checking
 // AWS_DEFAULT_REGION if AWS_REGION isn't set. If neither is set it returns an error.
 func getAwsRegion() (string, error) {
-	val, present := os.LookupEnv("AWS_REGION")
+	val, present := os.LookupEnv("DI2ME_AWS_REGION")
 	if !present {
-		val, present = os.LookupEnv("AWS_DEFAULT_REGION")
+		val, present = os.LookupEnv("DI2ME_AWS_DEFAULT_REGION")
 	}
 	if !present {
-		return "", fmt.Errorf("expected either AWS_REGION or AWS_DEFAULT_REGION env var to be set, but they were not")
+		return "", fmt.Errorf("expected either DI2ME_AWS_REGION or DI2ME_AWS_DEFAULT_REGION env var to be set, but they were not")
 	}
+
+	fmt.Printf("Using AWS region: %v", val)
 
 	return val, nil
 }
@@ -173,12 +175,15 @@ func getAwsRegion() (string, error) {
 // getAwsAvailabilityZone returns the desired AWS Availability Zone to use by first checking the env var AWS_AVAILABILITY_ZONE,
 // We default to {awsRegion}b if env var is not specified.
 func getAwsAvailabilityZone(awsRegion string) string {
-	val, present := os.LookupEnv("AWS_AVAILABILITY_ZONE")
+	zoneLetter, present := os.LookupEnv("AWS_AVAILABILITY_ZONE")
+	var zone string
 	if !present {
-		val = fmt.Sprintf("%s%s", awsRegion, "b")
+		zone = fmt.Sprintf("%s%s", awsRegion, "a")
+	} else {
+		zone = fmt.Sprintf("%s%s", awsRegion, zoneLetter)
 	}
 
-	return val
+	return zone
 }
 
 // getEnvVar gets an environment variable, returning an error if it isn't found.
