@@ -6,7 +6,6 @@ resources:
   - secrets.yaml
   - tenants.yaml
   - networkpolicies.yaml
-  # - apps/external-sonarqube-opts.yaml
 
 configMapGenerator:
   - name: common
