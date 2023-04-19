@@ -1,7 +1,8 @@
 resources:
   - vendor/bigbang/base
   - gitrepository.yaml
-  - databases.yaml
+  - databases/gitlab.yaml
+  - databases/sonarqube.yaml
   - secrets.yaml
   - tenants.yaml
   - networkpolicies.yaml

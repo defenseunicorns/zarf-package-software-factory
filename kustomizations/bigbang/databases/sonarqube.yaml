@@ -1,12 +1,11 @@
-# nonk8s
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: gitlab-database
+  name: sonarqube-database
   namespace: bigbang
 spec:
-  targetNamespace: gitlab
-  releaseName: gitlab-database
+  targetNamespace: sonarqube
+  releaseName: sonarqube-database
   interval: 5m
   timeout: 10m
   chart:
@@ -68,12 +67,8 @@ spec:
       - apiVersion: "acid.zalan.do/v1"
         kind: "postgresql"
         metadata:
-          name: "acid-gitlab"
-          labels:
-            # Not sure why yet, but GitLab's database has a lot of problems if it has sidecar injection turned on.
-            # acid-gitlab-1 throws "ERROR: failed to bootstrap from leader 'acid-gitlab-0'
-            # TODO: Figure out why GitLab's database has problems with sidecar injections and fix it.
-            sidecar.istio.io/inject: "false"
+          name: "acid-sonarqube"
+          namespace: "sonarqube"
         spec:
           teamId: "acid"
           postgresql:
@@ -85,6 +80,10 @@ spec:
             # storageClass: "your-storage-class-name-here"
           # enableLogicalBackup: true
           # logicalBackupSchedule: "*/2 * * * *"
+          users:
+            sonarqube: []
+          databases:
+            sonarqube: sonarqube
           env:
           - name: WAL_S3_BUCKET
             value: ""

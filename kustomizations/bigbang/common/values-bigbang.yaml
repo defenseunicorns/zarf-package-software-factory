@@ -81,6 +81,7 @@ istio:
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
+        - sonarqube.{{ .Values.domain }}
     private:
       ingressGateway: "private-ingressgateway"
       hosts:
@@ -215,6 +216,7 @@ kyvernopolicies:
               - confluence
               - gitlab
               - jira
+              - sonarqube
               kinds:
               - Pod
               selector:
@@ -560,6 +562,37 @@ twistlock:
   enabled: false
 
 addons:
+  sonarqube:
+    enabled: true
+    ingress:
+      gateway: public
+    values:
+      postgresql:
+        enabled: false
+      jdbcOverwrite:
+        enable: true
+        jdbcUrl: jdbc:postgresql://acid-sonarqube.sonarqube.svc.cluster.local:5432/sonarqube
+        jdbcUsername: sonarqube
+        jdbcSecretName: sonarqube.acid-sonarqube.credentials.postgresql.acid.zalan.do
+        jdbcSecretPasswordKey: password
+      sonarProperties:
+        sonar.forceAuthentication: true
+        sonar.search.javaAdditionalOpts: "-Dlog4j2.formatMsgNoLookups=true -Dcom.redhat.fips=false"
+        sonar.ce.javaAdditionalOpts: "-Dcom.redhat.fips=false"
+        sonar.web.javaAdditionalOpts: "-Dcom.redhat.fips=false"
+      istio:
+        enabled: true
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "1.5Gi"
+        limits:
+          cpu: "1"
+          memory: "4Gi"
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
   minioOperator:
     enabled: true
     values:

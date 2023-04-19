@@ -39,30 +39,37 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-artifactory -n artifactory; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Wait for the "acid-artifactory" database to report "PostgresClusterStatus==Running", then set the timestamp
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath="{.status.PostgresClusterStatus}"); while [ $DB_STATUS != "Running" ]; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=\$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath=\"{.status.PostgresClusterStatus}\"); while [ \"\$DB_STATUS\" != \"Running\" ]; do sleep 5; DB_STATUS=\$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath=\"{.status.PostgresClusterStatus}\"); done"`)
 		require.NoError(t, err, output)
 		timestampArtifactoryDb := time.Now().Add(time.Minute * 15).Add(time.Second * 10)
 		// Wait for the "acid-confluence" database to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-confluence -n confluence; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Wait for the "acid-confluence" database to report "PostgresClusterStatus==Running", then set the timestamp
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=$(kubectl get postgresql acid-confluence -n confluence -o jsonpath=:"{.status.PostgresClusterStatus}"); while [ $DB_STATUS != "Running" ]; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=\$(kubectl get postgresql acid-confluence -n confluence -o jsonpath=\"{.status.PostgresClusterStatus}\"); while [ \"\$DB_STATUS\" != \"Running\" ]; do sleep 5; DB_STATUS=\$(kubectl get postgresql acid-confluence -n confluence -o jsonpath=\"{.status.PostgresClusterStatus}\"); done"`)
 		require.NoError(t, err, output)
 		timestampConfluenceDb := time.Now().Add(time.Minute * 15).Add(time.Second * 10)
 		// Wait for the "acid-gitlab" database to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-gitlab -n gitlab; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Wait for the "acid-gitlab" database to report "PostgresClusterStatus==Running", then set the timestamp
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=$(kubectl get postgresql acid-gitlab -n gitlab -o jsonpath="{.status.PostgresClusterStatus}"); while [ $DB_STATUS != "Running" ]; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=\$(kubectl get postgresql acid-gitlab -n gitlab -o jsonpath=\"{.status.PostgresClusterStatus}\"); while [ \"\$DB_STATUS\" != \"Running\" ]; do sleep 5; DB_STATUS=\$(kubectl get postgresql acid-gitlab -n gitlab -o jsonpath=\"{.status.PostgresClusterStatus}\"); done"`)
 		require.NoError(t, err, output)
 		timestampGitlabDb := time.Now().Add(time.Minute * 15).Add(time.Second * 10)
 		// Wait for the "acid-jira" database to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-jira -n jira; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Wait for the "acid-jira" database to report "PostgresClusterStatus==Running", then set the timestamp
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=$(kubectl get postgresql acid-jira -n jira -o jsonpath="{.status.PostgresClusterStatus}"); while [ $DB_STATUS != "Running" ]; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=\$(kubectl get postgresql acid-jira -n jira -o jsonpath=\"{.status.PostgresClusterStatus}\"); while [ \"\$DB_STATUS\" != \"Running\" ]; do sleep 5; DB_STATUS=\$(kubectl get postgresql acid-jira -n jira -o jsonpath=\"{.status.PostgresClusterStatus}\"); done"`)
 		require.NoError(t, err, output)
 		timestampJiraDb := time.Now().Add(time.Minute * 15).Add(time.Second * 10)
+		// Wait for the "acid-sonarqube" database to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-sonarqube -n sonarqube; do sleep 5; done"`)
+		require.NoError(t, err, output)
+		timestampSonarqubeDb := time.Now().Add(time.Minute * 15).Add(time.Second * 10)
+		// Wait for the "acid-sonarqube" database to report "PostgresClusterStatus==Running", then set the timestamp
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=\$(kubectl get postgresql acid-sonarqube -n sonarqube -o jsonpath=\"{.status.PostgresClusterStatus}\"); while [ \"\$DB_STATUS\" != \"Running\" ]; do sleep 5; DB_STATUS=\$(kubectl get postgresql acid-sonarqube -n sonarqube -o jsonpath=\"{.status.PostgresClusterStatus}\"); done"`)
+		require.NoError(t, err, output)
 
 		// In order for the GitLab HelmRelease to fully reconcile, we need to manually trigger a backup, so that 2 remaining PVCs will bind.
 		// Wait for the "gitlab-toolbox-backup" CronJob to exist.
@@ -159,7 +166,9 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Ensure that GitLab is available outside of the cluster.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)
-
+		// Ensure that SonarQube is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://sonarqube.bigbang.dev/login > /dev/null; do sleep 5; done"`)
+		require.NoError(t, err, output)
 		// Ensure that Neuvector is available outside of the cluster.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://neuvector.bigbang.dev/#/login > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)
@@ -232,6 +241,9 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Ensure that Artifactory does not accept TLSv1.1
 		output, err = platform.RunSSHCommandAsSudo(`sslscan artifactory.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
+		// Ensure that Sonarqube does not accept TLSv1.1
+		output, err = platform.RunSSHCommandAsSudo(`sslscan sonarqube.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		require.NoError(t, err, output)
 		// Ensure that Neuvector does not accept TLSv1.1
 		output, err = platform.RunSSHCommandAsSudo(`sslscan neuvector.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
@@ -275,6 +287,12 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 			time.Sleep(1 * time.Second)
 		}
 		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-jira -n jira -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-jira expected to be Running, but got $DB_STATUS"; exit 1; fi`)
+		require.NoError(t, err, output)
+		// Wait until timestampSonarqubeDb, then verify "PostgresClusterStatus==Running"
+		for time.Now().Before(timestampSonarqubeDb) {
+			time.Sleep(1 * time.Second)
+		}
+		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-sonarqube -n sonarqube -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-sonarqube expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		require.NoError(t, err, output)
 	})
 }
