@@ -78,17 +78,17 @@ components:
 
 
           #  Tar the local-home folder in the backup-restore-tools pod
-          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts; tar -cvf local-home-backup.tar jira-local-home'
+          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts; tar -cvf /mounts/workspace/local-home-backup.tar jira-local-home'
 
           # Copy the local-home-backup.tar file from the backup-restore-tools pod to the local machine
-          - cmd: kubectl cp jira/backup-restore-tools:/mounts/local-home-backup.tar tmp/local-home-backup.tar
+          - cmd: kubectl cp jira/backup-restore-tools:/mounts/workspace/local-home-backup.tar tmp/local-home-backup.tar
 
 
           #  Tar the shared-home folder in the backup-restore-tools pod
-          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts; tar -cvf shared-home-backup.tar jira-shared-home'
+          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts; tar -cvf /mounts/workspace/shared-home-backup.tar jira-shared-home'
 
           # Copy the shared-home-backup.tar file from the backup-restore-tools pod to the local machine
-          - cmd: kubectl cp jira/backup-restore-tools:/mounts/shared-home-backup.tar tmp/shared-home-backup.tar
+          - cmd: kubectl cp jira/backup-restore-tools:/mounts/workspace/shared-home-backup.tar tmp/shared-home-backup.tar
         onFailure:
           - cmd: kubectl delete -f files/pod.yaml --wait=true --force=true --grace-period=0
           - cmd: rm -rf tmp
@@ -161,38 +161,38 @@ components:
 
 
           # Create temp local-home folder to untar the backup into
-          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- mkdir /mounts/local-tmp
+          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- mkdir /mounts/workspace/local-tmp
 
           # Copy the local-home-backup.tar file from the local machine to the backup-restore-tools pod
-          - cmd: kubectl cp local-home-backup.tar jira/backup-restore-tools:/mounts/local-home-backup.tar
+          - cmd: kubectl cp local-home-backup.tar jira/backup-restore-tools:/mounts/workspace/local-home-backup.tar
 
           # Untar the local-home-backup inside the pod to the temp folder
-          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts; tar -xf local-home-backup.tar -C /mounts/local-tmp'
+          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf /mounts/workspace/local-home-backup.tar -C /mounts/workspace/local-tmp'
 
           # Delete everything in the existing local-home folder
           - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'rm -rf /mounts/jira-local-home/*'
 
           # Copy the contents of the backup from the temp folder over the existing local-home folder
-          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cp -R /mounts/local-tmp/jira-local-home/* /mounts/jira-local-home'
+          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cp -R /mounts/workspace/local-tmp/jira-local-home/* /mounts/jira-local-home'
 
 
           # Create temp shared-home folder to untar the backup into
-          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- mkdir /mounts/shared-tmp
+          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- mkdir /mounts/workspace/shared-tmp
 
           # Copy the shared-home-backup.tar file from the local machine to the backup-restore-tools pod
-          - cmd: kubectl cp shared-home-backup.tar jira/backup-restore-tools:/mounts/shared-home-backup.tar
+          - cmd: kubectl cp shared-home-backup.tar jira/backup-restore-tools:/mounts/workspace/shared-home-backup.tar
 
           # Untar the shared-home-backup inside the pod
-          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts; tar -xf db-backup.tar -C /mounts/shared-tmp'
+          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf /mounts/workspacedb-backup.tar -C /mounts/workspace/shared-tmp'
 
           # Delete everything in the existing shared-home folder
           - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'rm -rf /mounts/jira-shared-home/*'
 
           # Copy the contents of the backup from the temp folder over the existing shared-home folder
-          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'if [ -d "/mounts/shared-tmp/jira-shared-home" ]; then cp -R /mounts/shared-tmp/jira-shared-home/* /mounts/jira-shared-home; fi'
+          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'if [ -d "/mounts/workspace/shared-tmp/jira-shared-home" ]; then cp -R /mounts/workspace/shared-tmp/jira-shared-home/* /mounts/jira-shared-home; fi'
 
 
           # Delete the backup-restore-tools pod
-          - cmd: kubectl delete -f files/pod.yaml --wait=true --force=true --grace-period=0
+          - cmd: kubectl delete -f pod.yaml --wait=true --force=true --grace-period=0
         onFailure:
-          - cmd: kubectl delete -f files/pod.yaml --wait=true --force=true --grace-period=0
+          - cmd: kubectl delete -f pod.yaml --wait=true --force=true --grace-period=0
