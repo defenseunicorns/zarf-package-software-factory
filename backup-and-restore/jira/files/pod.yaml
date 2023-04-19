@@ -6,7 +6,8 @@ metadata:
 spec:
   containers:
   - name: toolbox
-    image: registry1.dso.mil/ironbank/big-bang/base:2.0.0
+    image: redhat/ubi8:8.7
+    # image: registry1.dso.mil/ironbank/big-bang/base:2.0.0
     resources:
       requests:
         cpu: 100m
@@ -17,9 +18,11 @@ spec:
     command: ["sleep", "infinity"]
     volumeMounts:
     - name: jira-local-home
-      mountPath: /tmp/jira-local-home
+      mountPath: /mounts/jira-local-home
     - name: jira-shared-home
-      mountPath: /tmp/jira-shared-home
+      mountPath: /mounts/jira-shared-home
+    - name: backup-restore-workspace
+      mountPath: /mounts/workspace
     securityContext:
       runAsUser: 2001
   volumes:
@@ -29,3 +32,18 @@ spec:
   - name: jira-shared-home
     persistentVolumeClaim:
       claimName: jira-shared-home-single-node
+  - name: backup-restore-workspace
+    persistentVolumeClaim:
+      claimName: backup-restore-workspace
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backup-restore-workspace
+  namespace: jira
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
