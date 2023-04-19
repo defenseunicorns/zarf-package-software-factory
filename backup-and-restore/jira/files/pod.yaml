@@ -6,8 +6,7 @@ metadata:
 spec:
   containers:
   - name: toolbox
-    image: redhat/ubi8:8.7
-    # image: registry1.dso.mil/ironbank/big-bang/base:2.0.0
+    image: registry1.dso.mil/ironbank/big-bang/base:2.0.0
     resources:
       requests:
         cpu: 100m
