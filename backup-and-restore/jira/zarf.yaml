@@ -186,7 +186,7 @@ components:
           - cmd: kubectl cp shared-home-backup.tar jira/backup-restore-tools:/mounts/workspace/shared-home-backup.tar
 
           # Untar the shared-home-backup inside the pod
-          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf /mounts/workspacedb-backup.tar -C /mounts/workspace/shared-tmp'
+          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf /mounts/workspace/db-backup.tar -C /mounts/workspace/shared-tmp'
 
           # Delete everything in the existing shared-home folder
           - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'rm -rf /mounts/jira-shared-home/*'
