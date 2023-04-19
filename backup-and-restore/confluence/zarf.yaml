@@ -175,6 +175,9 @@ components:
           # Copy the contents of the backup from the temp folder over the existing local-home folder
           - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cp -R /tmp/local-tmp/confluence-local-home/* /tmp/confluence-local-home'
 
+          # Delete the confluence.cfg.xml file from the restored backup so it can be regenerated on confluence startup
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'rm -f /mounts/confluence-local-home/confluence.cfg.xml'
+
 
           # Create temp shared-home folder to untar the backup into
           - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- mkdir /tmp/shared-tmp

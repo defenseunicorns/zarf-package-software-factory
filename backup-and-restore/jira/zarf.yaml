@@ -175,6 +175,9 @@ components:
           # Copy the contents of the backup from the temp folder over the existing local-home folder
           - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cp -R /mounts/workspace/local-tmp/jira-local-home/* /mounts/jira-local-home'
 
+          # Delete the dbconfig.xml file from the restored backup so it can be regenerated on jira startup
+          - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'rm -f /mounts/jira-local-home/dbconfig.xml'
+
 
           # Create temp shared-home folder to untar the backup into
           - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- mkdir /mounts/workspace/shared-tmp
