@@ -16,6 +16,8 @@ spec:
         memory: 2048Mi
     command: ["sleep", "infinity"]
     volumeMounts:
+    - name: mounts-emptydir
+      mountPath: /mounts
     - name: jira-local-home
       mountPath: /mounts/jira-local-home
     - name: jira-shared-home
@@ -34,6 +36,8 @@ spec:
   - name: backup-restore-workspace
     persistentVolumeClaim:
       claimName: backup-restore-workspace
+  - name: mounts-emptydir
+    emptyDir: {}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
