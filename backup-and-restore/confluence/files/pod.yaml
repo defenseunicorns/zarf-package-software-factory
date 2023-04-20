@@ -17,9 +17,11 @@ spec:
     command: ["sleep", "infinity"]
     volumeMounts:
     - name: confluence-local-home
-      mountPath: /tmp/confluence-local-home
+      mountPath: /mounts/confluence-local-home
     - name: confluence-shared-home
-      mountPath: /tmp/confluence-shared-home
+      mountPath: /mounts/confluence-shared-home
+    - name: backup-restore-workspace
+      mountPath: /mounts/workspace
     securityContext:
       runAsUser: 2002
   volumes:
@@ -29,3 +31,18 @@ spec:
   - name: confluence-shared-home
     persistentVolumeClaim:
       claimName: confluence-shared-home-single-node
+  - name: backup-restore-workspace
+    persistentVolumeClaim:
+      claimName: backup-restore-workspace
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backup-restore-workspace
+  namespace: confluence
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
