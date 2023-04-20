@@ -385,7 +385,8 @@ components:
     repos:
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
-      - https://github.com/jenkinsci/helm-charts.git
+      # - https://github.com/jenkinsci/helm-charts.git
+      - https://repo1.dso.mil/big-bang/product/community/jenkins.git
       - https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git
     images:
       # Jira
