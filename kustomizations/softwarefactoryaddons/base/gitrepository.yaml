@@ -31,9 +31,9 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: https://github.com/jenkinsci/helm-charts.git
+  url: https://repo1.dso.mil/big-bang/product/community/jenkins.git
   ref:
-    tag: jenkins-4.3.22
+    tag: 4.3.9-bb.0
   secretRef:
     name: private-git-server
 ---
