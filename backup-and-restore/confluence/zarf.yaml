@@ -153,7 +153,7 @@ components:
           - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf db-backup.tar'
 
           # Write backup timestamp to file
-          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "jq '.start_time' /mounts/workspace/wal/11/basebackups_005/$(cat latest-backup-name)/metadata.json | tr -d '\"'" > latest-backup-timestamp
+          - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "jq '.start_time' /mounts/workspace/wal/13/basebackups_005/$(cat latest-backup-name)/metadata.json | tr -d '\"'" > latest-backup-timestamp
 
           # Copy the copy the backup data into the minio bucket
           - cmd: sleep 2s; kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc cp /mounts/workspace/wal postgres/postgres-backups/spilo/acid-confluence/$(cat postgres-cluster-uid)/ --recursive"
