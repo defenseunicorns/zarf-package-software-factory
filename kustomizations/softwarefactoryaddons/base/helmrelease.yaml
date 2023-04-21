@@ -106,7 +106,7 @@ spec:
   timeout: 10m
   chart:
     spec:
-      chart: charts/jenkins
+      chart: chart
       sourceRef:
         kind: GitRepository
         name: jenkins
