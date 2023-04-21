@@ -94,7 +94,7 @@ components:
           - cmd: rm -rf tmp
         after:
           - cmd: rm -rf tmp
-          - cmd: kubectl delete pod -n artifactory --wait=true --force=true --grace-period=0 backup-restore-tools
+          - cmd: kubectl delete pod -n jira --wait=true --force=true --grace-period=0 backup-restore-tools
     files:
       - source: tmp/db-backup.tar
         target: db-backup.tar
