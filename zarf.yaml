@@ -52,8 +52,8 @@ components:
     repos:
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git
     images:
-      - registry1.dso.mil/ironbank/bitnami/redis:7.0.0-debian-10-r3
-      - docker.io/bitnami/redis-sentinel:6.2.7
+      - registry1.dso.mil/ironbank/bitnami/redis:7.0.10
+      - docker.io/bitnami/redis-sentinel:7.0.10-debian-11-r2
 
   - name: big-bang
     required: true
@@ -385,19 +385,19 @@ components:
     repos:
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git
-      - https://github.com/jenkinsci/helm-charts.git
+      - https://repo1.dso.mil/big-bang/product/community/jenkins.git
       - https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git
     images:
       # Jira
-      - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:9.0.0
+      - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:9.6.0
       - registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.5
       # Confluence
       - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.18.1
       - registry1.dso.mil/ironbank/big-bang/base:2.0.0
       # Jenkins
-      - registry1.dso.mil/ironbank/opensource/jenkins/jenkins:2.357
-      - registry1.dso.mil/ironbank/opensource/jenkins/inbound-agent:4.13
-      - registry1.dso.mil/ironbank/kiwigrid/k8s-sidecar:1.15.0
+      - registry1.dso.mil/ironbank/opensource/jenkins/jenkins:2.387.2-lts
+      - registry1.dso.mil/ironbank/opensource/jenkins/inbound-agent:3107.v665000b_51092-4
+      - registry1.dso.mil/ironbank/kiwigrid/k8s-sidecar:1.22.4
       # Artifactory
       - registry1.dso.mil/ironbank/jfrog/artifactory/artifactory:7.55.9
       - registry1.dso.mil/ironbank/opensource/postgres/postgresql:13.10

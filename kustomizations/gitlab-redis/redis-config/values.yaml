@@ -3,9 +3,6 @@ auth:
 sentinel:
   enabled: true
   image:
-    registry: "docker.io"
-    repository: "bitnami/redis-sentinel"
-    tag: "6.2.7"
     pullPolicy: Always
   resources:
     limits:
