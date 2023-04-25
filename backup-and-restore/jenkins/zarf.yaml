@@ -33,10 +33,10 @@ components:
 
 
           #  Tar the jenkins-home folder in the backup-restore-tools pod
-          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -cvf jenkins-home-backup.tar jenkins-home'
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cd /mounts; tar -cvf /mounts/workspace/jenkins-home-backup.tar jenkins-home'
 
           # Copy the jenkins-home-backup.tar file from the backup-restore-tools pod to the local machine
-          - cmd: kubectl cp jenkins/backup-restore-tools:/tmp/jenkins-home-backup.tar tmp/jenkins-home-backup.tar
+          - cmd: kubectl cp jenkins/backup-restore-tools:/mounts/workspace/jenkins-home-backup.tar tmp/jenkins-home-backup.tar
 
 
           # Delete the backup-restore-tools pod
@@ -74,19 +74,19 @@ components:
 
 
           # Create temp jenkins-home folder to untar the backup into
-          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- mkdir /tmp/jenkins-tmp
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- mkdir /mounts/workspace/jenkins-tmp
 
           # Copy the jenkins-home-backup.tar file from the local machine to the backup-restore-tools pod
-          - cmd: kubectl cp jenkins-home-backup.tar jenkins/backup-restore-tools:/tmp/jenkins-home-backup.tar
+          - cmd: kubectl cp jenkins-home-backup.tar jenkins/backup-restore-tools:/mounts/workspace/jenkins-home-backup.tar
 
           # Untar the jenkins-home-backup inside the pod to the temp folder
-          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -xf jenkins-home-backup.tar -C /tmp/jenkins-tmp'
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf jenkins-home-backup.tar -C /mounts/workspace/jenkins-tmp'
 
           # Delete everything in the existing jenkins-home folder
-          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'rm -rf /tmp/jenkins-home/*'
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'rm -rf /mounts/jenkins-home/*'
 
           # Copy the contents of the backup from the temp folder over the existing jenkins-home folder
-          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cp -R /tmp/jenkins-tmp/jenkins-home/* /tmp/jenkins-home'
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cp -R /mounts/workspace/jenkins-tmp/jenkins-home/* /mounts/jenkins-home'
 
 
           # Delete the backup-restore-tools pod
