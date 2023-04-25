@@ -83,11 +83,11 @@ components:
           # Copy the artifactory-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp artifactory/backup-restore-tools:/mounts/workspace/artifactory-backup.tar tmp/artifactory-backup.tar
         onFailure:
-          - cmd: kubectl delete pod -n artifactory --wait=true --force=true --grace-period=0 backup-restore-tools
+          - cmd: kubectl delete -f files/pod.yaml --wait=true --force=true --grace-period=0
           - cmd: rm -rf tmp
         after:
           - cmd: rm -rf tmp
-          - cmd: kubectl delete pod -n artifactory --wait=true --force=true --grace-period=0 backup-restore-tools
+          - cmd: kubectl delete -f files/pod.yaml --wait=true --force=true --grace-period=0
     files:
       - source: tmp/db-backup.tar
         target: db-backup.tar
@@ -168,6 +168,6 @@ components:
 
 
           # Delete the backup-restore-tools pod
-          - cmd: kubectl delete pod -n artifactory --wait=true --force=true --grace-period=0 backup-restore-tools
+          - cmd: kubectl delete -f pod.yaml --wait=true --force=true --grace-period=0
         onFailure:
-          - cmd: kubectl delete pod -n artifactory --wait=true --force=true --grace-period=0 backup-restore-tools
+          - cmd: kubectl delete -f pod.yaml --wait=true --force=true --grace-period=0
