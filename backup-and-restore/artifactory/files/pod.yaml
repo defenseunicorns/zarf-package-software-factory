@@ -17,10 +17,27 @@ spec:
     command: ["sleep", "infinity"]
     volumeMounts:
     - name: artifactory
-      mountPath: /tmp/artifactory
+      mountPath: /mounts/artifactory
+    - name: backup-restore-workspace
+      mountPath: /mounts/workspace
     securityContext:
       runAsUser: 1030
   volumes:
   - name: artifactory
     persistentVolumeClaim:
       claimName: artifactory-volume-artifactory-0
+  - name: backup-restore-workspace
+    persistentVolumeClaim:
+      claimName: backup-restore-workspace
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backup-restore-workspace
+  namespace: artifactory
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

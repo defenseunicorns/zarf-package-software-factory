@@ -59,29 +59,29 @@ components:
 
 
           # Copy the minio client binary to the backup-restore-tools pod
-          - cmd: kubectl cp files/mc artifactory/backup-restore-tools:/tmp/mc
+          - cmd: kubectl cp files/mc artifactory/backup-restore-tools:/mounts/workspace/mc
 
           # Set credentials and url for the minio client
-          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
+          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
             maxRetries: 10
 
 
           # Copy the backup folder from the bucket to the backup-restore-tools pod TODO add logic around only downloading the latest backup if wanted
-          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc cp postgres/postgres-backups/spilo/acid-artifactory/$(cat tmp/postgres-cluster-uid)/ /tmp/backup --recursive"
+          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc cp postgres/postgres-backups/spilo/acid-artifactory/$(cat tmp/postgres-cluster-uid)/ /mounts/workspace/backup --recursive"
             maxRetries: 10
 
           # Tar the backup folder in the backup-restore-tools pod
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /tmp/backup; tar -cvf ../db-backup.tar wal'
+          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace/backup; tar -cvf ../db-backup.tar wal'
 
           # Copy the db-backup.tar file from the backup-restore-tools pod to the local machine
-          - cmd: kubectl cp artifactory/backup-restore-tools:/tmp/db-backup.tar tmp/db-backup.tar
+          - cmd: kubectl cp artifactory/backup-restore-tools:/mounts/workspace/db-backup.tar tmp/db-backup.tar
 
 
           #  Tar the artifactory folder in the backup-restore-tools pod
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -cvf artifactory-backup.tar artifactory'
+          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /mounts; tar -cvf /mounts/workspace/artifactory-backup.tar artifactory'
 
           # Copy the artifactory-backup.tar file from the backup-restore-tools pod to the local machine
-          - cmd: kubectl cp artifactory/backup-restore-tools:/tmp/artifactory-backup.tar tmp/artifactory-backup.tar
+          - cmd: kubectl cp artifactory/backup-restore-tools:/mounts/workspace/artifactory-backup.tar tmp/artifactory-backup.tar
         onFailure:
           - cmd: kubectl delete pod -n artifactory --wait=true --force=true --grace-period=0 backup-restore-tools
           - cmd: rm -rf tmp
@@ -130,41 +130,41 @@ components:
 
 
           # Copy the minio client binary to the backup-restore-tools pod
-          - cmd: kubectl cp mc artifactory/backup-restore-tools:/tmp/mc
+          - cmd: kubectl cp mc artifactory/backup-restore-tools:/mounts/workspace/mc
 
           # Set credentials and url for the minio client
-          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
+          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
             maxRetries: 10
 
 
           # Copy the db-backup.tar file from the local machine to the backup-restore-tools pod
-          - cmd: kubectl cp db-backup.tar artifactory/backup-restore-tools:/tmp/db-backup.tar
+          - cmd: kubectl cp db-backup.tar artifactory/backup-restore-tools:/mounts/workspace/db-backup.tar
 
           # Untar the db-backup inside the pod
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -xf db-backup.tar'
+          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf db-backup.tar'
 
           # Write backup timestamp to file
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "jq '.start_time' /tmp/wal/11/basebackups_005/$(cat latest-backup-name)/metadata.json | tr -d '\"'" > latest-backup-timestamp
+          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "jq '.start_time' /mounts/workspace/wal/11/basebackups_005/$(cat latest-backup-name)/metadata.json | tr -d '\"'" > latest-backup-timestamp
 
           # Copy the copy the backup data into the minio bucket
-          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /tmp; HOME=/tmp; /tmp/mc cp /tmp/wal postgres/postgres-backups/spilo/acid-artifactory/$(cat postgres-cluster-uid)/ --recursive"
+          - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc cp /mounts/workspace/wal postgres/postgres-backups/spilo/acid-artifactory/$(cat postgres-cluster-uid)/ --recursive"
             maxRetries: 10
 
 
           # Create temp artifactory folder to untar the backup into
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- mkdir /tmp/artifactory-tmp
+          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- mkdir /mounts/workspace/artifactory-tmp
 
           # Copy the artifactory-backup.tar file from the local machine to the backup-restore-tools pod
-          - cmd: kubectl cp artifactory-backup.tar artifactory/backup-restore-tools:/tmp/artifactory-backup.tar
+          - cmd: kubectl cp artifactory-backup.tar artifactory/backup-restore-tools:/mounts/workspace/artifactory-backup.tar
 
           # Untar the artifactory-backup inside the pod to the temp folder
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /tmp; tar -xf artifactory-backup.tar -C /tmp/artifactory-tmp'
+          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf artifactory-backup.tar -C /mounts/workspace/artifactory-tmp'
 
           # Delete everything in the existing artifactory folder
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'rm -rf /tmp/artifactory/*'
+          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'rm -rf /mounts/workspace/artifactory/*'
 
           # Copy the contents of the backup from the temp folder over the existing artifactory folder
-          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cp -R /tmp/artifactory-tmp/artifactory/* /tmp/artifactory'
+          - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cp -R /mounts/workspace/artifactory-tmp/artifactory/* /mounts/artifactory'
 
 
           # Delete the backup-restore-tools pod
