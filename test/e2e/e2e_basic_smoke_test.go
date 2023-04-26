@@ -260,16 +260,16 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Ensure that the databases are still reporting "PostgresClusterStatus==Running"
 		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-artifactory expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		require.NoError(t, err, output)
-		
+
 		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-confluence -n confluence -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-confluence expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		require.NoError(t, err, output)
 
 		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-gitlab -n gitlab -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-gitlab expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		require.NoError(t, err, output)
-		
+
 		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-jira -n jira -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-jira expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		require.NoError(t, err, output)
-		
+
 		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-sonarqube -n sonarqube -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-sonarqube expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		require.NoError(t, err, output)
 
