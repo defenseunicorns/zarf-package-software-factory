@@ -294,5 +294,40 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		}
 		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-sonarqube -n sonarqube -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-sonarqube expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		require.NoError(t, err, output)
+		
+		// Create backup for Artifactory
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/artifactory; ~/app/build/zarf p c --confirm --set BACKUP_TIMESTAMP=""`)
+		require.NoError(t, err, output)
+		// Start restore process for Artifactory
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/artifactory; mkdir test; mv zarf-package* test; cd test;  ~/app/build/zarf p d zarf-package* --components warning-downtime-begin-restore --confirm`)
+		require.NoError(t, err, output)
+		
+		// Create backup for Confluence
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/confluence; ~/app/build/zarf p c --confirm --set BACKUP_TIMESTAMP=""`)
+		require.NoError(t, err, output)
+		// Start restore process for Confluence
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/confluence; mkdir test; mv zarf-package* test; cd test;  ~/app/build/zarf p d zarf-package* --components warning-downtime-begin-restore --confirm`)
+		require.NoError(t, err, output)
+		
+		// Create backup for GitLab
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/gitlab; ~/app/build/zarf p c --confirm --set BACKUP_FILENAME="$(kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd ls s3://gitlab-backups | awk '{split($NF,a,"/"); print a[length(a)]; exit}')" --set DELETE_REMOTE_BACKUP_FILE="no"`)
+		require.NoError(t, err, output)
+		// Start restore process for Gitlab
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/gitlab; mkdir test; mv zarf-package* test; cd test;  ~/app/build/zarf p d zarf-package* --components warning-downtime-begin-restore --confirm`)
+		require.NoError(t, err, output)
+		
+		// Create backup for Jenkins
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/jenkins; ~/app/build/zarf p c --confirm --set BACKUP_TIMESTAMP=""`)
+		require.NoError(t, err, output)
+		// Start restore process for Jenkins
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/jenkins; mkdir test; mv zarf-package* test; cd test;  ~/app/build/zarf p d zarf-package* --components warning-downtime-begin-restore --confirm`)
+		require.NoError(t, err, output)
+		
+		// Create backup for Jira
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/jira; ~/app/build/zarf p c --confirm --set BACKUP_TIMESTAMP=""`)
+		require.NoError(t, err, output)
+		// Start restore process for Jira
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/jira; mkdir test; mv zarf-package* test; cd test;  ~/app/build/zarf p d zarf-package* --components warning-downtime-begin-restore --confirm`)
+		require.NoError(t, err, output)
 	})
 }
