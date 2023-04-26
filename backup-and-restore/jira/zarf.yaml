@@ -60,6 +60,7 @@ components:
 
           # Copy the minio client binary to the backup-restore-tools pod
           - cmd: kubectl cp files/mc jira/backup-restore-tools:/mounts/workspace/mc
+            maxRetries: 10
 
           # Set credentials and url for the minio client
           - cmd: sleep 2s; kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
@@ -75,6 +76,7 @@ components:
 
           # Copy the db-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp jira/backup-restore-tools:/mounts/workspace/db-backup.tar tmp/db-backup.tar
+            maxRetries: 10
 
 
           #  Tar the local-home folder in the backup-restore-tools pod
@@ -82,6 +84,7 @@ components:
 
           # Copy the local-home-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp jira/backup-restore-tools:/mounts/workspace/local-home-backup.tar tmp/local-home-backup.tar
+            maxRetries: 10
 
 
           #  Tar the shared-home folder in the backup-restore-tools pod
@@ -89,6 +92,7 @@ components:
 
           # Copy the shared-home-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp jira/backup-restore-tools:/mounts/workspace/shared-home-backup.tar tmp/shared-home-backup.tar
+            maxRetries: 10
         onFailure:
           - cmd: kubectl delete -f files/pod.yaml --wait=true --force=true --grace-period=0
           - cmd: rm -rf tmp
@@ -140,6 +144,7 @@ components:
 
           # Copy the minio client binary to the backup-restore-tools pod
           - cmd: kubectl cp mc jira/backup-restore-tools:/mounts/workspace/mc
+            maxRetries: 10
 
           # Set credentials and url for the minio client
           - cmd: sleep 2s; kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
@@ -148,6 +153,7 @@ components:
 
           # Copy the db-backup.tar file from the local machine to the backup-restore-tools pod
           - cmd: kubectl cp db-backup.tar jira/backup-restore-tools:/mounts/workspace/db-backup.tar
+            maxRetries: 10
 
           # Untar the db-backup inside the pod
           - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf db-backup.tar'
@@ -165,6 +171,7 @@ components:
 
           # Copy the local-home-backup.tar file from the local machine to the backup-restore-tools pod
           - cmd: kubectl cp local-home-backup.tar jira/backup-restore-tools:/mounts/workspace/local-home-backup.tar
+            maxRetries: 10
 
           # Untar the local-home-backup inside the pod to the temp folder
           - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf /mounts/workspace/local-home-backup.tar -C /mounts/workspace/local-tmp'
@@ -184,6 +191,7 @@ components:
 
           # Copy the shared-home-backup.tar file from the local machine to the backup-restore-tools pod
           - cmd: kubectl cp shared-home-backup.tar jira/backup-restore-tools:/mounts/workspace/shared-home-backup.tar
+            maxRetries: 10
 
           # Untar the shared-home-backup inside the pod
           - cmd: kubectl exec -i -n jira backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf /mounts/workspace/db-backup.tar -C /mounts/workspace/shared-tmp'

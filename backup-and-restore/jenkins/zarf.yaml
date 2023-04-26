@@ -37,6 +37,7 @@ components:
 
           # Copy the jenkins-home-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp jenkins/backup-restore-tools:/mounts/workspace/jenkins-home-backup.tar tmp/jenkins-home-backup.tar
+            maxRetries: 10
         onFailure:
           - cmd: kubectl delete -f files/pod.yaml --wait=true --force=true --grace-period=0
           - cmd: rm -rf tmp
@@ -75,6 +76,7 @@ components:
 
           # Copy the jenkins-home-backup.tar file from the local machine to the backup-restore-tools pod
           - cmd: kubectl cp jenkins-home-backup.tar jenkins/backup-restore-tools:/mounts/workspace/jenkins-home-backup.tar
+            maxRetries: 10
 
           # Untar the jenkins-home-backup inside the pod to the temp folder
           - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf jenkins-home-backup.tar -C /mounts/workspace/jenkins-tmp'

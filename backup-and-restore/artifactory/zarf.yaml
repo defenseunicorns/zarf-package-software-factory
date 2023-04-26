@@ -60,6 +60,7 @@ components:
 
           # Copy the minio client binary to the backup-restore-tools pod
           - cmd: kubectl cp files/mc artifactory/backup-restore-tools:/mounts/workspace/mc
+            maxRetries: 10
 
           # Set credentials and url for the minio client
           - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
@@ -75,6 +76,7 @@ components:
 
           # Copy the db-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp artifactory/backup-restore-tools:/mounts/workspace/db-backup.tar tmp/db-backup.tar
+            maxRetries: 10
 
 
           #  Tar the artifactory folder in the backup-restore-tools pod
@@ -82,6 +84,7 @@ components:
 
           # Copy the artifactory-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp artifactory/backup-restore-tools:/mounts/workspace/artifactory-backup.tar tmp/artifactory-backup.tar
+            maxRetries: 10
         onFailure:
           - cmd: kubectl delete -f files/pod.yaml --wait=true --force=true --grace-period=0
           - cmd: rm -rf tmp
@@ -131,6 +134,7 @@ components:
 
           # Copy the minio client binary to the backup-restore-tools pod
           - cmd: kubectl cp mc artifactory/backup-restore-tools:/mounts/workspace/mc
+            maxRetries: 10
 
           # Set credentials and url for the minio client
           - cmd: sleep 2s; kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
@@ -139,6 +143,7 @@ components:
 
           # Copy the db-backup.tar file from the local machine to the backup-restore-tools pod
           - cmd: kubectl cp db-backup.tar artifactory/backup-restore-tools:/mounts/workspace/db-backup.tar
+            maxRetries: 10
 
           # Untar the db-backup inside the pod
           - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf db-backup.tar'
@@ -156,6 +161,7 @@ components:
 
           # Copy the artifactory-backup.tar file from the local machine to the backup-restore-tools pod
           - cmd: kubectl cp artifactory-backup.tar artifactory/backup-restore-tools:/mounts/workspace/artifactory-backup.tar
+            maxRetries: 10
 
           # Untar the artifactory-backup inside the pod to the temp folder
           - cmd: kubectl exec -i -n artifactory backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf artifactory-backup.tar -C /mounts/workspace/artifactory-tmp'

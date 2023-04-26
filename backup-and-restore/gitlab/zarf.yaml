@@ -32,6 +32,7 @@ components:
           - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd get --skip-existing s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME### /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
           # Copy the backup from the toolbox container to the host
           - cmd: "kubectl cp -c toolbox gitlab/$(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}'):home/git/###ZARF_PKG_VAR_BACKUP_FILENAME### ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
+            maxRetries: 10
           # Delete the backup from the toolbox container (it's still in minio though)
           - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- rm -f /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
           # Copy the secrets from the cluster to the host
@@ -61,6 +62,7 @@ components:
         after:
           # Push the files into the cluster, cleaning up as we go
           - cmd: "kubectl cp -c toolbox ./###ZARF_PKG_VAR_BACKUP_FILENAME### gitlab/$(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}'):home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
+            maxRetries: 10
           - cmd: "rm -f ./###ZARF_PKG_VAR_BACKUP_FILENAME###"
           - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd put --skip-existing /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME### s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME###"
           - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- rm -f /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
