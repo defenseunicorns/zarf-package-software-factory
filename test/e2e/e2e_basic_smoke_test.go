@@ -288,7 +288,7 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		require.NoError(t, err, output)
 
 		// Create backup for GitLab
-		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/gitlab; ~/app/build/zarf p c --confirm --set BACKUP_FILENAME="$(kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- s3cmd ls s3://gitlab-backups | awk '{split($NF,a,"/"); print a[length(a)]; exit}')" --set DELETE_REMOTE_BACKUP_FILE="no"`)
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/gitlab; ~/app/build/zarf p c --confirm --set BACKUP_FILENAME="$(kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath="{.items[0].metadata.name}") -- s3cmd ls s3://gitlab-backups | awk "{split(\$NF,a,\"/\"); print a[length(a)]; exit}")" --set DELETE_REMOTE_BACKUP_FILE="no"`)
 		require.NoError(t, err, output)
 		// Start restore process for Gitlab
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/gitlab; mkdir test; mv zarf-package* test; cd test;  ~/app/build/zarf p d zarf-package* --components warning-downtime-begin-restore --confirm`)
