@@ -13,12 +13,12 @@ components:
     actions:
       onCreate:
         defaults:
-          maxRetries: 0
+          maxRetries: 5
         before:
           - cmd: if ! command -v kubectl; then echo "kubectl is required for this package" >&2; exit 1; fi
       onDeploy:
         defaults:
-          maxRetries: 0
+          maxRetries: 5
         before:
           - cmd: if ! command -v flux; then echo "flux cli is required for this package" >&2; exit 1; fi
 
@@ -28,7 +28,7 @@ components:
     actions:
       onCreate:
         defaults:
-          maxRetries: 0
+          maxRetries: 5
         before:
           # Create tmp folder for writing files during create
           - cmd: mkdir -p tmp
@@ -42,7 +42,7 @@ components:
     actions:
       onCreate:
         defaults:
-          maxRetries: 0
+          maxRetries: 5
         before:
           # Force a backup to be ran from the postgres pod to get the latest data
           - cmd: bash -c 'for (( c=0; c<$(kubectl get Postgresql -n confluence acid-confluence -o jsonpath="{.spec.numberOfInstances}"); c++ )); do kubectl exec -i -n confluence acid-confluence-$c -c postgres -- envdir "/run/etc/wal-e.d/env" /scripts/postgres_backup.sh "/home/postgres/pgdata/pgroot/data"; done'
@@ -60,23 +60,19 @@ components:
 
           # Copy the minio client binary to the backup-restore-tools pod
           - cmd: kubectl cp files/mc confluence/backup-restore-tools:/mounts/workspace/mc
-            maxRetries: 10
 
           # Set credentials and url for the minio client
           - cmd: sleep 2s; kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
-            maxRetries: 10
 
 
           # Copy the backup folder from the bucket to the backup-restore-tools pod TODO add logic around only downloading the latest backup if wanted
           - cmd: sleep 2s; kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc cp postgres/postgres-backups/spilo/acid-confluence/$(cat tmp/postgres-cluster-uid)/ /mounts/workspace/backup --recursive"
-            maxRetries: 10
 
           # Tar the backup folder in the backup-restore-tools pod
           - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace/backup; tar -cvf ../db-backup.tar wal'
 
           # Copy the db-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp confluence/backup-restore-tools:/mounts/workspace/db-backup.tar tmp/db-backup.tar
-            maxRetries: 10
 
 
           #  Tar the local-home folder in the backup-restore-tools pod
@@ -84,7 +80,6 @@ components:
 
           # Copy the local-home-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp confluence/backup-restore-tools:/mounts/workspace/local-home-backup.tar tmp/local-home-backup.tar
-            maxRetries: 10
 
 
           #  Tar the shared-home folder in the backup-restore-tools pod
@@ -92,7 +87,6 @@ components:
 
           # Copy the shared-home-backup.tar file from the backup-restore-tools pod to the local machine
           - cmd: kubectl cp confluence/backup-restore-tools:/mounts/workspace/shared-home-backup.tar tmp/shared-home-backup.tar
-            maxRetries: 10
         onFailure:
           - cmd: kubectl delete -f files/pod.yaml --wait=true --force=true --grace-period=0
           - cmd: rm -rf tmp
@@ -123,7 +117,7 @@ components:
     actions:
       onDeploy:
         defaults:
-          maxRetries: 0
+          maxRetries: 5
         after:
           # Suspend top level kustomization that controls helmreleases
           - cmd: flux suspend kustomization softwarefactoryaddons
@@ -144,16 +138,13 @@ components:
 
           # Copy the minio client binary to the backup-restore-tools pod
           - cmd: kubectl cp mc confluence/backup-restore-tools:/mounts/workspace/mc
-            maxRetries: 10
 
           # Set credentials and url for the minio client
           - cmd: sleep 2s; kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc alias set postgres http://minio.postgres-minio.svc.cluster.local:80 $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_ACCESS_KEY}' | base64 -d) $(kubectl get secret minio-user-creds -n postgres-minio -o jsonpath='{.data.CONSOLE_SECRET_KEY}' | base64 -d)"
-            maxRetries: 10
 
 
           # Copy the db-backup.tar file from the local machine to the backup-restore-tools pod
           - cmd: kubectl cp db-backup.tar confluence/backup-restore-tools:/mounts/workspace/db-backup.tar
-            maxRetries: 10
 
           # Untar the db-backup inside the pod
           - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf db-backup.tar'
@@ -163,7 +154,6 @@ components:
 
           # Copy the copy the backup data into the minio bucket
           - cmd: sleep 2s; kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c "cd /mounts/workspace; HOME=/mounts/workspace; /mounts/workspace/mc cp /mounts/workspace/wal postgres/postgres-backups/spilo/acid-confluence/$(cat postgres-cluster-uid)/ --recursive"
-            maxRetries: 10
 
 
           # Create temp local-home folder to untar the backup into
@@ -171,7 +161,6 @@ components:
 
           # Copy the local-home-backup.tar file from the local machine to the backup-restore-tools pod
           - cmd: kubectl cp local-home-backup.tar confluence/backup-restore-tools:/mounts/workspace/local-home-backup.tar
-            maxRetries: 10
 
           # Untar the local-home-backup inside the pod to the temp folder
           - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf /mounts/workspace/local-home-backup.tar -C /mounts/workspace/local-tmp'
@@ -191,7 +180,6 @@ components:
 
           # Copy the shared-home-backup.tar file from the local machine to the backup-restore-tools pod
           - cmd: kubectl cp shared-home-backup.tar confluence/backup-restore-tools:/mounts/workspace/shared-home-backup.tar
-            maxRetries: 10
 
           # Untar the shared-home-backup inside the pod
           - cmd: kubectl exec -i -n confluence backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf /mounts/workspace/db-backup.tar -C /mounts/workspace/shared-tmp'
