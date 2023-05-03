@@ -2,6 +2,10 @@
 
 The backup process for Jenkins is completely managed through this zarf package. Backups are not taken unless this zarf package is created. The package itself is the backup artifact, so after creation it should be stored somewhere safe. Please read through this guide in it's entirety before attempting any operations.
 
+## Notes
+
+For consistency the pods that are leveraged for performing backup/restore operations are given PVCs to perform their operations from. These PVCs do not specify a specific storageClass and default to 25 gigabytes. If you expect the size of your backup to exceed or get within a few gigabytes of 25 or wish to have it use a specific storageClass please modify the `pod.yaml` in the `files` folder to change it.
+
 ## Backup Procedure
 
 1. Get a terminal session on a Linux host that has direct `kubectl` access to the cluster.
