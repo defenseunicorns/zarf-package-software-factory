@@ -17,10 +17,28 @@ spec:
     command: ["sleep", "infinity"]
     volumeMounts:
     - name: jenkins-home
-      mountPath: /tmp/jenkins-home
+      mountPath: /mounts/jenkins-home
+    - name: backup-restore-workspace
+      mountPath: /mounts/workspace
     securityContext:
       runAsUser: 1000
   volumes:
   - name: jenkins-home
     persistentVolumeClaim:
       claimName: jenkins
+  - name: backup-restore-workspace
+    persistentVolumeClaim:
+      claimName: backup-restore-workspace
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backup-restore-workspace
+  namespace: jenkins
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 25Gi
+  # storageClassName: ""

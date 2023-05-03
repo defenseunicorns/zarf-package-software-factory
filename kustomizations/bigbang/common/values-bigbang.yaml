@@ -582,6 +582,8 @@ addons:
         sonar.web.javaAdditionalOpts: "-Dcom.redhat.fips=false"
       istio:
         enabled: true
+        mtls:
+          mode: PERMISSIVE
       resources:
         requests:
           cpu: "500m"
@@ -593,6 +595,7 @@ addons:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+
   minioOperator:
     enabled: true
     values:
