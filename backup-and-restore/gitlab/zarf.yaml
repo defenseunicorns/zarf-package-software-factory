@@ -66,7 +66,7 @@ components:
           - cmd: "kubectl cp -c toolbox ./###ZARF_PKG_VAR_BACKUP_FILENAME### gitlab/$(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}'):home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###"
 
           # Perform restore with file
-          - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- bash -c \"yes yes | backup-utility --restore -f file:///home/git/##ZARF_PKG_VAR_BACKUP_FILENAME###\""
+          - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- bash -c \"yes yes | backup-utility --restore -f file:///home/git/###ZARF_PKG_VAR_BACKUP_FILENAME###\""
 
           # Put the backup tarball we used into s3 storage
           - cmd: "kubectl exec -i -n gitlab -c toolbox $(kubectl get pod -n gitlab -l app=toolbox -o jsonpath='{.items[0].metadata.name}') -- bash -c \"s3cmd put --skip-existing /home/git/###ZARF_PKG_VAR_BACKUP_FILENAME### s3://gitlab-backups/###ZARF_PKG_VAR_BACKUP_FILENAME###\""
