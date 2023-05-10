@@ -1,0 +1,52 @@
+# nonk8s
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: gitlab-peerauthentication
+  namespace: bigbang
+spec:
+  targetNamespace: gitlab
+  releaseName: gitlab-peerauthentication
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+  values:
+    resources:
+      - apiVersion: "security.istio.io/v1beta1"
+        kind: PeerAuthentication
+        metadata:
+          name: gitlab-redis-exception
+          namespace: gitlab
+        spec:
+          mtls:
+            mode: STRICT
+          portLevelMtls:
+            "6379":
+              mode: PERMISSIVE
+            "9121":
+              mode: PERMISSIVE
+          selector:
+            matchLabels:
+              app.kubernetes.io/name: redis

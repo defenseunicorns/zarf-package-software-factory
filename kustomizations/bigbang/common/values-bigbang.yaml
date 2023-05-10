@@ -583,7 +583,7 @@ addons:
       istio:
         enabled: true
         mtls:
-          mode: PERMISSIVE
+          mode: STRICT
       resources:
         requests:
           cpu: "500m"
@@ -629,7 +629,7 @@ addons:
     values:
       istio:
         mtls:
-          mode: PERMISSIVE
+          mode: STRICT
       global:
         minio:
           enabled: false
