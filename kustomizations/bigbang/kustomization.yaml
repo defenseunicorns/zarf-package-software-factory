@@ -6,7 +6,7 @@ resources:
   - secrets.yaml
   - tenants.yaml
   - networkpolicies.yaml
-  - peerauthentication.yaml
+  - istio-updates
 
 configMapGenerator:
   - name: common

@@ -2,11 +2,11 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: gitlab-peerauthentication
+  name: gitlab-istio-updates
   namespace: bigbang
 spec:
   targetNamespace: gitlab
-  releaseName: gitlab-peerauthentication
+  releaseName: gitlab-istio-updates
   interval: 5m
   timeout: 10m
   chart:
@@ -60,7 +60,17 @@ spec:
             mode: STRICT
           selector:
             matchLabels:
-              service.istio.io/canonical-name: acid-gitlab
+              cluster-name: acid-gitlab
           portLevelMtls:
             "5432":
               mode: PERMISSIVE
+      - apiVersion: "networking.istio.io/v1alpha3"
+        kind: "DestinationRule"
+        metadata:
+          name: "enable-mtls"
+          namespace: "gitlab"
+        spec:
+          host: "*.gitlab.svc.cluster.local"
+          trafficPolicy:
+            tls:
+              mode: ISTIO_MUTUAL
