@@ -64,17 +64,3 @@ spec:
           portLevelMtls:
             "5432":
               mode: PERMISSIVE
-      - apiVersion: security.istio.io/v1beta1
-        kind: PeerAuthentication
-        metadata:
-          name: gitlab-minio-exception
-          namespace: gitlab
-        spec:
-          mtls:
-            mode: STRICT
-          selector:
-            matchLabels:
-              app: minio
-          portLevelMtls:
-            "9000":
-              mode: PERMISSIVE
