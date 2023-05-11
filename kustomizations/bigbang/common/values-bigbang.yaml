@@ -151,7 +151,7 @@ kiali:
   values:
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
     resources:
       requests:
         cpu: "100m"
@@ -382,7 +382,7 @@ loki:
       enabled: false
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
     loki:
       storage:
         s3:
@@ -395,7 +395,7 @@ promtail:
   values:
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
     resources:
       limits:
         cpu: "500m"
