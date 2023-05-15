@@ -1,0 +1,46 @@
+# nonk8s
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: minio-operator-istio-updates
+  namespace: bigbang
+spec:
+  targetNamespace: minio-operator
+  releaseName: minio-operator-istio-updates
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+  values:
+    resources:
+      - apiVersion: "networking.istio.io/v1alpha3"
+        kind: "DestinationRule"
+        metadata:
+          name: "enable-mtls"
+          namespace: "minio-operator"
+        spec:
+          host: "*.minio-operator.svc.cluster.local"
+          trafficPolicy:
+            tls:
+              mode: ISTIO_MUTUAL

@@ -78,7 +78,7 @@ istio:
         - gitlab.{{ .Values.domain }}
         - jenkins.{{ .Values.domain }}
         - jira.{{ .Values.domain }}
-        - confluence.{{ .Values.domain }}
+        - confluence.{{ .Values.domain
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
         - sonarqube.{{ .Values.domain }}
@@ -86,14 +86,22 @@ istio:
       ingressGateway: "private-ingressgateway"
       hosts:
         - neuvector.{{ .Values.domain }}
-        # Commented out until minio virtualservices are fixed (currently broken as there are multiple entries for each of the domains)
-        # - minio.{{ .Values.domain }}
-        # - minio-api.{{ .Values.domain }}
         - tracing.{{ .Values.domain }}
         - kiali.{{ .Values.domain }}
         - alertmanager.{{ .Values.domain }}
         - grafana.{{ .Values.domain }}
         - prometheus.{{ .Values.domain }}
+        # Minio hosts should match hostname config in their respective values files
+        # prepended with minio and minio-api like the following
+        # minio.<hostname in values file> and minio-api.<hostname in values file>
+        - minio.bbcore-minio.{{ .Values.domain }}
+        - minio-api.bbcore-minio.{{ .Values.domain }}
+        - minio.gitlab-minio.{{ .Values.domain }}
+        - minio-api.gitlab-minio.{{ .Values.domain }}
+        - minio.postgres-minio.{{ .Values.domain }}
+        - minio-api.postgres-minio.{{ .Values.domain }}
+        - minio.velero-minio.{{ .Values.domain }}
+        - minio-api.velero-minio.{{ .Values.domain }}
       autoHttpRedirect:
         enabled: true
 
