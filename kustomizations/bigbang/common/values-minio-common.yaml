@@ -4,8 +4,7 @@ domain: bigbang.dev
 istio:
   enabled: true
   mtls:
-    # TODO: Change this to strict
-    mode: PERMISSIVE
+    mode: STRICT
   console:
     gateways:
       - istio-system/public

@@ -448,7 +448,7 @@ neuvector:
       enabled: true
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
 
 monitoring:
   enabled: true
@@ -457,7 +457,7 @@ monitoring:
   values:
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
     cleanUpgrade:
       resources:
         requests:
@@ -611,7 +611,7 @@ addons:
       istio:
         enabled: true
         mtls:
-          mode: PERMISSIVE
+          mode: STRICT
 
   minio:
     enabled: false
@@ -908,7 +908,7 @@ addons:
     values:
       istio:
         mtls:
-          mode: PERMISSIVE
+          mode: STRICT
       resources:
         limits:
           memory: 256Mi
