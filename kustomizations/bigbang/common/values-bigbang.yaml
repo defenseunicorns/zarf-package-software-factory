@@ -78,7 +78,7 @@ istio:
         - gitlab.{{ .Values.domain }}
         - jenkins.{{ .Values.domain }}
         - jira.{{ .Values.domain }}
-        - confluence.{{ .Values.domain
+        - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
         - sonarqube.{{ .Values.domain }}
