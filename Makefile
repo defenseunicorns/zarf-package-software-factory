@@ -7,7 +7,7 @@ BIGBANG_VERSION := 1.57.1
 
 # The version of Zarf to use. To keep this repo as portable as possible the Zarf binary will be downloaded and added to
 # the build folder.
-ZARF_VERSION := v0.26.1
+ZARF_VERSION := v0.26.3
 
 # The version of the build harness container to use
 BUILD_HARNESS_REPO := ghcr.io/defenseunicorns/not-a-build-harness/not-a-build-harness
@@ -101,19 +101,6 @@ deploy-local: ## Deploy created zarf package to local cluster
 	kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '[{"op": "replace", "path": "/spec/ref/branch", "value": "$(shell git rev-parse --abbrev-ref HEAD)"}]'
 	timeout 2400 bash -c "while ! kubectl get cronjob gitlab-toolbox-backup -n gitlab; do sleep 5; done"
 	kubectl create job -n gitlab --from=cronjob/gitlab-toolbox-backup gitlab-toolbox-backup-manual
-
-.PHONY: vm-init
-vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
-	VAGRANT_EXPERIMENTAL="disks" vagrant up --no-color
-	vagrant ssh
-
-.PHONY: vm-ssh
-vm-ssh: ## SSH into the Vagrant VM
-	vagrant ssh
-
-.PHONY: vm-destroy
-vm-destroy: ## Destroy the Vagrant VM
-	vagrant destroy -f
 
 .PHONY: clean
 clean: ## Clean up build files
