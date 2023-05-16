@@ -102,19 +102,6 @@ deploy-local: ## Deploy created zarf package to local cluster
 	timeout 2400 bash -c "while ! kubectl get cronjob gitlab-toolbox-backup -n gitlab; do sleep 5; done"
 	kubectl create job -n gitlab --from=cronjob/gitlab-toolbox-backup gitlab-toolbox-backup-manual
 
-.PHONY: vm-init
-vm-init: vm-destroy ## Stripped-down vagrant box to reduce friction for basic user testing. Note the need to perform disk resizing for some examples
-	VAGRANT_EXPERIMENTAL="disks" vagrant up --no-color
-	vagrant ssh
-
-.PHONY: vm-ssh
-vm-ssh: ## SSH into the Vagrant VM
-	vagrant ssh
-
-.PHONY: vm-destroy
-vm-destroy: ## Destroy the Vagrant VM
-	vagrant destroy -f
-
 .PHONY: clean
 clean: ## Clean up build files
 	rm -rf ./build
