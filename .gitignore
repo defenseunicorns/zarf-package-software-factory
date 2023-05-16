@@ -1,7 +1,6 @@
 .cache/
 .idea/
 .vscode/
-.vagrant/
 build/
 .DS_Store
 *.tar.zst
