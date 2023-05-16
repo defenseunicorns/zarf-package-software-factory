@@ -42,7 +42,7 @@ components:
       - registry1.dso.mil/ironbank/opensource/zalando/logical-backup:v1.8.2
       - registry1.dso.mil/ironbank/opensource/zalando/pgbouncer:1.15.0
       - ghcr.io/zalando/spilo-15:2.1-p9
-#
+
   - name: gitlab-redis
     required: true
     manifests:
