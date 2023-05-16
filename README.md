@@ -47,8 +47,6 @@ All versions of this package will not be compatible with all versions of Zarf. F
 
 - :warning: We do not currently test compatibility from one version to the next. The user of this package is expected to first deploy to a test environment when doing upgrades. We will start testing upgrade paths as we get closer to a v1.0 release.
 
-- Several services have Istio sidecar injection disabled until we can determine how to enable it without breaking functionality with Postgres Operator.
-
 - Jenkins won't work in disconnected environments due to its dependency on plugins pulled from the internet. Work is needed to figure out and implement a method of doing locally sourced plugins. Jira and Confluence plugins will have the same issue.
 
 - The current deployment of HA Redis with Sentinel is deployed with no authentication. Please reference [ADR-002](doc/adr/0002-switch-to-authless-ha-redis.md) for additional details.
