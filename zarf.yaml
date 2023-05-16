@@ -41,7 +41,7 @@ components:
       - registry1.dso.mil/ironbank/opensource/zalando/postgres-operator:v1.10.0
       - registry1.dso.mil/ironbank/opensource/zalando/logical-backup:v1.8.2
       - registry1.dso.mil/ironbank/opensource/zalando/pgbouncer:1.15.0
-      - ghcr.io/zalando/spilo-15:2.1-p9
+      - ghcr.io/zalando/spilo-15:3.0-p1
 
   - name: gitlab-redis
     required: true
