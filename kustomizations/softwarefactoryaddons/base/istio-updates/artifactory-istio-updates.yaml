@@ -1,0 +1,44 @@
+# nonk8s
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: artifactory-istio-updates
+  namespace: bigbang
+spec:
+  targetNamespace: artifactory
+  releaseName: artifactory-istio-updates
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: artifactory
+      namespace: softwarefactoryaddons
+  values:
+    resources:
+      - apiVersion: "security.istio.io/v1beta1"
+        kind: PeerAuthentication
+        metadata:
+          name: default-artifactory
+          namespace: artifactory
+        spec:
+          mtls:
+            mode: PERMISSIVE

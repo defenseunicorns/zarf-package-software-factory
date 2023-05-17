@@ -1,0 +1,11 @@
+resources:
+  - gitlab-istio-updates.yaml
+  - jaeger-istio-updates.yaml
+  - kiali-istio-updates.yaml
+  - kyverno-reporter-istio-updates.yaml
+  - metrics-server-istio-updates.yaml
+  - sonarqube-istio-updates.yaml
+  - velero-istio-updates.yaml
+  - minio-operator-istio-updates.yaml
+  - monitoring-istio-updates.yaml
+  - neuvector-istio-updates.yaml

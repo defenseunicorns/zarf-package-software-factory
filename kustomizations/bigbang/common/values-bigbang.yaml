@@ -86,14 +86,22 @@ istio:
       ingressGateway: "private-ingressgateway"
       hosts:
         - neuvector.{{ .Values.domain }}
-        # Commented out until minio virtualservices are fixed (currently broken as there are multiple entries for each of the domains)
-        # - minio.{{ .Values.domain }}
-        # - minio-api.{{ .Values.domain }}
         - tracing.{{ .Values.domain }}
         - kiali.{{ .Values.domain }}
         - alertmanager.{{ .Values.domain }}
         - grafana.{{ .Values.domain }}
         - prometheus.{{ .Values.domain }}
+        # Minio hosts should match hostname config in their respective values files
+        # prepended with minio and minio-api like the following
+        # minio.<hostname in values file> and minio-api.<hostname in values file>
+        - minio.bbcore-minio.{{ .Values.domain }}
+        - minio-api.bbcore-minio.{{ .Values.domain }}
+        - minio.gitlab-minio.{{ .Values.domain }}
+        - minio-api.gitlab-minio.{{ .Values.domain }}
+        - minio.postgres-minio.{{ .Values.domain }}
+        - minio-api.postgres-minio.{{ .Values.domain }}
+        - minio.velero-minio.{{ .Values.domain }}
+        - minio-api.velero-minio.{{ .Values.domain }}
       autoHttpRedirect:
         enabled: true
 
@@ -151,7 +159,7 @@ kiali:
   values:
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
     resources:
       requests:
         cpu: "100m"
@@ -382,7 +390,7 @@ loki:
       enabled: false
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
     loki:
       storage:
         s3:
@@ -395,7 +403,7 @@ promtail:
   values:
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
     resources:
       limits:
         cpu: "500m"
@@ -448,7 +456,7 @@ neuvector:
       enabled: true
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
 
 monitoring:
   enabled: true
@@ -457,7 +465,7 @@ monitoring:
   values:
     istio:
       mtls:
-        mode: PERMISSIVE
+        mode: STRICT
     cleanUpgrade:
       resources:
         requests:
@@ -583,7 +591,7 @@ addons:
       istio:
         enabled: true
         mtls:
-          mode: PERMISSIVE
+          mode: STRICT
       resources:
         requests:
           cpu: "500m"
@@ -611,7 +619,7 @@ addons:
       istio:
         enabled: true
         mtls:
-          mode: PERMISSIVE
+          mode: STRICT
 
   minio:
     enabled: false
@@ -629,7 +637,7 @@ addons:
     values:
       istio:
         mtls:
-          mode: PERMISSIVE
+          mode: STRICT
       global:
         minio:
           enabled: false
@@ -908,7 +916,7 @@ addons:
     values:
       istio:
         mtls:
-          mode: PERMISSIVE
+          mode: STRICT
       resources:
         limits:
           memory: 256Mi
