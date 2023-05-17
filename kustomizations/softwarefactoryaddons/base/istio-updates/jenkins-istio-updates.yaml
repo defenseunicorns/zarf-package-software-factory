@@ -2,11 +2,11 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: jira-istio-updates
+  name: jenkins-istio-updates
   namespace: bigbang
 spec:
-  targetNamespace: jira
-  releaseName: jira-istio-updates
+  targetNamespace: jenkins
+  releaseName: jenkins-istio-updates
   interval: 5m
   timeout: 10m
   chart:
@@ -30,29 +30,15 @@ spec:
     timeout: 10m
     cleanupOnFail: false
   dependsOn:
-    - name: jira
+    - name: jenkins
       namespace: softwarefactoryaddons
   values:
     resources:
       - apiVersion: "security.istio.io/v1beta1"
         kind: PeerAuthentication
         metadata:
-          name: default-jira
-          namespace: jira
+          name: default-jenkins
+          namespace: jenkins
         spec:
           mtls:
             mode: PERMISSIVE
-          selector:
-            matchLabels:
-              app.kubernetes.io/name: jira
-      - apiVersion: "security.istio.io/v1beta1"
-        kind: PeerAuthentication
-        metadata:
-          name: acid-jira
-          namespace: jira
-        spec:
-          mtls:
-            mode: PERMISSIVE
-          selector:
-            matchLabels:
-              cluster-name: acid-jira

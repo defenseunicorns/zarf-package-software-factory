@@ -41,7 +41,7 @@ spec:
           namespace: confluence
         spec:
           mtls:
-            mode: STRICT
+            mode: PERMISSIVE
           selector:
             matchLabels:
               app.kubernetes.io/name: confluence
@@ -52,7 +52,7 @@ spec:
           namespace: confluence
         spec:
           mtls:
-            mode: STRICT
+            mode: PERMISSIVE
           selector:
             matchLabels:
               cluster-name: acid-confluence
