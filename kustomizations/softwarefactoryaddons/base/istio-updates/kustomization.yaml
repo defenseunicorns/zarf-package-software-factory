@@ -1,0 +1,3 @@
+resources:
+  - jira-istio-updates.yaml
+  - confluence-istio-updates.yaml
