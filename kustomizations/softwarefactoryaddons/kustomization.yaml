@@ -45,16 +45,16 @@ secretGenerator:
     options:
       disableNameSuffixHash: true
     envs:
-      - postgres-db/postgres-db-minio-creds.env.enc
+      - postgres-db/postgres-db-minio-creds.enc.env
   - name: postgres-minio-creds-env
     namespace: confluence
     options:
       disableNameSuffixHash: true
     envs:
-      - postgres-db/postgres-db-minio-creds.env.enc
+      - postgres-db/postgres-db-minio-creds.enc.env
   - name: postgres-minio-creds-env
     namespace: jira
     options:
       disableNameSuffixHash: true
     envs:
-      - postgres-db/postgres-db-minio-creds.env.enc
+      - postgres-db/postgres-db-minio-creds.enc.env
