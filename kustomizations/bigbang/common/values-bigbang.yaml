@@ -13,8 +13,8 @@ git:
 networkPolicies:
   enabled: true
   # When in prod use a real CIDR. Don't do this, it isn't secure.
-  controlPlaneCidr: "0.0.0.0/0"
-  nodeCidr: "0.0.0.0/0"
+  controlPlaneCidr: "172.18.0.2/32"
+  nodeCidr: "172.18.0.2/32"
   vpcCidr: "0.0.0.0/0"
 
 istio:
