@@ -84,6 +84,8 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/metrics-server.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/neuvector.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator.git
+      - https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost.git
 
     # To get the list of all images used in Big Bang:
     #    - Download "package-images.yml" from the big bang release
@@ -159,6 +161,11 @@ components:
       - "registry1.dso.mil/ironbank/neuvector/neuvector/scanner:5"
       - "registry1.dso.mil/ironbank/neuvector/neuvector/prometheus-exporter:5.1.0"
       - "registry1.dso.mil/ironbank/big-bang/sonarqube-9:9.9.0-community"
+      - "registry1.dso.mil/ironbank/opensource/mattermost/mattermost-operator:v1.20.0"
+      - "registry1.dso.mil/ironbank/opensource/mattermost/mattermost:7.8.1"
+      - "registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2022-08-23T05-45-20Z"
+      - "registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2022-11-26T22-43-32Z"
+      - "registry1.dso.mil/ironbank/opensource/postgres/postgresql11:11.18-1"
 
       # The detailed list of images needed for all the packages in this version of bigbang.
       # Use this is reference when bringing in new packages to your bigbang configuration.

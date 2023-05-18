@@ -570,6 +570,10 @@ twistlock:
   enabled: false
 
 addons:
+  mattermostOperator:
+    enabled: true
+  mattermost:
+    enabled: true
   sonarqube:
     enabled: true
     ingress:
