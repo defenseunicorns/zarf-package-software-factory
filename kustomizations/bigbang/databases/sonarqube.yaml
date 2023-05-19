@@ -39,31 +39,6 @@ spec:
       namespace: bigbang
   values:
     resources:
-      # - apiVersion: "networking.k8s.io/v1"
-      #   kind: NetworkPolicy
-      #   metadata:
-      #     name: allow-to-and-from-postgres-operator
-      #   spec:
-      #     ingress:
-      #       - ports:
-      #           - port: 5432
-      #             protocol: TCP
-      #         from:
-      #           - namespaceSelector:
-      #               matchLabels:
-      #                 kubernetes.io/metadata.name: postgres-operator
-      #     egress:
-      #       - ports:
-      #           - port: 8080
-      #             protocol: TCP
-      #         to:
-      #           - namespaceSelector:
-      #               matchLabels:
-      #                 kubernetes.io/metadata.name: postgres-operator
-      #     podSelector: {}
-      #     policyTypes:
-      #       - Ingress
-      #       - Egress
       - apiVersion: "acid.zalan.do/v1"
         kind: "postgresql"
         metadata:
@@ -100,3 +75,73 @@ spec:
         metadata:
           name: postgres-minio-creds-env
         type: Opaque
+      - apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        metadata:
+          name: allow-postgresql-in-namespace
+          namespace: sonarqube
+        spec:
+          egress:
+          - ports:
+            - port: 5432
+              protocol: TCP
+            - port: 8008
+              protocol: TCP
+            to:
+            - podSelector: {}
+          ingress:
+          - ports:
+            - port: 5432
+              protocol: TCP
+            - port: 8008
+              protocol: TCP
+            from:
+            - podSelector: {}
+          podSelector: {}
+          policyTypes:
+          - Ingress
+          - Egress
+      - apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        metadata:
+          name: allow-kube-api
+          namespace: sonarqube
+        spec:
+          egress:
+          - to:
+            - ipBlock:
+                cidr: 172.18.0.2/32
+          ingress:
+          - from:
+            - ipBlock:
+                cidr: 172.18.0.2/32
+          podSelector: {}
+          policyTypes:
+          - Egress
+          - Ingress
+        status: {}
+      - apiVersion: "networking.k8s.io/v1"
+        kind: NetworkPolicy
+        metadata:
+          name: allow-to-and-from-postgres-operator
+        spec:
+          ingress:
+            - ports:
+                - port: 5432
+                  protocol: TCP
+              from:
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: postgres-operator
+          egress:
+            - ports:
+                - port: 8080
+                  protocol: TCP
+              to:
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: postgres-operator
+          podSelector: {}
+          policyTypes:
+            - Ingress
+            - Egress
