@@ -215,6 +215,12 @@ kyvernopolicies:
           - resources:
               namespaces:
               - "zarf"
+      disallow-privileged-containers:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - "local-path-storage"
       disallow-privilege-escalation:
         exclude:
           any:
