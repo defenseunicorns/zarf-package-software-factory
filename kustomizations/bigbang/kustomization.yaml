@@ -93,15 +93,15 @@ patchesStrategicMerge:
                     value:
                       name: gitlab-minio
                       namespace: bigbang
-              - target:
-                  group: helm.toolkit.fluxcd.io
-                  version: v2beta1
-                  kind: HelmRelease
-                  name: velero
-                  namespace: bigbang
-                patch:
-                  - op: add
-                    path: "/spec/dependsOn/-"
-                    value:
-                      name: velero-minio
-                      namespace: bigbang
+#              - target:
+#                  group: helm.toolkit.fluxcd.io
+#                  version: v2beta1
+#                  kind: HelmRelease
+#                  name: velero
+#                  namespace: bigbang
+#                patch:
+#                  - op: add
+#                    path: "/spec/dependsOn/-"
+#                    value:
+#                      name: velero-minio
+#                      namespace: bigbang

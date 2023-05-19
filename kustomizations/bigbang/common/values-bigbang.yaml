@@ -100,8 +100,8 @@ istio:
         - minio-api.gitlab-minio.{{ .Values.domain }}
         - minio.postgres-minio.{{ .Values.domain }}
         - minio-api.postgres-minio.{{ .Values.domain }}
-        - minio.velero-minio.{{ .Values.domain }}
-        - minio-api.velero-minio.{{ .Values.domain }}
+        # - minio.velero-minio.{{ .Values.domain }}
+        # - minio-api.velero-minio.{{ .Values.domain }}
       autoHttpRedirect:
         enabled: true
 
