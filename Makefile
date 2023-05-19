@@ -105,6 +105,12 @@ create-cluster:
 destroy-cluster:
 	kind delete cluster --name di2me
 
+day2-create:
+	cd day2 && ../build/$(ZARF_BIN) package create --skip-sbom --confirm --set DI2ME_REPO="https://github.com/defenseunicorns/zarf-package-software-factory.git@$$(git show-ref --heads --tags | grep /$$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)$$ | cut -d ' ' -f2)"
+
+day2-deploy:
+	build/$(ZARF_BIN) package deploy --components=neuvector-cve-update --confirm day2/zarf-package-software-factory-amd64.tar.zst
+
 default-build: ## All in one make target for the default di2me repo (only x86) - uses the current branch/tag of the repo
 	make build
 	make build/zarf
