@@ -932,7 +932,7 @@ addons:
           cpu: 200m
 
   velero:
-    enabled: true
+    enabled: false
     plugins:
       - aws
     values:
