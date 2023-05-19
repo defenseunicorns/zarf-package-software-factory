@@ -84,6 +84,27 @@ test-ssh: ## Run this if you set SKIP_TEARDOWN=1 and want to SSH into the still-
 	cd test/tf/public-ec2-instance/.test-data && cat Ec2KeyPair.json | jq -r .PrivateKey > privatekey.pem && chmod 600 privatekey.pem
 	cd test/tf/public-ec2-instance && ssh -i .test-data/privatekey.pem ubuntu@$$(terraform output public_instance_ip | tr -d '"')
 
+create-cluster:
+	kind create cluster --name di2me --config test/kind-config/noCNI.yaml
+	echo
+	echo "Waiting for cluster to be ready..."
+	kubectl wait --for=condition=Ready pods --all --all-namespaces 2>&1 >/dev/null
+	echo
+	echo "Installing Calico..."
+	kubectl apply --wait=true -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/calico.yaml 2>&1 >/dev/null
+	echo "Waiting for Calico to be ready..."
+	kubectl rollout status deployment/calico-kube-controllers -n kube-system --watch --timeout=90s 2>&1 >/dev/null
+	kubectl rollout status daemonset/calico-node -n kube-system --watch --timeout=90s 2>&1 >/dev/null
+	kubectl wait --for=condition=Ready pods --all --all-namespaces 2>&1 >/dev/null
+	echo
+	test/metallb/install.sh
+	kubectl wait --for=condition=Ready pods --all --all-namespaces 2>&1 >/dev/null
+	echo
+	echo "Cluster is ready!"
+
+destroy-cluster:
+	kind delete cluster --name di2me
+
 default-build: ## All in one make target for the default di2me repo (only x86) - uses the current branch/tag of the repo
 	make build
 	make build/zarf

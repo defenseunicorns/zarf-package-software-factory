@@ -29,9 +29,9 @@ artifactory:
   nginx:
     enabled: false
   # Uncomment if you want to specify a particular storage class
-#  artifactory:
-#    persistence:
-#      storageClassName: "your-storage-class-here"
+  persistence:
+    storageClassName: "bad-storageclass"
+    # storageClassName: "your-storage-class-here"
 postgresql:
   enabled: false
 artifactory-ha:
