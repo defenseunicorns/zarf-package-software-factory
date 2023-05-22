@@ -917,6 +917,9 @@ addons:
         requests:
           memory: 256Mi
           cpu: 200m
+      # Disabled because of conflicts with postgres database
+      networkPolicies:
+        enabled: false
 
   velero:
     enabled: false
