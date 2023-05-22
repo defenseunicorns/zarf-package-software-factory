@@ -5,7 +5,6 @@ resources:
   - databases/sonarqube.yaml
   - secrets.yaml
   - tenants.yaml
-  - networkpolicies.yaml
   - istio-updates
 
 configMapGenerator:

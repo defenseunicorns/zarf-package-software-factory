@@ -9,8 +9,6 @@ resources:
   - gitrepository.yaml
   - helmrelease.yaml
   - virtualservice.yaml
-  # Disable network policies for now until they can be fixed
-  # - networkpolicy.yaml
   - databases/artifactory.yaml
   - databases/confluence.yaml
   - databases/jira.yaml

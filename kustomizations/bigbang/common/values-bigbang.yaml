@@ -590,6 +590,9 @@ addons:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+      # Disabled because of conflicts with postgres database
+      networkPolicies:
+        enabled: false
 
   minioOperator:
     enabled: true
@@ -864,8 +867,8 @@ addons:
               cpu: 400m
               memory: 600Mi
           # Uncomment this if you want to specify a particular storage class
-#          persistence:
-#            storageClass: "your-storage-class-name-here"
+          # persistence:
+          #   storageClass: "your-storage-class-name-here"
         gitlab-shell:
           init:
             resources:
@@ -898,6 +901,9 @@ addons:
             limits:
               cpu: 1
               memory: 1Gi
+      # Disabled because of conflicts with postgres database
+      networkPolicies:
+        enabled: false
   gitlabRunner:
     enabled: true
     values:
