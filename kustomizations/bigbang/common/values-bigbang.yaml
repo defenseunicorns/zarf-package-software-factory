@@ -98,7 +98,7 @@ istio:
         enabled: true
 
 
-istiooperator:
+istioOperator:
   enabled: true
   values:
     operator:
@@ -170,16 +170,19 @@ kiali:
               cpu: "500m"
               memory: "512Mi"
 
+tempo:
+  enabled: false
+
 clusterAuditor:
   enabled: false
 
 gatekeeper:
   enabled: false
 
-logging:
+elasticsearchKibana:
   enabled: false
 
-eckoperator:
+eckOperator:
   enabled: false
 
 fluentbit:
@@ -197,7 +200,7 @@ kyverno:
         cpu: "1"
         memory: 512Mi
 
-kyvernopolicies:
+kyvernoPolicies:
   enabled: true
   values:
     policies:
@@ -344,7 +347,7 @@ kyvernopolicies:
             value: none
 
 
-kyvernoreporter:
+kyvernoReporter:
   enabled: true
 
 loki:
