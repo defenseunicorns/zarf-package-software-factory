@@ -26,13 +26,6 @@ metadata:
   name: bbcore-minio
   labels:
     istio-injection: enabled
-# ---
-# apiVersion: v1
-# kind: Namespace
-# metadata:
-#   name: velero-minio
-#   labels:
-#     istio-injection: enabled
 ---
 apiVersion: v1
 kind: Namespace
