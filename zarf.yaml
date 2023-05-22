@@ -101,7 +101,7 @@ components:
       - "registry1.dso.mil/ironbank/tetrate/istio/proxyv2:1.17.2-tetratefips-v0"
       - "registry1.dso.mil/ironbank/tetrate/istio/pilot:1.17.2-tetratefips-v0"
       - "registry1.dso.mil/ironbank/opensource/istio/operator:1.17.2"
-      - "registry1.dso.mil/ironbank/tetrate/istio/operator:1.17.2-tetratefips-v1"
+      - "registry1.dso.mil/ironbank/tetrate/istio/operator:1.17.2-tetratefips-v0"
       - "registry1.dso.mil/ironbank/opensource/ingress-nginx/kube-webhook-certgen:v1.3.0"
       - "registry1.dso.mil/ironbank/opensource/jaegertracing/all-in-one:1.43.0"
       - "registry1.dso.mil/ironbank/opensource/jaegertracing/jaeger-operator:1.43.0"
