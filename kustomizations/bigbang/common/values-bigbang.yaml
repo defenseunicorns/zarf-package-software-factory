@@ -102,6 +102,8 @@ istio:
         - minio-api.postgres-minio.{{ .Values.domain }}
         - minio.velero-minio.{{ .Values.domain }}
         - minio-api.velero-minio.{{ .Values.domain }}
+        - minio.mattermost-minio.{{ .Values.domain }}
+        - minio-api.mattermost-minio.{{ .Values.domain }}
       autoHttpRedirect:
         enabled: true
 
@@ -581,14 +583,22 @@ addons:
     # Disabled because of conflicts with postgres database
     networkPolicies:
       enabled: false
-    values:
-      istio:
-        enabled: true
-      database:
+    database:
         username: "mattermost"
         host: "acid-mattermost.mattermost.svc.cluster.local"
         port: "5432"
         database: "mattermost"
+    objectStorage:
+      type: "minio"
+      endpoint: http://minio.mattermost-minio.svc.cluster.local:80
+      region: "minio"
+      # accessKey: "" -- Added in environment-bb/values-bigbang.enc.yaml
+      # accessSecret: "" -- Added in environment-bb/values-bigbang.enc.yaml
+    values:
+      istio:
+        enabled: true
+        injection: enabled
+
   sonarqube:
     enabled: true
     ingress:

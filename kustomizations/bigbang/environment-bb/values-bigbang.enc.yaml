@@ -274,6 +274,8 @@ addons:
             aws_access_key_id=changeme
             aws_secret_access_key=changeme
   mattermost:
-    values:
-      database:
-        password: "changeme"
+    database:
+      password: "changeme"
+    objectStorage:
+      accessKey: "changeme"         # needs to match the value in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
+      accessSecret: "changeme"      # needs to match the value in kustomizations/bigbang/environment-bb/values-minio-common-user-creds.enc.yaml
