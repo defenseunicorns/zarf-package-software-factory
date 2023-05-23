@@ -120,7 +120,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && make destroy-cluster`)
 
 		// Create kind cluster using 1.26 node image and install calico + metallb
-		output, err = platform.RunSSHCommandAsSudo(`make create-cluster`)
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make create-cluster`)
 		require.NoError(t, err, output)
 
 		// Get zarf/zarf init package and build flux package/di2me package
