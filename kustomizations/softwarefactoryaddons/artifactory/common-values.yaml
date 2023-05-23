@@ -27,9 +27,8 @@ artifactory:
       repository: ironbank/jfrog/artifactory/artifactory
       tag: 7.55.9
     # Uncomment if you want to specify a particular storage class
-    persistence:
-      storageClassName: "bad-storageclass"
-      # storageClassName: "your-storage-class-here"
+    # persistence:
+    #   storageClassName: "your-storage-class-here"
   nginx:
     enabled: false
 postgresql:
