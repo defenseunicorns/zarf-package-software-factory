@@ -225,6 +225,7 @@ kyvernopolicies:
               - gitlab
               - jira
               - sonarqube
+              - mattermost
               kinds:
               - Pod
               selector:
