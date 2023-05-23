@@ -199,11 +199,11 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get statefulset logging-loki-write -n logging; do sleep 5; done"`)
 		require.NoError(t, err, output)
 
-		// Wait for the Loki wrie Deployment to report that it is ready
+		// Wait for the Loki write Statefulset to report that it is ready
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/logging-loki-write -n logging --watch --timeout=1200s`)
 		require.NoError(t, err, output)
 
-		// Wait for the Loki read Statefulset to exist.
+		// Wait for the Loki read Deployment to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get deployment logging-loki-read -n logging; do sleep 5; done"`)
 		require.NoError(t, err, output)
 
@@ -215,7 +215,7 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get daemonset promtail-promtail -n promtail; do sleep 5; done"`)
 		require.NoError(t, err, output)
 
-		// Wait for the Promtail Statefulset to report that it is ready
+		// Wait for the Promtail Daemonset to report that it is ready
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status daemonset/promtail-promtail -n promtail --watch --timeout=1200s`)
 		require.NoError(t, err, output)
 
