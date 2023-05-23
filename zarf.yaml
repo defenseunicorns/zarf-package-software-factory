@@ -52,8 +52,8 @@ components:
     repos:
       - https://repo1.dso.mil/big-bang/product/packages/redis.git
     images:
-      - registry1.dso.mil/ironbank/bitnami/redis:7.0.10
-      - docker.io/bitnami/redis-sentinel:7.0.10-debian-11-r2
+      - registry1.dso.mil/ironbank/bitnami/redis:7.0.11
+      - docker.io/bitnami/redis-sentinel:7.0.10-debian-11-r8
 
   - name: big-bang
     required: true
@@ -149,7 +149,7 @@ components:
       - "registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner:v15.10.0"
       - "registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner-helper:v15.10.0"
       - "registry1.dso.mil/ironbank/big-bang/sonarqube-9:9.9.0-community"
-      # - "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.26.3"
+      - "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.26.3"
       - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.6.1"
       - "registry1.dso.mil/ironbank/opensource/velero/velero:v1.10.2"
       - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-csi:v0.4.2"
