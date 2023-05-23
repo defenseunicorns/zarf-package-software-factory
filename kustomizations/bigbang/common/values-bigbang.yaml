@@ -399,7 +399,8 @@ loki:
         s3:
           s3ForcePathStyle: true
           insecure: true
-
+    backend:
+      replicas: 1
 
 promtail:
   enabled: true
