@@ -80,10 +80,7 @@ components:
           - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cd /mounts/workspace; tar -xf jenkins-home-backup.tar -C /mounts/workspace/jenkins-tmp'
 
           # Delete everything in the existing jenkins-home folder
-          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'rm -rf /mounts/jenkins-home/*'
-
-          # Delete all hidden files/folders in the existing jenkins-home folder
-          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'rm -rf /mounts/jenkins-home/.*'
+          - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'rm -rf -- /mounts/jenkins-home/..?* /mounts/jenkins-home/.[!.]* /mounts/jenkins-home/*'
 
           # Copy the contents of the backup from the temp folder over the existing jenkins-home folder
           - cmd: kubectl exec -i -n jenkins backup-restore-tools -c toolbox -- bash -c 'cp -R /mounts/workspace/jenkins-tmp/jenkins-home/* /mounts/jenkins-home'
