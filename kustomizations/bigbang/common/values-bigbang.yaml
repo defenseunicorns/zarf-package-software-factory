@@ -589,11 +589,10 @@ addons:
         port: "5432"
         database: "mattermost"
     objectStorage:
-      type: "minio"
       endpoint: http://minio.mattermost-minio.svc.cluster.local:80
-      region: "minio"
       # accessKey: "" -- Added in environment-bb/values-bigbang.enc.yaml
       # accessSecret: "" -- Added in environment-bb/values-bigbang.enc.yaml
+      bucket: "mattermost-bucket"
     values:
       istio:
         enabled: true
