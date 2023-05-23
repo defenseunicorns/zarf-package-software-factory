@@ -116,7 +116,7 @@ vendor-big-bang-base: ## Vendor the BigBang base kustomization, since Flux doesn
 	cd kustomizations/bigbang/vendor && \
 	git init bigbang && \
 	cd bigbang && \
-	git remote add -f origin https://repo1.dso.mil/platform-one/big-bang/bigbang.git && \
+	git remote add -f origin https://repo1.dso.mil/big-bang/bigbang.git && \
 	git config core.sparseCheckout true && \
 	echo "base/" > .git/info/sparse-checkout && \
 	git checkout tags/$(BIGBANG_VERSION) -b tagbranch && \
