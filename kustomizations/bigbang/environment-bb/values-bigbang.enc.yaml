@@ -273,3 +273,7 @@ addons:
             [default]
             aws_access_key_id=changeme
             aws_secret_access_key=changeme
+  mattermost:
+    values:
+      database:
+        password: "changeme"

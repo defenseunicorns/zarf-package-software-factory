@@ -572,8 +572,22 @@ twistlock:
 addons:
   mattermostOperator:
     enabled: true
+    values:
+      istio:
+        enabled: true
   mattermost:
     enabled: true
+    # Disabled because of conflicts with postgres database
+    networkPolicies:
+      enabled: false
+    values:
+      istio:
+        enabled: true
+      database:
+        username: "mattermost"
+        host: "acid-mattermost.mattermost.svc.cluster.local"
+        port: "5432"
+        database: "mattermost"
   sonarqube:
     enabled: true
     ingress:
