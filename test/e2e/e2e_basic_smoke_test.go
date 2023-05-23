@@ -204,7 +204,7 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		require.NoError(t, err, output)
 
 		// Wait for the Loki read Statefulset to exist.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get statefulset logging-loki-read -n logging; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get deployment logging-loki-read -n logging; do sleep 5; done"`)
 		require.NoError(t, err, output)
 
 		// Wait for the Loki read Deployment to report that it is ready
