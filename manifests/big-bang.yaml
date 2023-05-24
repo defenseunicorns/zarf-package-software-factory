@@ -39,7 +39,7 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       namespace: bigbang
-      name: kyvernopolicies
+      name: kyverno-policies
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       namespace: bigbang
@@ -47,7 +47,7 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       namespace: bigbang
-      name: kyvernoreporter
+      name: kyverno-reporter
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       namespace: bigbang

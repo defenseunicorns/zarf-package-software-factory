@@ -10,7 +10,7 @@
   "prBodyNotes": [
     "- :warning: The E2E tests need to be run, they have a manual trigger. To start them add a comment to this PR that says `/test all`",
     "{{#if (containsString depType 'zarfcomponents')}}- :warning: Please ensure the images are also updated in `zarf.yaml`. Hint: Try using `zarf prepare find-images`. Right now this process is manual (add commits to this branch), but we intend to automate it later.{{/if}}",
-    "{{#if (containsString depType 'bigbang')}}- :warning: Please ensure the git repos that Big Bang depends on are also updated in `zarf.yaml`. You can find them by going to [values.yaml](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/{{newVersion}}/chart/values.yaml) in the Big Bang repo in the `<subrepo>.git.tag` parameter for each repo. Right now this process is manual (add commits to this branch), but we intend to automate it later.{{/if}}",
+    "{{#if (containsString depType 'bigbang')}}- :warning: Please ensure the git repos that Big Bang depends on are also updated in `zarf.yaml`. You can find them by going to [values.yaml](https://repo1.dso.mil/big-bang/bigbang/-/blob/{{newVersion}}/chart/values.yaml) in the Big Bang repo in the `<subrepo>.git.tag` parameter for each repo. Right now this process is manual (add commits to this branch), but we intend to automate it later.{{/if}}",
     "{{#if (containsString depType 'bigbang')}}- :warning: The vendor folder also needs to be updated. Renovate did not do it automatically. Run `make vendor-big-bang-base` and commit+push any changes.{{/if}}",
   ],
   "pre-commit": {
@@ -39,7 +39,7 @@
         "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/bigbang\\.git\/\/base\/flux\\?ref=(?<currentValue>\\S+)",
         "BIGBANG_VERSION := (?<currentValue>\\S+)"
       ],
-      "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/bigbang.git",
+      "depNameTemplate": "https://repo1.dso.mil/big-bang/bigbang.git",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfcomponents-bigbang"
     },
@@ -63,9 +63,9 @@
       ],
       "matchStrings": [
         "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/jira\\.git@(?<currentValue>\\S+)",
-        "url: https://repo1\\.dso\\.mil/platform-one/big-bang/apps/third-party/jira\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+        "url: https://repo1\\.dso\\.mil/big-bang/product/community/jira\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
-      "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git",
+      "depNameTemplate": "https://repo1.dso.mil/big-bang/product/community/jira.git",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfcomponents",
       "versioningTemplate": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-bb.(?<build>\\d+)$"
@@ -77,9 +77,9 @@
       ],
       "matchStrings": [
         "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/confluence\\.git@(?<currentValue>\\S+)",
-        "url: https://repo1\\.dso\\.mil/platform-one/big-bang/apps/third-party/confluence\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+        "url: https://repo1\\.dso\\.mil/big-bang/product/community/confluence\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
-      "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence.git",
+      "depNameTemplate": "https://repo1.dso.mil/big-bang/product/community/confluence.git",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfcomponents",
       "versioningTemplate": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-bb.(?<build>\\d+)$"
@@ -120,9 +120,9 @@
       ],
       "matchStrings": [
         "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/application-utilities\/redis\\.git@(?<currentValue>\\S+)",
-        "https://repo1\\.dso\\.mil/platform-one/big-bang/apps/application-utilities/redis\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
+        "https://repo1\\.dso\\.mil/big-bang/product/packages/redis\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
-      "depNameTemplate": "https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git",
+      "depNameTemplate": "https://repo1.dso.mil/big-bang/product/packages/redis.git",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfcomponents",
       "versioningTemplate": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-bb.(?<build>\\d+)$"

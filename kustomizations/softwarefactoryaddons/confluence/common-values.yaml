@@ -9,7 +9,7 @@ istio:
 synchrony:
   enabled: false
 
-# The chart won't let us specify a secret that already exists. See https://repo1.dso.mil/platform-one/big-bang/apps/third-party/confluence/-/issues/10
+# The chart won't let us specify a secret that already exists. See https://repo1.dso.mil/big-bang/product/community/confluence/-/issues/10
 # database:
 #   url: "jdbc:postgresql://acid-confluence.confluence.svc.cluster.local:5432/confluence"
 #   credentials:
