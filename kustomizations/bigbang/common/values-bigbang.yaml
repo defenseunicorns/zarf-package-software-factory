@@ -100,8 +100,6 @@ istio:
         - minio-api.gitlab-minio.{{ .Values.domain }}
         - minio.postgres-minio.{{ .Values.domain }}
         - minio-api.postgres-minio.{{ .Values.domain }}
-        - minio.velero-minio.{{ .Values.domain }}
-        - minio-api.velero-minio.{{ .Values.domain }}
       autoHttpRedirect:
         enabled: true
 
@@ -215,6 +213,12 @@ kyvernopolicies:
           - resources:
               namespaces:
               - "zarf"
+      disallow-privileged-containers:
+        exclude:
+          any:
+          - resources:
+              namespaces:
+              - "local-path-storage"
       disallow-privilege-escalation:
         exclude:
           any:
@@ -252,14 +256,6 @@ kyvernopolicies:
               - "kube-system"
               - "local-path-storage"
               - "zarf"
-          - resources:
-              namespaces:
-              - velero
-              kinds:
-              - Pod
-              selector:
-                matchLabels:
-                  name: node-agent
         parameters:
           allow:
           - "/var/lib/rancher/k3s/storage/*"
@@ -328,15 +324,6 @@ kyvernopolicies:
             version: v1
             kind: ClusterPolicy
             name: restrict-image-registries
-          patch:
-          - op: add
-            path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
-            value: none
-        # Required for velero when using hostPath backed storage
-        - target:
-            version: v1
-            kind: ClusterPolicy
-            name: restrict-host-path-write
           patch:
           - op: add
             path: "/metadata/annotations/pod-policies.kyverno.io~1autogen-controllers"
@@ -603,6 +590,9 @@ addons:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+      # Disabled because of conflicts with postgres database
+      networkPolicies:
+        enabled: false
 
   minioOperator:
     enabled: true
@@ -877,8 +867,8 @@ addons:
               cpu: 400m
               memory: 600Mi
           # Uncomment this if you want to specify a particular storage class
-#          persistence:
-#            storageClass: "your-storage-class-name-here"
+          # persistence:
+          #   storageClass: "your-storage-class-name-here"
         gitlab-shell:
           init:
             resources:
@@ -911,6 +901,9 @@ addons:
             limits:
               cpu: 1
               memory: 1Gi
+      # Disabled because of conflicts with postgres database
+      networkPolicies:
+        enabled: false
   gitlabRunner:
     enabled: true
     values:
@@ -924,59 +917,12 @@ addons:
         requests:
           memory: 256Mi
           cpu: 200m
+      # Disabled because of conflicts with postgres database
+      networkPolicies:
+        enabled: false
 
   velero:
-    enabled: true
-    plugins:
-      - aws
-    values:
-      initContainers:
-       - name: velero-plugin-for-aws
-         image: registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.6.1
-         imagePullPolicy: IfNotPresent
-         volumeMounts:
-           - mountPath: /target
-             name: plugins
-         resources:
-           requests:
-             memory: 512Mi
-             cpu: 100m
-           limits:
-             memory: 512Mi
-             cpu: 100m
-      resources:
-        # Demo/PoC values. Adjust for production
-        requests:
-          cpu: 100m
-          memory: 256Mi
-        limits:
-          cpu: 10
-          memory: 512Mi
-      configuration:
-        provider: aws
-        backupStorageLocation:
-          bucket: velero-backups
-          config:
-            region: minio
-            s3ForcePathStyle: "true"
-            s3Url: http://minio.velero-minio.svc.cluster.local:80
-        volumeSnapshotLocation:
-          name: default
-          config:
-            region: minio
-        defaultVolumesToFsBackup: true
-        default-repo-maintain-frequency: 168h
-      deployNodeAgent: true
-      nodeAgent:
-        # Demo/PoC values. Adjust for production
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
-          limits:
-            cpu: 10
-            memory: 1024Mi
-      #schedules:
+    enabled: false
 
   # Allow the metrics server (if deployed) to accept insecure connections to the
   # kubelet. This allows the metrics server to work with KinD.

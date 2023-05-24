@@ -26,12 +26,11 @@ artifactory:
       registry: registry1.dso.mil
       repository: ironbank/jfrog/artifactory/artifactory
       tag: 7.55.9
+    # Uncomment if you want to specify a particular storage class
+    # persistence:
+    #   storageClassName: "your-storage-class-here"
   nginx:
     enabled: false
-  # Uncomment if you want to specify a particular storage class
-#  artifactory:
-#    persistence:
-#      storageClassName: "your-storage-class-here"
 postgresql:
   enabled: false
 artifactory-ha:
