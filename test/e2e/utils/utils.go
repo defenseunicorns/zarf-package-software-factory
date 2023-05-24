@@ -117,14 +117,10 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		require.NoError(t, err, output)
 
 		// Try to be idempotent
-		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && kind delete cluster`)
+		_, _ = platform.RunSSHCommandAsSudo(`echo "Idempotently destroying the old cluster. This should fail most of the time. It just means there is no cluster to destroy." && make destroy-cluster`)
 
-		// Create kind cluster using 1.24 node image
-		output, err = platform.RunSSHCommandAsSudo(`kind create cluster --image kindest/node:v1.26.3`)
-		require.NoError(t, err, output)
-
-		// Install metallb into cluster and configure
-		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && test/metallb/install.sh`)
+		// Create kind cluster using 1.26 node image and install calico + metallb
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make create-cluster`)
 		require.NoError(t, err, output)
 
 		// Get zarf/zarf init package and build flux package/di2me package

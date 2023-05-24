@@ -91,29 +91,11 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Wait for the gitlab-minio Statefulset "gitlab-minio-minio-instance-ss-0" to report that it is ready.
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/gitlab-minio-minio-instance-ss-0 -n gitlab-minio --watch --timeout=1200s`)
 		require.NoError(t, err, output)
-		// Wait for the velero-minio Statefulset "velero-minio-minio-instance-ss-0" to exist.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get statefulset velero-minio-minio-instance-ss-0 -n velero-minio; do sleep 5; done"`)
-		require.NoError(t, err, output)
-		// Wait for the velero-minio Statefulset "velero-minio-minio-instance-ss-0" to report that it is ready.
-		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/velero-minio-minio-instance-ss-0 -n velero-minio --watch --timeout=1200s`)
-		require.NoError(t, err, output)
 		// Wait for the GitLab Webservice Deployment to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get deployment gitlab-webservice-default -n gitlab; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Wait for the GitLab Webservice Deployment to report that it is ready
 		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status deployment/gitlab-webservice-default -n gitlab --watch --timeout=1200s`)
-		require.NoError(t, err, output)
-		// Wait for the Velero Deployment to exist.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get deployment velero-velero -n velero; do sleep 5; done"`)
-		require.NoError(t, err, output)
-		// Wait for the Velero Deployment to report that it is ready
-		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status deployment/velero-velero -n velero --watch --timeout=1200s`)
-		require.NoError(t, err, output)
-		// Wait for the Velero node-agent Daemonset to exist.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get daemonset node-agent -n velero; do sleep 5; done"`)
-		require.NoError(t, err, output)
-		// Wait for the Velerdo node-agent Daemonset to report that it is ready
-		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status daemonset/node-agent -n velero --watch --timeout=1200s`)
 		require.NoError(t, err, output)
 		// Wait for the Jenkins StatefulSet to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get statefulset jenkins -n jenkins; do sleep 5; done"`)
