@@ -7,6 +7,6 @@ spec:
   interval: 5m
   url: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git
   ref:
-    tag: 17.9.3-bb.0
+    tag: 17.10.2-bb.1
   secretRef:
     name: private-git-server
