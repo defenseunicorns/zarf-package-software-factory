@@ -107,7 +107,7 @@ istio:
         enabled: true
 
 
-istiooperator:
+istioOperator:
   enabled: true
   values:
     operator:
@@ -179,16 +179,19 @@ kiali:
               cpu: "500m"
               memory: "512Mi"
 
+tempo:
+  enabled: false
+
 clusterAuditor:
   enabled: false
 
 gatekeeper:
   enabled: false
 
-logging:
+elasticsearchKibana:
   enabled: false
 
-eckoperator:
+eckOperator:
   enabled: false
 
 fluentbit:
@@ -206,7 +209,7 @@ kyverno:
         cpu: "1"
         memory: 512Mi
 
-kyvernopolicies:
+kyvernoPolicies:
   enabled: true
   values:
     policies:
@@ -343,7 +346,7 @@ kyvernopolicies:
             value: none
 
 
-kyvernoreporter:
+kyvernoReporter:
   enabled: true
 
 loki:
@@ -387,7 +390,8 @@ loki:
         s3:
           s3ForcePathStyle: true
           insecure: true
-
+    backend:
+      replicas: 1
 
 promtail:
   enabled: true
@@ -551,11 +555,11 @@ monitoring:
       prometheusSpec:
         resources:
           limits:
-            cpu: "300m"
-            memory: "2Gi"
+            cpu: "500m"
+            memory: "4Gi"
           requests:
             cpu: "100m"
-            memory: "2Gi"
+            memory: "4Gi"
 
 twistlock:
   enabled: false

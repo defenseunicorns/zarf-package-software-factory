@@ -12,9 +12,9 @@ To bring this Software Factory together as one solution, we need to use Single S
 
 Two options were discussed to accomplish this:
 
-1. Use [Keycloak](https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak) from [Big Bang Umbrella](https://repo1.dso.mil/platform-one/big-bang/bigbang)
+1. Use [Keycloak](https://repo1.dso.mil/big-bang/product/packages/keycloak) from [Big Bang Umbrella](https://repo1.dso.mil/big-bang/bigbang)
 
-1. Use [GitLab](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab) from [Big Bang Umbrella](https://repo1.dso.mil/platform-one/big-bang/bigbang)
+1. Use [GitLab](https://repo1.dso.mil/big-bang/product/packages/gitlab) from [Big Bang Umbrella](https://repo1.dso.mil/big-bang/bigbang)
 
 Keycloak is the incumbant. Platform One uses it, and a lot of customization work has been done to it to suit the needs that are common in a DoD environment, like support for Common Access Card (CAC). However, due to its architecture Keycloak is not able to run in the same Kubernetes cluster as the rest of the software factory. To use Keycloak we will need to run two clusters, one for Keycloak and one for the Software Factory.
 
