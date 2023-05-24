@@ -52,8 +52,8 @@ components:
     repos:
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git
     images:
-      - registry1.dso.mil/ironbank/bitnami/redis:7.0.10
-      - docker.io/bitnami/redis-sentinel:7.0.10-debian-11-r2
+      - registry1.dso.mil/ironbank/bitnami/redis:7.0.11
+      - docker.io/bitnami/redis-sentinel:7.0.10-debian-11-r8
 
   - name: big-bang
     required: true
