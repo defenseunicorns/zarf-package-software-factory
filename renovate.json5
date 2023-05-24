@@ -104,16 +104,15 @@
         ".*\\.yaml"
       ],
       "matchStrings": [
-        "github\\.com\/jenkinsci\/helm-charts\\.git@jenkins-(?<currentValue>\\S+)",
-        "github\\.com\/jenkinsci\/helm-charts\\.git\\s+ref:\\s+tag:\\s+jenkins-(?<currentValue>\\S+)",
-        "mirror__github\\.com__jenkinsci__helm-charts\\.git\\s+ref:\\s+tag:\\s+jenkins-(?<currentValue>\\S+)"
+        "https:\/\/repo1\\.dso\\.mil\/big-bang\/product\/community\/jenkins\\.git@(?<currentValue>\\S+)",
+        "https://repo1\\.dso\\.mil/big-bang/product/community/jenkins\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
-      "depNameTemplate": "https://github.com/jenkinsci/helm-charts.git",
+      "depNameTemplate": "https://repo1.dso.mil/big-bang/product/community/jenkins.git",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfcomponents",
-      "extractVersionTemplate": "^jenkins-(?<version>.*)$"
+      "versioningTemplate": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-bb.(?<build>\\d+)$"
     },
-        // Redis version
+    // Redis version
     {
       "fileMatch": [
         ".*\\.yaml"
