@@ -32,6 +32,7 @@ components:
         # This will be built on the package create side and deployed as a regular manifest on package deploy
         kustomizations:
           - https://repo1.dso.mil/big-bang/bigbang.git/base/flux?ref=2.2.0
+          - https://repo1.dso.mil/big-bang/bigbang.git/base/flux?ref=2.2.0
     images:
       # flux - flux
       - registry1.dso.mil/ironbank/fluxcd/source-controller:v0.36.1
