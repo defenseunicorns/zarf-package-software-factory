@@ -131,6 +131,10 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf init --components git-server --confirm`)
 		require.NoError(t, err, output)
 
+		// Copy zarf-config.toml to the build folder
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && cp test/e2e/zarf-config.toml build/zarf-config.toml`)
+		require.NoError(t, err, output)
+
 		// Deploy Flux
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm`)
 		require.NoError(t, err, output)
