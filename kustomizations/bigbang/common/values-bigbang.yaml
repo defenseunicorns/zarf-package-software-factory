@@ -551,11 +551,11 @@ monitoring:
       prometheusSpec:
         resources:
           limits:
-            cpu: "300m"
-            memory: "2Gi"
+            cpu: "500m"
+            memory: "4Gi"
           requests:
             cpu: "100m"
-            memory: "2Gi"
+            memory: "4Gi"
 
 twistlock:
   enabled: false
