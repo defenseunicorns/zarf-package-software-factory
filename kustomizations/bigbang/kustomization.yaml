@@ -5,7 +5,6 @@ resources:
   - databases/sonarqube.yaml
   - secrets.yaml
   - tenants.yaml
-  - networkpolicies.yaml
   - istio-updates
 
 configMapGenerator:
@@ -30,10 +29,6 @@ configMapGenerator:
     namespace: bigbang
     files:
       - values.yaml=common/values-gitlab-minio.yaml
-  - name: common-velero-minio
-    namespace: bigbang
-    files:
-      - values.yaml=common/values-velero-minio.yaml
   - name: common-postgres-minio
     namespace: bigbang
     files:
@@ -92,16 +87,4 @@ patchesStrategicMerge:
                     path: "/spec/dependsOn/-"
                     value:
                       name: gitlab-minio
-                      namespace: bigbang
-              - target:
-                  group: helm.toolkit.fluxcd.io
-                  version: v2beta1
-                  kind: HelmRelease
-                  name: velero
-                  namespace: bigbang
-                patch:
-                  - op: add
-                    path: "/spec/dependsOn/-"
-                    value:
-                      name: velero-minio
                       namespace: bigbang

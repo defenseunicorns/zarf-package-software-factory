@@ -80,7 +80,6 @@ components:
       - https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git
-      - https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/metrics-server.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/neuvector.git
       - https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube.git
@@ -148,10 +147,6 @@ components:
       - "registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner:v15.8.1"
       - "registry1.dso.mil/ironbank/gitlab/gitlab-runner/gitlab-runner-helper:v15.8.1"
       - "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.26.3"
-      - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.6.1"
-      - "registry1.dso.mil/ironbank/opensource/velero/velero:v1.10.2"
-      - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-csi:v0.4.2"
-      - "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-microsoft-azure:v1.6.1"
       - "registry1.dso.mil/ironbank/opensource/kubernetes-sigs/metrics-server:v0.6.2"
       - "registry1.dso.mil/ironbank/neuvector/neuvector/controller:5.1.1"
       - "registry1.dso.mil/ironbank/neuvector/neuvector/enforcer:5.1.1"
@@ -434,15 +429,9 @@ components:
         shasum: 640d2f9b403f446fbb7ee7b99bf58341aa1a98d64688b9f47e533b78dd212166
         target: flux.tar.gz
         executable: false
-      - source: https://github.com/vmware-tanzu/velero/releases/download/v1.9.3/velero-v1.9.3-linux-amd64.tar.gz
-        shasum: 13e498c1ebec1e7c5bd633cbd39775e2b60cc55c29333abf019abaf29f19cc0e
-        target: velero.tar.gz
-        executable: false
     actions:
       onDeploy:
         defaults:
           maxRetries: 0
         after:
           - cmd: tar -xzf flux.tar.gz -C /usr/sbin && chmod +x /usr/sbin/flux && rm flux.tar.gz
-          # If GNU tar, need to add --wildcards flag. If BSD tar, adding --wildcards flag makes it barf. :grumpyface:
-          - cmd: EXITCODE=$(tar --version | grep -q "gnu"); ADDL_FLAGS=$(if [ $? -eq 0 ]; then echo "--wildcards"; else echo ""; fi); tar -xzf velero.tar.gz -C /usr/sbin --strip-components=1 $ADDL_FLAGS 'velero-*-linux-amd64/velero' && chmod +x /usr/sbin/velero && rm velero.tar.gz
