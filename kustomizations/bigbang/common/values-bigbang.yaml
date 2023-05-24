@@ -82,7 +82,7 @@ istio:
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
         - sonarqube.{{ .Values.domain }}
-        - mattermost.{{ .Values.domain }}
+        - chat.{{ .Values.domain }}
     private:
       ingressGateway: "private-ingressgateway"
       hosts:
