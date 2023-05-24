@@ -583,11 +583,6 @@ addons:
     # Disabled because of conflicts with postgres database
     networkPolicies:
       enabled: false
-    database:
-        username: "mattermost"
-        host: "acid-mattermost.mattermost.svc.cluster.local"
-        port: "5432"
-        database: "mattermost"
     objectStorage:
       endpoint: http://minio.mattermost-minio.svc.cluster.local:80
       # accessKey: "" -- Added in environment-bb/values-bigbang.enc.yaml

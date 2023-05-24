@@ -3,7 +3,6 @@ resources:
   - gitrepository.yaml
   - databases/gitlab.yaml
   - databases/sonarqube.yaml
-  - databases/mattermost.yaml
   - secrets.yaml
   - tenants.yaml
   - networkpolicies.yaml
