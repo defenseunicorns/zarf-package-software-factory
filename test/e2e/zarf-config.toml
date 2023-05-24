@@ -1,0 +1,11 @@
+no_progress = true
+
+[package.deploy.set]
+helm_controller_cpu = '2000m'
+helm_controller_mem = '1500Mi'
+kustomize_controller_cpu = '2000m'
+kustomize_controller_mem = '1500Mi'
+notification_controller_cpu = '1000m'
+notification_controller_mem = '512Mi'
+source_controller_cpu = '2000m'
+source_controller_mem = '1Gi'
