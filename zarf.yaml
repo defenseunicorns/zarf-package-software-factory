@@ -5,7 +5,7 @@ metadata:
   description: "Zarf deployment of a software factory"
   # Iron Bank doesn't support ARM
   architecture: amd64
-  version: "0.1"
+  version: "###ZARF_PKG_TMPL_PACKAGE_VERSION###"
 
 components:
   - name: bigbang-dev-dns-modification
