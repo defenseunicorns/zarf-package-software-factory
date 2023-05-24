@@ -6,8 +6,8 @@ resources:
     spec:
       interval: 2m
       timeout: 60s
-      url: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git
+      url: https://repo1.dso.mil/big-bang/product/packages/minio.git
       ref:
-        tag: 4.5.8-bb.0
+        tag: 5.0.3-bb.2
       secretRef:
         name: private-git-server

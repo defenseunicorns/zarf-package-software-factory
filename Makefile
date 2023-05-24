@@ -3,7 +3,7 @@
 #    2. Additionally update the following files to use the new version of Big Bang:
 #        - zarf.yaml
 #        - flux/zarf.yaml
-BIGBANG_VERSION := 1.57.1
+BIGBANG_VERSION := 2.2.0
 
 # The version of Zarf to use. To keep this repo as portable as possible the Zarf binary will be downloaded and added to
 # the build folder.
@@ -143,7 +143,7 @@ vendor-big-bang-base: ## Vendor the BigBang base kustomization, since Flux doesn
 	cd kustomizations/bigbang/vendor && \
 	git init bigbang && \
 	cd bigbang && \
-	git remote add -f origin https://repo1.dso.mil/platform-one/big-bang/bigbang.git && \
+	git remote add -f origin https://repo1.dso.mil/big-bang/bigbang.git && \
 	git config core.sparseCheckout true && \
 	echo "base/" > .git/info/sparse-checkout && \
 	git checkout tags/$(BIGBANG_VERSION) -b tagbranch && \

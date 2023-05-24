@@ -5,7 +5,7 @@ metadata:
   namespace: softwarefactoryaddons
 spec:
   interval: 5m
-  url: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/redis.git
+  url: https://repo1.dso.mil/big-bang/product/packages/redis.git
   ref:
     tag: 17.10.2-bb.1
   secretRef:
