@@ -102,6 +102,7 @@ istio:
         - minio.postgres-minio.{{ .Values.domain }}
         - minio-api.postgres-minio.{{ .Values.domain }}
         - minio.mattermost-minio.{{ .Values.domain }}
+        - minio-api.mattermost-minio.{{ .Values.domain }}
       autoHttpRedirect:
         enabled: true
 
