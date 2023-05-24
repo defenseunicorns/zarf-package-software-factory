@@ -82,6 +82,7 @@ istio:
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
         - sonarqube.{{ .Values.domain }}
+        - mattermost.{{ .Values.domain }}
     private:
       ingressGateway: "private-ingressgateway"
       hosts:
@@ -570,7 +571,7 @@ addons:
     networkPolicies:
       enabled: false
     objectStorage:
-      endpoint: http://minio.mattermost-minio.svc.cluster.local:80
+      endpoint: minio.mattermost-minio.svc.cluster.local:80
       # accessKey: "" -- Added in environment-bb/values-bigbang.enc.yaml
       # accessSecret: "" -- Added in environment-bb/values-bigbang.enc.yaml
       bucket: "mattermost-bucket"
