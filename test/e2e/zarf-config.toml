@@ -1,3 +1,5 @@
+no_progress = true
+
 [package.deploy.set]
 helm_controller_cpu = '2000m'
 helm_controller_mem = '1500Mi'

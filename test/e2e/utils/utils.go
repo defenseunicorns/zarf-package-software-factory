@@ -108,10 +108,6 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app && make build/zarf`)
 		require.NoError(t, err, output)
 
-		// Create Zarf config and put in proper folder
-		output, err = platform.RunSSHCommandAsSudo(`mkdir -p ~/.zarf && echo "no_progress = true" | tee ~/.zarf/zarf-config.toml`)
-		require.NoError(t, err, output)
-
 		// Log into registry1.dso.mil
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`~/app/build/zarf tools registry login registry1.dso.mil -u %v -p %v`, registry1Username, registry1Password))
 		require.NoError(t, err, output)
