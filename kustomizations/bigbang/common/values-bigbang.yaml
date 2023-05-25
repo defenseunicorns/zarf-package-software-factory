@@ -572,6 +572,8 @@ addons:
         enabled: true
   mattermost:
     enabled: true
+    ingress:
+      gateway: public
     # Disabled because of conflicts with postgres database
     networkPolicies:
       enabled: false
@@ -580,6 +582,9 @@ addons:
       # accessKey: "" -- Added in environment-bb/values-bigbang.enc.yaml
       # accessSecret: "" -- Added in environment-bb/values-bigbang.enc.yaml
       bucket: "mattermost-bucket"
+    istio:
+      enabled: true
+      injection: enabled
     values:
       istio:
         enabled: true
