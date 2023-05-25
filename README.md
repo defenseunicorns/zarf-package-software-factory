@@ -10,21 +10,18 @@ Deploys the components of a software factory with the following services, all ru
 - Minio Operator*
 - Neuvector*
 - SonarQube*
+- Mattermost*
 - Jira
 - Confluence
 - Jenkins
 - Artifactory
 - HA Redis with Sentinel
 
-Coming Soon:
-
-- Mattermost*
-
 **Deployed using Big Bang Umbrella*
 
 ---
 
-**The requirements of the package on a single node/machine are roughly 48 CPU threads, 96 GB of memory, and a directly attached NVME solid-state storage device of at least 500k IOPS.**
+**The requirements of the package on a single node/machine are roughly 64 CPU threads, 96 GB of memory, and a directly attached NVME solid-state storage device of at least 500k IOPS.**
 
 ![warning](img/warning.png)
 
