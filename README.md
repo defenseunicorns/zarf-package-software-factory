@@ -56,7 +56,7 @@ All versions of this package will not be compatible with all versions of Zarf. F
 - [Logged into registry1.dso.mil](https://docs.zarf.dev/docs/the-zarf-cli/cli-commands/zarf_tools_registry_login)
 - `make` present in PATH
 - `sha256sum` present in PATH
-- TONS of CPU and RAM with high IOPS storage. Our testing shows the AWS EC2 instance type m6id.12xlarge works pretty well at about $2.80/hour, which can be reduced further if you do a spot instance.
+- TONS of CPU and RAM with high IOPS storage. Our testing shows the AWS EC2 instance type m6id.16xlarge works pretty well at about $3.80/hour, which can be reduced further if you do a spot instance.
 
 Note that having Zarf installed is not a prerequisite. This repo pulls in its own version of Zarf so that it can be versioned separately from whatever your system has installed. To change the version of Zarf used modify the ZARF_VERSION variable in the Makefile
 
