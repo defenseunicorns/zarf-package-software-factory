@@ -174,7 +174,7 @@ func getAwsAvailabilityZone(awsRegion string) string {
 	zoneLetter, present := os.LookupEnv("AWS_AVAILABILITY_ZONE")
 	var zone string
 	if !present {
-		zone = fmt.Sprintf("%s%s", awsRegion, "a")
+		zone = fmt.Sprintf("%s%s", awsRegion, "b")
 	} else {
 		zone = fmt.Sprintf("%s%s", awsRegion, zoneLetter)
 	}
