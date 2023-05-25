@@ -39,7 +39,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 	namespace := "di2me"
 	stage := "terratest"
 	name := fmt.Sprintf("e2e-%s", random.UniqueId())
-	instanceType := "m6id.12xlarge"
+	instanceType := "m6id.16xlarge"
 	teststructure.RunTestStage(t, "SETUP", func() {
 		keyPairName := fmt.Sprintf("%s-%s-%s", namespace, stage, name)
 		keyPair := aws.CreateAndImportEC2KeyPair(t, awsRegion, keyPairName)
@@ -144,7 +144,7 @@ func SetupTestPlatform(t *testing.T, platform *types.TestPlatform) { //nolint:fu
 		require.NoError(t, err, output)
 
 		// Deploy software factory
-		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --components optional-tools-linux-amd64 --confirm`)
+		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/build && ./zarf package deploy zarf-package-software-factory-* --components optional-tools-linux-amd64 --confirm`)
 		require.NoError(t, err, output)
 		// We have to patch the zarf-package-software-factory GitRepo to point at the right branch
 		output, err = platform.RunSSHCommandAsSudo(fmt.Sprintf(`kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '"'"'[{"op": "replace", "path": "/spec/ref/branch", "value": "%v"}]'"'"'`, gitBranch))
@@ -174,7 +174,7 @@ func getAwsAvailabilityZone(awsRegion string) string {
 	zoneLetter, present := os.LookupEnv("AWS_AVAILABILITY_ZONE")
 	var zone string
 	if !present {
-		zone = fmt.Sprintf("%s%s", awsRegion, "a")
+		zone = fmt.Sprintf("%s%s", awsRegion, "c")
 	} else {
 		zone = fmt.Sprintf("%s%s", awsRegion, zoneLetter)
 	}
