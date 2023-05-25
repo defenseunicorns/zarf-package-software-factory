@@ -386,7 +386,7 @@ components:
       - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:9.6.0
       - registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.5
       # Confluence
-      - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:7.18.1
+      - registry1.dso.mil/ironbank/atlassian/confluence-data-center/confluence-node:8.0.3
       - registry1.dso.mil/ironbank/big-bang/base:2.0.0
       # Jenkins
       - registry1.dso.mil/ironbank/opensource/jenkins/jenkins:2.387.2-lts
