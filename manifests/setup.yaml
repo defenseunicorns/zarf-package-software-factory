@@ -30,6 +30,13 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: mattermost-minio
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: gitlab-minio
   labels:
     istio-injection: enabled

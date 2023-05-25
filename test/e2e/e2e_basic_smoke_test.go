@@ -163,6 +163,9 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Ensure that Prometheus is available outside of the cluster.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://prometheus.bigbang.dev/graph > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)
+		// Ensure that Mattermost is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://chat.bigbang.dev/login > /dev/null; do sleep 5; done"`)
+		require.NoError(t, err, output)
 
 		// Wait for the Artifactory StatefulSet to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get statefulset artifactory -n artifactory; do sleep 5; done"`)
@@ -237,6 +240,9 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		require.NoError(t, err, output)
 		// Ensure that Prometheus does not accept TLSv1.1
 		output, err = platform.RunSSHCommandAsSudo(`sslscan prometheus.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		require.NoError(t, err, output)
+		// Ensure that Mattermost does not accept TLSv1.1
+		output, err = platform.RunSSHCommandAsSudo(`sslscan chat.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
 
 		// Ensure that the databases are still reporting "PostgresClusterStatus==Running"
