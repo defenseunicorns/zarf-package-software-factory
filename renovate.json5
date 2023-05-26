@@ -63,7 +63,7 @@
     },
     {
       "matchPackagePatterns": [
-        "registry1.dso.mil"
+        "postgres-operator"
       ],
       "matchUpdateTypes": [
         "major",
@@ -77,7 +77,97 @@
         "bump",
         "replacement"
       ],
-      "groupName": "images"
+      "groupName": "renovate/postgres-operator"
+    },
+    {
+      "matchPackagePatterns": [
+        "jira"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "lockFileMaintenance",
+        "rollback",
+        "bump",
+        "replacement"
+      ],
+      "groupName": "renovate/jira"
+    },
+    {
+      "matchPackagePatterns": [
+        "confluence"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "lockFileMaintenance",
+        "rollback",
+        "bump",
+        "replacement"
+      ],
+      "groupName": "renovate/confluence"
+    },
+    {
+      "matchPackagePatterns": [
+        "artifactory"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "lockFileMaintenance",
+        "rollback",
+        "bump",
+        "replacement"
+      ],
+      "groupName": "renovate/artifactory"
+    },
+    {
+      "matchPackagePatterns": [
+        "jenkins"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "lockFileMaintenance",
+        "rollback",
+        "bump",
+        "replacement"
+      ],
+      "groupName": "renovate/jenkins"
+    },
+    {
+      "matchPackagePatterns": [
+        "redis"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "lockFileMaintenance",
+        "rollback",
+        "bump",
+        "replacement"
+      ],
+      "groupName": "renovate/redis"
     }
   ],
   "regexManagers": [
