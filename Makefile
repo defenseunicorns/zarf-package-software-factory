@@ -9,11 +9,11 @@ BIGBANG_VERSION := 2.2.0
 
 # The version of Zarf to use. To keep this repo as portable as possible the Zarf binary will be downloaded and added to
 # the build folder.
-ZARF_VERSION := v0.26.4
+ZARF_VERSION := v0.27.0
 
 # The version of the build harness container to use
 BUILD_HARNESS_REPO := ghcr.io/defenseunicorns/not-a-build-harness/not-a-build-harness
-BUILD_HARNESS_VERSION := 0.0.17
+BUILD_HARNESS_VERSION := 0.0.25
 
 # Figure out which Zarf binary we should use based on the operating system we are on
 ZARF_BIN := zarf
@@ -66,7 +66,7 @@ docker-load-build-harness: ## Loads the saved build harness docker image
 .PHONY: run-pre-commit-hooks
 run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if any hooks fail. Uses Docker for maximum compatibility
 	mkdir -p .cache/pre-commit
-	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" $(BUILD_HARNESS_REPO):$(BUILD_HARNESS_VERSION) bash -c 'asdf install && pre-commit run -a'
+	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" $(BUILD_HARNESS_REPO):$(BUILD_HARNESS_VERSION) bash -c 'git config --global --add safe.directory /app && asdf install && pre-commit run -a'
 
 .PHONY: fix-cache-permissions
 fix-cache-permissions: ## Fixes the permissions on the pre-commit cache
@@ -122,6 +122,7 @@ default-build: ## All in one make target for the default di2me repo (only x86) -
 
 .PHONY: deploy-local
 deploy-local: ## Deploy created zarf package to local cluster
+	cat test/e2e/zarf-config.toml | grep -v progress > build/zarf-config.toml
 	cd build && ./zarf init --components git-server --confirm
 	cd build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm
 	gpg --list-secret-keys user@example.com || gpg --batch --passphrase '' --quick-gen-key user@example.com default default
