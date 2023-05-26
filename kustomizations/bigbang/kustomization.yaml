@@ -33,6 +33,10 @@ configMapGenerator:
     namespace: bigbang
     files:
       - values.yaml=common/values-postgres-minio.yaml
+  - name: common-mattermost-minio
+    namespace: bigbang
+    files:
+      - values.yaml=common/values-mattermost-minio.yaml
 
 secretGenerator:
   - name: environment-bb
@@ -87,4 +91,16 @@ patchesStrategicMerge:
                     path: "/spec/dependsOn/-"
                     value:
                       name: gitlab-minio
+                      namespace: bigbang
+              - target:
+                  group: helm.toolkit.fluxcd.io
+                  version: v2beta1
+                  kind: HelmRelease
+                  name: mattermost
+                  namespace: bigbang
+                patch:
+                  - op: add
+                    path: "/spec/dependsOn/-"
+                    value:
+                      name: mattermost-minio
                       namespace: bigbang

@@ -1,3 +1,5 @@
+# DI2ME package version
+PACKAGE_VERSION := 0.1.0
 # The version of Big Bang to use. If you change this you need to also do a couple of other things:
 #    1. Run `make vendor-big-bang-base` and commit any changes to the repo.
 #    2. Additionally update the following files to use the new version of Big Bang:
@@ -124,7 +126,7 @@ deploy-local: ## Deploy created zarf package to local cluster
 	cd build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm
 	gpg --list-secret-keys user@example.com || gpg --batch --passphrase '' --quick-gen-key user@example.com default default
 	gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin
-	cd build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm
+	cd build && ./zarf package deploy zarf-package-software-factory-amd64-$(PACKAGE_VERSION).tar.zst --confirm
 	kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '[{"op": "replace", "path": "/spec/ref/branch", "value": "$(shell git rev-parse --abbrev-ref HEAD)"}]'
 	timeout 2400 bash -c "while ! kubectl get cronjob gitlab-toolbox-backup -n gitlab; do sleep 5; done"
 	kubectl create job -n gitlab --from=cronjob/gitlab-toolbox-backup gitlab-toolbox-backup-manual
@@ -175,5 +177,5 @@ build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux pac
 
 build/zarf-package-software-factory-amd64.tar.zst: FORCE | build/$(ZARF_BIN) ## Build the Software Factory package
 	echo "Creating the deploy package"
-	build/$(ZARF_BIN) package create --skip-sbom --confirm --set DI2ME_REPO=$(DI2ME_REPO)
-	mv zarf-package-software-factory-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst
+	build/$(ZARF_BIN) package create --skip-sbom --confirm --set PACKAGE_VERSION=$(PACKAGE_VERSION) --set DI2ME_REPO=$(DI2ME_REPO)
+	mv zarf-package-software-factory-amd64-$(PACKAGE_VERSION).tar.zst build/zarf-package-software-factory-amd64-$(PACKAGE_VERSION).tar.zst
