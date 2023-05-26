@@ -35,8 +35,8 @@
         "^Makefile$"
       ],
       "matchStrings": [
-        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/bigbang\\.git@(?<currentValue>\\S+)",
-        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/bigbang\\.git\/\/base\/flux\\?ref=(?<currentValue>\\S+)",
+        "https:\/\/repo1\\.dso\\.mil\/big-bang\/bigbang\\.git@(?<currentValue>\\S+)",
+        "https:\/\/repo1\\.dso\\.mil\/big-bang\/bigbang\\.git\/\/base\/flux\\?ref=(?<currentValue>\\S+)",
         "BIGBANG_VERSION := (?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/big-bang/bigbang.git",
@@ -62,7 +62,7 @@
         ".*\\.yaml"
       ],
       "matchStrings": [
-        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/jira\\.git@(?<currentValue>\\S+)",
+        "https:\/\/repo1\\.dso\\.mil\/big-bang\/product\/community\/jira\\.git@(?<currentValue>\\S+)",
         "url: https://repo1\\.dso\\.mil/big-bang/product/community/jira\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/big-bang/product/community/jira.git",
@@ -76,7 +76,7 @@
         ".*\\.yaml"
       ],
       "matchStrings": [
-        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/third-party\/confluence\\.git@(?<currentValue>\\S+)",
+        "https:\/\/repo1\\.dso\\.mil\/big-bang\/product\/community\/confluence\\.git@(?<currentValue>\\S+)",
         "url: https://repo1\\.dso\\.mil/big-bang/product/community/confluence\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/big-bang/product/community/confluence.git",
@@ -101,25 +101,24 @@
     // Jenkins version
     {
       "fileMatch": [
-        ".*\\.yaml",
+        ".*\\.yaml"
       ],
       "matchStrings": [
-        "github\\.com\/jenkinsci\/helm-charts\\.git@jenkins-(?<currentValue>\\S+)",
-        "github\\.com\/jenkinsci\/helm-charts\\.git\\s+ref:\\s+tag:\\s+jenkins-(?<currentValue>\\S+)",
-        "mirror__github\\.com__jenkinsci__helm-charts\\.git\\s+ref:\\s+tag:\\s+jenkins-(?<currentValue>\\S+)"
+        "https:\/\/repo1\\.dso\\.mil\/big-bang\/product\/community\/jenkins\\.git@(?<currentValue>\\S+)",
+        "https://repo1\\.dso\\.mil/big-bang/product/community/jenkins\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
-      "depNameTemplate": "https://github.com/jenkinsci/helm-charts.git",
+      "depNameTemplate": "https://repo1.dso.mil/big-bang/product/community/jenkins.git",
       "datasourceTemplate": "git-tags",
       "depTypeTemplate": "zarfcomponents",
-      "extractVersionTemplate": "^jenkins-(?<version>.*)$"
+      "versioningTemplate": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-bb.(?<build>\\d+)$"
     },
-        // Redis version
+    // Redis version
     {
       "fileMatch": [
         ".*\\.yaml"
       ],
       "matchStrings": [
-        "https:\/\/repo1\\.dso\\.mil\/platform-one\/big-bang\/apps\/application-utilities\/redis\\.git@(?<currentValue>\\S+)",
+        "https:\/\/repo1\\.dso\\.mil\/big-bang\/product\/packages\/redis\\.git@(?<currentValue>\\S+)",
         "https://repo1\\.dso\\.mil/big-bang/product/packages/redis\\.git\\s+ref:\\s+tag:\\s+(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "https://repo1.dso.mil/big-bang/product/packages/redis.git",
