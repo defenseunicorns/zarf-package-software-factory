@@ -122,6 +122,7 @@ default-build: ## All in one make target for the default di2me repo (only x86) -
 
 .PHONY: deploy-local
 deploy-local: ## Deploy created zarf package to local cluster
+	cat test/e2e/zarf-config.toml | grep -v progress > build/zarf-config.toml
 	cd build && ./zarf init --components git-server --confirm
 	cd build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm
 	gpg --list-secret-keys user@example.com || gpg --batch --passphrase '' --quick-gen-key user@example.com default default
