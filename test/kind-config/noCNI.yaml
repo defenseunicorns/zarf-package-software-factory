@@ -9,3 +9,9 @@ networking:
 nodes:
   - role: control-plane
     image: kindest/node:v1.26.4
+    kubeadmConfigPatches:
+    - |
+      kind: InitConfiguration
+      nodeRegistration:
+        kubeletExtraArgs:
+          max-pods: "200"

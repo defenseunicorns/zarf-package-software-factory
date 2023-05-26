@@ -1,10 +1,11 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.26.4/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.27.0/zarf.schema.json
 kind: ZarfPackageConfig
 metadata:
   name: software-factory
   description: "Zarf deployment of a software factory"
   # Iron Bank doesn't support ARM
   architecture: amd64
+  version: "###ZARF_PKG_TMPL_PACKAGE_VERSION###"
 
 components:
   - name: bigbang-dev-dns-modification
@@ -36,7 +37,7 @@ components:
         files:
           - manifests/postgres-operator.yaml
     repos:
-      - https://github.com/zalando/postgres-operator.git
+      - https://github.com/zalando/postgres-operator.git@refs/tags/v1.10.0
     images:
       - registry1.dso.mil/ironbank/opensource/zalando/postgres-operator:v1.10.0
       - registry1.dso.mil/ironbank/opensource/zalando/logical-backup:v1.8.2
@@ -50,7 +51,7 @@ components:
         files:
           - manifests/gitlab-redis.yaml
     repos:
-      - https://repo1.dso.mil/big-bang/product/packages/redis.git
+      - https://repo1.dso.mil/big-bang/product/packages/redis.git@refs/tags/17.10.2-bb.1
     images:
       - registry1.dso.mil/ironbank/bitnami/redis:7.0.11
       - docker.io/bitnami/redis-sentinel:7.0.10-debian-11-r8
@@ -62,27 +63,29 @@ components:
         files:
           - manifests/big-bang.yaml
     repos:
-      - https://repo1.dso.mil/big-bang/bigbang.git
-      - https://repo1.dso.mil/big-bang/product/packages/istio-controlplane.git
-      - https://repo1.dso.mil/big-bang/product/packages/istio-operator.git
-      - https://repo1.dso.mil/big-bang/product/packages/jaeger.git
-      - https://repo1.dso.mil/big-bang/product/packages/kiali.git
-      - https://repo1.dso.mil/big-bang/product/packages/kyverno.git
-      - https://repo1.dso.mil/big-bang/product/packages/kyverno-policies.git
-      - https://repo1.dso.mil/big-bang/product/packages/kyverno-reporter.git
-      - https://repo1.dso.mil/big-bang/product/packages/elasticsearch-kibana.git
-      - https://repo1.dso.mil/big-bang/product/packages/eck-operator.git
-      - https://repo1.dso.mil/big-bang/product/packages/fluentbit.git
-      - https://repo1.dso.mil/big-bang/product/packages/promtail.git
-      - https://repo1.dso.mil/big-bang/product/packages/loki.git
-      - https://repo1.dso.mil/big-bang/product/packages/monitoring.git
-      - https://repo1.dso.mil/big-bang/product/packages/minio-operator.git
-      - https://repo1.dso.mil/big-bang/product/packages/minio.git
-      - https://repo1.dso.mil/big-bang/product/packages/gitlab.git
-      - https://repo1.dso.mil/big-bang/product/packages/gitlab-runner.git
-      - https://repo1.dso.mil/big-bang/product/packages/metrics-server.git
-      - https://repo1.dso.mil/big-bang/product/packages/neuvector.git
-      - https://repo1.dso.mil/big-bang/product/packages/sonarqube.git
+      - https://repo1.dso.mil/big-bang/bigbang.git@refs/tags/2.2.0
+      - https://repo1.dso.mil/big-bang/product/packages/istio-controlplane.git@refs/tags/1.17.2-bb.1
+      - https://repo1.dso.mil/big-bang/product/packages/istio-operator.git@refs/tags/1.17.2-bb.1
+      - https://repo1.dso.mil/big-bang/product/packages/jaeger.git@refs/tags/2.42.0-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/kiali.git@refs/tags/1.66.0-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/kyverno.git@refs/tags/2.6.5-bb.3
+      - https://repo1.dso.mil/big-bang/product/packages/kyverno-policies.git@refs/tags/1.1.0-bb.6
+      - https://repo1.dso.mil/big-bang/product/packages/kyverno-reporter.git@refs/tags/2.16.0-bb.1
+      - https://repo1.dso.mil/big-bang/product/packages/elasticsearch-kibana.git@refs/tags/1.2.0-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/eck-operator.git@refs/tags/2.7.0-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/fluentbit.git@refs/tags/0.28.0-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/promtail.git@refs/tags/6.11.0-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/loki.git@refs/tags/5.0.0-bb.4
+      - https://repo1.dso.mil/big-bang/product/packages/monitoring.git@refs/tags/45.27.2-bb.1
+      - https://repo1.dso.mil/big-bang/product/packages/minio-operator.git@refs/tags/5.0.4-bb.1
+      - https://repo1.dso.mil/big-bang/product/packages/minio.git@refs/tags/5.0.3-bb.2
+      - https://repo1.dso.mil/big-bang/product/packages/gitlab.git@refs/tags/6.11.2-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/gitlab-runner.git@refs/tags/0.51.0-bb.2
+      - https://repo1.dso.mil/big-bang/product/packages/metrics-server.git@refs/tags/3.9.0-bb.1
+      - https://repo1.dso.mil/big-bang/product/packages/neuvector.git@refs/tags/2.4.3-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/sonarqube.git@refs/tags/8.0.0-bb.1
+      - https://repo1.dso.mil/big-bang/product/packages/mattermost-operator.git@refs/tags/1.20.1-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/mattermost.git@refs/tags/7.10.0-bb.1
 
     # To get the list of all images used in Big Bang:
     #    - Download "package-images.yml" from the big bang release
@@ -150,6 +153,11 @@ components:
       - "registry1.dso.mil/ironbank/big-bang/sonarqube-9:9.9.0-community"
       - "registry1.dso.mil/ironbank/opensource/kubernetes/kubectl:v1.26.3"
       - "registry1.dso.mil/ironbank/opensource/kubernetes-sigs/metrics-server:v0.6.3"
+      - "registry1.dso.mil/ironbank/opensource/mattermost/mattermost-operator:v1.20.1"
+      - "registry1.dso.mil/ironbank/opensource/mattermost/mattermost:7.10.0"
+      - "registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2022-08-23T05-45-20Z"
+      - "registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2023-01-31T02-24-19Z"
+      - "registry1.dso.mil/ironbank/opensource/postgres/postgresql11:11.18-1"
 
       # The detailed list of images needed for all the packages in this version of bigbang.
       # Use this is reference when bringing in new packages to your bigbang configuration.
@@ -377,10 +385,10 @@ components:
         files:
           - manifests/softwarefactoryaddons.yaml
     repos:
-      - https://repo1.dso.mil/big-bang/product/community/jira.git
-      - https://repo1.dso.mil/big-bang/product/community/confluence.git
-      - https://repo1.dso.mil/big-bang/product/community/jenkins.git
-      - https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git
+      - https://repo1.dso.mil/big-bang/product/community/jira.git@refs/tags/1.10.0-bb.0
+      - https://repo1.dso.mil/big-bang/product/community/confluence.git@refs/tags/0.1.0-bb.20
+      - https://repo1.dso.mil/big-bang/product/community/jenkins.git@refs/tags/4.3.9-bb.0
+      - https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git@refs/tags/10.12.1
     images:
       # Jira
       - registry1.dso.mil/ironbank/atlassian/jira-data-center/jira-node:9.6.0

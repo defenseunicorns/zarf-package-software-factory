@@ -82,6 +82,7 @@ istio:
         - registry.{{ .Values.domain }}
         - artifactory.{{ .Values.domain }}
         - sonarqube.{{ .Values.domain }}
+        - chat.{{ .Values.domain }}
     private:
       ingressGateway: "private-ingressgateway"
       hosts:
@@ -100,6 +101,8 @@ istio:
         - minio-api.gitlab-minio.{{ .Values.domain }}
         - minio.postgres-minio.{{ .Values.domain }}
         - minio-api.postgres-minio.{{ .Values.domain }}
+        - minio.mattermost-minio.{{ .Values.domain }}
+        - minio-api.mattermost-minio.{{ .Values.domain }}
       autoHttpRedirect:
         enabled: true
 
@@ -232,6 +235,7 @@ kyvernoPolicies:
               - gitlab
               - jira
               - sonarqube
+              - mattermost
               kinds:
               - Pod
               selector:
@@ -561,6 +565,31 @@ twistlock:
   enabled: false
 
 addons:
+  mattermostOperator:
+    enabled: true
+    values:
+      istio:
+        enabled: true
+  mattermost:
+    enabled: true
+    ingress:
+      gateway: public
+    # Disabled because of conflicts with postgres database
+    networkPolicies:
+      enabled: false
+    objectStorage:
+      endpoint: minio.mattermost-minio.svc.cluster.local:80
+      # accessKey: "" -- Added in environment-bb/values-bigbang.enc.yaml
+      # accessSecret: "" -- Added in environment-bb/values-bigbang.enc.yaml
+      bucket: "mattermost-bucket"
+    istio:
+      enabled: true
+      injection: enabled
+    values:
+      istio:
+        enabled: true
+        injection: enabled
+
   sonarqube:
     enabled: true
     ingress:

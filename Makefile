@@ -1,3 +1,5 @@
+# DI2ME package version
+PACKAGE_VERSION := 0.1.0
 # The version of Big Bang to use. If you change this you need to also do a couple of other things:
 #    1. Run `make vendor-big-bang-base` and commit any changes to the repo.
 #    2. Additionally update the following files to use the new version of Big Bang:
@@ -7,11 +9,11 @@ BIGBANG_VERSION := 2.2.0
 
 # The version of Zarf to use. To keep this repo as portable as possible the Zarf binary will be downloaded and added to
 # the build folder.
-ZARF_VERSION := v0.26.4
+ZARF_VERSION := v0.27.0
 
 # The version of the build harness container to use
 BUILD_HARNESS_REPO := ghcr.io/defenseunicorns/not-a-build-harness/not-a-build-harness
-BUILD_HARNESS_VERSION := 0.0.17
+BUILD_HARNESS_VERSION := 0.0.25
 
 # Figure out which Zarf binary we should use based on the operating system we are on
 ZARF_BIN := zarf
@@ -64,7 +66,7 @@ docker-load-build-harness: ## Loads the saved build harness docker image
 .PHONY: run-pre-commit-hooks
 run-pre-commit-hooks: ## Run all pre-commit hooks. Returns nonzero exit code if any hooks fail. Uses Docker for maximum compatibility
 	mkdir -p .cache/pre-commit
-	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" $(BUILD_HARNESS_REPO):$(BUILD_HARNESS_VERSION) bash -c 'asdf install && pre-commit run -a'
+	docker run --rm -v "${PWD}:/app" --workdir "/app" -e "PRE_COMMIT_HOME=/app/.cache/pre-commit" $(BUILD_HARNESS_REPO):$(BUILD_HARNESS_VERSION) bash -c 'git config --global --add safe.directory /app && asdf install && pre-commit run -a'
 
 .PHONY: fix-cache-permissions
 fix-cache-permissions: ## Fixes the permissions on the pre-commit cache
@@ -120,11 +122,12 @@ default-build: ## All in one make target for the default di2me repo (only x86) -
 
 .PHONY: deploy-local
 deploy-local: ## Deploy created zarf package to local cluster
+	cat test/e2e/zarf-config.toml | grep -v progress > build/zarf-config.toml
 	cd build && ./zarf init --components git-server --confirm
 	cd build && ./zarf package deploy zarf-package-flux-amd64.tar.zst --confirm
 	gpg --list-secret-keys user@example.com || gpg --batch --passphrase '' --quick-gen-key user@example.com default default
 	gpg --export-secret-keys --armor user@example.com | kubectl create secret generic sops-gpg -n flux-system --from-file=sops.asc=/dev/stdin
-	cd build && ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm
+	cd build && ./zarf package deploy zarf-package-software-factory-amd64-$(PACKAGE_VERSION).tar.zst --confirm
 	kubectl patch gitrepositories.source.toolkit.fluxcd.io -n flux-system zarf-package-software-factory --type=json -p '[{"op": "replace", "path": "/spec/ref/branch", "value": "$(shell git rev-parse --abbrev-ref HEAD)"}]'
 	timeout 2400 bash -c "while ! kubectl get cronjob gitlab-toolbox-backup -n gitlab; do sleep 5; done"
 	kubectl create job -n gitlab --from=cronjob/gitlab-toolbox-backup gitlab-toolbox-backup-manual
@@ -175,5 +178,5 @@ build/zarf-package-flux-amd64.tar.zst: | build/$(ZARF_BIN) ## Build the Flux pac
 
 build/zarf-package-software-factory-amd64.tar.zst: FORCE | build/$(ZARF_BIN) ## Build the Software Factory package
 	echo "Creating the deploy package"
-	build/$(ZARF_BIN) package create --skip-sbom --confirm --set DI2ME_REPO=$(DI2ME_REPO)
-	mv zarf-package-software-factory-amd64.tar.zst build/zarf-package-software-factory-amd64.tar.zst
+	build/$(ZARF_BIN) package create --skip-sbom --confirm --set PACKAGE_VERSION=$(PACKAGE_VERSION) --set DI2ME_REPO=$(DI2ME_REPO)
+	mv zarf-package-software-factory-amd64-$(PACKAGE_VERSION).tar.zst build/zarf-package-software-factory-amd64-$(PACKAGE_VERSION).tar.zst
