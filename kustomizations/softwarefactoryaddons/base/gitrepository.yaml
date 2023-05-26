@@ -20,7 +20,7 @@ spec:
   interval: 5m
   url: https://repo1.dso.mil/big-bang/product/community/confluence.git
   ref:
-    tag: 0.1.0-bb.20
+    tag: 1.10.0-bb.3
   secretRef:
     name: private-git-server
 ---
