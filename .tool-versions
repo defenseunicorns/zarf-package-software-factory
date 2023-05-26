@@ -3,7 +3,7 @@ golangci-lint 1.52.2
 python 3.11.3
 pre-commit 3.3.2
 terraform 1.4.6
-tflint 0.44.1
+tflint 0.46.1
 tfsec 1.28.1
 sops 3.7.3
 make 4.4
