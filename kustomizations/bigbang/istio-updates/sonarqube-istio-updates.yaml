@@ -34,6 +34,20 @@ spec:
       namespace: bigbang
   values:
     resources:
+      - apiVersion: "security.istio.io/v1beta1"
+        kind: PeerAuthentication
+        metadata:
+          name: sonarqube-postgresql-exception
+          namespace: sonarqube
+        spec:
+          mtls:
+            mode: STRICT
+          selector:
+            matchLabels:
+              cluster-name: acid-sonarqube
+          portLevelMtls:
+            "5432":
+              mode: PERMISSIVE
       - apiVersion: "networking.istio.io/v1alpha3"
         kind: "DestinationRule"
         metadata:
