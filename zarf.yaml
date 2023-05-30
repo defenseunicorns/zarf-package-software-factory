@@ -87,7 +87,7 @@ components:
       - https://repo1.dso.mil/big-bang/product/packages/mattermost-operator.git@refs/tags/1.20.1-bb.0
       - https://repo1.dso.mil/big-bang/product/packages/mattermost.git@refs/tags/7.10.0-bb.1
       - https://repo1.dso.mil/big-bang/product/packages/nexus.git@refs/tags/52.0.0-bb.0
-      - https://repo1.dso.mil/big-bang/product/packages/keycloak.git@refs/tags/18.4.3-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/keycloak.git@refs/tags/18.4.0-bb.2
 
     # To get the list of all images used in Big Bang:
     #    - Download "package-images.yml" from the big bang release
