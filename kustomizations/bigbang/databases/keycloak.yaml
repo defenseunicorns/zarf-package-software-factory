@@ -51,8 +51,10 @@ spec:
           numberOfInstances: 3
           volume:
             size: "2Gi"
+          users:
+            keycloak: []
           databases:
-            confluence: keycloak
+            keycloak: keycloak
             # Uncomment this if you want to specify a particular storage class
             # storageClass: "your-storage-class-name-here"
           # enableLogicalBackup: true
