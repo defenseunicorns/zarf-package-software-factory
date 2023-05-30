@@ -158,6 +158,8 @@ components:
       - "registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2022-08-23T05-45-20Z"
       - "registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2023-01-31T02-24-19Z"
       - "registry1.dso.mil/ironbank/opensource/postgres/postgresql11:11.18-1"
+      - "registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.7"
+      - "registry1.dso.mil/ironbank/sonatype/nexus/nexus:3.52.0-01"
 
       # The detailed list of images needed for all the packages in this version of bigbang.
       # Use this is reference when bringing in new packages to your bigbang configuration.

@@ -955,6 +955,11 @@ addons:
       networkPolicies:
         enabled: false
 
+  nexusRepositoryManager:
+    enabled: true
+    # -- Base64 encoded license file.
+    license_key: ""
+
   velero:
     enabled: false
 
