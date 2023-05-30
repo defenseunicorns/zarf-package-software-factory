@@ -3,6 +3,7 @@ resources:
   - gitrepository.yaml
   - databases/gitlab.yaml
   - databases/sonarqube.yaml
+  - databases/keycloak.yaml
   - secrets.yaml
   - tenants.yaml
   - istio-updates

@@ -971,7 +971,15 @@ addons:
 
   keycloak:
     enabled: true
+    istio:
+      injection: enabled
     values:
+      istio:
+        mtls:
+          mode: STRICT
+      # Disabled because of conflicts with postgres database
+      networkPolicies:
+        enabled: false
       postgresql:
         enabled: false
       extraEnv: |
