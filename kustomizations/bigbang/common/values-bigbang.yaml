@@ -80,7 +80,8 @@ istio:
         - jira.{{ .Values.domain }}
         - confluence.{{ .Values.domain }}
         - registry.{{ .Values.domain }}
-        - artifactory.{{ .Values.domain }}
+        # DISABLE-ARTIFACTORY
+        # - artifactory.{{ .Values.domain }}
         - sonarqube.{{ .Values.domain }}
         - chat.{{ .Values.domain }}
     private:

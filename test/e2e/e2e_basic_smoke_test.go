@@ -31,15 +31,13 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`kubectl wait kustomization/postgres-operator -n flux-system --for=condition=Ready --timeout=1200s`)
 		require.NoError(t, err, output)
 
-		// Wait for the databases to report "PostgresClusterStatus==Running", then create a timestamp for 15 minutes and
-		// 10 seconds in the future which is when it should be checked again to make sure that nothing is blocking the
-		// operator from talking to the databases.
-		// Wait for the postgresql object "acid-artifactory" to exist.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-artifactory -n artifactory; do sleep 5; done"`)
-		require.NoError(t, err, output)
-		// Wait for the "acid-artifactory" database to report "PostgresClusterStatus==Running", then set the timestamp
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=\$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath=\"{.status.PostgresClusterStatus}\"); while [ \"\$DB_STATUS\" != \"Running\" ]; do sleep 5; DB_STATUS=\$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath=\"{.status.PostgresClusterStatus}\"); done"`)
-		require.NoError(t, err, output)
+		// DISABLE-ARTIFACTORY
+		// // Wait for the postgresql object "acid-artifactory" to exist.
+		// output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-artifactory -n artifactory; do sleep 5; done"`)
+		// require.NoError(t, err, output)
+		// // Wait for the "acid-artifactory" database to report "PostgresClusterStatus==Running", then set the timestamp
+		// output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=\$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath=\"{.status.PostgresClusterStatus}\"); while [ \"\$DB_STATUS\" != \"Running\" ]; do sleep 5; DB_STATUS=\$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath=\"{.status.PostgresClusterStatus}\"); done"`)
+		// require.NoError(t, err, output)
 		// Wait for the "acid-confluence" database to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-confluence -n confluence; do sleep 5; done"`)
 		require.NoError(t, err, output)
@@ -167,18 +165,19 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://chat.bigbang.dev/login > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)
 
-		// Wait for the Artifactory StatefulSet to exist.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get statefulset artifactory -n artifactory; do sleep 5; done"`)
-		require.NoError(t, err, output)
-		// Wait for the Artifactory StatefulSet to report that it is ready
-		output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/artifactory -n artifactory --watch --timeout=1200s`)
-		require.NoError(t, err, output)
-		// Ensure that Artifactory is able to talk to GitLab internally
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl exec statefulset/artifactory -n artifactory -c artifactory -- curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done"`)
-		require.NoError(t, err, output)
-		// Ensure that Artifactory is available outside of the cluster.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://artifactory.bigbang.dev/artifactory/api/system/ping > /dev/null; do sleep 5; done"`)
-		require.NoError(t, err, output)
+		// DISABLE-ARTIFACTORY
+		// // Wait for the Artifactory StatefulSet to exist.
+		// output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get statefulset artifactory -n artifactory; do sleep 5; done"`)
+		// require.NoError(t, err, output)
+		// // Wait for the Artifactory StatefulSet to report that it is ready
+		// output, err = platform.RunSSHCommandAsSudo(`kubectl rollout status statefulset/artifactory -n artifactory --watch --timeout=1200s`)
+		// require.NoError(t, err, output)
+		// // Ensure that Artifactory is able to talk to GitLab internally
+		// output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl exec statefulset/artifactory -n artifactory -c artifactory -- curl -L -s --fail --show-error https://gitlab.bigbang.dev/-/health > /dev/null; do sleep 5; done"`)
+		// require.NoError(t, err, output)
+		// // Ensure that Artifactory is available outside of the cluster.
+		// output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://artifactory.bigbang.dev/artifactory/api/system/ping > /dev/null; do sleep 5; done"`)
+		// require.NoError(t, err, output)
 
 		// Wait for the Loki write Statefulset to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get statefulset logging-loki-write -n logging; do sleep 5; done"`)
@@ -217,9 +216,11 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Ensure that Confluence does not accept TLSv1.1
 		output, err = platform.RunSSHCommandAsSudo(`sslscan confluence.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
-		// Ensure that Artifactory does not accept TLSv1.1
-		output, err = platform.RunSSHCommandAsSudo(`sslscan artifactory.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
-		require.NoError(t, err, output)
+
+    // DISABLE-ARTIFACTORY
+		// // Ensure that Artifactory does not accept TLSv1.1
+		// output, err = platform.RunSSHCommandAsSudo(`sslscan artifactory.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		// require.NoError(t, err, output)
 		// Ensure that Sonarqube does not accept TLSv1.1
 		output, err = platform.RunSSHCommandAsSudo(`sslscan sonarqube.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
@@ -245,9 +246,10 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`sslscan chat.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
 
-		// Ensure that the databases are still reporting "PostgresClusterStatus==Running"
-		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-artifactory expected to be Running, but got $DB_STATUS"; exit 1; fi`)
-		require.NoError(t, err, output)
+		// DISABLE-ARTIFACTORY
+		// // Ensure that the databases are still reporting "PostgresClusterStatus==Running"
+		// output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-artifactory expected to be Running, but got $DB_STATUS"; exit 1; fi`)
+		// require.NoError(t, err, output)
 
 		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-confluence -n confluence -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-confluence expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		require.NoError(t, err, output)
@@ -261,12 +263,13 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-sonarqube -n sonarqube -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-sonarqube expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		require.NoError(t, err, output)
 
-		// Create backup for Artifactory
-		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/artifactory; ~/app/build/zarf p c --confirm --set BACKUP_TIMESTAMP=""`)
-		require.NoError(t, err, output)
-		// Start restore process for Artifactory
-		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/artifactory; mkdir test; mv zarf-package* test; cd test;  ~/app/build/zarf p d zarf-package* --components warning-downtime-begin-restore --confirm`)
-		require.NoError(t, err, output)
+		// DISABLE-ARTIFACTORY
+		// // Create backup for Artifactory
+		// output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/artifactory; ~/app/build/zarf p c --confirm --set BACKUP_TIMESTAMP=""`)
+		// require.NoError(t, err, output)
+		// // Start restore process for Artifactory
+		// output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/artifactory; mkdir test; mv zarf-package* test; cd test;  ~/app/build/zarf p d zarf-package* --components warning-downtime-begin-restore --confirm`)
+		// require.NoError(t, err, output)
 
 		// Create backup for Confluence
 		output, err = platform.RunSSHCommandAsSudo(`cd ~/app/backup-and-restore/confluence; ~/app/build/zarf p c --confirm --set BACKUP_TIMESTAMP=""`)

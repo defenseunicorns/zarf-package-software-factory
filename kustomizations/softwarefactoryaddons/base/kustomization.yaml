@@ -9,7 +9,8 @@ resources:
   - gitrepository.yaml
   - helmrelease.yaml
   - virtualservice.yaml
-  - databases/artifactory.yaml
+  # DISABLE-ARTIFACTORY
+  # - databases/artifactory.yaml
   - databases/confluence.yaml
   - databases/jira.yaml
   - jira-init-rbac.yaml
@@ -48,16 +49,17 @@ configMapGenerator:
     behavior: create
     literals:
       - values.yaml=
-  - name: artifactory-common
-    namespace: softwarefactoryaddons
-    behavior: create
-    literals:
-      - values.yaml=
-  - name: artifactory-environment
-    namespace: softwarefactoryaddons
-    behavior: create
-    literals:
-      - values.yaml=
+  # DISABLE-ARTIFACTORY
+  # - name: artifactory-common
+  #   namespace: softwarefactoryaddons
+  #   behavior: create
+  #   literals:
+  #     - values.yaml=
+  # - name: artifactory-environment
+  #   namespace: softwarefactoryaddons
+  #   behavior: create
+  #   literals:
+  #     - values.yaml=
 
 # Flux combines secrets and configmaps in `valuesFrom`.  Kustomize
 # cannot distinguish between them when applying suffixes.  Therefore,
@@ -95,13 +97,14 @@ secretGenerator:
     behavior: create
     literals:
       - values.yaml=
-  - name: artifactory-common-bb
-    namespace: softwarefactoryaddons
-    behavior: create
-    literals:
-      - values.yaml=
-  - name: artifactory-environment-bb
-    namespace: softwarefactoryaddons
-    behavior: create
-    literals:
-      - values.yaml=
+  # DISABLE-ARTIFACTORY
+  # - name: artifactory-common-bb
+  #   namespace: softwarefactoryaddons
+  #   behavior: create
+  #   literals:
+  #     - values.yaml=
+  # - name: artifactory-environment-bb
+  #   namespace: softwarefactoryaddons
+  #   behavior: create
+  #   literals:
+  #     - values.yaml=
