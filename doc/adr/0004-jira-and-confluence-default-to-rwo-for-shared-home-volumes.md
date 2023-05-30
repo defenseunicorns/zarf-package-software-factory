@@ -17,7 +17,7 @@ The shared-home folder in Confluence Data Center stores the Confluence attachmen
 ```
 
 ```
-The shared-home folder in Jira Data Center stores the Jira attachments, backups, and other content. 
+The shared-home folder in Jira Data Center stores the Jira attachments, backups, and other content.
 ```
 
 When this volume is not persisted whenever the pod restarts the data mentioned above is lost.
