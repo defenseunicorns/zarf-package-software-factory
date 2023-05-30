@@ -38,6 +38,7 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// // Wait for the "acid-artifactory" database to report "PostgresClusterStatus==Running", then set the timestamp
 		// output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=\$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath=\"{.status.PostgresClusterStatus}\"); while [ \"\$DB_STATUS\" != \"Running\" ]; do sleep 5; DB_STATUS=\$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath=\"{.status.PostgresClusterStatus}\"); done"`)
 		// require.NoError(t, err, output)
+
 		// Wait for the "acid-confluence" database to exist.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-confluence -n confluence; do sleep 5; done"`)
 		require.NoError(t, err, output)
@@ -61,6 +62,12 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		require.NoError(t, err, output)
 		// Wait for the "acid-sonarqube" database to report "PostgresClusterStatus==Running", then set the timestamp
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=\$(kubectl get postgresql acid-sonarqube -n sonarqube -o jsonpath=\"{.status.PostgresClusterStatus}\"); while [ \"\$DB_STATUS\" != \"Running\" ]; do sleep 5; DB_STATUS=\$(kubectl get postgresql acid-sonarqube -n sonarqube -o jsonpath=\"{.status.PostgresClusterStatus}\"); done"`)
+		require.NoError(t, err, output)
+		// Wait for the "acid-keycloak" database to exist.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! kubectl get postgresql acid-keycloak -n keycloak; do sleep 5; done"`)
+		require.NoError(t, err, output)
+		// Wait for the "acid-keycloak" database to report "PostgresClusterStatus==Running", then set the timestamp
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "DB_STATUS=\$(kubectl get postgresql acid-keycloak -n keycloak -o jsonpath=\"{.status.PostgresClusterStatus}\"); while [ \"\$DB_STATUS\" != \"Running\" ]; do sleep 5; DB_STATUS=\$(kubectl get postgresql acid-keycloak -n keycloak -o jsonpath=\"{.status.PostgresClusterStatus}\"); done"`)
 		require.NoError(t, err, output)
 
 		// In order for the GitLab HelmRelease to fully reconcile, we need to manually trigger a backup, so that 2 remaining PVCs will bind.
@@ -164,6 +171,12 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Ensure that Mattermost is available outside of the cluster.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://chat.bigbang.dev/login > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)
+		// Ensure that Nexus is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://nexus.bigbang.dev/login > /dev/null; do sleep 5; done"`)
+		require.NoError(t, err, output)
+		// Ensure that keycloak is available outside of the cluster.
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://keycloak.bigbang.dev/login > /dev/null; do sleep 5; done"`)
+		require.NoError(t, err, output)
 
 		// DISABLE-ARTIFACTORY
 		// // Wait for the Artifactory StatefulSet to exist.
@@ -217,10 +230,11 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`sslscan confluence.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
 
-    // DISABLE-ARTIFACTORY
+		// DISABLE-ARTIFACTORY
 		// // Ensure that Artifactory does not accept TLSv1.1
 		// output, err = platform.RunSSHCommandAsSudo(`sslscan artifactory.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		// require.NoError(t, err, output)
+
 		// Ensure that Sonarqube does not accept TLSv1.1
 		output, err = platform.RunSSHCommandAsSudo(`sslscan sonarqube.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
@@ -245,9 +259,16 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Ensure that Mattermost does not accept TLSv1.1
 		output, err = platform.RunSSHCommandAsSudo(`sslscan chat.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
+		// Ensure that Nexus does not accept TLSv1.1
+		output, err = platform.RunSSHCommandAsSudo(`sslscan nexus.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		require.NoError(t, err, output)
+		// Ensure that Keycloak does not accept TLSv1.1
+		output, err = platform.RunSSHCommandAsSudo(`sslscan keycloak.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		require.NoError(t, err, output)
+
+		// Ensure that the databases are still reporting "PostgresClusterStatus==Running"
 
 		// DISABLE-ARTIFACTORY
-		// // Ensure that the databases are still reporting "PostgresClusterStatus==Running"
 		// output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-artifactory -n artifactory -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-artifactory expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		// require.NoError(t, err, output)
 
@@ -261,6 +282,9 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		require.NoError(t, err, output)
 
 		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-sonarqube -n sonarqube -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-sonarqube expected to be Running, but got $DB_STATUS"; exit 1; fi`)
+		require.NoError(t, err, output)
+
+		output, err = platform.RunSSHCommandAsSudo(`DB_STATUS=$(kubectl get postgresql acid-keycloak -n keycloak -o jsonpath="{.status.PostgresClusterStatus}"); if [ "$DB_STATUS" != "Running" ]; then echo "Status of database acid-keycloak expected to be Running, but got $DB_STATUS"; exit 1; fi`)
 		require.NoError(t, err, output)
 
 		// DISABLE-ARTIFACTORY
