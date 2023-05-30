@@ -87,6 +87,7 @@ components:
       - https://repo1.dso.mil/big-bang/product/packages/mattermost-operator.git@refs/tags/1.20.1-bb.0
       - https://repo1.dso.mil/big-bang/product/packages/mattermost.git@refs/tags/7.10.0-bb.1
       - https://repo1.dso.mil/big-bang/product/packages/nexus.git@refs/tags/52.0.0-bb.0
+      - https://repo1.dso.mil/big-bang/product/packages/keycloak.git@refs/tags/18.4.3-bb.0
 
     # To get the list of all images used in Big Bang:
     #    - Download "package-images.yml" from the big bang release
@@ -161,6 +162,7 @@ components:
       - "registry1.dso.mil/ironbank/opensource/postgres/postgresql11:11.18-1"
       - "registry1.dso.mil/ironbank/redhat/ubi/ubi8-minimal:8.7"
       - "registry1.dso.mil/ironbank/sonatype/nexus/nexus:3.52.0-01"
+      - "registry1.dso.mil/ironbank/opensource/keycloak/keycloak:21.0.2"
 
       # The detailed list of images needed for all the packages in this version of bigbang.
       # Use this is reference when bringing in new packages to your bigbang configuration.
