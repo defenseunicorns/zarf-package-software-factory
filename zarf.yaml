@@ -28,7 +28,7 @@ components:
         files:
           - manifests/setup.yaml
     repos:
-      - "###ZARF_PKG_VAR_DI2ME_REPO###"
+      - "###ZARF_PKG_TMPL_DI2ME_REPO###"
 
   - name: postgres-operator
     required: true
