@@ -8,3 +8,4 @@ resources:
   - minio-operator-istio-updates.yaml
   - monitoring-istio-updates.yaml
   - neuvector-istio-updates.yaml
+  - keycloak-istio-updates.yaml

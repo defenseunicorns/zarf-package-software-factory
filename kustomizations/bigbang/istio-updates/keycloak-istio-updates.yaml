@@ -2,11 +2,11 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: sonarqube-istio-updates
+  name: keycloak-istio-updates
   namespace: bigbang
 spec:
-  targetNamespace: sonarqube
-  releaseName: sonarqube-istio-updates
+  targetNamespace: keycloak
+  releaseName: keycloak-istio-updates
   interval: 5m
   timeout: 10m
   chart:
@@ -37,14 +37,14 @@ spec:
       - apiVersion: "security.istio.io/v1beta1"
         kind: PeerAuthentication
         metadata:
-          name: sonarqube-postgresql-exception
-          namespace: sonarqube
+          name: keycloak-postgresql-exception
+          namespace: keycloak
         spec:
           mtls:
             mode: STRICT
           selector:
             matchLabels:
-              cluster-name: acid-sonarqube
+              cluster-name: acid-keycloak
           portLevelMtls:
             "5432":
               mode: PERMISSIVE
@@ -52,9 +52,9 @@ spec:
         kind: "DestinationRule"
         metadata:
           name: "enable-mtls"
-          namespace: "sonarqube"
+          namespace: "keycloak"
         spec:
-          host: "*.sonarqube.svc.cluster.local"
+          host: "*.keycloak.svc.cluster.local"
           trafficPolicy:
             tls:
               mode: ISTIO_MUTUAL
