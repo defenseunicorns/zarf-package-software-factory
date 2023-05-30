@@ -443,6 +443,13 @@ components:
           maxRetries: 0
         # This checks if user is root
         before:
-          - cmd: if [ "$(id -u)" -ne 0 ]; then echo "Please run as root." >&2; exit 1; fi
+          - cmd: if [ "$(id -u)" -ne 0 ]; then echo ; exit 1; fi
         after:
           - cmd: tar -xzf flux.tar.gz -C /usr/sbin && chmod +x /usr/sbin/flux && rm flux.tar.gz
+        onFailure:
+          - cmd: |
+              echo "\033[1;91m┏━━━━━━━━━━━━━━━━━━━━━┓\033[0m";
+              echo "\033[1;91m┃ Please run as root. ┃\033[0m";
+              echo "\033[1;91m┗━━━━━━━━━━━━━━━━━━━━━┛\033[0m";
+              echo;
+              exit 1
