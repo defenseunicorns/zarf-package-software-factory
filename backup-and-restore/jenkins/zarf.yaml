@@ -4,7 +4,7 @@ metadata:
   name: di2me-jenkins-restorable-backup
   description: Zarf package for backing up and restoring jenkins in a DI2-ME environment. On package create, the backup will be pulled out of the cluster and added to the package. On deploy, All backup files will be placed in the local directory. Perform the restore by deploying the optional component.
   url: https://github.com/defenseunicorns/zarf-package-software-factory/tree/main/backup-and-restore/gitlab
-  version: "###ZARF_PKG_VAR_BACKUP_TIMESTAMP###"
+  version: "###ZARF_PKG_TMPL_BACKUP_TIMESTAMP###"
 
 components:
   - name: preflight-checks

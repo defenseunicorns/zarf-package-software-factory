@@ -52,7 +52,7 @@ components:
           - cmd: kubectl get deployment -n flux-system helm-controller -o=jsonpath='{.spec.template.spec.containers[0].resources.limits.memory}'
             setVariables:
               - name: HELM_CONTROLLER_MEM_PREV
-          - cmd: 'kubectl get deployment -n flux-system helm-controller -o=yaml | sed "s/cpu: ${ZARF_VAR_HELM_CONTROLLER_CPU_PREV}/cpu: ${ZARF_VAR_HELM_CONTROLLER_CPU}/" | sed "s/memory: ${ZARF_VAR_HELM_CONTROLLER_MEM_PREV}/memory: ${ZARF_VAR_HELM_CONTROLLER_MEM}/" | kubectl apply -f -'
+          - cmd: 'kubectl get deployment -n flux-system helm-controller -o=yaml | sed "s/cpu: ${ZARF_TMPL_HELM_CONTROLLER_CPU_PREV}/cpu: ${ZARF_TMPL_HELM_CONTROLLER_CPU}/" | sed "s/memory: ${ZARF_TMPL_HELM_CONTROLLER_MEM_PREV}/memory: ${ZARF_TMPL_HELM_CONTROLLER_MEM}/" | kubectl apply -f -'
 
           # Set new limits and requests for the kustomize-controller deployment
           - cmd: kubectl get deployment -n flux-system kustomize-controller -o=jsonpath='{.spec.template.spec.containers[0].resources.limits.cpu}'
@@ -61,7 +61,7 @@ components:
           - cmd: kubectl get deployment -n flux-system kustomize-controller -o=jsonpath='{.spec.template.spec.containers[0].resources.limits.memory}'
             setVariables:
               - name: KUSTOMIZE_CONTROLLER_MEM_PREV
-          - cmd: 'kubectl get deployment -n flux-system kustomize-controller -o=yaml | sed "s/cpu: ${ZARF_VAR_KUSTOMIZE_CONTROLLER_CPU_PREV}/cpu: ${ZARF_VAR_KUSTOMIZE_CONTROLLER_CPU}/" | sed "s/memory: ${ZARF_VAR_KUSTOMIZE_CONTROLLER_MEM_PREV}/memory: ${ZARF_VAR_KUSTOMIZE_CONTROLLER_MEM}/" | kubectl apply -f -'
+          - cmd: 'kubectl get deployment -n flux-system kustomize-controller -o=yaml | sed "s/cpu: ${ZARF_TMPL_KUSTOMIZE_CONTROLLER_CPU_PREV}/cpu: ${ZARF_TMPL_KUSTOMIZE_CONTROLLER_CPU}/" | sed "s/memory: ${ZARF_TMPL_KUSTOMIZE_CONTROLLER_MEM_PREV}/memory: ${ZARF_TMPL_KUSTOMIZE_CONTROLLER_MEM}/" | kubectl apply -f -'
 
           # Set new limits and requests for the notification-controller deployment
           - cmd: kubectl get deployment -n flux-system notification-controller -o=jsonpath='{.spec.template.spec.containers[0].resources.limits.cpu}'
@@ -70,7 +70,7 @@ components:
           - cmd: kubectl get deployment -n flux-system notification-controller -o=jsonpath='{.spec.template.spec.containers[0].resources.limits.memory}'
             setVariables:
               - name: NOTIFICATION_CONTROLLER_MEM_PREV
-          - cmd: 'kubectl get deployment -n flux-system notification-controller -o=yaml | sed "s/cpu: ${ZARF_VAR_NOTIFICATION_CONTROLLER_CPU_PREV}/cpu: ${ZARF_VAR_NOTIFICATION_CONTROLLER_CPU}/" | sed "s/memory: ${ZARF_VAR_NOTIFICATION_CONTROLLER_MEM_PREV}/memory: ${ZARF_VAR_NOTIFICATION_CONTROLLER_MEM}/" | kubectl apply -f -'
+          - cmd: 'kubectl get deployment -n flux-system notification-controller -o=yaml | sed "s/cpu: ${ZARF_TMPL_NOTIFICATION_CONTROLLER_CPU_PREV}/cpu: ${ZARF_TMPL_NOTIFICATION_CONTROLLER_CPU}/" | sed "s/memory: ${ZARF_TMPL_NOTIFICATION_CONTROLLER_MEM_PREV}/memory: ${ZARF_TMPL_NOTIFICATION_CONTROLLER_MEM}/" | kubectl apply -f -'
 
           # Set new limits and requests for the source-controller deployment
           - cmd: kubectl get deployment -n flux-system source-controller -o=jsonpath='{.spec.template.spec.containers[0].resources.limits.cpu}'
@@ -79,4 +79,4 @@ components:
           - cmd: kubectl get deployment -n flux-system source-controller -o=jsonpath='{.spec.template.spec.containers[0].resources.limits.memory}'
             setVariables:
               - name: SOURCE_CONTROLLER_MEM_PREV
-          - cmd: 'kubectl get deployment -n flux-system source-controller -o=yaml | sed "s/cpu: ${ZARF_VAR_SOURCE_CONTROLLER_CPU_PREV}/cpu: ${ZARF_VAR_SOURCE_CONTROLLER_CPU}/" | sed "s/memory: ${ZARF_VAR_SOURCE_CONTROLLER_MEM_PREV}/memory: ${ZARF_VAR_SOURCE_CONTROLLER_MEM}/" | kubectl apply -f -'
+          - cmd: 'kubectl get deployment -n flux-system source-controller -o=yaml | sed "s/cpu: ${ZARF_TMPL_SOURCE_CONTROLLER_CPU_PREV}/cpu: ${ZARF_TMPL_SOURCE_CONTROLLER_CPU}/" | sed "s/memory: ${ZARF_TMPL_SOURCE_CONTROLLER_MEM_PREV}/memory: ${ZARF_TMPL_SOURCE_CONTROLLER_MEM}/" | kubectl apply -f -'

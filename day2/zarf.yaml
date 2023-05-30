@@ -7,7 +7,7 @@ components:
   - name: setup
     required: true
     repos:
-      - "###ZARF_PKG_VAR_DI2ME_REPO###"
+      - "###ZARF_PKG_TMPL_DI2ME_REPO###"
     manifests:
       - name: setup-config
         files:
