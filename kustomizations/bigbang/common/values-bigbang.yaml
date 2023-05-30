@@ -230,7 +230,9 @@ kyvernoPolicies:
           any:
           - resources:
               namespaces:
-              - artifactory
+              # DISABLE-ARTIFACTORY
+              # - artifactory
+              - keycloak
               - confluence
               - gitlab
               - jira
