@@ -49,6 +49,19 @@ istio:
           limits:
             cpu: "500m"
             memory: "512Mi"
+    passthrough-ingressgateway:
+      type: "LoadBalancer"
+      kubernetesResourceSpec:
+        serviceAnnotations: # Example for AWS internal load balancer
+          service.beta.kubernetes.io/aws-load-balancer-type: nlb
+          service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
   values:
     istiod:
       resources:
@@ -84,6 +97,7 @@ istio:
         # - artifactory.{{ .Values.domain }}
         - sonarqube.{{ .Values.domain }}
         - chat.{{ .Values.domain }}
+        - nexus.{{ .Values.domain }}
     private:
       ingressGateway: "private-ingressgateway"
       hosts:
@@ -93,6 +107,7 @@ istio:
         - alertmanager.{{ .Values.domain }}
         - grafana.{{ .Values.domain }}
         - prometheus.{{ .Values.domain }}
+        - keycloak.{{ .Values.domain }}
         # Minio hosts should match hostname config in their respective values files
         # prepended with minio and minio-api like the following
         # minio.<hostname in values file> and minio-api.<hostname in values file>
@@ -106,6 +121,12 @@ istio:
         - minio-api.mattermost-minio.{{ .Values.domain }}
       autoHttpRedirect:
         enabled: true
+    passthrough:
+      ingressGateway: passthrough-ingressgateway
+      hosts:
+        - keycloak.{{ .Values.domain }}
+      tls:
+        mode: "PASSTHROUGH"
 
 istioOperator:
   enabled: true
