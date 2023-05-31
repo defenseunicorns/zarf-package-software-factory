@@ -1,5 +1,5 @@
 # DI2ME package version
-PACKAGE_VERSION := 0.1.0
+PACKAGE_VERSION := 0.1.1
 # The version of Big Bang to use. If you change this you need to also do a couple of other things:
 #    1. Run `make vendor-big-bang-base` and commit any changes to the repo.
 #    2. Additionally update the following files to use the new version of Big Bang:
