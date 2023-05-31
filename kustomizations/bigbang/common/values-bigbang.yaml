@@ -992,6 +992,9 @@ addons:
       args:
         - --kubelet-insecure-tls
 
+  authservice:
+    enabled: true
+
   keycloak:
     enabled: true
     istio:
