@@ -124,7 +124,7 @@ istio:
     passthrough:
       ingressGateway: passthrough-ingressgateway
       hosts:
-        - keycloak.{{ .Values.domain }}
+        - "*.{{ .Values.domain }}"
       tls:
         mode: "PASSTHROUGH"
 
