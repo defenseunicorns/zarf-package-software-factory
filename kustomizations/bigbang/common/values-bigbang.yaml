@@ -88,42 +88,17 @@ istio:
     public:
       ingressGateway: "public-ingressgateway"
       hosts:
-        - gitlab.{{ .Values.domain }}
-        - jenkins.{{ .Values.domain }}
-        - jira.{{ .Values.domain }}
-        - confluence.{{ .Values.domain }}
-        - registry.{{ .Values.domain }}
-        # DISABLE-ARTIFACTORY
-        # - artifactory.{{ .Values.domain }}
-        - sonarqube.{{ .Values.domain }}
-        - chat.{{ .Values.domain }}
-        - nexus.{{ .Values.domain }}
+        - "*.{{ .Values.domain }}"
     private:
       ingressGateway: "private-ingressgateway"
       hosts:
-        - neuvector.{{ .Values.domain }}
-        - tracing.{{ .Values.domain }}
-        - kiali.{{ .Values.domain }}
-        - alertmanager.{{ .Values.domain }}
-        - grafana.{{ .Values.domain }}
-        - prometheus.{{ .Values.domain }}
-        # Minio hosts should match hostname config in their respective values files
-        # prepended with minio and minio-api like the following
-        # minio.<hostname in values file> and minio-api.<hostname in values file>
-        - minio.bbcore-minio.{{ .Values.domain }}
-        - minio-api.bbcore-minio.{{ .Values.domain }}
-        - minio.gitlab-minio.{{ .Values.domain }}
-        - minio-api.gitlab-minio.{{ .Values.domain }}
-        - minio.postgres-minio.{{ .Values.domain }}
-        - minio-api.postgres-minio.{{ .Values.domain }}
-        - minio.mattermost-minio.{{ .Values.domain }}
-        - minio-api.mattermost-minio.{{ .Values.domain }}
+        - "*.{{ .Values.domain }}"
       autoHttpRedirect:
         enabled: true
     passthrough:
-      ingressGateway: passthrough-ingressgateway
+      ingressGateway: "passthrough-ingressgateway"
       hosts:
-        - keycloak.{{ .Values.domain }}
+        - "*.{{ .Values.domain }}"
       tls:
         mode: "PASSTHROUGH"
 
@@ -993,6 +968,18 @@ addons:
 
   authservice:
     enabled: true
+    values:
+      # Adding this default filter as authservice fails without at least one entry
+      chains:
+        local:
+          match:
+            header: ":local"
+            prefix: "localhost"
+          client_id: local_id
+          client_secret: local_secret
+          callback_uri: https://localhost/login
+          logout_path: "/local"
+
 
   keycloak:
     enabled: true
