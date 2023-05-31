@@ -976,6 +976,7 @@ addons:
     istio:
       injection: enabled
     values:
+      replicas: 1
       istio:
         mtls:
           mode: STRICT
