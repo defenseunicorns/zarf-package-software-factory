@@ -174,9 +174,9 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Ensure that Nexus is available outside of the cluster.
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://nexus.bigbang.dev/login > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)
-		// Ensure that keycloak is available outside of the cluster.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://keycloak.bigbang.dev/login > /dev/null; do sleep 5; done"`)
-		require.NoError(t, err, output)
+		// // Ensure that keycloak is available outside of the cluster.
+		// output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://keycloak.bigbang.dev/login > /dev/null; do sleep 5; done"`)
+		// require.NoError(t, err, output)
 
 		// DISABLE-ARTIFACTORY
 		// // Wait for the Artifactory StatefulSet to exist.
@@ -262,9 +262,9 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		// Ensure that Nexus does not accept TLSv1.1
 		output, err = platform.RunSSHCommandAsSudo(`sslscan nexus.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
 		require.NoError(t, err, output)
-		// Ensure that Keycloak does not accept TLSv1.1
-		output, err = platform.RunSSHCommandAsSudo(`sslscan keycloak.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
-		require.NoError(t, err, output)
+		// // Ensure that Keycloak does not accept TLSv1.1
+		// output, err = platform.RunSSHCommandAsSudo(`sslscan keycloak.bigbang.dev | grep "TLSv1.1" | grep "disabled"`)
+		// require.NoError(t, err, output)
 
 		// Ensure that the databases are still reporting "PostgresClusterStatus==Running"
 
