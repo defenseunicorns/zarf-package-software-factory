@@ -107,7 +107,6 @@ istio:
         - alertmanager.{{ .Values.domain }}
         - grafana.{{ .Values.domain }}
         - prometheus.{{ .Values.domain }}
-        - keycloak.{{ .Values.domain }}
         # Minio hosts should match hostname config in their respective values files
         # prepended with minio and minio-api like the following
         # minio.<hostname in values file> and minio-api.<hostname in values file>
@@ -124,7 +123,7 @@ istio:
     passthrough:
       ingressGateway: passthrough-ingressgateway
       hosts:
-        - "*.{{ .Values.domain }}"
+        - keycloak.{{ .Values.domain }}
       tls:
         mode: "PASSTHROUGH"
 
