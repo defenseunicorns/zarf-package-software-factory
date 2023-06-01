@@ -36,16 +36,17 @@ spec:
     tag: 4.3.9-bb.0
   secretRef:
     name: private-git-server
----
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: GitRepository
-metadata:
-  name: artifactory
-  namespace: softwarefactoryaddons
-spec:
-  interval: 5m
-  url: https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git
-  ref:
-    tag: 10.12.1
-  secretRef:
-    name: private-git-server
+# DISABLE-ARTIFACTORY
+# ---
+# apiVersion: source.toolkit.fluxcd.io/v1beta2
+# kind: GitRepository
+# metadata:
+#   name: artifactory
+#   namespace: softwarefactoryaddons
+# spec:
+#   interval: 5m
+#   url: https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git
+#   ref:
+#     tag: 10.12.1
+#   secretRef:
+#     name: private-git-server

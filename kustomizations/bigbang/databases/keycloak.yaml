@@ -1,0 +1,77 @@
+# nonk8s
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: keycloak-database
+  namespace: bigbang
+spec:
+  targetNamespace: keycloak
+  releaseName: keycloak-database
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      chart: charts/raw
+      sourceRef:
+        kind: GitRepository
+        name: zarf-package-software-factory
+        namespace: flux-system
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+    cleanupOnFail: false
+  dependsOn:
+    - name: bigbang
+      namespace: bigbang
+    - name: postgres-operator
+      namespace: softwarefactoryaddons
+    - name: kyverno-policies
+      namespace: bigbang
+    - name: istio
+      namespace: bigbang
+  values:
+    resources:
+      - apiVersion: "acid.zalan.do/v1"
+        kind: "postgresql"
+        metadata:
+          name: "acid-keycloak"
+        spec:
+          teamId: "acid"
+          postgresql:
+            version: "12"
+          numberOfInstances: 3
+          volume:
+            size: "2Gi"
+          users:
+            keycloak: []
+          databases:
+            keycloak: keycloak
+            # Uncomment this if you want to specify a particular storage class
+            # storageClass: "your-storage-class-name-here"
+          # enableLogicalBackup: true
+          # logicalBackupSchedule: "*/2 * * * *"
+          env:
+          - name: WAL_S3_BUCKET
+            value: ""
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: "1"
+              memory: 2000Mi
+      # Create empty secret so that other postgres clusters can use secrets for env
+      - apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres-minio-creds-env
+        type: Opaque

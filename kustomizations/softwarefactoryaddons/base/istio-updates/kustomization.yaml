@@ -2,4 +2,5 @@ resources:
   - jira-istio-updates.yaml
   - confluence-istio-updates.yaml
   - jenkins-istio-updates.yaml
-  - artifactory-istio-updates.yaml
+  # DISABLE-ARTIFACTORY
+  # - artifactory-istio-updates.yaml

@@ -49,6 +49,19 @@ istio:
           limits:
             cpu: "500m"
             memory: "512Mi"
+    passthrough-ingressgateway:
+      type: "LoadBalancer"
+      kubernetesResourceSpec:
+        serviceAnnotations: # Example for AWS internal load balancer
+          service.beta.kubernetes.io/aws-load-balancer-type: nlb
+          service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
   values:
     istiod:
       resources:
@@ -75,37 +88,19 @@ istio:
     public:
       ingressGateway: "public-ingressgateway"
       hosts:
-        - gitlab.{{ .Values.domain }}
-        - jenkins.{{ .Values.domain }}
-        - jira.{{ .Values.domain }}
-        - confluence.{{ .Values.domain }}
-        - registry.{{ .Values.domain }}
-        - artifactory.{{ .Values.domain }}
-        - sonarqube.{{ .Values.domain }}
-        - chat.{{ .Values.domain }}
+        - "*.{{ .Values.domain }}"
     private:
       ingressGateway: "private-ingressgateway"
       hosts:
-        - neuvector.{{ .Values.domain }}
-        - tracing.{{ .Values.domain }}
-        - kiali.{{ .Values.domain }}
-        - alertmanager.{{ .Values.domain }}
-        - grafana.{{ .Values.domain }}
-        - prometheus.{{ .Values.domain }}
-        # Minio hosts should match hostname config in their respective values files
-        # prepended with minio and minio-api like the following
-        # minio.<hostname in values file> and minio-api.<hostname in values file>
-        - minio.bbcore-minio.{{ .Values.domain }}
-        - minio-api.bbcore-minio.{{ .Values.domain }}
-        - minio.gitlab-minio.{{ .Values.domain }}
-        - minio-api.gitlab-minio.{{ .Values.domain }}
-        - minio.postgres-minio.{{ .Values.domain }}
-        - minio-api.postgres-minio.{{ .Values.domain }}
-        - minio.mattermost-minio.{{ .Values.domain }}
-        - minio-api.mattermost-minio.{{ .Values.domain }}
+        - "*.{{ .Values.domain }}"
       autoHttpRedirect:
         enabled: true
-
+    passthrough:
+      ingressGateway: "passthrough-ingressgateway"
+      hosts:
+        - "*.{{ .Values.domain }}"
+      tls:
+        mode: "PASSTHROUGH"
 
 istioOperator:
   enabled: true
@@ -230,7 +225,9 @@ kyvernoPolicies:
           any:
           - resources:
               namespaces:
-              - artifactory
+              # DISABLE-ARTIFACTORY
+              # - artifactory
+              - keycloak
               - confluence
               - gitlab
               - jira
@@ -954,6 +951,11 @@ addons:
       networkPolicies:
         enabled: false
 
+  nexusRepositoryManager:
+    enabled: true
+    # -- Base64 encoded license file.
+    license_key: ""
+
   velero:
     enabled: false
 
@@ -963,3 +965,90 @@ addons:
     values:
       args:
         - --kubelet-insecure-tls
+
+  authservice:
+    enabled: true
+    values:
+      # Adding this default filter as authservice fails without at least one entry
+      chains:
+        local:
+          match:
+            header: ":local"
+            prefix: "localhost"
+          client_id: local_id
+          client_secret: local_secret
+          callback_uri: https://localhost/login
+          logout_path: "/local"
+
+
+  keycloak:
+    enabled: true
+    istio:
+      injection: enabled
+    values:
+      replicas: 1
+      istio:
+        mtls:
+          mode: STRICT
+      # Disabled because of conflicts with postgres database
+      networkPolicies:
+        enabled: false
+      postgresql:
+        enabled: false
+      extraEnv: |
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: "postgres.acid-keycloak.credentials.postgresql.acid.zalan.do"
+              key: "username"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "postgres.acid-keycloak.credentials.postgresql.acid.zalan.do"
+              key: "password"
+        - name: DB_VENDOR
+          value: "postgres"
+        - name: DB_ADDR
+          value: "acid-keycloak.keycloak.svc.cluster.local"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_DATABASE
+          value: "keycloak"
+        - name: KC_DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: "postgres.acid-keycloak.credentials.postgresql.acid.zalan.do"
+              key: "username"
+        - name: KC_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "postgres.acid-keycloak.credentials.postgresql.acid.zalan.do"
+              key: "password"
+        - name: KC_DB
+          value: "postgres"
+        - name: KC_DB_URL_HOST
+          value: "acid-keycloak.keycloak.svc.cluster.local"
+        - name: KC_DB_URL_PORT
+          value: "5432"
+        - name: KC_DB_URL_DATABASE
+          value: "keycloak"
+        - name: KC_HTTP_ENABLED
+          value: "true"
+        - name: KC_HTTP_RELATIVE_PATH
+          value: /auth
+        - name: KC_PROXY
+          value: passthrough
+        - name: KC_HOSTNAME_STRICT
+          value: "true"
+        - name: KC_HOSTNAME_STRICT_HTTPS
+          value: "true"
+        - name: KC_LOG_LEVEL
+          value: "org.keycloak.events:DEBUG,org.infinispan:INFO,org.jgroups:INFO"
+        - name: KC_CACHE
+          value: ispn
+        - name: KC_CACHE_STACK
+          value: kubernetes
+        - name: KC_METRICS_ENABLED
+          value: "true"
+        - name: KC_HOSTNAME
+          value: keycloak.bigbang.dev
