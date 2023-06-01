@@ -172,7 +172,7 @@ func TestAllServicesRunning(t *testing.T) { //nolint:funlen
 		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://chat.bigbang.dev/login > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// Ensure that Nexus is available outside of the cluster.
-		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://nexus.bigbang.dev/login > /dev/null; do sleep 5; done"`)
+		output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://nexus.bigbang.dev/ > /dev/null; do sleep 5; done"`)
 		require.NoError(t, err, output)
 		// // Ensure that keycloak is available outside of the cluster.
 		// output, err = platform.RunSSHCommandAsSudo(`timeout 1200 bash -c "while ! curl -L -s --fail --show-error https://keycloak.bigbang.dev/login > /dev/null; do sleep 5; done"`)
