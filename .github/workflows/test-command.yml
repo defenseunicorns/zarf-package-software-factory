@@ -110,20 +110,20 @@ jobs:
           ref: ${{ github.event.client_payload.pull_request.head.ref || github.ref_name }}
 
       - name: Init gopath cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: "${{ github.workspace }}/.cache/go"
           key: "gopath|${{ hashFiles('.tool-versions') }}|${{ hashFiles('go.sum') }}"
 
       - name: Init gobuild cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: "${{ github.workspace }}/.cache/go-build"
           key: "gobuild|${{ hashFiles('.tool-versions') }}|${{ hashFiles('go.sum') }}"
 
       - name: Init docker cache
         id: init-docker-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: "${{ github.workspace }}/.cache/docker"
           key: "docker|${{ hashFiles('Makefile') }}"
