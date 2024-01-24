@@ -29,4 +29,4 @@ Depending on where you want to run the package you just created, there are a few
    ./zarf package deploy zarf-package-software-factory-amd64.tar.zst --confirm
    ```
 
-4. Wait for everything to come up. Use `./zarf tools k9s` to monitor using the [K9s](https://github.com/derailed/k9s) tool
+4. Wait for everything to come up. Use `./zarf tools monitor` to monitor using the [K9s](https://github.com/derailed/k9s) tool
