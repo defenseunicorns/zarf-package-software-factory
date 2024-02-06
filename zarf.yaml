@@ -387,7 +387,7 @@ components:
         files:
           - manifests/softwarefactoryaddons.yaml
     repos:
-      - https://repo1.dso.mil/big-bang/product/community/jira.git@refs/tags/1.10.0-bb.0
+      - https://repo1.dso.mil/big-bang/product/community/jira.git@refs/tags/1.17.2-bb.1
       - https://repo1.dso.mil/big-bang/product/community/confluence.git@refs/tags/1.10.0-bb.3
       - https://repo1.dso.mil/big-bang/product/community/jenkins.git@refs/tags/4.3.9-bb.0
       - https://repo1.dso.mil/big-bang/apps/third-party/jfrog-platform.git@refs/tags/10.12.1
