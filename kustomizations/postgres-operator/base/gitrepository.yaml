@@ -7,6 +7,6 @@ spec:
   interval: 5m
   url: https://github.com/zalando/postgres-operator.git
   ref:
-    tag: v1.10.0
+    tag: v1.11.0
   secretRef:
     name: private-git-server

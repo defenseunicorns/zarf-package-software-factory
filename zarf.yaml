@@ -37,7 +37,7 @@ components:
         files:
           - manifests/postgres-operator.yaml
     repos:
-      - https://github.com/zalando/postgres-operator.git@refs/tags/v1.10.0
+      - https://github.com/zalando/postgres-operator.git@v1.11.0
     images:
       - registry1.dso.mil/ironbank/opensource/zalando/postgres-operator:v1.10.0
       - registry1.dso.mil/ironbank/opensource/zalando/logical-backup:v1.8.2
