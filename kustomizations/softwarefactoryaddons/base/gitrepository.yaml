@@ -7,7 +7,7 @@ spec:
   interval: 5m
   url: https://repo1.dso.mil/big-bang/product/community/jira.git
   ref:
-    tag: 1.10.0-bb.0
+    tag: 1.18.0-bb.0
   secretRef:
     name: private-git-server
 ---
