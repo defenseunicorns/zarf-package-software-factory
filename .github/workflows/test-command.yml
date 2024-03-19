@@ -202,7 +202,7 @@ jobs:
       # Send Slack message if pipeline run failed in main
       - name: Slack Notify
         if: ${{ failure() && github.event_name == 'push' }}
-        uses: rtCamp/action-slack-notify@v2.2.0
+        uses: rtCamp/action-slack-notify@v2.3.0
         env:
           SLACK_WEBHOOK: "${{ secrets.SLACK_INCOMING_WEBHOOK }}"
           SLACK_CHANNEL: "di2me-dev"
