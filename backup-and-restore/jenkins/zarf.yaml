@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.27.0/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/v0.32.6/zarf.schema.json
 kind: ZarfPackageConfig
 metadata:
   name: di2me-jenkins-restorable-backup
