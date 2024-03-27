@@ -9,11 +9,11 @@ jobs:
     name: Add issue to project
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/add-to-project@v0.5.0
+      - uses: actions/add-to-project@v1.0.0
         with:
           project-url: https://github.com/orgs/defenseunicorns/projects/33
           github-token: ${{ secrets.ZARF_ORG_PROJECT_TOKEN }}
-      - uses: actions/add-to-project@v0.5.0
+      - uses: actions/add-to-project@v1.0.0
         with:
           project-url: https://github.com/orgs/defenseunicorns/projects/31
           github-token: ${{ secrets.TF_NARWHAL_PROJECT_TOKEN }}
